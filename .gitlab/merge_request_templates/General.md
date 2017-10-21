@@ -12,6 +12,16 @@
 - [ ] Die Testabdeckung beträgt mindestens 75 %.
 - [ ] Der Entwurf wurde aktualisiert.
 - [ ] Der Code ist kommentiert.
-- [ ] *TODO zusätzliches Kriterium 1/[EDIT .gitlab/merge_reqeust_templates/General.md](/.gitlab/merge_request_templates/General.md)*
-- [ ] *TODO zusätzliches Kriterium 2/[EDIT .gitlab/merge_reqeust_templates/General.md](/.gitlab/merge_request_templates/General.md)*
-- [ ] *TODO zusätzliches Kriterium 3/[EDIT .gitlab/merge_reqeust_templates/General.md](/.gitlab/merge_request_templates/General.md)*
+- [ ] Alle zur User Story assoziierten Test sind erfolgreich durchgelaufen.
+- [ ] Die Testabdeckung beträgt mindestens 75 %.
+- [ ] Der Entwurf wurde aktualisiert.
+- [ ] Der Code ist kommentiert.
+- [ ] UML-Klassendiagramm erstellt.
+- [ ] UML-Kompnentendiagramm erstellt.
+- [ ] Die GUI ist erstellt.
+- [ ] Handbuch ist erstellt.
+- [ ] Code für Criticl Features erstellt und getestet.
+- [ ] Code für Additional Features erstellt und getestet.
+- [ ] User Stories für alle Critical Features erstellt.
+- [ ] User Stories für additional Features erstellt.
+- [ ] Product Backlog erstellt und alle im Moment geplanten Features eingetragen.

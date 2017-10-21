@@ -10,7 +10,7 @@ This project adheres currently NOT REALLY to [Semantic Versioning](http://semver
 - added something else
 
 ### Changed
-
+- Definition of Done Ergänzt
 - changed something
 - changed something else
 

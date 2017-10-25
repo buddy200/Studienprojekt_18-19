@@ -8,20 +8,15 @@
 
 ## Defintion of Done Checklist
 
-- [ ] Alle zur User Story assoziierten Test sind erfolgreich durchgelaufen.
-- [ ] Die Testabdeckung beträgt mindestens 75 %.
+
+- [ ] Tests abgeschlossen
+	- [ ] Die Testabdeckung beträgt mindestens 75 %.
+	- [ ] Alle zur User Story assoziierten Test sind erfolgreich durchgelaufen.
 - [ ] Der Entwurf wurde aktualisiert.
 - [ ] Der Code ist kommentiert.
-- [ ] Alle zur User Story assoziierten Test sind erfolgreich durchgelaufen.
-- [ ] Die Testabdeckung beträgt mindestens 75 %.
-- [ ] Der Entwurf wurde aktualisiert.
-- [ ] Der Code ist kommentiert.
-- [ ] UML-Klassendiagramm erstellt.
-- [ ] UML-Kompnentendiagramm erstellt.
-- [ ] Die GUI ist erstellt.
-- [ ] Handbuch ist erstellt.
-- [ ] Code für Criticl Features erstellt und getestet.
-- [ ] Code für Additional Features erstellt und getestet.
-- [ ] User Stories für alle Critical Features erstellt.
-- [ ] User Stories für additional Features erstellt.
-- [ ] Product Backlog erstellt und alle im Moment geplanten Features eingetragen.
+- [ ] Das UML Diagramme sind auf aktuellen Stand.
+- [ ] Die GUI hält die Google Material Design Guidelines ein.
+- [ ] Das Handbuch ist auf aktuellen Stand.
+- [ ] User Stories sind für das Feature erstellt und verständlich defniert.
+- [ ] Product Backlog ist angepasst
+- [ ] Alle Teammitglieder haben das gesamte vorhandene Material angesehen und geprüft.

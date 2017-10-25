@@ -195,6 +195,172 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 ## Epic 2 Additional Features
 Hier werden alle Features aufgeführt die zusätzlich zu den gegebnen Anforderungen implementiert werden sollen.
 Es werden eventuell nicht alle Features die hier aufgeführt werden später implementiert werden.
+
+### Feature 2.1 Felder suchen/sortieren
+
+> Als Benutzer möchte ich nach einzelnen Feldern suchen bzw. mir meine Felder geordnet ansehen.
+
+- Aufwandsschätzung: M
+- Akzeptanztests:
+    - [ ] Felder können durchsucht werden
+	- [ ] Felder können nach verschiedenen Kriterien sortiert werden
+
+#### Implementable Story 2.1.1 Suche nach Feldern
+> Als Benutzer möchte ich nach einzelnen Feldern suchen.
+
+- Aufwandsschätzung: 50 SP
+- Akzeptanztests:
+    - [ ] Nach einzelnen Feldern kann gesucht werden
+	- [ ] Bei einer nicht erfolgreichen Suche wird der Benutzer darüber informiert
+
+##### Task 2.1.1.1 Suche nach Feldern
+
+- Aufwandsschätzung: 4 Stunden#
+
+##### Task 1.1.1.2 Information der Benutzer über eine nicht erfolgreiche Suche
+
+- Aufwandsschätzung: 2 Stunden
+
+#### Implementable Story 2.1.2 Sortieren von Feldern
+> Als Benutzer möchte ich mir meine Felder sortiert anzeigen lassen.
+
+- Aufwandsschätzung: 70 SP
+- Akzeptanztests:
+    - [ ] Felder können nach unterschiedlichen Kriterien sortiert werden
+	- [ ] Sortieren sowohl aufwärts als auch abwärts möglich
+	- [ ] Benutzer wird darüber informiert, wenn es keine Felder gibt, die seinen Kriterien entsprechen
+
+##### Task 2.1.2.1 Sortierung der Felder nach Kriterien
+
+- Aufwandsschätzung: 6 Stunden
+
+##### Task 2.1.2.2 Sortierung in beide Richtungen
+
+- Aufwandsschätzung: 2 Stunden
+
+##### Task 2.1.2.3 Information des Benutzer über unpassende Kriterien
+
+- Aufwandsschätzung: 2 Stunden
+
+### Feature 2.2 Fotos zu Schadensfällen hinzufügen
+
+> Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
+
+- Aufwandsschätzung: M
+- Akzeptanztests:
+    - [ ] Einem Schadensfall können Fotos hinzugefügt werden
+	- [ ] Die Fotos werden beim Bearbeiten des Schadensfalls angezeigt
+	- [ ] Die Fotos werden abgespeichert bleiben dem Schadensfall zugeordnet
+
+#### Implementable Story 2.2.1 Fotos zu Schadensfall hinzufügen 
+> Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
+
+- Aufwandsschätzung: 50 SP
+- Akzeptanztests:
+    - [ ] Ein Foto kann einem Schadensfall hinzugefügt werden
+	- [ ] Ein Schadensfall kann mit mehreren Fotos dokumentiert werden
+
+##### Task 2.2.1.1 Foto aus der App machen
+
+- Aufwandsschätzung: 4 Stunden
+
+##### Task 2.2.1.2 Fotos einem Schadensfall zuordnen
+
+- Aufwandsschätzung: 2 Stunden
+
+#### Implementable Story 2.2.2 Fotos beim Bearbeiten eines Schadensfalls anzeigen
+> Als Benutzer möchte ich mir die Fotos beim Bearbeiten eines Schadensfalls anzeigen lassen.
+
+- Aufwandsschätzung: 60 Story Points
+- Akzeptanztests:
+    - [ ] Beim Bearbeiten eines Schadensfalls werden die dazugehörigen Fotos angezeigt
+
+##### Task 2.2.2.1 Einlesen der Fotos
+
+- Aufwandsschätzung: 2 Stunden
+
+##### Task 2.2.2.2 Anzeige der Fotos
+- Aufwandsschätzung: 6 Stunden
+
+### Feature 2.2 Fotos zu Schadensfällen hinzufügen
+
+> Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
+
+- Aufwandsschätzung: M
+- Akzeptanztests:
+    - [ ] Einem Schadensfall können Fotos hinzugefügt werden
+	- [ ] Die Fotos werden beim Bearbeiten des Schadensfalls angezeigt
+	- [ ] Die Fotos werden abgespeichert bleiben dem Schadensfall zugeordnet
+
+#### Implementable Story 2.2.1 Fotos zu Schadensfall hinzufügen 
+> Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
+
+- Aufwandsschätzung: 50 SP
+- Akzeptanztests:
+    - [ ] Ein Foto kann einem Schadensfall hinzugefügt werden
+	- [ ] Ein Schadensfall kann mit mehreren Fotos dokumentiert werden
+
+##### Task 2.2.1.1 Foto aus der App machen
+
+- Aufwandsschätzung: 4 Stunden
+
+##### Task 2.2.1.2 Fotos einem Schadensfall zuordnen
+
+- Aufwandsschätzung: 2 Stunden
+
+#### Implementable Story 2.2.2 Fotos beim Bearbeiten eines Schadensfalls anzeigen
+> Als Benutzer möchte ich mir die Fotos beim Bearbeiten eines Schadensfalls anzeigen lassen.
+
+- Aufwandsschätzung: 60 Story Points
+- Akzeptanztests:
+    - [ ] Beim Bearbeiten eines Schadensfalls werden die dazugehörigen Fotos angezeigt
+
+##### Task 2.2.2.1 Einlesen der Fotos
+
+- Aufwandsschätzung: 2 Stunden
+
+##### Task 2.2.2.2 Anzeige der Fotos
+- Aufwandsschätzung: 6 Stunden
+
+### Feature 2.3 Eigenes Datenmodell
+
+> Als Versicherung möchte ich, dass die App ein eigenes Datenmodel verwendet.
+
+- Aufwandsschätzung: L
+- Akzeptanztests:
+    - [ ] Eigenes Datenmodel vorhanden
+	- [ ] Modell ist les- und schreibbar
+
+#### Implementable Story 2.3.1 Eigenes Datenmodel
+> Als Versicherung möchte ich, dass die App ein eigenes Datenmodel verwendet.
+
+- Aufwandsschätzung: 80 SP
+- Akzeptanztests:
+    - [ ] Eigenes Datenmodel verwendet
+
+##### Task 2.3.1.1 Datenmodel konzipieren
+
+- Aufwandsschätzung: 8 Stunden
+
+##### Task 2.3.1.2 Datenmodel implementieren 
+
+- Aufwandsschätzung: 4 Stunden
+
+#### Implementable Story 2.3.2 Das Datenmodel ist einlesbar und schreibbar
+> Als Versicherung möchte ich, dass das Datenmodel einlesbar und schreibbar ist.
+
+- Aufwandsschätzung: 60 Story Points
+- Akzeptanztests:
+    - [ ] Beim Bearbeiten eines Schadensfalls werden die dazugehörigen Fotos angezeigt
+
+##### Task 2.3.2.1 Datenmodell scheibbar
+
+- Aufwandsschätzung: 4 Stunden
+
+##### Task 2.3.2.2 Datenmodel einlesbar
+- Aufwandsschätzung: 4 Stunden
+
+
 ### Feature 2.4 *Export und Import von Felderdaten*
 > Als Benutzer möchte ich Daten Importieren und Exportieren können
  

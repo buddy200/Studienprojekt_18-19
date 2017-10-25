@@ -193,7 +193,7 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 - Aufwandsschätzung: 3 Stunden
  
 ## Epic 2 Additional Features
-Hier werden alle Features aufgeführt die zusätzlich zu den gegebnen Anforderungen implementiert werden sollen.
+Hier werden alle Features aufgeführt die zusätzlich zu den gegebenen Anforderungen implementiert werden sollen.
 Es werden eventuell nicht alle Features die hier aufgeführt werden später implementiert werden.
 
 ### Feature 2.1 Felder suchen/sortieren
@@ -215,9 +215,9 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 
 ##### Task 2.1.1.1 Suche nach Feldern
 
-- Aufwandsschätzung: 4 Stunden#
+- Aufwandsschätzung: 4 Stunden
 
-##### Task 1.1.1.2 Information der Benutzer über eine nicht erfolgreiche Suche
+##### Task 2.1.1.2 Information der Benutzer über eine nicht erfolgreiche Suche
 
 - Aufwandsschätzung: 2 Stunden
 
@@ -250,47 +250,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 - Akzeptanztests:
     - [ ] Einem Schadensfall können Fotos hinzugefügt werden
 	- [ ] Die Fotos werden beim Bearbeiten des Schadensfalls angezeigt
-	- [ ] Die Fotos werden abgespeichert bleiben dem Schadensfall zugeordnet
-
-#### Implementable Story 2.2.1 Fotos zu Schadensfall hinzufügen 
-> Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
-
-- Aufwandsschätzung: 50 SP
-- Akzeptanztests:
-    - [ ] Ein Foto kann einem Schadensfall hinzugefügt werden
-	- [ ] Ein Schadensfall kann mit mehreren Fotos dokumentiert werden
-
-##### Task 2.2.1.1 Foto aus der App machen
-
-- Aufwandsschätzung: 4 Stunden
-
-##### Task 2.2.1.2 Fotos einem Schadensfall zuordnen
-
-- Aufwandsschätzung: 2 Stunden
-
-#### Implementable Story 2.2.2 Fotos beim Bearbeiten eines Schadensfalls anzeigen
-> Als Benutzer möchte ich mir die Fotos beim Bearbeiten eines Schadensfalls anzeigen lassen.
-
-- Aufwandsschätzung: 60 Story Points
-- Akzeptanztests:
-    - [ ] Beim Bearbeiten eines Schadensfalls werden die dazugehörigen Fotos angezeigt
-
-##### Task 2.2.2.1 Einlesen der Fotos
-
-- Aufwandsschätzung: 2 Stunden
-
-##### Task 2.2.2.2 Anzeige der Fotos
-- Aufwandsschätzung: 6 Stunden
-
-### Feature 2.2 Fotos zu Schadensfällen hinzufügen
-
-> Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
-
-- Aufwandsschätzung: M
-- Akzeptanztests:
-    - [ ] Einem Schadensfall können Fotos hinzugefügt werden
-	- [ ] Die Fotos werden beim Bearbeiten des Schadensfalls angezeigt
-	- [ ] Die Fotos werden abgespeichert bleiben dem Schadensfall zugeordnet
+	- [ ] Die Fotos werden abgespeichert werden dem Schadensfall zugeordnet
 
 #### Implementable Story 2.2.1 Fotos zu Schadensfall hinzufügen 
 > Als Benutzer möchte ich Fotos zu Schadensfällen hinzufügen, um den vorhandenen Schaden zu dokumentieren.
@@ -324,7 +284,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 
 ### Feature 2.3 Eigenes Datenmodell
 
-> Als Versicherung möchte ich, dass die App ein eigenes Datenmodel verwendet.
+> Als Nutzer möchte ich die Vorteile eines Datenmodells nutzen
 
 - Aufwandsschätzung: L
 - Akzeptanztests:
@@ -332,7 +292,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 	- [ ] Modell ist les- und schreibbar
 
 #### Implementable Story 2.3.1 Eigenes Datenmodel
-> Als Versicherung möchte ich, dass die App ein eigenes Datenmodel verwendet.
+> Als Nutzer möchte ich, dass die App ein eigenes Datenmodel verwendet.
 
 - Aufwandsschätzung: 80 SP
 - Akzeptanztests:
@@ -347,7 +307,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 - Aufwandsschätzung: 4 Stunden
 
 #### Implementable Story 2.3.2 Das Datenmodel ist einlesbar und schreibbar
-> Als Versicherung möchte ich, dass das Datenmodel einlesbar und schreibbar ist.
+> Als Nutzer möchte ich, dass das Datenmodel einlesbar und schreibbar ist.
 
 - Aufwandsschätzung: 60 Story Points
 - Akzeptanztests:
@@ -359,7 +319,6 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 
 ##### Task 2.3.2.2 Datenmodel einlesbar
 - Aufwandsschätzung: 4 Stunden
-
 
 ### Feature 2.4 *Export und Import von Felderdaten*
 > Als Benutzer möchte ich Daten Importieren und Exportieren können
@@ -448,15 +407,14 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
     - [ ] Versicherungsnehmer darf nur Felder hinzufügen
     - [ ] Verwalter hat Zugriff auf alle Funktionen
  
-##### Task 2.5.2.2 *Versicherungsnehmer darf nur Felder hinzufügen*
+##### Task 2.5.2.1 *Versicherungsnehmer darf nur Felder hinzufügen*
  
 - Aufwandsschätzung: 2 Stunden
  
-##### Task 2.5.2.3 *Verwalter hat Zugriff auf alle Funtkionen*
+##### Task 2.5.2.2 *Verwalter hat Zugriff auf alle Funtkionen*
  
 - Aufwandsschätzung: 1 Stunde
- 
- 
+
 #### Implementable Story 2.5.3 *Einmaliges Einloggen*
 > Als Nutzer möchte ich mich nur einmalig einloggen müssen.
  
@@ -514,8 +472,8 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
  
 - Aufwandsschätzung: 3 Stunden
 
-### Feature 2.7 *Unterstützung von verschiednen Sprachen*
-> Ich möchte als Nutzer gerne als Nutzer in meiner bervorzugten Sprache die App benutzen
+### Feature 2.7 *Unterstützung von verschiedener Sprachen*
+> Ich möchte als Nutzer gerne in meiner bervorzugten Sprache die App nutzen
 
 - Aufwandsschätzung: S
 - Akzeptanztests:
@@ -542,7 +500,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 	- [ ] Alle Texte, Buttons, und sonstige Elemente die Schrift enthalten sind auf Deutsch
 	- [ ] Alle Texte, Buttons, und sonstige Elemente die Schrift enthalten sind auf Englisch
 
-##### Task 2.7.2.1 *Deutsche Oberfläche*
+##### Task 2.7.2.3 *Deutsche Oberfläche*
 - Aufwandschätzung: 2 Stunden
 
 ##### Task 2.7.2.2 *Englische Oberfläche*
@@ -555,7 +513,6 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 - Akzeptanztests:
     - [ ] Route zu Feld kann berechnet werden
     - [ ] Route zu Schaden kann berechent werden
-
 
 ##### Task 2.8.1 *Schnittstelle zwischen unserer App und Google Maps*
 - Aufwandsschätzung: 5 Stunden

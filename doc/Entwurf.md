@@ -14,17 +14,32 @@ Gubaer at the German language Wikipedia [GFDL (http://www.gnu.org/copyleft/fdl.h
 
 **TODO:** Komponentendiagramm der eigenen und externen Komponenten der App erstellen.
 
-## Komponente 1
+## Database
 
-**TODO:** Beschreibung der Komponente inklusive seiner verwendeten und bereitgestellten Schnittstellen
+Speichert alle Daten wie Positionsdaten der Felder, Details zu den Schadensfällen usw.
 
-## Komponente 2
+## Datenmangment
 
-**TODO:** Beschreibung der Komponente inklusive seiner verwendeten und bereitgestellten Schnittstellen
+Holt die Daten aus der Database und stellt sie der Berechnung und dem User Interface zur Verfügung. Nimmt Datensätze die vom User Interface oder von der Berechnung erstelt werden und pack sie in die passende Datenstrucktur.
 
-## Externe Komponente 1
+## Berechnungen
 
-**TODO:** Beschreibung der **externen** Komponente/Bibliothek und wie diese verwendet werden soll.
+Realisiert jegliche Berechnungen die für die Felder und Schadensfälle nötig sind 
+
+## User Interface
+
+
+
+## Lokales Dateisystem
+
+
+## Map
+
+
+## UI Kompnenten
+
+
+
 
 # Klassendiagramm
 

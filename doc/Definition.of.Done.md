@@ -5,9 +5,10 @@
 	- [ ] Alle zur User Story assoziierten Test sind erfolgreich durchgelaufen.
 - [ ] Der Entwurf wurde aktualisiert.
 - [ ] Der Code ist kommentiert.
-- [ ] Das UML Diagramme sind auf aktuellen Stand.
+- [ ] Das UML Diagramme sind auf aktuellem Stand.
 - [ ] Die GUI hält die Google Material Design Guidelines ein.
-- [ ] Das Handbuch ist auf aktuellen Stand.
+- [ ] Der Code folgt den Java Code Conventions.
+- [ ] Das Handbuch ist auf aktuellem Stand.
 - [ ] User Stories sind für das Feature erstellt und verständlich defniert.
 - [ ] Product Backlog ist angepasst
 - [ ] Alle Teammitglieder haben das gesamte vorhandene Material angesehen und geprüft.

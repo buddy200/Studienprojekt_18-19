@@ -11,12 +11,12 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
  
 ### Feature 1.1 *Visuelle Darstellung der Schadensfälle*
  
-> Als Benutzer möchte ich, dass Schadensfälle und ihre Form, auf einer Karte dargestellt werden.
+> Als Benutzer möchte ich, dass Schadensfälle und ihre Form auf einer Karte dargestellt werden.
  
 - Aufwandsschätzung: L
 - Akzeptanztests:
     - [ ] Schadensfälle können in einer Kartenansicht dargestellt werden.
-    - [ ] Die Kartenansicht des Schadens zeig Polygone der versicherten Objekte.
+    - [ ] Die Kartenansicht des Schadens zeigt Polygone der versicherten Objekte.
     - [ ] Die Kartenansicht des Schadens zeigt den Schaden als Polygon/Fläche innerhalb der versicherten Objekte.
     - [ ] Die Kartenansicht inkl. der Schadensdarstellung ermöglicht mehrere Maßstäbe.
     - [ ] Die Ansicht der Polygone ist ohne Internetverbindung möglich.
@@ -28,13 +28,13 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 - Akzeptanztests:
     - [ ] Es wird eine Karte dargestellt
     - [ ] Die Kartenansicht ermöglicht mehrere Maßstäbe
-    - [ ] Die Kamera der Karte lässt sich verschieben
+    - [ ] Die Ansicht der Karte lässt sich verschieben
  
 ##### Task 1.1.1.1 Darstellung einer Karte
  
 - Aufwandsschätzung: 5 Stunden
  
-##### Task 1.1.1.2 Die Kamera lässt sich verschieben
+##### Task 1.1.1.2 Die Kartenansicht lässt sich verschieben
  
 - Aufwandsschätzung: 1 Stunde
  
@@ -69,7 +69,7 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 - Aufwandsschätzung: 40 SP
 - Akzeptanztests:
     - [ ] Die Ansicht der Polygone ist ohne Internetverbindung möglich.
-    - [ ] Die Ansicher der Karte der nähren Umgebung ist ohne Internetverbindung möglich
+    - [ ] Die Ansicht der Karte der nähren Umgebung ist ohne Internetverbindung möglich
  
 ##### Task 1.1.3.1 *Offline Speicherung der Polygone*
  
@@ -83,7 +83,7 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 ### Feature 1.2 *Verwaltung von Feldern*
 > Als Gutachter möchte ich Schadensfälle und Felder verwalten (erfassen/bearbeiten/löschen) können.
  
-- Aufwandsschätzung: XL
+- Aufwandsschätzung: L
 - Akzeptanztests:
     - [ ] Schadensfälle können mit der Angabe des Versicherungsobjekts (Name des Versicherungsnehmers, Fläche und Koordinaten des Objekts, Region (mind. Landkreis)), Schadensinformationen (Schadensfläche, Schadensposition, Schadens-Koordinaten/-Polygon, Datum) und Name des Gutachters erfasst werden.
     - [ ] Die Erfassung von Schadensfällen/-Koordinaten verwendet tatsächliche Sensorwerte eines Positionssensors im Gerät.
@@ -172,7 +172,7 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 - Aufwandsschätzung: 4 Stunden
  
 #### Implementable Story 1.2.5 *Schadensfälle können bearbeitet und gelöscht werden*
-> Als Gutachter möchte ich vorhandene Schadensfälle löschen oder bearbeiten können.
+> Als Nutzer möchte ich vorhandene Schadensfälle löschen oder bearbeiten können.
  
 - Aufwandsschätzung 30 SP
 - Akteptanztests:
@@ -204,6 +204,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 - Akzeptanztests:
     - [ ] Felder können durchsucht werden
 	- [ ] Felder können nach verschiedenen Kriterien sortiert werden
+	- [ ] Das Suchen und Sortieren der Felder funktioniert ohne Internetverbindung
 
 #### Implementable Story 2.1.1 Suche nach Feldern
 > Als Benutzer möchte ich nach einzelnen Feldern suchen.
@@ -259,12 +260,17 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 - Akzeptanztests:
     - [ ] Ein Foto kann einem Schadensfall hinzugefügt werden
 	- [ ] Ein Schadensfall kann mit mehreren Fotos dokumentiert werden
+	- [ ] Die Fotos werden lokal zwischengespeichert
 
 ##### Task 2.2.1.1 Foto aus der App machen
 
 - Aufwandsschätzung: 4 Stunden
 
 ##### Task 2.2.1.2 Fotos einem Schadensfall zuordnen
+
+- Aufwandsschätzung: 2 Stunden
+
+##### Task 2.2.1.3 Zwischenspeichern der Fotos
 
 - Aufwandsschätzung: 2 Stunden
 
@@ -284,40 +290,41 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 
 ### Feature 2.3 Eigenes Datenmodell
 
-> Als Nutzer möchte ich die Vorteile eines Datenmodells nutzen
+> Als Nutzer möchte ich ein eigenes Datenmodell verwenden, um dessen Vorteile zu nutzen.
 
 - Aufwandsschätzung: L
 - Akzeptanztests:
     - [ ] Eigenes Datenmodel vorhanden
 	- [ ] Modell ist les- und schreibbar
 
-#### Implementable Story 2.3.1 Eigenes Datenmodel
-> Als Nutzer möchte ich, dass die App ein eigenes Datenmodel verwendet.
+#### Implementable Story 2.3.1 Eigenes Datenmodell
+> Als Nutzer möchte ich, dass die App ein eigenes Datenmodell verwendet.
 
 - Aufwandsschätzung: 80 SP
 - Akzeptanztests:
-    - [ ] Eigenes Datenmodel verwendet
+    - [ ] Eigenes Datenmodell verwendet
 
-##### Task 2.3.1.1 Datenmodel konzipieren
+##### Task 2.3.1.1 Datenmodell konzipieren
 
 - Aufwandsschätzung: 8 Stunden
 
-##### Task 2.3.1.2 Datenmodel implementieren 
+##### Task 2.3.1.2 Datenmodell implementieren 
 
 - Aufwandsschätzung: 4 Stunden
 
-#### Implementable Story 2.3.2 Das Datenmodel ist einlesbar und schreibbar
-> Als Nutzer möchte ich, dass das Datenmodel einlesbar und schreibbar ist.
+#### Implementable Story 2.3.2 Das Datenmodell ist einlesbar und schreibbar
+> Als Nutzer möchte ich, dass das Datenmodell einlesbar und schreibbar ist.
 
 - Aufwandsschätzung: 60 Story Points
-- Akzeptanztests:
-    - [ ] Beim Bearbeiten eines Schadensfalls werden die dazugehörigen Fotos angezeigt
+- Akzeptanztests:    
+	- [ ] Das Datenmodell ist schreibbar
+	- [ ] Das Datenmodell ist einlesbar
 
 ##### Task 2.3.2.1 Datenmodell scheibbar
 
 - Aufwandsschätzung: 4 Stunden
 
-##### Task 2.3.2.2 Datenmodel einlesbar
+##### Task 2.3.2.2 Datenmodell einlesbar
 - Aufwandsschätzung: 4 Stunden
 
 ### Feature 2.4 *Export und Import von Felderdaten*
@@ -479,7 +486,7 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 - Akzeptanztests:
     - [ ] Englisch wird unterstützt
     - [ ] Deutsch wird unterstützte
-    - [ ] weitere Sprachen sollen mit wenig Aufwand hinzugefügt werden können
+    - [ ] Der Code enthält keine Text-Literale
 
 #### Implementable Story 2.7.1 *Sprachunabhängige GUI*
 
@@ -500,11 +507,11 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 	- [ ] Alle Texte, Buttons, und sonstige Elemente die Schrift enthalten sind auf Deutsch
 	- [ ] Alle Texte, Buttons, und sonstige Elemente die Schrift enthalten sind auf Englisch
 
-##### Task 2.7.2.3 *Deutsche Oberfläche*
-- Aufwandschätzung: 2 Stunden
+##### Task 2.7.2.1 *Deutsche Oberfläche*
+- Aufwandsschätzung: 2 Stunden
 
 ##### Task 2.7.2.2 *Englische Oberfläche*
-- Aufwandschätzung: 2,5 Stunden
+- Aufwandsschätzung: 2,5 Stunden
 
 ### Feature 2.8 *Navigation zu den Feldern via Google Maps*
 > Als Nutzer will ich zu den Feldern die z.B einen Schaden haben navigieren können um die Felder finden. Gerade wenn ich die Felder/Schaden nicht selbst erstellt habe.

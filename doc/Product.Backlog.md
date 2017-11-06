@@ -3,7 +3,9 @@
 Hier werden **alle** Anforderungen in Form von **User Stories** geordnet aufgelistet.
  
 ## Epic 1 Critical Features
- 
+
+> Als Benutzer möchte ich die wichtigsten Funktionen zur Verwaltung von Feldern und Schadensfällen in der App verwenden.
+
 Alle unbedingt notwendigen Anforderungen werden hier behandelt.
 Die visuelle Darstellung der Schadensfälle muss in der App gewährleistet sein, um dem User bereits gekennzeichnete Felder zu zeigen und um direktes Feedback zu liefern. Dies wird durch die Implementierung einer Karte in der App und in ihr enthaltenen graphischen Objekten erreicht.
 Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erstellen, bearbeiten und löschen.
@@ -193,6 +195,9 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
 - Aufwandsschätzung: 3 Stunden
  
 ## Epic 2 Additional Features
+
+> Als Benutzer möchte ich, dass die App mir weitere hilfreiche Funktionen anbietet.
+
 Hier werden alle Features aufgeführt die zusätzlich zu den gegebenen Anforderungen implementiert werden sollen.
 Es werden eventuell nicht alle Features die hier aufgeführt werden später implementiert werden.
 
@@ -526,12 +531,11 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 
 
 ### Feature 2.9 *Einzeichnen von Eckpunkten*
-> Als Nutzer möchte ich nur Eckpunkte einzeichnen oder ablaufen und dann die Feldgröße berechnen
+> Als Nutzer möchte ich nur Eckpunkte einzeichnen und daraus die Feldgröße berechnen
 
 - Aufwandsschätzung: M
 - Akzeptanztests:
     - [ ] Punkte können manuell auf der Karte gesetzt werden
-    - [ ] Einzlene Punkte können per GPS hinzugefügt werden
     - [ ] Fläche soll aus den Punkten berechnet werden (mit bestehenden Algorithmus)
 
 #### Implementable Story 2.9.1 *einzelne Punkte erfassen*
@@ -539,14 +543,8 @@ Es werden eventuell nicht alle Features die hier aufgeführt werden später impl
 
 - Aufwandsschätzung: 40 SP
 - Aktzeptanztests:
-	- [ ] Eckpunkte müssen über das GPS bestimmt sein
 	- [ ] Eckpunkte können manuell hinzugefügt werden können
-	- [ ] Eckpunkte können sowohl händisch als auch per GPS eingetragen werden (Von einem Feld)
 
-##### Task 2.9.1.1 *Punkte mit GPS einzeichnen*
-
-- Aufwandsschätzung: 5 Stunden
-
-##### Task 2.9.1.2 *Punkte manuell einzeichnen*
+##### Task 2.9.1.1 *Punkte manuell einzeichnen*
 
 - Aufwandsschätzung: 3,5 Stunden

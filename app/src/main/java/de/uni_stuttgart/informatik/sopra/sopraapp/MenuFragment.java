@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -50,9 +49,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
-        Button add = (Button) view.findViewById(R.id.button_add);
+
+        Button add = view.findViewById(R.id.button_add);
+        Button loc = view.findViewById(R.id.button_location);
+
         add.setOnClickListener(this);
-        // Inflate the layout for this fragment
+        loc.setOnClickListener(this);
+
         return view;
     }
 
@@ -60,6 +63,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -76,13 +80,22 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         if(mListener != null){
             switch (v.getId()) {
                 case R.id.button_add:
                     mListener.onAddButtonInteraction();
                     break;
+                case R.id.button_location:
+                    checkLocPermissions();
+                    mListener.onLocationButtonInteraction();
+                    break;
             }
         }
+    }
+
+    private void checkLocPermissions() {
+        //TODO check Permissions
     }
 
     /**
@@ -98,5 +111,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onAddButtonInteraction();
+        void onLocationButtonInteraction();
     }
 }

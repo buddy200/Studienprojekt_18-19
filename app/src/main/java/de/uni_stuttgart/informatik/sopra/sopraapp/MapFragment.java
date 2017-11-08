@@ -2,9 +2,9 @@ package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,8 +18,8 @@ import org.osmdroid.views.MapView;
  * Created by gin on 03.11.17.
  */
 
-public class MapFragment extends Fragment implements ItemListDialogFragment.Listener {
-    private static final String TAG = "MainMapFragment";
+public class MapFragment extends Fragment {
+    private static final String TAG = "MapFragment";
 
     ConstraintLayout cl;
     ItemListDialogFragment list;
@@ -37,7 +37,6 @@ public class MapFragment extends Fragment implements ItemListDialogFragment.List
         super.onCreate(savedInstanceState);
 
         list =  ItemListDialogFragment.newInstance(5);
-        menu = MenuFragment.newInstance("1", "2");
 
 
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -52,7 +51,7 @@ public class MapFragment extends Fragment implements ItemListDialogFragment.List
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.map_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_map, container, false);
 
     }
 
@@ -69,15 +68,6 @@ public class MapFragment extends Fragment implements ItemListDialogFragment.List
         if(permissionGranted){
             MapView m = new MapView(getContext());
             cl.addView(m);
-
-            FloatingActionButton fab = new FloatingActionButton(getContext());
-            fab.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View v) {
-                                           list.show(getChildFragmentManager(), "Dialog");
-                                       }
-            });
-            cl.addView(fab);
 
         }else {
             TextView v = new TextView(getContext());
@@ -117,9 +107,4 @@ public class MapFragment extends Fragment implements ItemListDialogFragment.List
 
     }
 
-
-    @Override
-    public void onItemClicked(int position) {
-
-    }
 }

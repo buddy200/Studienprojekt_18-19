@@ -26,6 +26,7 @@ public class UTMCoordinate {
 
     /**
      * the east value (based of the middle merdian)
+     *
      */
     private int eastValue;
 

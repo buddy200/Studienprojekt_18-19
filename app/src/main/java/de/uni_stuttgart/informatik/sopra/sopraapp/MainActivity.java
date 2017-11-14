@@ -2,7 +2,10 @@ package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 
 /**
  * sopra_priv
@@ -34,7 +37,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationButtonInteraction() {
-        map.animateToPosition(48.727504, 9.138324);
+        map.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
     }
 
     @Override

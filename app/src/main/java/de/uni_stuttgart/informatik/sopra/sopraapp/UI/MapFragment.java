@@ -1,9 +1,7 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp;
+package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -14,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
 /**
  * sopra_priv
@@ -29,12 +25,8 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 public class MapFragment extends Fragment {
     private static final String TAG = "MapFragment";
 
-    //Uni Stuttgart - compsci building
-    private static final GeoPoint START = new GeoPoint( 48.745424, 9.106488 );
-
     private ConstraintLayout cl;
-    private MapView map;
-    private IMapController mapController;
+    private MapViewHandler mapViewHandler;
 
     private boolean permissionGranted = true;
 
@@ -75,22 +67,8 @@ public class MapFragment extends Fragment {
 
         if(permissionGranted){
 
-            map = new MapView(getContext());
-            map.setTileSource(TileSourceFactory.MAPNIK);
-            //map.setBuiltInZoomControls(true);
-            map.setMultiTouchControls(true);
-            mapController = map.getController();
-            mapController.setZoom(20);
-            map.setUseDataConnection(true);
-            //default center is campus uni stuttgart
-            mapController.setCenter(START);
-
-            MyLocationNewOverlay myLocationOverlay = new MyLocationNewOverlay(map);
-            myLocationOverlay.enableMyLocation();
-            myLocationOverlay.enableFollowLocation();
-            map.getOverlays().add(myLocationOverlay);
-
-            cl.addView(map);
+            mapViewHandler = new MapViewHandler(getContext());
+            cl.addView(mapViewHandler.getMapView());
 
 
         }else {
@@ -141,7 +119,9 @@ public class MapFragment extends Fragment {
      */
     public void animateToPosition(double lat, double lon){
         GeoPoint startPoint = new GeoPoint(lat, lon);
-        mapController.animateTo(startPoint);
+        if(mapViewHandler != null) {
+            mapViewHandler.animateTo(startPoint);
+        }
     }
 
 }

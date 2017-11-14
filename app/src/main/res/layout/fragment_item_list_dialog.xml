@@ -7,5 +7,5 @@
     android:clipToPadding="false"
     android:paddingBottom="@dimen/list_item_spacing_half"
     android:paddingTop="@dimen/list_item_spacing_half"
-    tools:context="de.uni_stuttgart.informatik.sopra.sopraapp.ItemListDialogFragment"
+    tools:context="de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment"
     tools:listitem="@layout/fragment_item_list_dialog_item" />

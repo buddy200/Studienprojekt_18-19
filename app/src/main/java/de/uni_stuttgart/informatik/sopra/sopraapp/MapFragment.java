@@ -18,6 +18,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 /**
  * sopra_priv
@@ -28,14 +29,14 @@ import org.osmdroid.views.MapView;
 public class MapFragment extends Fragment {
     private static final String TAG = "MapFragment";
 
-    ConstraintLayout cl;
-    ItemListDialogFragment list;
-    MenuFragment menu;
-    MapView map;
-    IMapController mapController;
+    //Uni Stuttgart - compsci building
+    private static final GeoPoint START = new GeoPoint( 48.745424, 9.106488 );
 
+    private ConstraintLayout cl;
+    private MapView map;
+    private IMapController mapController;
 
-    boolean permissionGranted = true;
+    private boolean permissionGranted = true;
 
     //Please keep this method order!
     //Fragment lifecycle is in the same order
@@ -47,6 +48,11 @@ public class MapFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
+        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            permissionGranted = false;
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             permissionGranted = false;
@@ -73,15 +79,24 @@ public class MapFragment extends Fragment {
         super.onStart();
 
         if(permissionGranted){
+
             map = new MapView(getContext());
             map.setTileSource(TileSourceFactory.MAPNIK);
             //map.setBuiltInZoomControls(true);
             map.setMultiTouchControls(true);
             mapController = map.getController();
             mapController.setZoom(20);
+            map.setUseDataConnection(true);
             //default center is campus uni stuttgart
-            mapController.setCenter(new GeoPoint( 48.745424, 9.106488 ));
+            mapController.setCenter(START);
+
+            MyLocationNewOverlay myLocationOverlay = new MyLocationNewOverlay(map);
+            myLocationOverlay.enableMyLocation();
+            myLocationOverlay.enableFollowLocation();
+            map.getOverlays().add(myLocationOverlay);
+
             cl.addView(map);
+
 
         }else {
             TextView v = new TextView(getContext());

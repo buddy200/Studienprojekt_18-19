@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:text="Search for Fields or Persons.." />
 
 
         <LinearLayout
@@ -27,24 +27,28 @@
                 android:id="@+id/button_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="MENU" />
 
             <Button
                 android:id="@+id/button_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sample Loc" />
+                android:layout_weight="1"
+                android:text=" Loc" />
 
             <Button
                 android:id="@+id/button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Button" />
 
             <Button
                 android:id="@+id/button4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Button" />
         </LinearLayout>
     </RelativeLayout>

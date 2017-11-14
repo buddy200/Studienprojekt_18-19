@@ -12,7 +12,8 @@ import java.util.Queue;
 public class Field {
 
     private boolean finised = false;
-    private List<CornerPoint> cornerPoints = new ArrayList<>();
+    //removed private to access corner points - FB
+    List<CornerPoint> cornerPoints = new ArrayList<>();
 
     /**
      * the size of the field
@@ -73,6 +74,10 @@ public class Field {
      */
     public double getSize() {
         return finised ? size : null;
+    }
+
+    public List<CornerPoint> getCornerPoints(){
+        return cornerPoints;
     }
 
 }

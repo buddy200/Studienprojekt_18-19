@@ -69,6 +69,8 @@ public class Field {
                 } else {
                     //make triangle
                 }
+
+                //TODO recalculate angles
             }
         }
 

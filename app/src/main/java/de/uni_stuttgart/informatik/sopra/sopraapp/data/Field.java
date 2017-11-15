@@ -26,9 +26,11 @@ public class Field {
     }
 
     public void addCornerPoint (CornerPoint cp) {
-        cornerPoints.add(cp);
-        if (cornerPoints.size() > 2) {
-            cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);
+        if(!finised) {
+            cornerPoints.add(cp);
+            if (cornerPoints.size() > 2) {
+                cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);
+            }
         }
     }
 

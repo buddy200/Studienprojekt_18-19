@@ -1,9 +1,12 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Triangle;
 
 /**
  * Created by Christian on 13.11.2017.
@@ -42,19 +45,21 @@ public class Field {
     }
 
     private void calculateSize() {
+        List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints.size());
+        Collections.copy(rmCopy, cornerPoints);
         Queue<CornerPoint> outwardPoints = new LinkedList<>();
-
-        //TODO check for correct zone
+        List<Triangle> triangleList = new ArrayList<>();
 
         for(CornerPoint cp : cornerPoints) {
-            if (cp.getAngle() > 180 /* or pi*/) {
+            if (cp.getAngle() > Math.PI ) {
                 outwardPoints.add(cp);
             }
         }
 
         for (int i = 0; i < cornerPoints.size()-2; i++) {
             if(outwardPoints.isEmpty()){
-                //simple triangulation
+                triangleList.add(new Triangle(rmCopy.get(0), rmCopy.get(1), rmCopy.get(2)));
+                rmCopy.remove(1);
             } else {
                 CornerPoint cp = outwardPoints.poll();
                 //TODO if is not fitting
@@ -66,7 +71,10 @@ public class Field {
                 }
             }
         }
-        //TODO calculate the field size
+
+        for (Triangle t : triangleList) {
+            size += t.getSize();
+        }
 
     }
 

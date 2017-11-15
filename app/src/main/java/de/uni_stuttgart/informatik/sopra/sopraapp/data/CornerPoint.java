@@ -18,6 +18,7 @@ public class CornerPoint {
     /**
      * the angle at this cornerpoint
      * on the right side following the input path
+     * as radian
      */
     private double angle;
 
@@ -41,7 +42,7 @@ public class CornerPoint {
 
             //maybe remove itself if angle = 180°
         } else {
-            //TODO 
+            //TODO
         }
 
     }

@@ -30,9 +30,6 @@ public class UTMCoordinate {
         return ((int)(middleMerdian+180)/6) +1;
     }
 
-
-
-
     public int getNorthing() {
         return northing;
     }
@@ -47,5 +44,16 @@ public class UTMCoordinate {
 
     public void setEasting(int easting) {
         this.easting = easting;
+    }
+
+    public double getMiddleMerdian() {
+        return middleMerdian;
+    }
+    public void setMiddleMerdian(double middleMerdian) {
+        this.middleMerdian = middleMerdian;
+    }
+
+    public boolean isSouth() {
+        return southernHemisphere;
     }
 }

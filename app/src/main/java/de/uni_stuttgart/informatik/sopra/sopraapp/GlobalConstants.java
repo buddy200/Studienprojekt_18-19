@@ -28,7 +28,7 @@ public class GlobalConstants {
 
     /**
      * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh
-     * creates a square containing n polygons with m points, close to START_POINT  - FB
+     * creates a rectangle containing n polygons with m points, close to START_POINT  - FB
      * @param numberPolygons n
      * @param numberPoints m
      * @return ArrayList of polygons
@@ -44,7 +44,7 @@ public class GlobalConstants {
 
         for(int j=0; j<numberPolygons; j++) {
             Polygon p = new Polygon();
-            p.setTitle(String.valueOf("test"));
+            p.setTitle(String.valueOf(String.valueOf(j)));
             p.setFillColor(Color.argb(50,0,0,0));
             List<GeoPoint> points = new ArrayList<>();
             for (int i = 0; i < numberPoints; i++) {

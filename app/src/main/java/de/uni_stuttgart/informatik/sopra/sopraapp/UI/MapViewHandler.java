@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -30,7 +32,7 @@ public class MapViewHandler {
         this.context = context;
         init();
 
-        addPolygons(GlobalConstants.polygonTest(100,6));
+        addPolygons(GlobalConstants.polygonTest(100,5));
     }
 
     public void init(){
@@ -52,7 +54,20 @@ public class MapViewHandler {
         }
     }
 
-    public void addFields(List<GeoPoint> points){
+    public void addFields(List<Field> fields){
+        for(Field field : fields){
+
+            Polygon poly = new Polygon();
+            //TODO: dynamic color depending on state of field
+            poly.setFillColor(Color.BLACK);
+            List<GeoPoint> polyPoints = new ArrayList<>();
+
+            for(CornerPoint point : field.getCornerPoints()){
+                polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
+            }
+            poly.setPoints(polyPoints);
+            map.getOverlayManager().add(poly);
+        }
         //TODO
     }
 

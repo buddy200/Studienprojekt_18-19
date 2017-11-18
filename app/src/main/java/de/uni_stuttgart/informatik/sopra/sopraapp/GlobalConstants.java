@@ -8,6 +8,11 @@ import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 /**
  * sopra_priv
@@ -59,6 +64,45 @@ public class GlobalConstants {
 
             p.setPoints(points);
             polis.add(p);
+        }
+
+        return polis;
+    }
+
+    /**
+     * Same as polygonTest, only for fields, state is selected by random
+     * @param numberFields
+     * @param numberCornerPoints
+     * @return
+     */
+    public static List<Field> fieldTest(int numberFields, int numberCornerPoints){
+        //just small numbers to keep the tester from searching the rectangle
+        double Max = +0.001;
+        double Min = -0.001;
+
+        List<Field> polis = new ArrayList<>();
+        double initialLat = GlobalConstants.START_POINT.getLatitude();
+        double initialLon = GlobalConstants.START_POINT.getLongitude();
+
+        for(int j=0; j<numberFields; j++) {
+
+
+            List<CornerPoint> points = new ArrayList<>();
+            for (int i = 0; i < numberCornerPoints; i++) {
+                points.add(new CornerPoint(initialLat +  Min + (Math.random() * ((Max - Min) )),
+                        initialLon + Min + (Math.random() * ((Max - Min) ))));
+            }
+            if(j % (int) Math.sqrt(numberFields) == 0){
+                initialLon += 0.001;
+                initialLat = GlobalConstants.START_POINT.getLatitude();
+            }
+            initialLat += 0.001;
+
+            Field f = new Field(points);
+            f.setName(String.valueOf(j));
+            f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
+
+            polis.add(f);
         }
 
         return polis;

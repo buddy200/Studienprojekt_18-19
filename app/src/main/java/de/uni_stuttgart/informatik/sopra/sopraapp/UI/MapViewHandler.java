@@ -2,6 +2,8 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
@@ -32,7 +35,8 @@ public class MapViewHandler {
         this.context = context;
         init();
 
-        addPolygons(GlobalConstants.polygonTest(100,5));
+        //addPolygons(GlobalConstants.polygonTest(100,5));
+        addFields(GlobalConstants.fieldTest(20,4));
     }
 
     public void init(){
@@ -58,17 +62,40 @@ public class MapViewHandler {
         for(Field field : fields){
 
             Polygon poly = new Polygon();
-            //TODO: dynamic color depending on state of field
-            poly.setFillColor(Color.BLACK);
             List<GeoPoint> polyPoints = new ArrayList<>();
 
             for(CornerPoint point : field.getCornerPoints()){
                 polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
             }
+            // add field attributes to polygon attributes
             poly.setPoints(polyPoints);
+            poly.setFillColor(fieldToPolygonColor(field));
+            // invisible borders look really cool :D
+            poly.setStrokeColor(Color.argb(0,0,0,0));
+            Log.d("Field state:", String.valueOf(fieldToPolygonColor(field)));
+            Log.d("Real field state", String.valueOf(field.getState().name()));
+            poly.setTitle(field.getName());
             map.getOverlayManager().add(poly);
         }
         //TODO
+    }
+
+    /**
+     * map field state to color
+     * @param field
+     * @return
+     */
+    private int fieldToPolygonColor(Field field) {
+        switch (field.getState()){
+            case NoDamage:
+                return ContextCompat.getColor(context, R.color.stateNoDamage);
+            case LightDamage:
+                return ContextCompat.getColor(context, R.color.stateLightDamage);
+            case HighDamage:
+                return ContextCompat.getColor(context, R.color.stateHighDamage);
+            default:
+                return ContextCompat.getColor(context, R.color.stateDefault);
+        }
     }
 
     public void animateTo(GeoPoint point){

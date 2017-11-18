@@ -11,19 +11,27 @@ import java.util.Queue;
 
 public class Field {
 
-    private boolean finised = false;
-    //removed private to access corner points - FB
+    private boolean finished = false;
+
+    //the size of the field in m²
+    private double size;
+
+    //default values for field
+    String name = "Field";
+    FieldStates state = FieldStates.NoDamage;
     List<CornerPoint> cornerPoints = new ArrayList<>();
 
     /**
-     * the size of the field
-     * in m²
+     * fields need at least 3 corner points to exist
      */
-    private double size;
-
-    public Field() {
-
+    public Field(List<CornerPoint> cPoints) {
+        if(cPoints.size() < 2){
+            throw new IllegalArgumentException();
+        }else {
+            this.cornerPoints = cPoints; //TODO: does this copy work? We might need some deepCopy() stuff here
+        }
     }
+
 
     public void addCornerPoint (CornerPoint cp) {
         cornerPoints.add(cp);
@@ -36,7 +44,7 @@ public class Field {
         cornerPoints.get(cornerPoints.size()-1).calculateAngle(cornerPoints.get(cornerPoints.size()-2), cornerPoints.get(0));
         cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size()-1), cornerPoints.get(1));
         calculateSize();
-        finised = true;
+        finished = true;
     }
 
     private void calculateSize() {
@@ -73,11 +81,25 @@ public class Field {
      * @return the size of the field or @code{null} if the field isn't finished
      */
     public double getSize() {
-        return finised ? size : null;
+        return finished ? size : null;
     }
 
     public List<CornerPoint> getCornerPoints(){
         return cornerPoints;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+    public String getName(){
+        return this.name;
+    }
+
+    public void setState(FieldStates state){
+        this.state = state;
+    }
+    public FieldStates getState(){
+        return this.state;
     }
 
 }

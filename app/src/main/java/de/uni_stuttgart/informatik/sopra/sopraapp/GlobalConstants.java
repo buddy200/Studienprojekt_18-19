@@ -57,10 +57,10 @@ public class GlobalConstants {
                         initialLon + Min + (Math.random() * ((Max - Min) ))));
             }
             if(j % (int) Math.sqrt(numberPolygons) == 0){
-                initialLon += 0.001;
+                initialLon += 0.003;
                 initialLat = GlobalConstants.START_POINT.getLatitude();
             }
-            initialLat += 0.001;
+            initialLat += 0.003;
 
             p.setPoints(points);
             polis.add(p);
@@ -93,10 +93,10 @@ public class GlobalConstants {
                         initialLon + Min + (Math.random() * ((Max - Min) ))));
             }
             if(j % (int) Math.sqrt(numberFields) == 0){
-                initialLon += 0.001;
+                initialLon += 0.003;
                 initialLat = GlobalConstants.START_POINT.getLatitude();
             }
-            initialLat += 0.001;
+            initialLat += 0.003;
 
             Field f = new Field(points);
             f.setName(String.valueOf(j));

@@ -1,5 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Queue;
  */
 
 public class Field {
+    private static final String TAG = "Field";
 
     private boolean finished = false;
 
@@ -26,7 +29,7 @@ public class Field {
      */
     public Field(List<CornerPoint> cPoints) {
         if(cPoints.size() < 2){
-            throw new IllegalArgumentException();
+            Log.e(TAG, "not enough corner points provided for field: " + name);
         }else {
             this.cornerPoints = cPoints; //TODO: does this copy work? We might need some deepCopy() stuff here
         }

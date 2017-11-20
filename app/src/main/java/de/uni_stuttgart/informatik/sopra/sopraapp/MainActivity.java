@@ -4,9 +4,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
@@ -48,11 +50,14 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onLocationButtonInteraction() {
         Location loc = mapFragment.getGPSPostion();
+
         if(loc != null) {
+            mapFragment.setCurrLocMatrker(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
             mapFragment.animateToPosition(loc.getLatitude(), loc.getLongitude());
         }
                 else{
-                    Log.e("GPSErr", "Keine Location");
+            Toast.makeText(this, "Keine Standortdaten verfügbar. Standorterfassung aktiviert?", Toast.LENGTH_SHORT).show();
+                     //Todo add to Strings xml
             }
 
      //   mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());

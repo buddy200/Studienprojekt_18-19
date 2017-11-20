@@ -40,19 +40,18 @@ public class MapFragment extends Fragment implements LocationListener {
     private LocationManager locationManager;
 
 
-
     //Please keep this method order!
     //Fragment lifecycle is in the same order
     //https://developer.android.com/images/fragment_lifecycle.png
     //Every Method not overriding some fragment lifecycle stuff below
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
             permissionGranted = false;
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
@@ -68,21 +67,21 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         cl = getView().findViewById(R.id.cl);
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
-        if(permissionGranted){
+        if (permissionGranted) {
 
             mapViewHandler = new MapViewHandler(getContext());
             cl.addView(mapViewHandler.getMapView());
             mListener.onMapFragmentComplete();
 
-        }else {
+        } else {
             TextView v = new TextView(getContext());
             v.setText("Permission not granted - sorry");
             cl.addView(v);
@@ -95,16 +94,16 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try{
+        try {
             this.mListener = (OnCompleteListener) context;
-        }catch(final ClassCastException e){
+        } catch (final ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
         }
     }
 
 
     @Override
-    public void onActivityCreated(Bundle savedInstance){
+    public void onActivityCreated(Bundle savedInstance) {
         super.onActivityCreated(savedInstance);
 
     }
@@ -115,7 +114,7 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case 0:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -149,17 +148,22 @@ public class MapFragment extends Fragment implements LocationListener {
 
     /**
      * animate to given position
+     *
      * @param lat
      * @param lon
      */
-    public void animateToPosition(double lat, double lon){
+    public void animateToPosition(double lat, double lon) {
         GeoPoint startPoint = new GeoPoint(lat, lon);
-        if(mapViewHandler != null) {
+        if (mapViewHandler != null) {
             mapViewHandler.animateTo(startPoint);
         }
     }
 
-    public void addData(List<Field> fields){
+    public void setCurrLocMatrker(GeoPoint point){
+        mapViewHandler.setCurrlocMarker(point);
+    }
+
+    public void addData(List<Field> fields) {
         mapViewHandler.addFields(fields);
     }
 
@@ -190,29 +194,29 @@ public class MapFragment extends Fragment implements LocationListener {
 
     public Location getGPSPostion() {
         Location location = null;
-        try{
-            locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        try {
+            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                 }
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
-                Log.e("GPSerr", "Hallo3");
-                if(locationManager != null){
-                    Log.e("GPSerr", "Hallo");
-                    }
-                    location =  locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location == null){
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (locationManager != null) {
+                }
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
+
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location == null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
                 }
 
 
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return location;

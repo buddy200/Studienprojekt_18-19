@@ -5,6 +5,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MapViewHandler {
     MapView map;
     IMapController mapController;
     Context context;
+    private Marker currentlocmarker;
 
     public MapViewHandler(Context context){
         this.context = context;
@@ -70,6 +72,13 @@ public class MapViewHandler {
         //TODO
     }
 
+    public void setCurrlocMarker(GeoPoint point){
+        map.getOverlayManager().remove(currentlocmarker);
+        currentlocmarker = new Marker(map);
+        currentlocmarker.setPosition(point);
+        map.getOverlayManager().add(currentlocmarker);
+
+    }
 
     public void animateTo(GeoPoint point){
         mapController.animateTo(point);

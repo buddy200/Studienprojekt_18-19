@@ -24,6 +24,7 @@ public class FieldPolygon extends Polygon {
 
     Context context;
     Paint textPaint;
+    GeoPoint centroidPoint;
 
     public FieldPolygon(Context context){
         super(context);
@@ -33,6 +34,7 @@ public class FieldPolygon extends Polygon {
         //init default values
         this.setFillColor(ContextCompat.getColor(context, R.color.stateDefault));
         this.setTitle("Field");
+        //invisible borders
         this.setStrokeColor(Color.argb(0,0,0,0));
 
         textPaint = new Paint();
@@ -78,6 +80,7 @@ public class FieldPolygon extends Polygon {
         double centerY = lowY0 + ((highY1 - lowY0) / 2);
 
         Point polyCentroidPoint = new Point();
+        centroidPoint = new GeoPoint(centerX, centerY);
         mapView.getProjection().toPixels(new GeoPoint(centerX, centerY), polyCentroidPoint);
 
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
@@ -112,25 +115,3 @@ public class FieldPolygon extends Polygon {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

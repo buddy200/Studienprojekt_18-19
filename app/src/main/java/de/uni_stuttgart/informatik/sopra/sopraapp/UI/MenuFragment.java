@@ -14,14 +14,14 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MenuFragment.OnFragmentInteractionListener} interface
+ * {@link OnMenuFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link MenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "MenuFragment";
-    private OnFragmentInteractionListener mListener;
+    private OnMenuFragmentInteractionListener mListener;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -66,11 +66,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnMenuFragmentInteractionListener) {
+            mListener = (OnMenuFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnMenuFragmentInteractionListener");
         }
     }
 
@@ -110,7 +110,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnMenuFragmentInteractionListener {
         // TODO: Update argument type and name
         void onAddButtonInteraction();
         void onLocationButtonInteraction();

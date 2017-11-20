@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
+import android.view.MotionEvent;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -86,6 +87,13 @@ public class FieldPolygon extends Polygon {
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
 
         super.draw(canvas,mapView, shadow);
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent event, MapView mapView){
+
+
+        return false;
     }
 
     /**

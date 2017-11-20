@@ -80,7 +80,8 @@ public class MapViewHandler {
 
     }
 
-    public void animateTo(GeoPoint point){
+    public void animateTo(GeoPoint point) {
+        mapController.setZoom(20);
         mapController.animateTo(point);
     }
 

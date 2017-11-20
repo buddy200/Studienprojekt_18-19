@@ -10,6 +10,7 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
@@ -44,7 +45,9 @@ public class MainActivity extends FragmentActivity
     //handle menu buttons interactions
     @Override
     public void onListButtonInteraction() {
-        ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "dialog");
+        ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "FieldList");
+        //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "Field");
+
     }
 
     @Override
@@ -76,5 +79,6 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onMapFragmentComplete() {
         mapFragment.addData(testData);
+
     }
 }

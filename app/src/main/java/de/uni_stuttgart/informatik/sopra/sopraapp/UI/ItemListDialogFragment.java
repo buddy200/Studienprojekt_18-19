@@ -1,9 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -36,6 +33,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
     // TODO: Customize parameter argument names
+    private static final String ARG_ITEM_LIST_BUNDLE = "list_bundle";
     private static final String ARG_ITEM_LIST = "list";
     private Listener mListener;
 
@@ -49,9 +47,9 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             fieldBundles.add(fields.get(i).getBundle());
         }
         Bundle listBundle = new Bundle();
-        listBundle.putParcelableArrayList("test", fieldBundles);
-        args.putBundle(ARG_ITEM_LIST, listBundle);
-        Log.e("BLAH", String.valueOf(args.getBundle(ARG_ITEM_LIST).getParcelableArrayList("test").size()));
+        listBundle.putParcelableArrayList(ARG_ITEM_LIST, fieldBundles);
+        args.putBundle(ARG_ITEM_LIST_BUNDLE, listBundle);
+        Log.e("BLAH", String.valueOf(args.getBundle(ARG_ITEM_LIST_BUNDLE).getParcelableArrayList(ARG_ITEM_LIST).size()));
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,7 +65,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new ItemAdapter(getArguments().getBundle(ARG_ITEM_LIST)));
+        recyclerView.setAdapter(new ItemAdapter(getArguments().getBundle(ARG_ITEM_LIST_BUNDLE)));
     }
 
     @Override
@@ -134,8 +132,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             Log.e("ItemListDialogFragment", "size: " + fieldBundles.size());
             mFieldBundle = fieldBundles;
             bundleListFields = new ArrayList<>();
-            for(int i=0; i<fieldBundles.getParcelableArrayList("test").size(); i++){
-                bundleListFields.add((Bundle) fieldBundles.getParcelableArrayList("test").get(i));
+            for(int i=0; i<fieldBundles.getParcelableArrayList(ARG_ITEM_LIST).size(); i++){
+                bundleListFields.add((Bundle) fieldBundles.getParcelableArrayList(ARG_ITEM_LIST).get(i));
             }
         }
 

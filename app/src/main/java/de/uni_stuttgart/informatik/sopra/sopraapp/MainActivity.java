@@ -36,12 +36,12 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(500,4);
+        testData = GlobalConstants.fieldTest(100,4);
     }
 
     //handle menu buttons interactions
     @Override
-    public void onAddButtonInteraction() {
+    public void onListButtonInteraction() {
         ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "dialog");
     }
 
@@ -61,7 +61,9 @@ public class MainActivity extends FragmentActivity
     //handle item clicked interaction from ItemListDialogFragment
     @Override
     public void onListItemClicked(int position) {
-        Log.d("FieldList", "clicked on position: " + position);
+        Log.d("FieldList", "clicked on position: " + testData.get(position).getName());
+        mapFragment.animateToPosition(testData.get(position).getCornerPoints().get(0).getWGS().getLatitude(),
+                testData.get(position).getCornerPoints().get(0).getWGS().getLongitude());
     }
 
 

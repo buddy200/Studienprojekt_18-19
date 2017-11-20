@@ -3,6 +3,9 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -26,13 +29,17 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * Mail: felix.burk@gmail.com
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements LocationListener {
     private static final String TAG = "MapFragment";
 
     private ConstraintLayout cl;
     private MapViewHandler mapViewHandler;
 
     private boolean permissionGranted = true;
+    private boolean permissionGPSGranted = true;
+    private LocationManager locationManager;
+
+
 
     //Please keep this method order!
     //Fragment lifecycle is in the same order
@@ -125,6 +132,15 @@ public class MapFragment extends Fragment {
                     //no permission - no map
                 }
                 break;
+            case 1:
+                //GPS Permission check
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permissionGPSGranted = true;
+                } else {
+                    permissionGPSGranted = false;
+                }
+                break;
             default:
                 Log.e(TAG, "requested permission not handled");
         }
@@ -147,8 +163,58 @@ public class MapFragment extends Fragment {
         mapViewHandler.addFields(fields);
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
     public interface OnCompleteListener {
         void onMapFragmentComplete();
     }
 
+
+    public Location getGPSPostion() {
+        Location location = null;
+        try{
+            locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
+                Log.e("GPSerr", "Hallo3");
+                if(locationManager != null){
+                    Log.e("GPSerr", "Hallo");
+                    }
+                    location =  locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location == null){
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                }
+
+
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return location;
+    }
 }

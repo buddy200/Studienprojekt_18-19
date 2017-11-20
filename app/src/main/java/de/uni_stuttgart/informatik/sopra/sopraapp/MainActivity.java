@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -46,7 +47,15 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationButtonInteraction() {
-        mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
+        Location loc = mapFragment.getGPSPostion();
+        if(loc != null) {
+            mapFragment.animateToPosition(loc.getLatitude(), loc.getLongitude());
+        }
+                else{
+                    Log.e("GPSErr", "Keine Location");
+            }
+
+     //   mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
     }
 
     //handle item clicked interaction from ItemListDialogFragment

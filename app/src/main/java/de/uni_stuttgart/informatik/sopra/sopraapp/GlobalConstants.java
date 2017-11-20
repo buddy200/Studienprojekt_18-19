@@ -28,7 +28,7 @@ public class GlobalConstants {
     // random Geo Point in Moehringen
     public static final GeoPoint SOME_POINT = new GeoPoint(48.727504, 9.138324);
 
-    //default zoom value for the map
+    //default zoom value for the mapFragment
     public static final int DEFAULT_ZOOM = 20;
 
     /**

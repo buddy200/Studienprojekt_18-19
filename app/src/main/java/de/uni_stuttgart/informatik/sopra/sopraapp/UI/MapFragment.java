@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.util.List;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -69,7 +73,7 @@ public class MapFragment extends Fragment {
 
             mapViewHandler = new MapViewHandler(getContext());
             cl.addView(mapViewHandler.getMapView());
-
+            mListener.onMapFragmentComplete();
 
         }else {
             TextView v = new TextView(getContext());
@@ -78,9 +82,24 @@ public class MapFragment extends Fragment {
         }
     }
 
+    private OnCompleteListener mListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try{
+            this.mListener = (OnCompleteListener) context;
+        }catch(final ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
+        }
+    }
+
+
     @Override
     public void onActivityCreated(Bundle savedInstance){
         super.onActivityCreated(savedInstance);
+
     }
 
     //Methods not for fragment lifecycle
@@ -122,6 +141,14 @@ public class MapFragment extends Fragment {
         if(mapViewHandler != null) {
             mapViewHandler.animateTo(startPoint);
         }
+    }
+
+    public void addData(List<Field> fields){
+        mapViewHandler.addFields(fields);
+    }
+
+    public interface OnCompleteListener {
+        void onMapFragmentComplete();
     }
 
 }

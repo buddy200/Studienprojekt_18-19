@@ -16,11 +16,11 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 
 
 public class MainActivity extends FragmentActivity
-        implements MenuFragment.OnMenuFragmentInteractionListener, ItemListDialogFragment.Listener {
+        implements MenuFragment.OnMenuFragmentInteractionListener, ItemListDialogFragment.Listener, MapFragment.OnCompleteListener {
     private static final String TAG = "MainActivity";
 
 
-    MapFragment map;
+    MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class MainActivity extends FragmentActivity
 
         setContentView(R.layout.activity_main);
 
-        map = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
     }
 
     //handle menu buttons interactions
@@ -39,12 +39,19 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationButtonInteraction() {
-        map.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
+        mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
     }
 
     //handle item clicked interaction from ItemListDialogFragment
     @Override
     public void onListItemClicked(int position) {
         Log.d("FieldList", "clicked on position: " + position);
+    }
+
+
+    //add received data to the mapFragment
+    @Override
+    public void onMapFragmentComplete() {
+        mapFragment.addData(GlobalConstants.fieldTest(500,4));
     }
 }

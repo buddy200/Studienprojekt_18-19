@@ -29,9 +29,7 @@ public class MapViewHandler {
     public MapViewHandler(Context context){
         this.context = context;
         init();
-
-        //addPolygons(GlobalConstants.polygonTest(100,5));
-        addFields(GlobalConstants.fieldTest(500,4));
+        
     }
 
     public void init(){

@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -21,6 +25,7 @@ public class MainActivity extends FragmentActivity
 
 
     MapFragment mapFragment;
+    ArrayList<Field> testData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +34,14 @@ public class MainActivity extends FragmentActivity
         setContentView(R.layout.activity_main);
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+
+        testData = GlobalConstants.fieldTest(500,4);
     }
 
     //handle menu buttons interactions
     @Override
     public void onAddButtonInteraction() {
-        ItemListDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
+        ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "dialog");
     }
 
     @Override
@@ -52,6 +59,6 @@ public class MainActivity extends FragmentActivity
     //add received data to the mapFragment
     @Override
     public void onMapFragmentComplete() {
-        mapFragment.addData(GlobalConstants.fieldTest(500,4));
+        mapFragment.addData(testData);
     }
 }

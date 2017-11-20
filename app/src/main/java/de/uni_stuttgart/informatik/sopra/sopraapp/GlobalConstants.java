@@ -75,12 +75,12 @@ public class GlobalConstants {
      * @param numberCornerPoints
      * @return
      */
-    public static List<Field> fieldTest(int numberFields, int numberCornerPoints){
+    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
 
-        List<Field> polis = new ArrayList<>();
+        ArrayList<Field> polis = new ArrayList<>();
         double initialLat = GlobalConstants.START_POINT.getLatitude();
         double initialLon = GlobalConstants.START_POINT.getLongitude();
 
@@ -99,7 +99,7 @@ public class GlobalConstants {
             initialLat += 0.003;
 
             Field f = new Field(points);
-            f.setName(String.valueOf(j));
+            f.setName("Field Nr: " + String.valueOf(j));
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
             polis.add(f);

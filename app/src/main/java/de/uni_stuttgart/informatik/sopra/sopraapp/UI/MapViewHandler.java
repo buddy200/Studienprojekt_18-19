@@ -29,7 +29,7 @@ public class MapViewHandler {
     public MapViewHandler(Context context){
         this.context = context;
         init();
-        
+
     }
 
     public void init(){

@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ public class Field {
     String name = "Field";
     FieldStates state = FieldStates.NoDamage;
     List<CornerPoint> cornerPoints = new ArrayList<>();
+
+    //bundle keys
+    private static final String KEY_NAME = "title";
+    private static final String KEY_STATE = "state";
 
     /**
      * fields need at least 3 corner points to exist
@@ -103,6 +108,13 @@ public class Field {
     }
     public FieldStates getState(){
         return this.state;
+    }
+
+    public Bundle getBundle(){
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_NAME, name);
+        bundle.putSerializable(KEY_STATE, state);
+        return bundle;
     }
 
 }

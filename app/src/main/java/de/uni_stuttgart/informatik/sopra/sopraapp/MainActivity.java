@@ -72,6 +72,7 @@ public class MainActivity extends FragmentActivity
         Log.d("FieldList", "clicked on position: " + testData.get(position).getName());
         mapFragment.animateToPosition(testData.get(position).getCornerPoints().get(0).getWGS().getLatitude(),
                 testData.get(position).getCornerPoints().get(0).getWGS().getLongitude());
+        BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "Field");
     }
 
 

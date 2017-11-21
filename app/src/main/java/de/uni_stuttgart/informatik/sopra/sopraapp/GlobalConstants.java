@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
+import android.content.Context;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 
@@ -75,7 +76,7 @@ public class GlobalConstants {
      * @param numberCornerPoints
      * @return
      */
-    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints){
+    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints, Context context){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
@@ -98,7 +99,7 @@ public class GlobalConstants {
             }
             initialLat += 0.003;
 
-            Field f = new Field(points);
+            Field f = new Field(points, context);
             f.setName("Field Nr: " + String.valueOf(j));
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 

@@ -52,24 +52,20 @@ public class MapViewHandler {
             map.getOverlayManager().add(pol);
         }
     }
+    public void addField(Field field){
+        map.getOverlayManager().add( field.getFieldPolygon());
+    }
 
     public void addFields(List<Field> fields){
+
         for(Field field : fields){
-
-            FieldPolygon poly = new FieldPolygon(context);
-            List<GeoPoint> polyPoints = new ArrayList<>();
-
-            for(CornerPoint point : field.getCornerPoints()){
-                polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
-            }
-            // add field attributes to polygon attributes
-            poly.setPoints(polyPoints);
-            poly.setState(field.getState());
-            // invisible borders look really cool :D
-            poly.setTitle(field.getName());
-            map.getOverlayManager().add(poly);
+            map.getOverlayManager().add(field.getFieldPolygon());
         }
         //TODO
+    }
+    public void deleteField(Field field) {
+        map.getOverlayManager().remove(field);
+        field = null;
     }
 
     public void setCurrlocMarker(GeoPoint point){

@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100, 4);
+        testData = GlobalConstants.fieldTest(100, 4, this);
     }
 
     //handle menu buttons interactions

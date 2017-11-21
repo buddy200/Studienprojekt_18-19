@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity
             //Todo add to Strings xml
         }
 
-        //   mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
+        //mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
     }
 
     //handle item clicked interaction from ItemListDialogFragment

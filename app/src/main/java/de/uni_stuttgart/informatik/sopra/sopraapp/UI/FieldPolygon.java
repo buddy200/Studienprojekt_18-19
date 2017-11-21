@@ -13,7 +13,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polygon;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 /**
  * sopra_priv
@@ -96,30 +95,5 @@ public class FieldPolygon extends Polygon {
         return false;
     }
 
-    /**
-     * map field state to color
-     * @param field
-     * @return
-     */
-    private int stateToPolygonColor(FieldStates field) {
-        switch (field){
-            case NoDamage:
-                return ContextCompat.getColor(context, R.color.stateNoDamage);
-            case LightDamage:
-                return ContextCompat.getColor(context, R.color.stateLightDamage);
-            case HighDamage:
-                return ContextCompat.getColor(context, R.color.stateHighDamage);
-            default:
-                return ContextCompat.getColor(context, R.color.stateDefault);
-        }
-    }
-
-    /**
-     * changes the state the fill color depening on the state
-     * @param state
-     */
-    public void setState(FieldStates state){
-        this.setFillColor(stateToPolygonColor(state));
-    }
 
 }

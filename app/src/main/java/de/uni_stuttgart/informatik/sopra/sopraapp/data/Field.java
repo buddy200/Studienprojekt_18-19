@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
@@ -12,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 
 /**
@@ -97,6 +99,38 @@ public class Field {
 
     }
 
+    public void initPolygon() {
+        List<GeoPoint> polyPoints = new ArrayList<>();
+        for (CornerPoint point : cornerPoints) {
+            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
+        }
+        // add field attributes to polygon attributes
+        poly.setPoints(polyPoints);
+        poly.setFillColor(stateToPolygonColor(this.state));
+        // invisible borders look really cool :D
+        poly.setTitle(getName());
+
+    }
+
+
+    /**
+     * map field state to color
+     * @param field
+     * @return
+     */
+    private int stateToPolygonColor(FieldStates field) {
+        switch (field){
+            case NoDamage:
+                return ContextCompat.getColor(context, R.color.stateNoDamage);
+            case LightDamage:
+                return ContextCompat.getColor(context, R.color.stateLightDamage);
+            case HighDamage:
+                return ContextCompat.getColor(context, R.color.stateHighDamage);
+            default:
+                return ContextCompat.getColor(context, R.color.stateDefault);
+        }
+    }
+
     /**
      *
      * @return the size of the field or @code{null} if the field isn't finished
@@ -112,6 +146,7 @@ public class Field {
     public void setName(String name){
         this.name = name;
     }
+
     public String getName(){
         return this.name;
     }
@@ -119,31 +154,21 @@ public class Field {
     public void setState(FieldStates state){
         this.state = state;
     }
+
     public FieldStates getState(){
         return this.state;
     }
+
+    public FieldPolygon getFieldPolygon(){
+        return poly;
+    }
+
 
     public Bundle getBundle(){
         Bundle bundle = new Bundle();
         bundle.putString(KEY_NAME, name);
         bundle.putSerializable(KEY_STATE, state);
         return bundle;
-    }
-
-    public void initPolygon() {
-        List<GeoPoint> polyPoints = new ArrayList<>();
-        for (CornerPoint point : cornerPoints) {
-            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
-        }
-        // add field attributes to polygon attributes
-        poly.setPoints(polyPoints);
-        poly.setState(getState());
-        // invisible borders look really cool :D
-        poly.setTitle(getName());
-
-    }
-    public FieldPolygon getFieldPolygon(){
-        return poly;
     }
 
 }

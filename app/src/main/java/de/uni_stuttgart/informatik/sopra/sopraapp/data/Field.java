@@ -50,7 +50,7 @@ public class Field {
         }
         this.context = context;
         poly = new FieldPolygon(this.context);
-        initPolygon();
+        //initPolygon();
     }
 
 

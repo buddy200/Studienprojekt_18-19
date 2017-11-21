@@ -59,6 +59,7 @@ public class MapViewHandler {
     public void addFields(List<Field> fields){
 
         for(Field field : fields){
+            field.initPolygon();
             map.getOverlayManager().add(field.getFieldPolygon());
         }
         //TODO

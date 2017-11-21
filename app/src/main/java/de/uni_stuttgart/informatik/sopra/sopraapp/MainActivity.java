@@ -10,11 +10,11 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 /**
  * sopra_priv
@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100,4);
+        testData = GlobalConstants.fieldTest(100, 4);
     }
 
     //handle menu buttons interactions
@@ -52,18 +52,18 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationButtonInteraction() {
-        Location loc = mapFragment.getGPSPostion();
+        MYLocationListener locationListener = new MYLocationListener();
+        Location loc = locationListener.getGPSPosition(this, mapFragment);
 
-        if(loc != null) {
+        if (loc != null) {
             mapFragment.setCurrLocMatrker(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
             mapFragment.animateToPosition(loc.getLatitude(), loc.getLongitude());
-        }
-                else{
+        } else {
             Toast.makeText(this, "Keine Standortdaten verfügbar. Standorterfassung aktiviert?", Toast.LENGTH_SHORT).show();
-                     //Todo add to Strings xml
-            }
+            //Todo add to Strings xml
+        }
 
-     //   mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
+        //   mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
     }
 
     //handle item clicked interaction from ItemListDialogFragment

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -29,16 +30,15 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * Mail: felix.burk@gmail.com
  */
 
-public class MapFragment extends Fragment implements LocationListener {
+public class MapFragment extends Fragment {
     private static final String TAG = "MapFragment";
 
     private ConstraintLayout cl;
     private MapViewHandler mapViewHandler;
 
     private boolean permissionGranted = true;
-    private boolean permissionGPSGranted = true;
-    private LocationManager locationManager;
 
+    private OnCompleteListener mListener;
 
     //Please keep this method order!
     //Fragment lifecycle is in the same order
@@ -89,8 +89,6 @@ public class MapFragment extends Fragment implements LocationListener {
         }
     }
 
-    private OnCompleteListener mListener;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -101,7 +99,6 @@ public class MapFragment extends Fragment implements LocationListener {
             throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
         }
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstance) {
@@ -136,15 +133,13 @@ public class MapFragment extends Fragment implements LocationListener {
                 //GPS Permission check
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionGPSGranted = true;
                 } else {
-                    permissionGPSGranted = false;
+                    Toast.makeText(getActivity(), "Keine Standort Berechtigung", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
                 Log.e(TAG, "requested permission not handled");
         }
-
     }
 
     /**
@@ -160,7 +155,7 @@ public class MapFragment extends Fragment implements LocationListener {
         }
     }
 
-    public void setCurrLocMatrker(GeoPoint point){
+    public void setCurrLocMatrker(GeoPoint point) {
         mapViewHandler.setCurrlocMarker(point);
     }
 
@@ -168,58 +163,8 @@ public class MapFragment extends Fragment implements LocationListener {
         mapViewHandler.addFields(fields);
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
     public interface OnCompleteListener {
         void onMapFragmentComplete();
-    }
-
-
-    public Location getGPSPostion() {
-        Location location = null;
-        try {
-            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
-                if (locationManager != null) {
-                }
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location == null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    }
-                }
-
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return location;
     }
 }

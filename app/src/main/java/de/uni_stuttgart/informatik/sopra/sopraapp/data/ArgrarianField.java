@@ -29,6 +29,9 @@ public class ArgrarianField extends Field {
     private static final String KEY_NAME = "name";
     private static final String KEY_STATE = "state";
     private static final String KEY_COLOR = "color";
+    private static final String KEY_OWNER = "owner";
+    private static final String KEY_COUNTY = "county";
+
 
     /**
      * fields need at least 3 corner points to exist
@@ -110,6 +113,8 @@ public class ArgrarianField extends Field {
         bundle.putString(KEY_NAME, this.getName());
         bundle.putSerializable(KEY_STATE, this.state);
         bundle.putInt(KEY_COLOR, stateToPolygonColor(this.state));
+        bundle.putString(KEY_OWNER, this.getOwner());
+        bundle.putString(KEY_COUNTY, this.getCounty());
         return bundle;
     }
 

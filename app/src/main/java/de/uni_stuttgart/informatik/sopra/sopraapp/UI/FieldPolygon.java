@@ -36,7 +36,7 @@ public class FieldPolygon extends Polygon {
         this.setTitle("");
         //invisible borders
         this.setStrokeColor(Color.argb(0,0,0,0));
-
+        
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(50);

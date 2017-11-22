@@ -16,11 +16,7 @@ import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
-import java.util.List;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 
 /**
  * sopra_priv

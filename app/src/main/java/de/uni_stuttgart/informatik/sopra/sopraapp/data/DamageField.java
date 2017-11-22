@@ -27,7 +27,7 @@ public class DamageField extends Field {
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
         this.evaluator = context.getResources().getString(R.string.evaluator_default_name);
-        setName(context.getResources().getString(R.string.damagefield_name_default));
+        setName(context.getResources().getString(R.string.damage_case_defaut_name));
     }
 
     @Override

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 
 
 /**
@@ -24,11 +24,11 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     private static final String KEY_STATE = "state";
 
 
-    public static BottomSheetDialogFragment newInstance(Field field) {
+    public static BottomSheetDialogFragment newInstance(ArgrarianField argrarianField) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_NAME, field.getName());
-        args.putSerializable(KEY_STATE, field.getState());
+        args.putString(KEY_NAME, argrarianField.getName());
+        args.putSerializable(KEY_STATE, argrarianField.getState());
         fragment.setArguments(args);
 
         return fragment;

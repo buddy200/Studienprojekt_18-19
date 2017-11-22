@@ -8,12 +8,10 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 
 /**
  * sopra_priv
@@ -52,21 +50,21 @@ public class MapViewHandler {
             map.getOverlayManager().add(pol);
         }
     }
-    public void addField(Field field){
-        map.getOverlayManager().add( field.getFieldPolygon());
+    public void addField(ArgrarianField argrarianField){
+        map.getOverlayManager().add( argrarianField.getFieldPolygon());
     }
 
-    public void addFields(List<Field> fields){
+    public void addFields(List<ArgrarianField> argrarianFields){
 
-        for(Field field : fields){
-            field.initPolygon();
-            map.getOverlayManager().add(field.getFieldPolygon());
+        for(ArgrarianField argrarianField : argrarianFields){
+            argrarianField.initPolygon();
+            map.getOverlayManager().add(argrarianField.getFieldPolygon());
         }
         //TODO
     }
-    public void deleteField(Field field) {
-        map.getOverlayManager().remove(field);
-        field = null;
+    public void deleteField(ArgrarianField argrarianField) {
+        map.getOverlayManager().remove(argrarianField);
+        argrarianField = null;
     }
 
     public void setCurrlocMarker(GeoPoint point){

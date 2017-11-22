@@ -3,9 +3,6 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -22,7 +19,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 
 /**
  * sopra_priv
@@ -158,8 +155,8 @@ public class MapFragment extends Fragment {
         mapViewHandler.setCurrlocMarker(point);
     }
 
-    public void addData(List<Field> fields) {
-        mapViewHandler.addFields(fields);
+    public void addData(List<ArgrarianField> argrarianFields) {
+        mapViewHandler.addFields(argrarianFields);
     }
 
 

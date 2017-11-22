@@ -30,7 +30,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
         args.putString(KEY_NAME, field.getName());
         args.putSerializable(KEY_STATE, field.getState());
         fragment.setArguments(args);
-
         return fragment;
     }
 

@@ -49,7 +49,6 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         Bundle listBundle = new Bundle();
         listBundle.putParcelableArrayList(ARG_ITEM_LIST, fieldBundles);
         args.putBundle(ARG_ITEM_LIST_BUNDLE, listBundle);
-        Log.e("BLAH", String.valueOf(args.getBundle(ARG_ITEM_LIST_BUNDLE).getParcelableArrayList(ARG_ITEM_LIST).size()));
         fragment.setArguments(args);
         return fragment;
     }
@@ -129,7 +128,6 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         private final ArrayList<Bundle> bundleListFields;
 
         ItemAdapter(Bundle fieldBundles) {
-            Log.e("ItemListDialogFragment", "size: " + fieldBundles.size());
             mFieldBundle = fieldBundles;
             bundleListFields = new ArrayList<>();
             for(int i=0; i<fieldBundles.getParcelableArrayList(ARG_ITEM_LIST).size(); i++){

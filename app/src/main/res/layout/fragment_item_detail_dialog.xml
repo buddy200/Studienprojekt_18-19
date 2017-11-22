@@ -38,8 +38,73 @@
             android:paddingRight="@dimen/list_item_spacing"
             android:paddingTop="@dimen/list_item_spacing_half"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_state"
-            android:text="-state"/>
+            android:id="@+id/field_detail_region"
+            android:text="-region-"/>
+
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:id="@+id/field_detail_state"
+                android:text="-state-"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:id="@+id/field_detail_damage_date"
+                android:text="-damage date-"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:id="@+id/field_detail_damage_by"
+                android:text="-damage by-"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:id="@+id/field_detail_size"
+            android:text="-size-"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:id="@+id/field_detail_policyholder"
+            android:text="-name policyholer-"/>
 
     </LinearLayout>
 

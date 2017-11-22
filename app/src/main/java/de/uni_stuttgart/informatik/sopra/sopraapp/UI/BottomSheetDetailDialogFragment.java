@@ -1,8 +1,11 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +25,13 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
 
     private static final String KEY_NAME = "name";
     private static final String KEY_STATE = "state";
+    private static final String KEY_COLOR = "color";
 
 
     public static BottomSheetDialogFragment newInstance(ArgrarianField argrarianField) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_NAME, argrarianField.getName());
-        args.putSerializable(KEY_STATE, argrarianField.getState());
-        fragment.setArguments(args);
+        fragment.setArguments(argrarianField.getBundle());
         return fragment;
     }
 
@@ -58,5 +60,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
 
         name.setText(getArguments().getString(KEY_NAME));
         state.setText(getArguments().getSerializable(KEY_STATE).toString());
+        state.setTextColor(getArguments().getInt(KEY_COLOR));
     }
 }

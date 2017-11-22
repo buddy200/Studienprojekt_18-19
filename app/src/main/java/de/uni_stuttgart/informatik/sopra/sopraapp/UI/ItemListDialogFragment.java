@@ -145,9 +145,9 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         //sets the text as the item int value
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(bundleListFields.get(position).getString("title"));
+            holder.text.setText(bundleListFields.get(position).getString("name"));
             holder.state.setText(bundleListFields.get(position).getSerializable("state").toString());
-
+            holder.state.setTextColor(bundleListFields.get(position).getInt("color"));
         }
 
         @Override

@@ -9,4 +9,6 @@
     <color name="stateLightDamage">#aaff7f00</color>
     <color name="stateHighDamage">#aaff0000</color>
     <color name="stateDefault">#aa000000</color>
+
+    <color name="transparent">#00000000</color>
 </resources>

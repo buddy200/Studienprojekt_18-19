@@ -20,6 +20,7 @@ import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 
 /**
  * sopra_priv
@@ -155,8 +156,8 @@ public class MapFragment extends Fragment {
         mapViewHandler.setCurrlocMarker(point);
     }
 
-    public void addData(List<ArgrarianField> argrarianFields) {
-        mapViewHandler.addFields(argrarianFields);
+    public MapViewHandler getMapViewHandler() {
+        return mapViewHandler;
     }
 
 

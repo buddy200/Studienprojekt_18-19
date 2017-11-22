@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 
 public abstract class Field {
 
-
+    private static final String TAG = "ArgrarianField";
     private FieldPolygon poly;
     protected Context context;
 
@@ -35,10 +36,14 @@ public abstract class Field {
 
     }
 
-    public Field(Context context) {
+    public Field(Context context, List<CornerPoint> cPoints) {
         this.context = context;
         poly = new FieldPolygon(this.context);
-        this.name = context.getResources().getString(R.string.field_default_name);
+        if (cPoints.size() < 2) {
+            Log.e(TAG, "not enough corner points provided for field: " + getName());
+        } else {
+            setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
+        }
     }
 
     public void addCornerPoint(CornerPoint cp) {
@@ -112,4 +117,6 @@ public abstract class Field {
     }
 
     public abstract Bundle getBundle();
+
+    abstract public void createPolygon();
 }

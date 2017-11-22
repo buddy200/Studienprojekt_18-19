@@ -4,9 +4,10 @@
 
     <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
 
-    <string name="field_default_name">no Fieldname</string>
+    <string name="field_default_name">no field name</string>
     <string name="damage_case_defaut_name">no name</string>
     <string name="owner_default_name">no owner</string>
     <string name="evaluator_default_name">no evaluator</string>
     <string name="county_default_name">no county</string>
+    <string name="damagefield_name_default">no name</string>
 </resources>

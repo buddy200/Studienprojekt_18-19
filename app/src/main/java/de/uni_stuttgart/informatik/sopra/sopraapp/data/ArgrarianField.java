@@ -22,6 +22,7 @@ public class ArgrarianField extends Field {
 
     //default state
     private FieldStates state = FieldStates.NoDamage;
+
     private String owner;
     private String county;
 
@@ -37,20 +38,18 @@ public class ArgrarianField extends Field {
      * fields need at least 3 corner points to exist
      */
     public ArgrarianField(List<CornerPoint> cPoints, Context context) {
-        super(context);
+        super(context, cPoints);
         //set default values
         owner = context.getResources().getString(R.string.owner_default_name);
         county = context.getResources().getString(R.string.county_default_name);
-
-        if (cPoints.size() < 2) {
-            Log.e(TAG, "not enough corner points provided for field: " + getName());
-        } else {
-            setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
-        }
+        setName(context.getResources().getString(R.string.field_default_name));
     }
 
 
-    public void initPolygon() {
+    /**
+     * Create the polygon from the agrarian field.
+     */
+    public void createPolygon() {
         List<GeoPoint> polyPoints = new ArrayList<>();
         for (CornerPoint point : getCornerPoints()) {
             polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));

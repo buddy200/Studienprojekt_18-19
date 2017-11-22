@@ -12,6 +12,7 @@ import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 
 /**
  * sopra_priv
@@ -21,9 +22,9 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 
 public class MapViewHandler {
 
-    MapView map;
-    IMapController mapController;
-    Context context;
+    private MapView map;
+    private IMapController mapController;
+    private Context context;
     private Marker currentlocmarker;
 
     public MapViewHandler(Context context){
@@ -45,6 +46,10 @@ public class MapViewHandler {
 
     }
 
+    /**
+     * add a polygon form the agrarian field to the map
+     * @param polis
+     */
     public void addPolygons(List<Polygon> polis){
         for(Polygon pol : polis){
             map.getOverlayManager().add(pol);
@@ -57,16 +62,41 @@ public class MapViewHandler {
     public void addFields(List<ArgrarianField> argrarianFields){
 
         for(ArgrarianField argrarianField : argrarianFields){
-            argrarianField.initPolygon();
+            argrarianField.createPolygon();
             map.getOverlayManager().add(argrarianField.getFieldPolygon());
         }
         //TODO
     }
-    public void deleteField(ArgrarianField argrarianField) {
-        map.getOverlayManager().remove(argrarianField);
-        argrarianField = null;
+
+    /**
+     * delete the agrarian field polygon from the map
+     * @param argrarianField
+     */
+    public void deleteFieldFromOverlay(ArgrarianField argrarianField){
+        map.getOverlayManager().remove(argrarianField.getFieldPolygon());
     }
 
+    /**
+     * add a polygon form the damage field to the map
+     * @param damageField
+     */
+    public void addDamageField(DamageField damageField){
+        damageField.createPolygon();
+        map.getOverlayManager().add(damageField.getFieldPolygon());
+    }
+
+    /**
+     * delete the damage field polygon from the map
+     * @param damageField
+     */
+    public void deleteDamageFieldFromOverlay(DamageField damageField){
+        map.getOverlayManager().remove(damageField.getFieldPolygon());
+    }
+
+    /**
+     * set a Marker with the current Location on the map
+     * @param point
+     */
     public void setCurrlocMarker(GeoPoint point){
         map.getOverlayManager().remove(currentlocmarker);
         currentlocmarker = new Marker(map);
@@ -75,6 +105,10 @@ public class MapViewHandler {
 
     }
 
+    /**
+     * animate to a the given point on the map
+     * @param point
+     */
     public void animateTo(GeoPoint point) {
         mapController.setZoom(20);
         mapController.animateTo(point);

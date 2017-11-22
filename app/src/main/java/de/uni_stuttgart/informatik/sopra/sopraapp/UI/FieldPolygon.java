@@ -33,7 +33,7 @@ public class FieldPolygon extends Polygon {
 
         //init default values
         this.setFillColor(ContextCompat.getColor(context, R.color.stateDefault));
-        this.setTitle("ArgrarianField");
+        this.setTitle("");
         //invisible borders
         this.setStrokeColor(Color.argb(0,0,0,0));
 

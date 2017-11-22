@@ -2,14 +2,19 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
@@ -81,6 +86,13 @@ public class ArgrarianField extends Field {
         }
     }
 
+    public void setAutomaticCounty(){
+        new AsyncReverseGeoCoding().execute(new double[]{
+                this.getCornerPoints().get(0).getWGS().getLatitude(),
+                this.getCornerPoints().get(0).getWGS().getLongitude()
+        });
+    }
+
 
     public void setState(FieldStates state) {
         this.state = state;
@@ -117,4 +129,53 @@ public class ArgrarianField extends Field {
         return bundle;
     }
 
+
+    /**
+     * google asks its servers for reverse geo coding, this might take some time
+     * especially for 100+ fields
+     * try to call this only if necessary! -FB
+     */
+    private class AsyncReverseGeoCoding extends AsyncTask<double[], Void, String> {
+
+        @Override
+        protected String doInBackground(double[]... doubles) {
+            //async task is weird.. TODO change this
+            setCounty(doubles[0][0], doubles[0][1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+
+
+        private void setCounty(double lat, double lon){
+            Log.e("AgrarianField", "fetching location..");
+            //uses the google geocoder, might be a part of the google maps api.. or not -FB
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(lat, lon, 1);
+                Address result;
+
+                if (addresses != null && !addresses.isEmpty()) {
+                    county = addresses.get(0).getSubAdminArea();
+                }else {
+                    county = "No Location Set";
+                }
+            } catch (IOException ignored) {
+                //do something
+            }
+        }
+    }
+
 }
+

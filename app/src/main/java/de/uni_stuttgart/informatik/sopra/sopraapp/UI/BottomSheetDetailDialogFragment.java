@@ -1,11 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +23,8 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     private static final String KEY_NAME = "name";
     private static final String KEY_STATE = "state";
     private static final String KEY_COLOR = "color";
+    private static final String KEY_COUNTY = "county";
+    private static final String KEY_OWNER = "owner";
 
 
     public static BottomSheetDialogFragment newInstance(ArgrarianField argrarianField) {
@@ -57,9 +56,13 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TextView name = (TextView) view.findViewById(R.id.field_detail_name);
         TextView state = (TextView) view.findViewById(R.id.field_detail_state);
+        TextView county = (TextView) view.findViewById(R.id.field_detail_region);
+        TextView owner = (TextView) view.findViewById(R.id.field_detail_policyholder);
 
         name.setText(getArguments().getString(KEY_NAME));
         state.setText(getArguments().getSerializable(KEY_STATE).toString());
         state.setTextColor(getArguments().getInt(KEY_COLOR));
+        county.setText(getArguments().getString(KEY_COUNTY));
+        owner.setText(getArguments().getString(KEY_OWNER));
     }
 }

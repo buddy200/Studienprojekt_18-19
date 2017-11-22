@@ -93,6 +93,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
         final TextView text;
         final TextView state;
+        final TextView county;
         final LinearLayout layout;
 
         ViewHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -103,6 +104,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             //the item is shown as a text view
             text = (TextView) itemView.findViewById(R.id.text);
             state = (TextView) itemView.findViewById(R.id.state);
+            county = (TextView) itemView.findViewById(R.id.county);
             layout = (LinearLayout) itemView.findViewById(R.id.ll_item);
 
             // the on click listener for the item that is being clicked
@@ -146,6 +148,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             holder.text.setText(bundleListFields.get(position).getString("name"));
             holder.state.setText(bundleListFields.get(position).getSerializable("state").toString());
             holder.state.setTextColor(bundleListFields.get(position).getInt("color"));
+            holder.county.setText(bundleListFields.get(position).getString("county"));
         }
 
         @Override

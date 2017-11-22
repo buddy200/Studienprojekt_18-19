@@ -94,6 +94,9 @@ public class GlobalConstants {
         double initialLat = GlobalConstants.START_POINT.getLatitude();
         double initialLon = GlobalConstants.START_POINT.getLongitude();
 
+        String[] superheroes = {
+                "BATMAN", "Superman", "Superwoman", "Spiderman", "THE INCREDIBLE HULK"
+        };
 
         //Test for field with damage
         List<CornerPoint> points2 = new ArrayList<>();
@@ -102,6 +105,7 @@ public class GlobalConstants {
         points2.add(new CornerPoint(48.840586, 8.844068));
         points2.add(new CornerPoint(48.840992, 8.840656));
         ArgrarianField ff = new ArgrarianField(points2, context);
+        ff.setAutomaticCounty();
         polis.add(ff);
 
         for(int j=0; j<numberFields; j++) {
@@ -121,6 +125,10 @@ public class GlobalConstants {
             ArgrarianField f = new ArgrarianField(points, context);
             f.setName("ArgrarianField Nr: " + String.valueOf(j));
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
+
+            //keep this! if there is no county numberFields times searches by google must be done, this takes time!
+            f.setCounty("Stuttgart");
+            f.setOwner(superheroes[(int)(Math.random()*superheroes.length)]);
 
             polis.add(f);
         }

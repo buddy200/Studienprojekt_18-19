@@ -18,16 +18,17 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  */
 
 public class ArgrarianField extends Field {
+    private static final String TAG = "ArgrarianField";
 
+    //default state
     private FieldStates state = FieldStates.NoDamage;
     private String owner;
     private String county;
 
     //bundle keys
-    private static final String KEY_NAME = "title";
+    private static final String KEY_NAME = "name";
     private static final String KEY_STATE = "state";
-    private static final String TAG = "ArgrarianField";
-
+    private static final String KEY_COLOR = "color";
 
     /**
      * fields need at least 3 corner points to exist
@@ -106,8 +107,9 @@ public class ArgrarianField extends Field {
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, getName());
-        bundle.putSerializable(KEY_STATE, state);
+        bundle.putString(KEY_NAME, this.getName());
+        bundle.putSerializable(KEY_STATE, this.state);
+        bundle.putInt(KEY_COLOR, stateToPolygonColor(this.state));
         return bundle;
     }
 

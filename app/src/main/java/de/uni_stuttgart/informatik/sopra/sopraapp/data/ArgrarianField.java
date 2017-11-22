@@ -20,12 +20,13 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 public class ArgrarianField extends Field {
 
     private FieldStates state = FieldStates.NoDamage;
+    private String owner;
+    private String county;
 
     //bundle keys
     private static final String KEY_NAME = "title";
     private static final String KEY_STATE = "state";
     private static final String TAG = "ArgrarianField";
-
 
 
     /**
@@ -34,12 +35,13 @@ public class ArgrarianField extends Field {
     public ArgrarianField(List<CornerPoint> cPoints, Context context) {
         super(context);
         //set default values
-        setName("ArgrarianField");
+        owner = context.getResources().getString(R.string.owner_default_name);
+        county = context.getResources().getString(R.string.county_default_name);
 
-        if(cPoints.size() < 2){
+        if (cPoints.size() < 2) {
             Log.e(TAG, "not enough corner points provided for field: " + getName());
-        }else {
-           setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
+        } else {
+            setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
         }
     }
 
@@ -59,11 +61,12 @@ public class ArgrarianField extends Field {
 
     /**
      * map field state to color
+     *
      * @param field
      * @return
      */
     protected int stateToPolygonColor(FieldStates field) {
-        switch (field){
+        switch (field) {
             case NoDamage:
                 return ContextCompat.getColor(context, R.color.stateNoDamage);
             case LightDamage:
@@ -76,17 +79,32 @@ public class ArgrarianField extends Field {
     }
 
 
-    public void setState(FieldStates state){
+    public void setState(FieldStates state) {
         this.state = state;
     }
 
-    public FieldStates getState(){
+    public FieldStates getState() {
         return this.state;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
 
     @Override
-    public Bundle getBundle(){
+    public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_NAME, getName());
         bundle.putSerializable(KEY_STATE, state);

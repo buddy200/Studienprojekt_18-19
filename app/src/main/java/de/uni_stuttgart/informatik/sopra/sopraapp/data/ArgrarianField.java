@@ -86,7 +86,14 @@ public class ArgrarianField extends Field {
         }
     }
 
+    /**
+     * starts an async task that tries to get the SubAdminArea
+     * by reverse geocoding the first corner point of this field
+     * might take a bit, thats why its async -FB
+     */
     public void setAutomaticCounty(){
+        county = "Loading..";
+
         new AsyncReverseGeoCoding().execute(new double[]{
                 this.getCornerPoints().get(0).getWGS().getLatitude(),
                 this.getCornerPoints().get(0).getWGS().getLongitude()
@@ -118,6 +125,10 @@ public class ArgrarianField extends Field {
         this.county = county;
     }
 
+    /**
+     * bundle helper function
+     * @return
+     */
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
@@ -158,7 +169,7 @@ public class ArgrarianField extends Field {
 
 
         private void setCounty(double lat, double lon){
-            Log.e("AgrarianField", "fetching location..");
+            Log.d(TAG, "fetching location..");
             //uses the google geocoder, might be a part of the google maps api.. or not -FB
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses = null;

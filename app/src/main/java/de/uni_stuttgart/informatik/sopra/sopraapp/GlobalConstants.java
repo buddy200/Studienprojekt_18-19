@@ -127,7 +127,7 @@ public class GlobalConstants {
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
             //keep this! if there is no county numberFields times searches by google must be done, this takes time!
-            f.setCounty("Stuttgart");
+            f.setAutomaticCounty();
             f.setOwner(superheroes[(int)(Math.random()*superheroes.length)]);
 
             polis.add(f);

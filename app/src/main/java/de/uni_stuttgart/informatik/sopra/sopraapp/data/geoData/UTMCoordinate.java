@@ -6,7 +6,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
 public class UTMCoordinate {
 
-    private double middleMerdian;
+    private int zone;
 
     private boolean southernHemisphere;
 
@@ -14,43 +14,40 @@ public class UTMCoordinate {
      * the north Value
      *
      */
-    private int northing;
+    private long northing;
 
     /**
      * the east value (based of the middle merdian)
      *
      */
-    private int easting;
+    private long easting;
 
     public UTMCoordinate() {
 
     }
 
     public int getZone() {
-        return ((int)(middleMerdian+180)/6) +1;
+        return zone;
     }
 
-    public int getNorthing() {
+    public void setZone(int zone) {
+        this.zone = zone;
+    }
+
+    public long getNorthing() {
         return northing;
     }
 
-    public void setNorthing(int northing) {
+    public void setNorthing(long northing) {
         this.northing = northing;
     }
 
-    public int getEasting() {
+    public long getEasting() {
         return easting;
     }
 
-    public void setEasting(int easting) {
+    public void setEasting(long easting) {
         this.easting = easting;
-    }
-
-    public double getMiddleMerdian() {
-        return middleMerdian;
-    }
-    public void setMiddleMerdian(double middleMerdian) {
-        this.middleMerdian = middleMerdian;
     }
 
     public boolean isSouth() {

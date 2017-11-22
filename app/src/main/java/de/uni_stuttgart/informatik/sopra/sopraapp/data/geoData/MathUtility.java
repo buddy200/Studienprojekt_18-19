@@ -7,11 +7,11 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 public class MathUtility {
 
     public static double degToRad(double angle) {
-        return (angle/360) *(2*Math.PI);
+        return (angle/180) *(Math.PI);
     }
 
     public static double radToDeg(double angle) {
-        return (angle/(2*Math.PI) )* 360;
+        return (angle/(Math.PI) )* 180;
     }
 
     public static int scalarProduct(Vector a, Vector b) {

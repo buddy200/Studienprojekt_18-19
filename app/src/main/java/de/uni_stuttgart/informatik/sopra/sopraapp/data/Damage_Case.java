@@ -1,4 +1,6 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
+package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+
+import android.os.Bundle;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field_DamageCase;
 
@@ -7,4 +9,12 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field_DamageCase;
  */
 
 public class Damage_Case extends Field_DamageCase {
+
+
+
+
+    @Override
+    public Bundle getBundle() {
+        return null;
+    }
 }

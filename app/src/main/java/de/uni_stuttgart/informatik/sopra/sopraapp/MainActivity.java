@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity
             mapFragment.setCurrLocMatrker(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
             mapFragment.animateToPosition(loc.getLatitude(), loc.getLongitude());
         } else {
-            Toast.makeText(this, "Keine Standortdaten verfügbar. Standorterfassung aktiviert?", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
             //Todo add to Strings xml
         }
 

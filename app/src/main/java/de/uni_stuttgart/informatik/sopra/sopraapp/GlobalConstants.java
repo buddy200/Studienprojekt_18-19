@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 /**
@@ -24,8 +25,6 @@ public class GlobalConstants {
     // Uni Stuttgart - compsci building
     public static final GeoPoint START_POINT = new GeoPoint( 48.745424, 9.106488 );
 
-    // random Geo Point in Moehringen
-    public static final GeoPoint SOME_POINT = new GeoPoint(48.727504, 9.138324);
 
     //default zoom value for the mapFragment
     public static final int DEFAULT_ZOOM = 20;
@@ -68,6 +67,18 @@ public class GlobalConstants {
         return polis;
     }
 
+    public static DamageField damageFieldTest(Context context){
+
+        List<CornerPoint> points3 = new ArrayList<>();
+        points3.add(new CornerPoint(48.840644, 8.841278));
+        points3.add(new CornerPoint(48.840377, 8.841401));
+        points3.add(new CornerPoint(48.840384, 8.841656));
+        points3.add(new CornerPoint(48.840658, 8.841659));
+        DamageField df = new DamageField(context, points3);
+        df.setName("Test");
+        return  df;
+    }
+
     /**
      * Same as polygonTest, only for fields, state is selected by random
      * @param numberFields
@@ -82,6 +93,16 @@ public class GlobalConstants {
         ArrayList<ArgrarianField> polis = new ArrayList<>();
         double initialLat = GlobalConstants.START_POINT.getLatitude();
         double initialLon = GlobalConstants.START_POINT.getLongitude();
+
+
+        //Test for field with damage
+        List<CornerPoint> points2 = new ArrayList<>();
+        points2.add(new CornerPoint(48.839349, 8.840506));
+        points2.add(new CornerPoint(48.839101, 8.843861));
+        points2.add(new CornerPoint(48.840586, 8.844068));
+        points2.add(new CornerPoint(48.840992, 8.840656));
+        ArgrarianField ff = new ArgrarianField(points2, context);
+        polis.add(ff);
 
         for(int j=0; j<numberFields; j++) {
 

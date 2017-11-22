@@ -3,6 +3,8 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,14 +19,12 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 
 public abstract class Field {
 
-
+    private static final String TAG = "ArgrarianField";
     private FieldPolygon poly;
     protected Context context;
 
     //values for field and damage case
     private String name;
-    private String owner;
-    private String evaluator;
 
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
@@ -32,16 +32,21 @@ public abstract class Field {
     //the size of the field in m²
     private double size;
 
-    public Field(){
+    public Field() {
 
     }
 
-    public Field(Context context) {
+    public Field(Context context, List<CornerPoint> cPoints) {
         this.context = context;
         poly = new FieldPolygon(this.context);
+        if (cPoints.size() < 2) {
+            Log.e(TAG, "not enough corner points provided for field: " + getName());
+        } else {
+            setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
+        }
     }
 
-    public void addCornerPoint (CornerPoint cp) {
+    public void addCornerPoint(CornerPoint cp) {
         cornerPoints.add(cp);
         if (cornerPoints.size() > 2) {
             cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);
@@ -49,8 +54,8 @@ public abstract class Field {
     }
 
     public void finish() {
-        cornerPoints.get(cornerPoints.size()-1).calculateAngle(cornerPoints.get(cornerPoints.size()-2), cornerPoints.get(0));
-        cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size()-1), cornerPoints.get(1));
+        cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));
+        cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size() - 1), cornerPoints.get(1));
         calculateSize();
         finished = true;
     }
@@ -60,19 +65,19 @@ public abstract class Field {
 
         //TODO check for correct zone
 
-        for(CornerPoint cp : cornerPoints) {
+        for (CornerPoint cp : cornerPoints) {
             if (cp.getAngle() > 180 /* or pi*/) {
                 outwardPoints.add(cp);
             }
         }
 
-        for (int i = 0; i < cornerPoints.size()-2; i++) {
-            if(outwardPoints.isEmpty()){
+        for (int i = 0; i < cornerPoints.size() - 2; i++) {
+            if (outwardPoints.isEmpty()) {
                 //simple triangulation
             } else {
                 CornerPoint cp = outwardPoints.poll();
                 //TODO if is not fitting
-                if(false) {
+                if (false) {
                     i--;
                     outwardPoints.add(cp);
                 } else {
@@ -84,10 +89,7 @@ public abstract class Field {
 
     }
 
-
-
     /**
-     *
      * @return the size of the field or @code{null} if the field isn't finished
      */
     public double getSize() {
@@ -98,37 +100,23 @@ public abstract class Field {
         this.cornerPoints = cornerPoints;
     }
 
-    public List<CornerPoint> getCornerPoints(){
+    public List<CornerPoint> getCornerPoints() {
         return cornerPoints;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public FieldPolygon getFieldPolygon(){
+    public FieldPolygon getFieldPolygon() {
         return poly;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getEvaluator() {
-        return evaluator;
-    }
-
-    public void setEvaluator(String evaluator) {
-        this.evaluator = evaluator;
-    }
-
     public abstract Bundle getBundle();
+
+    abstract public void createPolygon();
 }

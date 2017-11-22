@@ -23,29 +23,33 @@ public class ArgrarianField extends Field {
     //default state
     private FieldStates state = FieldStates.NoDamage;
 
+    private String owner;
+    private String county;
+
     //bundle keys
     private static final String KEY_NAME = "name";
     private static final String KEY_STATE = "state";
     private static final String KEY_COLOR = "color";
+    private static final String KEY_OWNER = "owner";
+    private static final String KEY_COUNTY = "county";
 
 
     /**
      * fields need at least 3 corner points to exist
      */
     public ArgrarianField(List<CornerPoint> cPoints, Context context) {
-        super(context);
+        super(context, cPoints);
         //set default values
-        setName("ArgrarianField");
-
-        if(cPoints.size() < 2){
-            Log.e(TAG, "not enough corner points provided for field: " + getName());
-        }else {
-           setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
-        }
+        owner = context.getResources().getString(R.string.owner_default_name);
+        county = context.getResources().getString(R.string.county_default_name);
+        setName(context.getResources().getString(R.string.field_default_name));
     }
 
 
-    public void initPolygon() {
+    /**
+     * Create the polygon from the agrarian field.
+     */
+    public void createPolygon() {
         List<GeoPoint> polyPoints = new ArrayList<>();
         for (CornerPoint point : getCornerPoints()) {
             polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
@@ -60,11 +64,12 @@ public class ArgrarianField extends Field {
 
     /**
      * map field state to color
+     *
      * @param field
      * @return
      */
     protected int stateToPolygonColor(FieldStates field) {
-        switch (field){
+        switch (field) {
             case NoDamage:
                 return ContextCompat.getColor(context, R.color.stateNoDamage);
             case LightDamage:
@@ -77,21 +82,38 @@ public class ArgrarianField extends Field {
     }
 
 
-    public void setState(FieldStates state){
+    public void setState(FieldStates state) {
         this.state = state;
     }
 
-    public FieldStates getState(){
+    public FieldStates getState() {
         return this.state;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
 
     @Override
-    public Bundle getBundle(){
+    public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_NAME, this.getName());
         bundle.putSerializable(KEY_STATE, this.state);
         bundle.putInt(KEY_COLOR, stateToPolygonColor(this.state));
+        bundle.putString(KEY_OWNER, this.getOwner());
+        bundle.putString(KEY_COUNTY, this.getCounty());
         return bundle;
     }
 

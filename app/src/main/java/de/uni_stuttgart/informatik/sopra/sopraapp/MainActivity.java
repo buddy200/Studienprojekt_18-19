@@ -15,6 +15,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 /**
@@ -41,6 +42,7 @@ public class MainActivity extends FragmentActivity
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
         testData = GlobalConstants.fieldTest(100, 4, this);
+
     }
 
     //handle menu buttons interactions
@@ -64,7 +66,6 @@ public class MainActivity extends FragmentActivity
             //Todo add to Strings xml
         }
 
-        //mapFragment.animateToPosition(GlobalConstants.SOME_POINT.getLatitude(), GlobalConstants.SOME_POINT.getLongitude());
     }
 
     //handle item clicked interaction from ItemListDialogFragment
@@ -80,7 +81,8 @@ public class MainActivity extends FragmentActivity
     //add received data to the mapFragment
     @Override
     public void onMapFragmentComplete() {
-        mapFragment.addData(testData);
+        mapFragment.getMapViewHandler().addFields(testData);
+        mapFragment.getMapViewHandler().addDamageField(GlobalConstants.damageFieldTest(this));
 
     }
 }

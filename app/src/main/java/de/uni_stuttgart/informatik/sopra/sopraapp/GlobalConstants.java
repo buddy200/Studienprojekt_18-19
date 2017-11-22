@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Context;
-import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 
 import org.osmdroid.util.GeoPoint;
@@ -9,10 +8,9 @@ import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 /**
@@ -76,12 +74,12 @@ public class GlobalConstants {
      * @param numberCornerPoints
      * @return
      */
-    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints, Context context){
+    public static ArrayList<ArgrarianField> fieldTest(int numberFields, int numberCornerPoints, Context context){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
 
-        ArrayList<Field> polis = new ArrayList<>();
+        ArrayList<ArgrarianField> polis = new ArrayList<>();
         double initialLat = GlobalConstants.START_POINT.getLatitude();
         double initialLon = GlobalConstants.START_POINT.getLongitude();
 
@@ -99,8 +97,8 @@ public class GlobalConstants {
             }
             initialLat += 0.003;
 
-            Field f = new Field(points, context);
-            f.setName("Field Nr: " + String.valueOf(j));
+            ArgrarianField f = new ArgrarianField(points, context);
+            f.setName("ArgrarianField Nr: " + String.valueOf(j));
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
             polis.add(f);

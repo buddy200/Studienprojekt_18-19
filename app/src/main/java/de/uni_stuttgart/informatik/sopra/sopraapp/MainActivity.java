@@ -14,7 +14,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 /**
@@ -30,7 +30,7 @@ public class MainActivity extends FragmentActivity
 
 
     MapFragment mapFragment;
-    ArrayList<Field> testData;
+    ArrayList<ArgrarianField> testData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onListButtonInteraction() {
         ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "FieldList");
-        //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "Field");
+        //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "ArgrarianField");
 
     }
 
@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity
         Log.d("FieldList", "clicked on position: " + testData.get(position).getName());
         mapFragment.animateToPosition(testData.get(position).getCornerPoints().get(0).getWGS().getLatitude(),
                 testData.get(position).getCornerPoints().get(0).getWGS().getLongitude());
-        BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "Field");
+        BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "ArgrarianField");
     }
 
 

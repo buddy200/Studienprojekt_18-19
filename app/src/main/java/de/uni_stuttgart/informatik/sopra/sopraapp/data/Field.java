@@ -1,94 +1,134 @@
-
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-
-import org.osmdroid.util.GeoPoint;
-
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 
 /**
- * Created by Christian on 13.11.2017.
+ * Created by larsb on 22.11.2017.
  */
 
-public class Field extends Field_DamageCase {
+public abstract class Field {
 
-    FieldStates state = FieldStates.NoDamage;
 
-    //bundle keys
-    private static final String KEY_NAME = "title";
-    private static final String KEY_STATE = "state";
+    private FieldPolygon poly;
+    protected Context context;
+
+    //values for field and damage case
+    private String name;
+    private String owner;
+    private String evaluator;
+
+
+    private List<CornerPoint> cornerPoints = new ArrayList<>();
+    private boolean finished = false;
+    //the size of the field in m²
+    private double size;
+
+    public Field(){
+
+    }
+
+    public Field(Context context) {
+        this.context = context;
+        poly = new FieldPolygon(this.context);
+    }
+
+    public void addCornerPoint (CornerPoint cp) {
+        cornerPoints.add(cp);
+        if (cornerPoints.size() > 2) {
+            cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);
+        }
+    }
+
+    public void finish() {
+        cornerPoints.get(cornerPoints.size()-1).calculateAngle(cornerPoints.get(cornerPoints.size()-2), cornerPoints.get(0));
+        cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size()-1), cornerPoints.get(1));
+        calculateSize();
+        finished = true;
+    }
+
+    private void calculateSize() {
+        Queue<CornerPoint> outwardPoints = new LinkedList<>();
+
+        //TODO check for correct zone
+
+        for(CornerPoint cp : cornerPoints) {
+            if (cp.getAngle() > 180 /* or pi*/) {
+                outwardPoints.add(cp);
+            }
+        }
+
+        for (int i = 0; i < cornerPoints.size()-2; i++) {
+            if(outwardPoints.isEmpty()){
+                //simple triangulation
+            } else {
+                CornerPoint cp = outwardPoints.poll();
+                //TODO if is not fitting
+                if(false) {
+                    i--;
+                    outwardPoints.add(cp);
+                } else {
+                    //make triangle
+                }
+            }
+        }
+        //TODO calculate the field size
+
+    }
 
 
 
     /**
-     * fields need at least 3 corner points to exist
+     *
+     * @return the size of the field or @code{null} if the field isn't finished
      */
-    public Field(List<CornerPoint> cPoints, Context context) {
-        super(context);
-        //set default values
-        this.name = "Field";
-        if(cPoints.size() < 2){
-            Log.e(TAG, "not enough corner points provided for field: " + getName());
-        }else {
-            this.cornerPoints = cPoints; //TODO: does this copy work? We might need some deepCopy() stuff here
-        }
+    public double getSize() {
+        return finished ? size : null;
     }
 
-
-    public void initPolygon() {
-        List<GeoPoint> polyPoints = new ArrayList<>();
-        for (CornerPoint point : getCornerPoints()) {
-            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
-        }
-        // add field attributes to polygon attributes
-        getFieldPolygon().setPoints(polyPoints);
-        getFieldPolygon().setFillColor(stateToPolygonColor(this.state));
-        // invisible borders look really cool :D
-        getFieldPolygon().setTitle(getName());
-
+    public void setCornerPoints(List<CornerPoint> cornerPoints) {
+        this.cornerPoints = cornerPoints;
     }
 
-    /**
-     * map field state to color
-     * @param field
-     * @return
-     */
-    protected int stateToPolygonColor(FieldStates field) {
-        switch (field){
-            case NoDamage:
-                return ContextCompat.getColor(context, R.color.stateNoDamage);
-            case LightDamage:
-                return ContextCompat.getColor(context, R.color.stateLightDamage);
-            case HighDamage:
-                return ContextCompat.getColor(context, R.color.stateHighDamage);
-            default:
-                return ContextCompat.getColor(context, R.color.stateDefault);
-        }
+    public List<CornerPoint> getCornerPoints(){
+        return cornerPoints;
     }
 
-
-    public void setState(FieldStates state){
-        this.state = state;
+    public void setName(String name){
+        this.name = name;
     }
 
-    public FieldStates getState(){
-        return this.state;
+    public String getName(){
+        return this.name;
     }
 
-
-    @Override
-    public Bundle getBundle(){
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, getName());
-        bundle.putSerializable(KEY_STATE, state);
-        return bundle;
+    public FieldPolygon getFieldPolygon(){
+        return poly;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getEvaluator() {
+        return evaluator;
+    }
+
+    public void setEvaluator(String evaluator) {
+        this.evaluator = evaluator;
+    }
+
+    public abstract Bundle getBundle();
 }

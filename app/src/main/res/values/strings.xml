@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">SoPraApp</string>
     <string name="action_settings">Settings</string>
+
     <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
+
+    <string name="field_default_name">no argrarianField name</string>
+    <string name="damage_case_defaut_name">no name</string>
+    <string name="owner_default_name">no owner</string>
+    <string name="evaluator_default_name">no evaluator</string>
 </resources>

@@ -3,7 +3,6 @@ package de.uni_stuttgart.informatik.sopra.sopraapp;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
@@ -60,7 +59,7 @@ public class MainActivity extends FragmentActivity
      Location location = myLocationListener.getLocation();
      if (location != null) {
          mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
-         mapFragment.setCurrLocMatrker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+         mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
      }
      else{
          Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
@@ -76,9 +75,11 @@ public class MainActivity extends FragmentActivity
     //handle item clicked interaction from ItemListDialogFragment
     @Override
     public void onListItemClicked(int position) {
-        mapFragment.animateToPosition(testData.get(position).getCornerPoints().get(0).getWGS().getLatitude(),
-                testData.get(position).getCornerPoints().get(0).getWGS().getLongitude());
-        BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "ArgrarianField");
+        //offset to show centroid of polygon completely while bottom sheet is visible
+        double offset = 0.001;
+        mapFragment.animateToPosition(testData.get(position).getCentroid().getLatitude()-offset,
+                testData.get(position).getCentroid().getLongitude());
+        BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "Field");
     }
 
 

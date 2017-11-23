@@ -1,8 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.GestureDetector;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -15,12 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -36,8 +32,8 @@ public class MapViewHandler {
     private Context context;
     private Marker currentLocMarker;
 
-    private GestureDetector gestureDetector;
-    private Map<Field, FieldPolygon> fieldPoly;
+    //map fields to Polygon Overlays
+    private Map<Field, FieldPolygon> fieldPolyMap;
 
     public MapViewHandler(Context context){
         this.context = context;
@@ -52,7 +48,7 @@ public class MapViewHandler {
         map.setMultiTouchControls(true);
         map.setUseDataConnection(true);
 
-        fieldPoly = new HashMap<>();
+        fieldPolyMap = new HashMap<>();
 
         mapController = map.getController();
         mapController.setZoom(GlobalConstants.DEFAULT_ZOOM);
@@ -72,7 +68,7 @@ public class MapViewHandler {
         polygon.setFillColor(field.getColor());
         polygon.setTitle(field.getName());
 
-        fieldPoly.put(field, polygon);
+        fieldPolyMap.put(field, polygon);
 
         return polygon;
     }
@@ -98,7 +94,7 @@ public class MapViewHandler {
      */
 
     public void deleteFieldFromOverlay(Field field){
-        map.getOverlayManager().remove(fieldPoly.get(field));
+        map.getOverlayManager().remove(fieldPolyMap.get(field));
     }
 
     /**

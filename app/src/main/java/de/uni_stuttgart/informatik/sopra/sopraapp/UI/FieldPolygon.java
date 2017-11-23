@@ -30,7 +30,6 @@ public class FieldPolygon extends Polygon {
 
     Context context;
     Paint textPaint;
-    GeoPoint centroidPoint;
     Field field;
 
     public FieldPolygon(Context context, Field field){
@@ -57,7 +56,7 @@ public class FieldPolygon extends Polygon {
      * (this is the quickest way to get the title in a good position relative to the polygon
      * better would be a center point inside of it, but this might be a bit more difficult)
      */
-    double lowX0, lowY0, highX1, highY1;
+    Point polyCentroidPoint;
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow){
         //only draw names if zoomed in to certain level
@@ -67,33 +66,12 @@ public class FieldPolygon extends Polygon {
             return;
         }
 
-        //calculate centroid ( = center of gravity) of polygon
-        lowX0 = lowY0 = Double.MAX_VALUE;
-        highX1 = highY1 = Double.MIN_VALUE;
-        for(GeoPoint point : this.getPoints()){
-            if(lowX0 > point.getLatitude()){
-                lowX0 = point.getLatitude();
-            }
-            if(lowY0 > point.getLongitude()){
-                lowY0 = point.getLongitude();
-            }
-            if(highX1 < point.getLatitude()){
-                highX1 = point.getLatitude();
-            }
-            if(highY1 < point.getLongitude()){
-                highY1 = point.getLongitude();
-            }
-        }
-        double centerX = lowX0 + ((highX1 - lowX0) / 2);
-        double centerY = lowY0 + ((highY1 - lowY0) / 2);
-
-        Point polyCentroidPoint = new Point();
-        centroidPoint = new GeoPoint(centerX, centerY);
-        mapView.getProjection().toPixels(new GeoPoint(centerX, centerY), polyCentroidPoint);
+        polyCentroidPoint = new Point();
+        mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);
 
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
 
-        super.draw(canvas,mapView, shadow);
+        super.draw(canvas, mapView, shadow);
     }
 
 

@@ -148,7 +148,7 @@ public class MapFragment extends Fragment {
         }
     }
 
-    public void setCurrLocMatrker(GeoPoint point) {
+    public void setCurrLocMarker(GeoPoint point) {
         mapViewHandler.setCurrlocMarker(point);
     }
 

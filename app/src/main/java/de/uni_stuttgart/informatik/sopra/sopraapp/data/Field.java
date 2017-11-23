@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,13 +22,14 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 
 public abstract class Field {
 
-    private static final String TAG = "ArgrarianField";
+    private static final String TAG = "Field";
 
     protected Context context;
 
     //values for field and damage case
     private String name;
     private int color = Color.argb(255,0,0,0);
+    private GeoPoint centroid;
 
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
@@ -45,6 +48,7 @@ public abstract class Field {
         } else {
             setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
         }
+        calculateCentroid();
     }
 
     public void addCornerPoint(CornerPoint cp) {
@@ -91,6 +95,33 @@ public abstract class Field {
     }
 
     /**
+     * calculate centroid ( = center of gravity) of polygon
+     */
+    public void calculateCentroid(){
+        double lowX0, lowY0, highX1, highY1;
+
+        lowX0 = lowY0 = Double.MAX_VALUE;
+        highX1 = highY1 = Double.MIN_VALUE;
+
+        for(CornerPoint point : getCornerPoints()){
+            if(lowX0 > point.getWGS().getLatitude()){
+                lowX0 = point.getWGS().getLatitude();
+            }
+            if(lowY0 > point.getWGS().getLongitude()){
+                lowY0 = point.getWGS().getLongitude();
+            }
+            if(highX1 < point.getWGS().getLatitude()){
+                highX1 = point.getWGS().getLatitude();
+            }
+            if(highY1 < point.getWGS().getLongitude()){
+                highY1 = point.getWGS().getLongitude();
+            }
+        }
+
+        centroid = new GeoPoint(lowX0 + ((highX1 - lowX0) / 2), lowY0 + ((highY1 - lowY0) / 2));
+    }
+
+    /**
      * @return the size of the field or @code{null} if the field isn't finished
      */
     public double getSize() {
@@ -114,6 +145,8 @@ public abstract class Field {
     }
 
     public int getColor(){ return this.color;}
+
+    public GeoPoint getCentroid(){ return this.centroid;}
 
     public abstract Bundle getBundle();
 

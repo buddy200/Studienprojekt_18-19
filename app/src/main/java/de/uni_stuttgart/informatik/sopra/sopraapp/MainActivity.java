@@ -15,7 +15,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 /**
@@ -28,6 +27,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 public class MainActivity extends FragmentActivity
         implements MenuFragment.OnMenuFragmentInteractionListener, ItemListDialogFragment.Listener, MapFragment.OnCompleteListener {
     private static final String TAG = "MainActivity";
+    private MYLocationListener myLocationListener = new MYLocationListener();
 
 
     MapFragment mapFragment;
@@ -43,6 +43,8 @@ public class MainActivity extends FragmentActivity
 
         testData = GlobalConstants.fieldTest(100, 4, this);
 
+
+
     }
 
     //handle menu buttons interactions
@@ -55,16 +57,14 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationButtonInteraction() {
-        MYLocationListener locationListener = new MYLocationListener();
-        Location loc = locationListener.getGPSPosition(this, mapFragment);
-
-        if (loc != null) {
-            mapFragment.setCurrLocMatrker(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
-            mapFragment.animateToPosition(loc.getLatitude(), loc.getLongitude());
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
-            //Todo add to Strings xml
-        }
+     Location location = myLocationListener.getLocation();
+     if (location != null) {
+         mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+         mapFragment.setCurrLocMatrker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+     }
+     else{
+         Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
+     }
 
     }
 
@@ -83,6 +83,8 @@ public class MainActivity extends FragmentActivity
     public void onMapFragmentComplete() {
         mapFragment.getMapViewHandler().addFields(testData);
         mapFragment.getMapViewHandler().addDamageField(GlobalConstants.damageFieldTest(this));
+        myLocationListener.initializeLocationManager(this, mapFragment);
+
 
     }
 }

@@ -178,7 +178,10 @@ public class ArgrarianField extends Field {
                 Address result;
 
                 if (addresses != null && !addresses.isEmpty()) {
-                    county = addresses.get(0).getSubAdminArea();
+                    county = ""; //remove "loading..."
+                    for(int i=0; i<= addresses.get(0).getMaxAddressLineIndex(); i++){
+                        county += " " +  addresses.get(0).getAddressLine(i);
+                    }
                 }else {
                     county = "No Location Set";
                 }

@@ -30,23 +30,6 @@ public class DamageField extends Field {
         setName(context.getResources().getString(R.string.damage_case_defaut_name));
     }
 
-    @Override
-    public void createPolygon() {
-        List<GeoPoint> polyPoints = new ArrayList<>();
-        for (CornerPoint point : getCornerPoints()) {
-            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
-        }
-        // add field attributes to polygon attributes
-        getFieldPolygon().setPoints(polyPoints);
-        //color to test
-        getFieldPolygon().setFillColor(Color.argb(170, 255, 255, 100));
-        // invisible borders look really cool :D
-        getFieldPolygon().setTitle(getName());
-
-    }
-
-
-
     public ArgrarianField getArgrarianField() {
         return argrarianField;
     }

@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -20,11 +21,12 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 public abstract class Field {
 
     private static final String TAG = "ArgrarianField";
-    private FieldPolygon poly;
+
     protected Context context;
 
     //values for field and damage case
     private String name;
+    private int color = Color.argb(255,0,0,0);
 
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
@@ -38,7 +40,6 @@ public abstract class Field {
 
     public Field(Context context, List<CornerPoint> cPoints) {
         this.context = context;
-        poly = new FieldPolygon(this.context);
         if (cPoints.size() < 2) {
             Log.e(TAG, "not enough corner points provided for field: " + getName());
         } else {
@@ -112,11 +113,9 @@ public abstract class Field {
         return this.name;
     }
 
-    public FieldPolygon getFieldPolygon() {
-        return poly;
-    }
+    public int getColor(){ return this.color;}
 
     public abstract Bundle getBundle();
 
-    abstract public void createPolygon();
+
 }

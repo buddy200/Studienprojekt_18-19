@@ -5,14 +5,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Polygon;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -25,10 +31,12 @@ public class FieldPolygon extends Polygon {
     Context context;
     Paint textPaint;
     GeoPoint centroidPoint;
+    Field field;
 
-    public FieldPolygon(Context context){
+    public FieldPolygon(Context context, Field field){
         super(context);
 
+        this.field = field;
         this.context = context;
 
         //init default values
@@ -88,11 +96,22 @@ public class FieldPolygon extends Polygon {
         super.draw(canvas,mapView, shadow);
     }
 
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent event, MapView mapView){
 
+    @Override public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView){
+        boolean tapped = contains(event);
+        //only show detail if map is zoomed in enough
+        if (tapped && mapView.getZoomLevel() > 13){
+            Projection pj = mapView.getProjection();
+            GeoPoint position = (GeoPoint)pj.fromPixels((int)event.getX(), (int)event.getY());
 
-        return false;
+            try {
+                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                BottomSheetDetailDialogFragment.newInstance(field).show(fragmentManager, "test");
+            } catch (ClassCastException e) {
+                Log.e("FieldPolygon", "Can't get fragment manager");
+            }
+        }
+        return tapped;
     }
 
 

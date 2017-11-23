@@ -68,6 +68,11 @@ public class MainActivity extends FragmentActivity
 
     }
 
+    @Override
+    public void onInfoButtonInteraction(){
+        //Todo
+    }
+
     //handle item clicked interaction from ItemListDialogFragment
     @Override
     public void onListItemClicked(int position) {
@@ -81,7 +86,7 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onMapFragmentComplete() {
         mapFragment.getMapViewHandler().addFields(testData);
-        mapFragment.getMapViewHandler().addDamageField(GlobalConstants.damageFieldTest(this));
+        mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
 
     }
 }

@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,6 +27,7 @@ public class ArgrarianField extends Field {
 
     private String owner;
     private String county;
+    private int color;
 
     //bundle keys
     private static final String KEY_NAME = "name";
@@ -47,24 +45,8 @@ public class ArgrarianField extends Field {
         //set default values
         owner = context.getResources().getString(R.string.owner_default_name);
         county = context.getResources().getString(R.string.county_default_name);
+        color = stateToColor(state);
         setName(context.getResources().getString(R.string.field_default_name));
-    }
-
-
-    /**
-     * Create the polygon from the agrarian field.
-     */
-    public void createPolygon() {
-        List<GeoPoint> polyPoints = new ArrayList<>();
-        for (CornerPoint point : getCornerPoints()) {
-            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
-        }
-        // add field attributes to polygon attributes
-        getFieldPolygon().setPoints(polyPoints);
-        getFieldPolygon().setFillColor(stateToPolygonColor(this.state));
-        // invisible borders look really cool :D
-        getFieldPolygon().setTitle(getName());
-
     }
 
     /**
@@ -73,7 +55,7 @@ public class ArgrarianField extends Field {
      * @param field
      * @return
      */
-    protected int stateToPolygonColor(FieldStates field) {
+    protected int stateToColor(FieldStates field) {
         switch (field) {
             case NoDamage:
                 return ContextCompat.getColor(context, R.color.stateNoDamage);
@@ -100,9 +82,24 @@ public class ArgrarianField extends Field {
         });
     }
 
+    /**
+     * bundle helper function
+     * @return
+     */
+    @Override
+    public Bundle getBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_NAME, this.getName());
+        bundle.putSerializable(KEY_STATE, this.state);
+        bundle.putInt(KEY_COLOR, stateToColor(this.state));
+        bundle.putString(KEY_OWNER, this.getOwner());
+        bundle.putString(KEY_COUNTY, this.getCounty());
+        return bundle;
+    }
 
     public void setState(FieldStates state) {
         this.state = state;
+        color = stateToColor(state);
     }
 
     public FieldStates getState() {
@@ -125,19 +122,8 @@ public class ArgrarianField extends Field {
         this.county = county;
     }
 
-    /**
-     * bundle helper function
-     * @return
-     */
-    @Override
-    public Bundle getBundle() {
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, this.getName());
-        bundle.putSerializable(KEY_STATE, this.state);
-        bundle.putInt(KEY_COLOR, stateToPolygonColor(this.state));
-        bundle.putString(KEY_OWNER, this.getOwner());
-        bundle.putString(KEY_COUNTY, this.getCounty());
-        return bundle;
+    public int getColor(){
+        return color;
     }
 
 

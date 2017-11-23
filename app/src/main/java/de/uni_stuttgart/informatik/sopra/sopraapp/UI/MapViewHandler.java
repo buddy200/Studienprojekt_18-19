@@ -1,6 +1,9 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.GestureDetector;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -8,11 +11,17 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -25,7 +34,10 @@ public class MapViewHandler {
     private MapView map;
     private IMapController mapController;
     private Context context;
-    private Marker currentlocmarker;
+    private Marker currentLocMarker;
+
+    private GestureDetector gestureDetector;
+    private Map<Field, FieldPolygon> fieldPoly;
 
     public MapViewHandler(Context context){
         this.context = context;
@@ -40,57 +52,53 @@ public class MapViewHandler {
         map.setMultiTouchControls(true);
         map.setUseDataConnection(true);
 
+        fieldPoly = new HashMap<>();
+
         mapController = map.getController();
         mapController.setZoom(GlobalConstants.DEFAULT_ZOOM);
         mapController.setCenter(GlobalConstants.START_POINT);
 
     }
 
+    protected Polygon fieldToPolygon(Field field){
+        FieldPolygon polygon = new FieldPolygon(context, field);
+
+        List<GeoPoint> polyPoints = new ArrayList<>();
+        for (CornerPoint point : field.getCornerPoints()) {
+            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
+        }
+
+        polygon.setPoints(polyPoints);
+        polygon.setFillColor(field.getColor());
+        polygon.setTitle(field.getName());
+
+        fieldPoly.put(field, polygon);
+
+        return polygon;
+    }
+
     /**
-     * add a polygon form the agrarian field to the map
-     * @param polis
+     * add a list of fields
+     * @param fields
      */
-    public void addPolygons(List<Polygon> polis){
-        for(Polygon pol : polis){
-            map.getOverlayManager().add(pol);
+    public void addFields(List<ArgrarianField> fields){
+        for(Field field : fields){
+           map.getOverlayManager().add(fieldToPolygon(field));
+
         }
     }
-    public void addField(ArgrarianField argrarianField){
-        map.getOverlayManager().add( argrarianField.getFieldPolygon());
-    }
 
-    public void addFields(List<ArgrarianField> argrarianFields){
-
-        for(ArgrarianField argrarianField : argrarianFields){
-            argrarianField.createPolygon();
-            map.getOverlayManager().add(argrarianField.getFieldPolygon());
-        }
-        //TODO
+    public void addField(Field field){
+        map.getOverlayManager().add(fieldToPolygon(field));
     }
 
     /**
-     * delete the agrarian field polygon from the map
-     * @param argrarianField
+     * delete field polygon from the map
+     * @param field
      */
-    public void deleteFieldFromOverlay(ArgrarianField argrarianField){
-        map.getOverlayManager().remove(argrarianField.getFieldPolygon());
-    }
 
-    /**
-     * add a polygon form the damage field to the map
-     * @param damageField
-     */
-    public void addDamageField(DamageField damageField){
-        damageField.createPolygon();
-        map.getOverlayManager().add(damageField.getFieldPolygon());
-    }
-
-    /**
-     * delete the damage field polygon from the map
-     * @param damageField
-     */
-    public void deleteDamageFieldFromOverlay(DamageField damageField){
-        map.getOverlayManager().remove(damageField.getFieldPolygon());
+    public void deleteFieldFromOverlay(Field field){
+        map.getOverlayManager().remove(fieldPoly.get(field));
     }
 
     /**
@@ -98,10 +106,10 @@ public class MapViewHandler {
      * @param point
      */
     public void setCurrlocMarker(GeoPoint point){
-        map.getOverlayManager().remove(currentlocmarker);
-        currentlocmarker = new Marker(map);
-        currentlocmarker.setPosition(point);
-        map.getOverlayManager().add(currentlocmarker);
+        map.getOverlayManager().remove(currentLocMarker);
+        currentLocMarker = new Marker(map);
+        currentLocMarker.setPosition(point);
+        map.getOverlayManager().add(currentLocMarker);
 
     }
 

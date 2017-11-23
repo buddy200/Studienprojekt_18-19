@@ -54,9 +54,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
         Button add = view.findViewById(R.id.button_list);
         Button loc = view.findViewById(R.id.button_location);
+        Button info = view.findViewById(R.id.button_info);
 
         add.setOnClickListener(this);
         loc.setOnClickListener(this);
+        info.setOnClickListener(this);
 
         return view;
     }
@@ -92,6 +94,10 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     checkLocPermissions();
                     mListener.onLocationButtonInteraction();
                     break;
+                case R.id.button_info:
+                    checkLocPermissions();
+                    mListener.onInfoButtonInteraction();
+                    break;
             }
         }
     }
@@ -114,5 +120,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         // TODO: Update argument type and name
         void onListButtonInteraction();
         void onLocationButtonInteraction();
+        void onInfoButtonInteraction();
     }
 }

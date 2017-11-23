@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 
 /**
@@ -27,7 +28,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     private static final String KEY_OWNER = "owner";
 
 
-    public static BottomSheetDialogFragment newInstance(ArgrarianField argrarianField) {
+    public static BottomSheetDialogFragment newInstance(Field argrarianField) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(argrarianField.getBundle());

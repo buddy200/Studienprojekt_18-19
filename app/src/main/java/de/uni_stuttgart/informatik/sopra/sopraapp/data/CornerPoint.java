@@ -62,4 +62,13 @@ public class CornerPoint {
         return angle;
     }
 
+    @Override
+    public boolean equals(Object o ) {
+        if (o instanceof CornerPoint) {
+            return wgs.equals( ((CornerPoint) o).getWGS());
+        } else {
+            return false;
+        }
+    }
+
 }

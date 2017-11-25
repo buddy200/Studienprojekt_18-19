@@ -14,6 +14,11 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Triangle;
 
 public class Field {
 
+    /**
+     * the rotation of the polygon
+     * true if counterclockwise
+     */
+    private boolean rotation = false;
     private boolean finised = false;
     //removed private to access corner points - FB
     List<CornerPoint> cornerPoints = new ArrayList<>();
@@ -38,10 +43,12 @@ public class Field {
     }
 
     public void finish() {
-        cornerPoints.get(cornerPoints.size()-1).calculateAngle(cornerPoints.get(cornerPoints.size()-2), cornerPoints.get(0));
-        cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size()-1), cornerPoints.get(1));
-        calculateSize();
-        finised = true;
+        if (cornerPoints.size() > 2) {
+            cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));
+            cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size() - 1), cornerPoints.get(1));
+            calculateSize();
+            finised = true;
+        }
     }
 
     private void calculateSize() {
@@ -52,7 +59,7 @@ public class Field {
 
         if(angleSum()) {
             for (CornerPoint cp : cornerPoints) {
-                if (cp.getAngle() > Math.PI) {
+                if (angleCheck(cp.getAngle())) {
                     outwardPoints.add(cp);
                 }
             }
@@ -63,15 +70,32 @@ public class Field {
                     rmCopy.remove(1);
                 } else {
                     CornerPoint cp = outwardPoints.poll();
-                    //TODO if is not fitting
-                    if (false) {
+                    int index = rmCopy.indexOf(cp);
+                    int indexBefore = ((index == 0)? index-1 : rmCopy.size()-1);
+
+                    //two outward Points following
+                    if (angleCheck(rmCopy.get(indexBefore).getAngle())) {
                         i--;
                         outwardPoints.add(cp);
                     } else {
+                        int indexTwoBefore = ((indexBefore == 0) ? indexBefore-1 : rmCopy.size()-1);
+                        int indexThreeBefore = ((indexTwoBefore == 0) ? indexTwoBefore-1 : rmCopy.size()-1);
+                        int indexAfter = ((index == rmCopy.size()-1) ? 0 : ++index);
                         //make triangle
-                    }
+                        triangleList.add(new Triangle(rmCopy.get(indexTwoBefore), rmCopy.get(indexBefore), rmCopy.get(index)));
+                        rmCopy.remove(indexBefore);
 
-                    //TODO recalculate angles
+                        //recalculate angles
+                        CornerPoint cpBefore = rmCopy.get(indexTwoBefore);
+                        cp.calculateAngle(cpBefore, rmCopy.get(indexAfter));
+                        cpBefore.calculateAngle(rmCopy.get(indexThreeBefore), cp);
+                        if(angleCheck(cp.getAngle())) {
+                            outwardPoints.add(cp);
+                        }
+                        if(angleCheck(cpBefore.getAngle())) {
+                            outwardPoints.add(cpBefore);
+                        }
+                    }
                 }
             }
 
@@ -81,17 +105,22 @@ public class Field {
         }
     }
 
+    private boolean angleCheck(double angle) {
+        return rotation ? angle <= Math.PI : angle >= Math.PI;
+    }
+
     private boolean angleSum() {
         double sum = 0;
         for(int i = 0; i < cornerPoints.size();i++) {
             sum += cornerPoints.get(i).getAngle();
         }
         if (Math.abs(sum - (Math.PI * (cornerPoints.size()+2)))< 0.001) {
-            //TODO swap angles
+            rotation = true;
             return true;
         } else if(Math.abs(sum - (Math.PI * (cornerPoints.size()-2)))< 0.001) {
             return true;
         } else {
+            //either wrong calculation or crossing lines in input polygon
             return false;
         }
     }

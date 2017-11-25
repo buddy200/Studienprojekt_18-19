@@ -37,8 +37,11 @@ public class CornerPoint {
 
             //cos a = (v_a x v_b )/ (|v_a| * |v_b)|
             angle = Math.acos(MathUtility.scalarProduct(v_before,v_after)/(v_before.getLength() * v_after.getLength()));
-            //TODO find a way to get the orientation of the angle
-            //TODO change angel to 2*PI - angle if orientation is wrong
+
+            Vector rotated = v_after.rotate(angle);
+            if(rotated.equalDirection(v_before)) {
+                angle = 2*Math.PI - angle;
+            }
 
             //maybe remove itself if angle = 180°
         } else {

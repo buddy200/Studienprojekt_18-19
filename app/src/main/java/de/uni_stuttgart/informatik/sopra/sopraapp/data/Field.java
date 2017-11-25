@@ -50,34 +50,50 @@ public class Field {
         Queue<CornerPoint> outwardPoints = new LinkedList<>();
         List<Triangle> triangleList = new ArrayList<>();
 
-        for(CornerPoint cp : cornerPoints) {
-            if (cp.getAngle() > Math.PI ) {
-                outwardPoints.add(cp);
-            }
-        }
-
-        for (int i = 0; i < cornerPoints.size()-2; i++) {
-            if(outwardPoints.isEmpty()){
-                triangleList.add(new Triangle(rmCopy.get(0), rmCopy.get(1), rmCopy.get(2)));
-                rmCopy.remove(1);
-            } else {
-                CornerPoint cp = outwardPoints.poll();
-                //TODO if is not fitting
-                if(false) {
-                    i--;
+        if(angleSum()) {
+            for (CornerPoint cp : cornerPoints) {
+                if (cp.getAngle() > Math.PI) {
                     outwardPoints.add(cp);
-                } else {
-                    //make triangle
                 }
+            }
 
-                //TODO recalculate angles
+            for (int i = 0; i < cornerPoints.size() - 2; i++) {
+                if (outwardPoints.isEmpty()) {
+                    triangleList.add(new Triangle(rmCopy.get(0), rmCopy.get(1), rmCopy.get(2)));
+                    rmCopy.remove(1);
+                } else {
+                    CornerPoint cp = outwardPoints.poll();
+                    //TODO if is not fitting
+                    if (false) {
+                        i--;
+                        outwardPoints.add(cp);
+                    } else {
+                        //make triangle
+                    }
+
+                    //TODO recalculate angles
+                }
+            }
+
+            for (Triangle t : triangleList) {
+                size += t.getSize();
             }
         }
+    }
 
-        for (Triangle t : triangleList) {
-            size += t.getSize();
+    private boolean angleSum() {
+        double sum = 0;
+        for(int i = 0; i < cornerPoints.size();i++) {
+            sum += cornerPoints.get(i).getAngle();
         }
-
+        if (Math.abs(sum - (Math.PI * (cornerPoints.size()+2)))< 0.001) {
+            //TODO swap angles
+            return true;
+        } else if(Math.abs(sum - (Math.PI * (cornerPoints.size()-2)))< 0.001) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

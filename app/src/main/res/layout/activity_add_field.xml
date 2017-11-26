@@ -20,7 +20,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_add_field" />
+    <fragment
+        android:id="@+id/map_fragment_add"
+        class="de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -28,6 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>

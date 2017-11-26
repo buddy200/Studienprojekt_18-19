@@ -7,18 +7,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import org.osmdroid.util.GeoPoint;
 
-public class AddFieldActivity extends AppCompatActivity {
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
+
+public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener {
+
+    MapFragment mapFragment;
+    MYLocationListener myLocationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_field);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_activity_add_field);
 
+        //floating action button listener stuff
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,6 +38,7 @@ public class AddFieldActivity extends AppCompatActivity {
         });
 
 
+        //back button on toolbar implementation
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -38,6 +48,20 @@ public class AddFieldActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_add);
+
     }
 
+
+    @Override
+    public void onMapFragmentComplete() {
+        myLocationListener = new MYLocationListener();
+        myLocationListener.initializeLocationManager(this, mapFragment);
+        GeoPoint userLocation = new GeoPoint(myLocationListener.getLocation().getLatitude(),
+                myLocationListener.getLocation().getLongitude());
+        mapFragment.getMapViewHandler().animateTo(userLocation);
+        mapFragment.setCurrLocMarker(userLocation);
+
+    }
 }

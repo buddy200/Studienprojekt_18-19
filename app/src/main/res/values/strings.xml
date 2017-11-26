@@ -10,4 +10,8 @@
     <string name="evaluator_default_name">no evaluator</string>
     <string name="county_default_name">no county</string>
     <string name="damagefield_name_default">no name</string>
+
+    <string name="title_activity_add_field">Add a field</string>
+
+
 </resources>

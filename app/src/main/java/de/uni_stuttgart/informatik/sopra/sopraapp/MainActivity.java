@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -43,7 +44,6 @@ public class MainActivity extends FragmentActivity
         testData = GlobalConstants.fieldTest(100, 4, this);
 
 
-
     }
 
     //handle menu buttons interactions
@@ -65,6 +65,13 @@ public class MainActivity extends FragmentActivity
          Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
      }
 
+    }
+
+    @Override
+    public void onAddButtonInteraction(){
+        //start Add Field Activity
+        Intent i = new Intent(this, AddFieldActivity.class);
+        startActivity(i);
     }
 
     @Override

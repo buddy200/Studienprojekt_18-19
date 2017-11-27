@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
 
+import org.osmdroid.util.GeoPoint;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 
 /**
@@ -40,11 +42,22 @@ public class MYLocationListener implements LocationListener {
         this.context = context;
         //get the location manager
         this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                //Check Permission for fine location
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    mapFragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-        //define the location manager criteria
-        criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
 
     }
@@ -52,7 +65,10 @@ public class MYLocationListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
+        if(location != null){
+            mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+            mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+        }
     }
 
     @Override
@@ -71,22 +87,29 @@ public class MYLocationListener implements LocationListener {
     }
 
     public Location getLocation() {
+        try {
 
-        this.locationProvider = locationManager.getBestProvider(criteria, true);
-
-        if (locationManager.isProviderEnabled(locationProvider)) {
+            if (locationManager != null) {
+            }
             //Check Permission for fine location
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 mapFragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
-            locationManager.requestLocationUpdates(locationProvider, 100, 10, this);
-            location = locationManager.getLastKnownLocation(locationProvider);
-            return location;
-        } else {
-            return location;
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                // if no GPS signal available, get location from Network Location
+                if (location == null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return location;
     }
 }
+
 
 

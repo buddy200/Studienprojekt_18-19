@@ -2,6 +2,8 @@
     <string name="app_name">SoPraApp</string>
     <string name="action_settings">Settings</string>
 
+    <string name="done">Done</string>
+
     <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
 
     <string name="field_default_name">no field name</string>

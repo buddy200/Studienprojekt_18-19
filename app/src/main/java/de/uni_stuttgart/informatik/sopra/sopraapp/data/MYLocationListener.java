@@ -30,6 +30,8 @@ public class MYLocationListener implements LocationListener {
     private Thread thread;
     private boolean locationUpdateEnable = true;
 
+    public boolean follow = false;
+
     /**
      *
      */
@@ -66,7 +68,9 @@ public class MYLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(location != null){
-            mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+            if(follow){
+                mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+            }
             mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
         }
     }
@@ -108,6 +112,10 @@ public class MYLocationListener implements LocationListener {
             e.printStackTrace();
         }
         return location;
+    }
+
+    public void setFollow(boolean b){
+        follow = b;
     }
 }
 

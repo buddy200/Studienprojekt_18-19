@@ -15,6 +15,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 /**
@@ -31,7 +32,7 @@ public class MainActivity extends FragmentActivity
 
 
     MapFragment mapFragment;
-    ArrayList<AgrarianField> testData;
+    ArrayList<Field> testData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

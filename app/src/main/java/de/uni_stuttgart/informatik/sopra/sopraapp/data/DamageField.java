@@ -15,11 +15,15 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 public class DamageField extends Field {
     private static final String TAG = "DamageField";
 
-    private Date date;
-    private String evaluator;
+    private static final String KEY_DATE = "date";
+    private static final String KEY_EVALUATOR = "evaluator";
 
 
-    public DamageField(Context context, List<CornerPoint> cPoints) {
+    public Date date;
+    public String evaluator;
+
+
+    public DamageField(List<CornerPoint> cPoints, Context context) {
         super(context, cPoints);
         this.name= context.getResources().getString(R.string.field_default_name);
         this.county = context.getResources().getString(R.string.county_default_name);
@@ -43,9 +47,13 @@ public class DamageField extends Field {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_NAME, this.name);
         bundle.putInt(KEY_COLOR, this.color);
-        bundle.putString(KEY_EVALUATOR, this.evaluator);
         bundle.putString(KEY_COUNTY, this.county);
         bundle.putDouble(KEY_SIZE, this.size);
+
+        //damageField specific attributes
+        bundle.putString(KEY_EVALUATOR, this.evaluator);
+        //store date as a string - is probably easier
+        bundle.putString(KEY_DATE, date.toString());
         return bundle;
     }
 

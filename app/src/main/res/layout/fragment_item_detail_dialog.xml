@@ -60,28 +60,6 @@
                 android:id="@+id/field_detail_state"
                 android:text="-state-"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:id="@+id/field_detail_damage_date"
-                android:text="-damage date-"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:id="@+id/field_detail_damage_by"
-                android:text="-damage by-"/>
-
         </LinearLayout>
 
         <TextView

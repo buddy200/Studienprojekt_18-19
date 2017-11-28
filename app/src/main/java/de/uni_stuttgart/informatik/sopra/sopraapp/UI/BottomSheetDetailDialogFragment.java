@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 
@@ -25,12 +26,16 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     private static final String KEY_COLOR = "color";
     private static final String KEY_COUNTY = "county";
     private static final String KEY_OWNER = "owner";
+    private static final String KEY_SIZE = "size";
+    private static final String KEY_DATE = "date";
+    private static final String KEY_EVALUATOR = "evaluator";
 
 
-    public static BottomSheetDialogFragment newInstance(Field argrarianField) {
+
+    public static BottomSheetDialogFragment newInstance(Field field) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
-        fragment.setArguments(argrarianField.getBundle());
+        fragment.setArguments(field.getBundle());
         return fragment;
     }
 
@@ -55,14 +60,28 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TextView name = (TextView) view.findViewById(R.id.field_detail_name);
-        TextView state = (TextView) view.findViewById(R.id.field_detail_state);
+        TextView stateOrDate = (TextView) view.findViewById(R.id.field_detail_state);
         TextView county = (TextView) view.findViewById(R.id.field_detail_region);
-        TextView owner = (TextView) view.findViewById(R.id.field_detail_policyholder);
+        TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
+        TextView size = (TextView) view.findViewById(R.id.field_detail_size);
 
         name.setText(getArguments().getString(KEY_NAME));
-        state.setText(getArguments().getSerializable(KEY_STATE).toString());
-        state.setTextColor(getArguments().getInt(KEY_COLOR));
         county.setText(getArguments().getString(KEY_COUNTY));
-        owner.setText(getArguments().getString(KEY_OWNER));
+        size.setText(String.valueOf(getArguments().getDouble(KEY_SIZE)));
+
+        //is field agrarian?
+        if(getArguments().getString(KEY_OWNER) != null){
+            stateOrDate.setText(getArguments().getSerializable(KEY_STATE).toString());
+            stateOrDate.setTextColor(getArguments().getInt(KEY_COLOR));
+            ownerOrEvaluator.setText(getArguments().getString(KEY_OWNER));
+        }
+        //is field damage?
+        if(getArguments().getString(KEY_DATE) != null){
+            stateOrDate.setText(getArguments().getString(KEY_DATE));
+            ownerOrEvaluator.setText(getArguments().getString(KEY_EVALUATOR));
+        }
+
+
+
     }
 }

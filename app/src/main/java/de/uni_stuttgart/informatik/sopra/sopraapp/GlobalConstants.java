@@ -7,11 +7,13 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 /**
@@ -74,7 +76,7 @@ public class GlobalConstants {
         points3.add(new CornerPoint(48.840377, 8.841401));
         points3.add(new CornerPoint(48.840384, 8.841656));
         points3.add(new CornerPoint(48.840658, 8.841659));
-        DamageField df = new DamageField(context, points3);
+        DamageField df = new DamageField(points3, context);
         df.name = "Test";
         return  df;
     }
@@ -85,12 +87,12 @@ public class GlobalConstants {
      * @param numberCornerPoints
      * @return
      */
-    public static ArrayList<AgrarianField> fieldTest(int numberFields, int numberCornerPoints, Context context){
+    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints, Context context){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
 
-        ArrayList<AgrarianField> polis = new ArrayList<>();
+        ArrayList<Field> polis = new ArrayList<>();
         double initialLat = GlobalConstants.START_POINT.getLatitude();
         double initialLon = GlobalConstants.START_POINT.getLongitude();
 
@@ -122,15 +124,27 @@ public class GlobalConstants {
             }
             initialLat += 0.003;
 
-            AgrarianField f = new AgrarianField(points, context);
-            f.name = "AgrarianField Nr: " + String.valueOf(j);
-            f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
+            //add a agrarian field
+            if(j % 2 == 0){
+                AgrarianField f = new AgrarianField(points, context);
+                f.name = "AgrarianField Nr: " + String.valueOf(j);
+                f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
-            //keep this! if there is no county numberFields times searches by google must be done, this takes time!
-            f.setAutomaticCounty();
-            f.owner = (superheroes[(int)(Math.random()*superheroes.length)]);
+                f.setAutomaticCounty();
+                f.owner = (superheroes[(int)(Math.random()*superheroes.length)]);
+                polis.add(f);
+            //or a damage field
+            }else {
+                DamageField f = new DamageField(points, context);
+                f.name = "DamageField Nr: " + String.valueOf(j);
+                f.date = new Date(0);
 
-            polis.add(f);
+                f.evaluator = (superheroes[(int)(Math.random()*superheroes.length)]);
+                polis.add(f);
+            }
+
+
+
         }
 
         return polis;

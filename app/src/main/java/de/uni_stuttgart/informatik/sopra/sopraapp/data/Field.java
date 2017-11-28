@@ -26,9 +26,7 @@ public abstract class Field {
 
     //keys
     protected static final String KEY_NAME = "name";
-    protected static final String KEY_STATE = "state";
     protected static final String KEY_COLOR = "color";
-    protected static final String KEY_OWNER = "owner";
     protected static final String KEY_COUNTY = "county";
     protected static final String KEY_SIZE = "size";
     protected static final String KEY_EVALUATOR = "evaluator";

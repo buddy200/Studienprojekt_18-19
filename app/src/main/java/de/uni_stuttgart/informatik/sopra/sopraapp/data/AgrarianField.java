@@ -21,6 +21,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 public class AgrarianField extends Field {
     private static final String TAG = "AgrarianField";
 
+    protected static final String KEY_OWNER = "owner";
+    protected static final String KEY_STATE = "state";
+
+
     //default state
     private FieldStates state = FieldStates.NoDamage;
     public String owner;
@@ -82,9 +86,12 @@ public class AgrarianField extends Field {
         bundle.putString(KEY_NAME, this.name);
         bundle.putSerializable(KEY_STATE, this.state);
         bundle.putInt(KEY_COLOR, agrarianFieldToColor(this.state));
-        bundle.putString(KEY_OWNER, this.owner);
         bundle.putString(KEY_COUNTY, this.county);
         bundle.putDouble(KEY_SIZE, this.size);
+
+        //agrarianField specific attributes
+        bundle.putString(KEY_OWNER, this.owner);
+        bundle.putSerializable(KEY_STATE, this.state);
         return bundle;
     }
 

@@ -77,7 +77,7 @@ public class MapViewHandler {
      * add a list of fields
      * @param fields
      */
-    public void addFields(List<AgrarianField> fields){
+    public void addFields(List<Field> fields){
         for(Field field : fields){
            map.getOverlayManager().add(fieldToPolygon(field));
 

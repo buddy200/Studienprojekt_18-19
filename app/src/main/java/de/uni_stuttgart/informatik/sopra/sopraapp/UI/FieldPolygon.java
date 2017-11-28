@@ -73,7 +73,7 @@ public class FieldPolygon extends Polygon {
         super.draw(canvas, mapView, shadow);
     }
 
-
+    double offset = 0.00075;
     @Override public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView){
         boolean tapped = contains(event);
         //only show detail if map is zoomed in enough
@@ -84,6 +84,8 @@ public class FieldPolygon extends Polygon {
             try {
                 FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
                 BottomSheetDetailDialogFragment.newInstance(field).show(fragmentManager, "test");
+                mapView.getController().setZoom(20);
+                mapView.getController().animateTo(new GeoPoint(field.getCentroid().getLatitude()-offset, field.getCentroid().getLongitude()));
             } catch (ClassCastException e) {
                 Log.e("FieldPolygon", "Can't get fragment manager");
             }

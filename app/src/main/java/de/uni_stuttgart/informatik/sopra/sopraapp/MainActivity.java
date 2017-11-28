@@ -16,7 +16,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
@@ -52,7 +51,7 @@ public class MainActivity extends FragmentActivity
     //handle menu buttons interactions
     @Override
     public void onListButtonInteraction() {
-        ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "FieldList");
+        ItemListDialogFragment.newInstance(testData, false).show(getSupportFragmentManager(), "FieldList");
         //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "AgrarianField");
 
     }
@@ -82,28 +81,49 @@ public class MainActivity extends FragmentActivity
         //Todo
     }
 
+    int i = 0;
+    ArrayList<Field> searchData;
     @Override
     public void onSearchButtonClicked(String input) {
         Log.e(TAG, "Search for: " + input);
 
         // copy testData in search data list
         // this copy is comparable to shallow copy in the C language
-        ArrayList<Field> tempList = new ArrayList<>(testData);
+        searchData = new ArrayList<>(testData);
         //ArrayList<Field> searchList = new ArrayList<>();
 
         /**
-         * search for names
+         * not optimal and dirty way of searching
+         * but it's fast to implement and probably enough for our use case
+         * - ah and this is case sensitive right now... TODO
          */
-        Iterator<Field> iter = tempList.iterator();
+        Iterator<Field> iter = searchData.iterator();
         while(iter.hasNext()){
             Field f = iter.next();
+            Bundle b = f.getBundle();
             if(!f.name.contains(input)){
-                iter.remove();
+                //f is type agrarian
+                if(b.containsKey("state")){
+                    //search for states and owners
+                    if(! b.getSerializable("state").toString().contains(input)){
+                        if( ! b.getString("owner").contains(input)){
+                            iter.remove();
+                        }
+                    }
+
+                }
+                //f is type damage field
+                if(b.containsKey("evaluator")){
+                    //search for evaluators
+                    if(! b.getString("evaluator").contains(input)){
+                        iter.remove();
+                    }
+                }
             }
         }
 
-        if(tempList.size() != 0){
-            ItemListDialogFragment.newInstance(tempList).show(getSupportFragmentManager(), "SearchList");
+        if(searchData.size() != 0){
+            ItemListDialogFragment.newInstance(searchData, true).show(getSupportFragmentManager(), "SearchList");
         }else{
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
         }
@@ -112,12 +132,19 @@ public class MainActivity extends FragmentActivity
 
     //handle item clicked interaction from ItemListDialogFragment
     @Override
-    public void onListItemClicked(int position) {
+    public void onListItemClicked(int position, boolean search) {
         //offset to show centroid of polygon completely while bottom sheet is visible
         double offset = 0.001;
-        mapFragment.animateToPosition(testData.get(position).getCentroid().getLatitude()-offset,
-                testData.get(position).getCentroid().getLongitude());
-        BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "Field");
+        if(search && searchData != null){
+            mapFragment.animateToPosition(searchData.get(position).getCentroid().getLatitude()-offset,
+                    testData.get(position).getCentroid().getLongitude());
+            BottomSheetDetailDialogFragment.newInstance(searchData.get(position)).show(this.getSupportFragmentManager(), "Field");
+        }else{
+            mapFragment.animateToPosition(testData.get(position).getCentroid().getLatitude()-offset,
+                    testData.get(position).getCentroid().getLongitude());
+            BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "Field");
+        }
+
     }
 
 

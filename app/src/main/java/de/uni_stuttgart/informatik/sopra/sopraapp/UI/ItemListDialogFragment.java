@@ -37,11 +37,15 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     private static final String ARG_ITEM_LIST = "list";
     private Listener mListener;
 
+    //is this a list of searched items?
+    static boolean mSearch;
+
     // TODO: Customize parameters
-    public static ItemListDialogFragment newInstance(ArrayList<Field> agrarianFields) {
+    public static ItemListDialogFragment newInstance(ArrayList<Field> agrarianFields, boolean search) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();
 
+        mSearch = search;
         ArrayList<Bundle> fieldBundles = new ArrayList<>();
         for (int i = 0; i < agrarianFields.size(); ++i) {
             fieldBundles.add(agrarianFields.get(i).getBundle());
@@ -86,7 +90,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
 
     public interface Listener {
-        void onListItemClicked(int position);
+        void onListItemClicked(int position, boolean search);
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
@@ -112,7 +116,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onListItemClicked(getAdapterPosition());
+                        mListener.onListItemClicked(getAdapterPosition(), mSearch);
                         dismiss();
                     }
                 }

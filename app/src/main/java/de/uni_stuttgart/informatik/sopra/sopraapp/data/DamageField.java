@@ -13,45 +13,40 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  */
 
 public class DamageField extends Field {
+    private static final String TAG = "DamageField";
 
-    private Date date = new Date(0);
+    private Date date;
     private String evaluator;
 
-    private AgrarianField agrarianField;
 
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
-        this.evaluator = context.getResources().getString(R.string.evaluator_default_name);
-        setName(context.getResources().getString(R.string.damage_case_defaut_name));
+        this.name= context.getResources().getString(R.string.field_default_name);
+        this.county = context.getResources().getString(R.string.county_default_name);
+        this.color = damageFieldToColor();
+        evaluator = context.getResources().getString(R.string.evaluator_default_name);
+        date = new Date(0);
     }
 
-    public AgrarianField getAgrarianField() {
-        return agrarianField;
+    /**
+     * map type of damage to color
+     * TODO
+     * @return
+     */
+    private int damageFieldToColor() {
+        return R.color.fieldDefaultColor;
     }
 
-    public void setAgrarianField(AgrarianField agrarianField) {
-        this.agrarianField = agrarianField;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getEvaluator() {
-        return evaluator;
-    }
-
-    public void setEvaluator(String evaluator) {
-        this.evaluator = evaluator;
-    }
 
     @Override
     public Bundle getBundle() {
-        return null;
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_NAME, this.name);
+        bundle.putInt(KEY_COLOR, this.color);
+        bundle.putString(KEY_EVALUATOR, this.evaluator);
+        bundle.putString(KEY_COUNTY, this.county);
+        bundle.putDouble(KEY_SIZE, this.size);
+        return bundle;
     }
 
 

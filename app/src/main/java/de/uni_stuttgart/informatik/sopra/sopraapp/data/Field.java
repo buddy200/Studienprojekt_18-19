@@ -24,18 +24,29 @@ public abstract class Field {
 
     private static final String TAG = "Field";
 
+    //keys
+    protected static final String KEY_NAME = "name";
+    protected static final String KEY_STATE = "state";
+    protected static final String KEY_COLOR = "color";
+    protected static final String KEY_OWNER = "owner";
+    protected static final String KEY_COUNTY = "county";
+    protected static final String KEY_SIZE = "size";
+    protected static final String KEY_EVALUATOR = "evaluator";
+
+
     protected Context context;
 
     //values for field and damage case
-    private String name;
-    private int color = Color.argb(255,0,0,0);
-    private GeoPoint centroid;
+    public String name;
+    public String county;
+    protected double size;
+    public int color;
+    protected GeoPoint centroid;
 
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
     private boolean finished = false;
-    //the size of the field in m²
-    private double size;
+
 
     public Field() {
 
@@ -43,8 +54,16 @@ public abstract class Field {
 
     public Field(Context context, List<CornerPoint> cPoints) {
         this.context = context;
+
+        //set default attributes
+        this.name = context.getResources().getString(R.string.field_default_name);
+        this.county = context.getResources().getString(R.string.county_default_name);
+        this.size = 0.0;
+        this.color = R.color.fieldDefaultColor;
+
+
         if (cPoints.size() < 2) {
-            Log.e(TAG, "not enough corner points provided for field: " + getName());
+            Log.e(TAG, "not enough corner points provided for field: " + name);
         } else {
             setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
         }
@@ -135,16 +154,6 @@ public abstract class Field {
     public List<CornerPoint> getCornerPoints() {
         return cornerPoints;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getColor(){ return this.color;}
 
     public GeoPoint getCentroid(){ return this.centroid;}
 

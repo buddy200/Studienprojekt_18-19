@@ -5,6 +5,8 @@
     <color name="colorPrimaryDark">#2E7D32</color>
     <color name="colorAccent">#8D6E63</color>
 
+    <color name="fieldDefaultColor">#aaffffff</color>
+
     <color name="stateNoDamage">#aa00ff00</color>
     <color name="stateLightDamage">#aaff7f00</color>
     <color name="stateHighDamage">#aaff0000</color>

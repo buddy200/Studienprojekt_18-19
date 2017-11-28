@@ -75,7 +75,7 @@ public class GlobalConstants {
         points3.add(new CornerPoint(48.840384, 8.841656));
         points3.add(new CornerPoint(48.840658, 8.841659));
         DamageField df = new DamageField(context, points3);
-        df.setName("Test");
+        df.name = "Test";
         return  df;
     }
 
@@ -123,12 +123,12 @@ public class GlobalConstants {
             initialLat += 0.003;
 
             AgrarianField f = new AgrarianField(points, context);
-            f.setName("AgrarianField Nr: " + String.valueOf(j));
+            f.name = "AgrarianField Nr: " + String.valueOf(j);
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
             //keep this! if there is no county numberFields times searches by google must be done, this takes time!
             f.setAutomaticCounty();
-            f.setOwner(superheroes[(int)(Math.random()*superheroes.length)]);
+            f.owner = (superheroes[(int)(Math.random()*superheroes.length)]);
 
             polis.add(f);
         }

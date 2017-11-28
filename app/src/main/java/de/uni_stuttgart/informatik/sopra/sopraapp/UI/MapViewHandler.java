@@ -65,8 +65,8 @@ public class MapViewHandler {
         }
 
         polygon.setPoints(polyPoints);
-        polygon.setFillColor(field.getColor());
-        polygon.setTitle(field.getName());
+        polygon.setFillColor(field.color);
+        polygon.setTitle(field.name);
 
         fieldPolyMap.put(field, polygon);
 

@@ -7,7 +7,6 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,17 +23,7 @@ public class AgrarianField extends Field {
 
     //default state
     private FieldStates state = FieldStates.NoDamage;
-
-    private String owner;
-    private String county;
-    private int color;
-
-    //bundle keys
-    private static final String KEY_NAME = "name";
-    private static final String KEY_STATE = "state";
-    private static final String KEY_COLOR = "color";
-    private static final String KEY_OWNER = "owner";
-    private static final String KEY_COUNTY = "county";
+    public String owner;
 
 
     /**
@@ -42,11 +31,12 @@ public class AgrarianField extends Field {
      */
     public AgrarianField(List<CornerPoint> cPoints, Context context) {
         super(context, cPoints);
+
         //set default values
         owner = context.getResources().getString(R.string.owner_default_name);
-        county = context.getResources().getString(R.string.county_default_name);
-        color = stateToColor(state);
-        setName(context.getResources().getString(R.string.field_default_name));
+        this.name= context.getResources().getString(R.string.field_default_name);
+        this.county = context.getResources().getString(R.string.county_default_name);
+        this.color = agrarianFieldToColor(state);
     }
 
     /**
@@ -55,7 +45,7 @@ public class AgrarianField extends Field {
      * @param field
      * @return
      */
-    protected int stateToColor(FieldStates field) {
+    protected int agrarianFieldToColor(FieldStates field) {
         switch (field) {
             case NoDamage:
                 return ContextCompat.getColor(context, R.color.stateNoDamage);
@@ -89,41 +79,18 @@ public class AgrarianField extends Field {
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, this.getName());
+        bundle.putString(KEY_NAME, this.name);
         bundle.putSerializable(KEY_STATE, this.state);
-        bundle.putInt(KEY_COLOR, stateToColor(this.state));
-        bundle.putString(KEY_OWNER, this.getOwner());
-        bundle.putString(KEY_COUNTY, this.getCounty());
+        bundle.putInt(KEY_COLOR, agrarianFieldToColor(this.state));
+        bundle.putString(KEY_OWNER, this.owner);
+        bundle.putString(KEY_COUNTY, this.county);
+        bundle.putDouble(KEY_SIZE, this.size);
         return bundle;
     }
 
     public void setState(FieldStates state) {
         this.state = state;
-        color = stateToColor(state);
-    }
-
-    public FieldStates getState() {
-        return this.state;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public int getColor(){
-        return color;
+        color = agrarianFieldToColor(state);
     }
 
 

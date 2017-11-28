@@ -9,8 +9,8 @@ import org.osmdroid.views.overlay.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
@@ -85,12 +85,12 @@ public class GlobalConstants {
      * @param numberCornerPoints
      * @return
      */
-    public static ArrayList<ArgrarianField> fieldTest(int numberFields, int numberCornerPoints, Context context){
+    public static ArrayList<AgrarianField> fieldTest(int numberFields, int numberCornerPoints, Context context){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
 
-        ArrayList<ArgrarianField> polis = new ArrayList<>();
+        ArrayList<AgrarianField> polis = new ArrayList<>();
         double initialLat = GlobalConstants.START_POINT.getLatitude();
         double initialLon = GlobalConstants.START_POINT.getLongitude();
 
@@ -104,7 +104,7 @@ public class GlobalConstants {
         points2.add(new CornerPoint(48.839101, 8.843861));
         points2.add(new CornerPoint(48.840586, 8.844068));
         points2.add(new CornerPoint(48.840992, 8.840656));
-        ArgrarianField ff = new ArgrarianField(points2, context);
+        AgrarianField ff = new AgrarianField(points2, context);
         ff.setAutomaticCounty();
         polis.add(ff);
 
@@ -122,8 +122,8 @@ public class GlobalConstants {
             }
             initialLat += 0.003;
 
-            ArgrarianField f = new ArgrarianField(points, context);
-            f.setName("ArgrarianField Nr: " + String.valueOf(j));
+            AgrarianField f = new AgrarianField(points, context);
+            f.setName("AgrarianField Nr: " + String.valueOf(j));
             f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
             //keep this! if there is no county numberFields times searches by google must be done, this takes time!

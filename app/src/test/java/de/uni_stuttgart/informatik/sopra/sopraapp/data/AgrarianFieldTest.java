@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  * Created by larsb on 16.11.2017.
  */
-public class ArgrarianFieldTest {
+public class AgrarianFieldTest {
     @Test
     public void getSize() throws Exception {
     }

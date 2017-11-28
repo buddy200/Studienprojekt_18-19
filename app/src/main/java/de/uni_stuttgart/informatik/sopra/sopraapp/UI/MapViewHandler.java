@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
@@ -77,7 +77,7 @@ public class MapViewHandler {
      * add a list of fields
      * @param fields
      */
-    public void addFields(List<ArgrarianField> fields){
+    public void addFields(List<AgrarianField> fields){
         for(Field field : fields){
            map.getOverlayManager().add(fieldToPolygon(field));
 

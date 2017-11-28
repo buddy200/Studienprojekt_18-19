@@ -17,7 +17,6 @@ import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Polygon;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**

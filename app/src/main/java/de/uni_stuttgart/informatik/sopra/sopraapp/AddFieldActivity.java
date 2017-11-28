@@ -4,7 +4,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,14 +12,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
@@ -91,7 +88,7 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         cornerPoints.add(new CornerPoint(location.getLatitude(), location.getLongitude()));
 
         if(cornerPoints.size() >= 3){
-            createField = new ArgrarianField(cornerPoints, this.getApplicationContext());
+            createField = new AgrarianField(cornerPoints, this.getApplicationContext());
             mapFragment.getMapViewHandler().addField(createField);
         }
 

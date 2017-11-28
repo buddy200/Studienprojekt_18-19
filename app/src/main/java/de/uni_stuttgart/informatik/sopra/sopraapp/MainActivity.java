@@ -14,7 +14,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ArgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 /**
@@ -31,7 +31,7 @@ public class MainActivity extends FragmentActivity
 
 
     MapFragment mapFragment;
-    ArrayList<ArgrarianField> testData;
+    ArrayList<AgrarianField> testData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onListButtonInteraction() {
         ItemListDialogFragment.newInstance(testData).show(getSupportFragmentManager(), "FieldList");
-        //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "ArgrarianField");
+        //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "AgrarianField");
 
     }
 

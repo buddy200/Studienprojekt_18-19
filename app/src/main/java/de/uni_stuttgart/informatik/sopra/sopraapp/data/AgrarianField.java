@@ -19,8 +19,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  * Created by Christian on 13.11.2017.
  */
 
-public class ArgrarianField extends Field {
-    private static final String TAG = "ArgrarianField";
+public class AgrarianField extends Field {
+    private static final String TAG = "AgrarianField";
 
     //default state
     private FieldStates state = FieldStates.NoDamage;
@@ -40,7 +40,7 @@ public class ArgrarianField extends Field {
     /**
      * fields need at least 3 corner points to exist
      */
-    public ArgrarianField(List<CornerPoint> cPoints, Context context) {
+    public AgrarianField(List<CornerPoint> cPoints, Context context) {
         super(context, cPoints);
         //set default values
         owner = context.getResources().getString(R.string.owner_default_name);

@@ -1,13 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
-import org.osmdroid.util.GeoPoint;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +17,7 @@ public class DamageField extends Field {
     private Date date = new Date(0);
     private String evaluator;
 
-    private ArgrarianField argrarianField;
+    private AgrarianField agrarianField;
 
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
@@ -30,12 +25,12 @@ public class DamageField extends Field {
         setName(context.getResources().getString(R.string.damage_case_defaut_name));
     }
 
-    public ArgrarianField getArgrarianField() {
-        return argrarianField;
+    public AgrarianField getAgrarianField() {
+        return agrarianField;
     }
 
-    public void setArgrarianField(ArgrarianField argrarianField) {
-        this.argrarianField = argrarianField;
+    public void setAgrarianField(AgrarianField agrarianField) {
+        this.agrarianField = agrarianField;
     }
 
     public Date getDate() {

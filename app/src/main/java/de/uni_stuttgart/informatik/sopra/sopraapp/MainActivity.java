@@ -10,11 +10,13 @@ import android.widget.Toast;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
@@ -82,7 +84,29 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onSearchButtonClicked(String input) {
-        Log.e(TAG, input);
+        Log.e(TAG, "Search for: " + input);
+
+        // copy testData in search data list
+        // this copy is comparable to shallow copy in the C language
+        ArrayList<Field> tempList = new ArrayList<>(testData);
+        //ArrayList<Field> searchList = new ArrayList<>();
+
+        /**
+         * search for names
+         */
+        Iterator<Field> iter = tempList.iterator();
+        while(iter.hasNext()){
+            Field f = iter.next();
+            if(!f.name.contains(input)){
+                iter.remove();
+            }
+        }
+
+        if(tempList.size() != 0){
+            ItemListDialogFragment.newInstance(tempList).show(getSupportFragmentManager(), "SearchList");
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
+        }
 
     }
 

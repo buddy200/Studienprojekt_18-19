@@ -5,6 +5,7 @@
     <string name="done">Done</string>
 
     <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
+    <string name="toastmsg_nothing_found">Keine Felder gefunden</string>
 
     <string name="field_default_name">no field name</string>
     <string name="damage_case_defaut_name">no name</string>

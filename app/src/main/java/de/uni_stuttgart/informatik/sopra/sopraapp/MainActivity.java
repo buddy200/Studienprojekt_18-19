@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
@@ -14,7 +15,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
@@ -42,7 +42,7 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100, 4, this);
+        testData = GlobalConstants.fieldTest(100, 50, this);
 
 
     }
@@ -78,6 +78,12 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onInfoButtonInteraction(){
         //Todo
+    }
+
+    @Override
+    public void onSearchButtonClicked(String input) {
+        Log.e(TAG, input);
+
     }
 
     //handle item clicked interaction from ItemListDialogFragment

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
@@ -19,7 +20,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  * Use the {@link MenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MenuFragment extends Fragment implements View.OnClickListener {
+public class MenuFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "MenuFragment";
     private OnMenuFragmentInteractionListener mListener;
 
@@ -46,6 +47,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+    EditText input;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,14 +58,19 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         Button loc = view.findViewById(R.id.button_location);
         Button add = view.findViewById(R.id.button_add);
         Button info = view.findViewById(R.id.button_info);
+        Button search = view.findViewById(R.id.button_search);
+        input = view.findViewById(R.id.edit_text);
 
         list.setOnClickListener(this);
         loc.setOnClickListener(this);
         info.setOnClickListener(this);
         add.setOnClickListener(this);
+        search.setOnClickListener(this);
+        input.setOnClickListener(this);
 
         return view;
     }
+
 
 
     @Override
@@ -102,6 +109,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 case R.id.button_info:
                     mListener.onInfoButtonInteraction();
                     break;
+                case R.id.edit_text:
+                    //remove text if user clicks on search
+                    input.setText("");
+                    break;
+                case R.id.button_search:
+                    mListener.onSearchButtonClicked(input.getText().toString());
             }
         }
     }
@@ -109,6 +122,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private void checkLocPermissions() {
         //TODO check Permissions
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -126,5 +140,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         void onLocationButtonInteraction();
         void onAddButtonInteraction();
         void onInfoButtonInteraction();
+        void onSearchButtonClicked(String text);
     }
 }

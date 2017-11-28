@@ -112,9 +112,10 @@ public class GlobalConstants {
 
         for(int j=0; j<numberFields; j++) {
 
+            int numberCornerPointsRandom = 3 + (int) (Math.random()*(numberCornerPoints-3));
 
             List<CornerPoint> points = new ArrayList<>();
-            for (int i = 0; i < numberCornerPoints; i++) {
+            for (int i = 0; i < numberCornerPointsRandom; i++) {
                 points.add(new CornerPoint(initialLat +  Min + (Math.random() * ((Max - Min) )),
                         initialLon + Min + (Math.random() * ((Max - Min) ))));
             }

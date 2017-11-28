@@ -23,7 +23,7 @@ public class DamageField extends Field {
     public String evaluator;
 
 
-    public DamageField(List<CornerPoint> cPoints, Context context) {
+    public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
         this.name= context.getResources().getString(R.string.field_default_name);
         this.county = context.getResources().getString(R.string.county_default_name);

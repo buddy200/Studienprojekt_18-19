@@ -101,7 +101,7 @@ public class MapViewHandler {
      * set a Marker with the current Location on the map
      * @param point
      */
-    public void setCurrlocMarker(GeoPoint point){
+    public void setCurrLocMarker(GeoPoint point){
         map.getOverlayManager().remove(currentLocMarker);
         currentLocMarker = new Marker(map);
         currentLocMarker.setPosition(point);
@@ -113,7 +113,7 @@ public class MapViewHandler {
      * animate to a the given point on the map
      * @param point
      */
-    public void animateTo(GeoPoint point) {
+    public void animateAndZoomTo(GeoPoint point) {
         mapController.setZoom(20);
         mapController.animateTo(point);
     }

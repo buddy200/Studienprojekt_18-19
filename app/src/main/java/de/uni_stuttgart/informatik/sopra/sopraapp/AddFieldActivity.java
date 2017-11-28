@@ -88,7 +88,7 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         cornerPoints.add(new CornerPoint(location.getLatitude(), location.getLongitude()));
 
         if(cornerPoints.size() >= 3){
-            createField = new AgrarianField(cornerPoints, this.getApplicationContext());
+            createField = new AgrarianField(this.getApplicationContext(), cornerPoints);
             mapFragment.getMapViewHandler().addField(createField);
         }
 
@@ -105,7 +105,7 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         if (location != null) {
             GeoPoint userLocation = new GeoPoint(myLocationListener.getLocation().getLatitude(),
                     myLocationListener.getLocation().getLongitude());
-            mapFragment.getMapViewHandler().animateTo(userLocation);
+            mapFragment.getMapViewHandler().animateAndZoomTo(userLocation);
             mapFragment.setCurrLocMarker(userLocation);
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();

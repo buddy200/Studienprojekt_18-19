@@ -33,7 +33,7 @@ public class AgrarianField extends Field {
     /**
      * fields need at least 3 corner points to exist
      */
-    public AgrarianField(List<CornerPoint> cPoints, Context context) {
+    public AgrarianField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
 
         //set default values

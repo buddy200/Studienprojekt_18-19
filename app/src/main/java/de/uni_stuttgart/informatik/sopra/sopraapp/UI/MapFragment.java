@@ -144,12 +144,12 @@ public class MapFragment extends Fragment {
     public void animateToPosition(double lat, double lon) {
         GeoPoint startPoint = new GeoPoint(lat, lon);
         if (mapViewHandler != null) {
-            mapViewHandler.animateTo(startPoint);
+            mapViewHandler.animateAndZoomTo(startPoint);
         }
     }
 
     public void setCurrLocMarker(GeoPoint point) {
-        mapViewHandler.setCurrlocMarker(point);
+        mapViewHandler.setCurrLocMarker(point);
     }
 
     public MapViewHandler getMapViewHandler() {

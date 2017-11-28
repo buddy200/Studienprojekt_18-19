@@ -60,7 +60,7 @@ public class FieldPolygon extends Polygon {
     public void draw(Canvas canvas, MapView mapView, boolean shadow){
         //only draw names if zoomed in to certain level
         //TODO: show name depending to polygon size and zoom level
-        if(mapView.getZoomLevel() < 16){
+        if(mapView.getZoomLevel() < 18){
             super.draw(canvas, mapView, shadow);
             return;
         }

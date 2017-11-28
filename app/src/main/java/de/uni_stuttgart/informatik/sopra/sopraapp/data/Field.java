@@ -1,9 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Queue;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.FieldPolygon;
 
 /**
  * Created by larsb on 22.11.2017.

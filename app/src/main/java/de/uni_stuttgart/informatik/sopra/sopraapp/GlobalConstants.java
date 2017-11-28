@@ -76,7 +76,7 @@ public class GlobalConstants {
         points3.add(new CornerPoint(48.840377, 8.841401));
         points3.add(new CornerPoint(48.840384, 8.841656));
         points3.add(new CornerPoint(48.840658, 8.841659));
-        DamageField df = new DamageField(points3, context);
+        DamageField df = new DamageField(context, points3);
         df.name = "Test";
         return  df;
     }
@@ -106,7 +106,7 @@ public class GlobalConstants {
         points2.add(new CornerPoint(48.839101, 8.843861));
         points2.add(new CornerPoint(48.840586, 8.844068));
         points2.add(new CornerPoint(48.840992, 8.840656));
-        AgrarianField ff = new AgrarianField(points2, context);
+        AgrarianField ff = new AgrarianField(context, points2);
         ff.setAutomaticCounty();
         polis.add(ff);
 
@@ -126,7 +126,7 @@ public class GlobalConstants {
 
             //add a agrarian field
             if(j % 2 == 0){
-                AgrarianField f = new AgrarianField(points, context);
+                AgrarianField f = new AgrarianField(context, points);
                 f.name = "AgrarianField Nr: " + String.valueOf(j);
                 f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
@@ -135,7 +135,7 @@ public class GlobalConstants {
                 polis.add(f);
             //or a damage field
             }else {
-                DamageField f = new DamageField(points, context);
+                DamageField f = new DamageField(context, points);
                 f.name = "DamageField Nr: " + String.valueOf(j);
                 f.date = new Date(0);
 

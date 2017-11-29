@@ -15,11 +15,11 @@ Desweiteren bekommt der jeweilige Nutzer die Möglichkeit Schadensfälle zu erst
  
 - Aufwandsschätzung: L
 - Akzeptanztests:
-    - [ ] Schadensfälle können in einer Kartenansicht dargestellt werden.
-    - [ ] Die Kartenansicht des Schadens zeig Polygone der versicherten Objekte.
+    - [ X ] Schadensfälle können in einer Kartenansicht dargestellt werden.
+    - [ X ] Die Kartenansicht des Schadens zeig Polygone der versicherten Objekte.
     - [ ] Die Kartenansicht des Schadens zeigt den Schaden als Polygon/Fläche innerhalb der versicherten Objekte.
-    - [ ] Die Kartenansicht inkl. der Schadensdarstellung ermöglicht mehrere Maßstäbe.
-    - [ ] Die Ansicht der Polygone ist ohne Internetverbindung möglich.
+    - [ X ] Die Kartenansicht inkl. der Schadensdarstellung ermöglicht mehrere Maßstäbe.
+    - [ X ] Die Ansicht der Polygone ist ohne Internetverbindung möglich.
  
 #### Implementable Story 1.1.1 *Karten Darstellung*
 > Als User möchte Ich eine interaktive Karte meiner Umgebung sehen.

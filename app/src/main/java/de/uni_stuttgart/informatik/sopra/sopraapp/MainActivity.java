@@ -81,16 +81,14 @@ public class MainActivity extends FragmentActivity
         //Todo
     }
 
-    int i = 0;
-    ArrayList<Field> searchData;
+
     @Override
     public void onSearchButtonClicked(String input) {
         Log.e(TAG, "Search for: " + input);
 
         // copy testData in search data list
         // this copy is comparable to shallow copy in the C language
-        searchData = new ArrayList<>(testData);
-        //ArrayList<Field> searchList = new ArrayList<>();
+        ArrayList<Field> searchData = new ArrayList<>(testData);
 
         /**
          * not optimal and dirty way of searching
@@ -107,6 +105,7 @@ public class MainActivity extends FragmentActivity
                     //search for states and owners
                     if(! b.getSerializable("state").toString().contains(input)){
                         if( ! b.getString("owner").contains(input)){
+                            Log.e("OWNER", b.getString("owner"));
                             iter.remove();
                         }
                     }
@@ -116,6 +115,7 @@ public class MainActivity extends FragmentActivity
                 if(b.containsKey("evaluator")){
                     //search for evaluators
                     if(! b.getString("evaluator").contains(input)){
+                        Log.e("EVAL", b.getString("evaluator"));
                         iter.remove();
                     }
                 }
@@ -123,7 +123,7 @@ public class MainActivity extends FragmentActivity
         }
 
         if(searchData.size() != 0){
-            ItemListDialogFragment.newInstance(searchData, true).show(getSupportFragmentManager(), "SearchList");
+            ItemListDialogFragment.newInstance(searchData, true).show(getSupportFragmentManager(), "SearchList" );
         }else{
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
         }
@@ -132,18 +132,13 @@ public class MainActivity extends FragmentActivity
 
     //handle item clicked interaction from ItemListDialogFragment
     @Override
-    public void onListItemClicked(int position, boolean search) {
+    public void onListItemClicked(Field field) {
         //offset to show centroid of polygon completely while bottom sheet is visible
         double offset = 0.001;
-        if(search && searchData != null){
-            mapFragment.animateToPosition(searchData.get(position).getCentroid().getLatitude()-offset,
-                    testData.get(position).getCentroid().getLongitude());
-            BottomSheetDetailDialogFragment.newInstance(searchData.get(position)).show(this.getSupportFragmentManager(), "Field");
-        }else{
-            mapFragment.animateToPosition(testData.get(position).getCentroid().getLatitude()-offset,
-                    testData.get(position).getCentroid().getLongitude());
-            BottomSheetDetailDialogFragment.newInstance(testData.get(position)).show(this.getSupportFragmentManager(), "Field");
-        }
+
+        mapFragment.animateToPosition(field.getCentroid().getLatitude()-offset,
+                field.getCentroid().getLongitude());
+        BottomSheetDetailDialogFragment.newInstance(field).show(this.getSupportFragmentManager(), "SearchField");
 
     }
 

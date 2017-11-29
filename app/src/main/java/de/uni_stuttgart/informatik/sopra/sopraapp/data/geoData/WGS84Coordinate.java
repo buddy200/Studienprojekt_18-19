@@ -16,6 +16,10 @@ public class WGS84Coordinate {
      */
     private double longitude;
 
+    public  WGS84Coordinate() {
+        this(0,0);
+    }
+
     public WGS84Coordinate(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -35,5 +39,9 @@ public class WGS84Coordinate {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public boolean equals(WGS84Coordinate wgs) {
+        return Math.abs(wgs.getLongitude() - longitude) < 0.001 && Math.abs(wgs.getLatitude() - latitude) < 0.0001;
     }
 }

@@ -6,29 +6,21 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
 public class UTMCoordinate {
 
-    /**
-     * the zone in longitude
-     * between 1 and 60
-     */
     private int zone;
 
-    /**
-     * the zonefield in latitude
-     * big character between C and X (excluding I and O)
-     */
-    private char latitudeBand;
+    private boolean southernHemisphere;
 
     /**
      * the north Value
      *
      */
-    private int northValue;
+    private long northing;
 
     /**
      * the east value (based of the middle merdian)
      *
      */
-    private int eastValue;
+    private long easting;
 
     public UTMCoordinate() {
 
@@ -42,27 +34,23 @@ public class UTMCoordinate {
         this.zone = zone;
     }
 
-    public char getLatitudeBand() {
-        return latitudeBand;
+    public long getNorthing() {
+        return northing;
     }
 
-    public void setLatitudeBand(char latitudeBand) {
-        this.latitudeBand = latitudeBand;
+    public void setNorthing(long northing) {
+        this.northing = northing;
     }
 
-    public int getNorthValue() {
-        return northValue;
+    public long getEasting() {
+        return easting;
     }
 
-    public void setNorthValue(int northValue) {
-        this.northValue = northValue;
+    public void setEasting(long easting) {
+        this.easting = easting;
     }
 
-    public int getEastValue() {
-        return eastValue;
-    }
-
-    public void setEastValue(int eastValue) {
-        this.eastValue = eastValue;
+    public boolean isSouth() {
+        return southernHemisphere;
     }
 }

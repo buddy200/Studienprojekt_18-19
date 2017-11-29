@@ -16,6 +16,10 @@ public class WGS84Coordinate {
      */
     private double longitude;
 
+    public  WGS84Coordinate() {
+        this(0,0);
+    }
+
     public WGS84Coordinate(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#FFFF</color>
+    <color name="colorPrimary">#388E3C</color>
+    <color name="colorPrimaryDark">#2E7D32</color>
+    <color name="colorAccent">#8D6E63</color>
+
+    <color name="fieldDefaultColor">#aaffffff</color>
+
+    <color name="stateNoDamage">#aa00ff00</color>
+    <color name="stateLightDamage">#aaff7f00</color>
+    <color name="stateHighDamage">#aaff0000</color>
+    <color name="stateDefault">#aa000000</color>
+
+    <color name="transparent">#00000000</color>
 </resources>

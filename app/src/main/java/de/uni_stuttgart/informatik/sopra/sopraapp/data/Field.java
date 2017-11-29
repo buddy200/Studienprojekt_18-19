@@ -50,9 +50,8 @@ public abstract class Field {
      */
     private boolean rotation = false;
 
-    private boolean finised = false;
-    //removed private to access corner points - FB
-    List<CornerPoint> cornerPoints = new ArrayList<>();
+    private boolean finished = false;
+
 
 
     public Field() {
@@ -79,7 +78,7 @@ public abstract class Field {
 
 
     public void addCornerPoint (CornerPoint cp) {
-        if(!finised) {
+        if(!finished) {
             cornerPoints.add(cp);
             if (cornerPoints.size() > 2) {
                 cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);
@@ -92,7 +91,7 @@ public abstract class Field {
             cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));
             cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size() - 1), cornerPoints.get(1));
             calculateSize();
-            finised = true;
+            finished = true;
         }
     }
 

@@ -14,7 +14,7 @@ public class MathUtility {
         return (angle/(Math.PI) )* 180;
     }
 
-    public static int scalarProduct(Vector a, Vector b) {
+    public static double scalarProduct(Vector a, Vector b) {
         return a.getX()*b.getX() + a.getY()*b.getX();
     }
 }

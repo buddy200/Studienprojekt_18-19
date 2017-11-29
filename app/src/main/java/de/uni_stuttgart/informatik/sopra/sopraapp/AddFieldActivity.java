@@ -1,5 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
+import android.graphics.Color;
+import android.graphics.Path;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +14,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.drawing.OsmPath;
+import org.osmdroid.views.overlay.PathOverlay;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,18 +85,12 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
 
     }
 
+    ArrayList<GeoPoint> list = new ArrayList<>();
     public void addPoint(Location location){
-        if(createField != null){
-            mapFragment.getMapViewHandler().deleteFieldFromOverlay(createField);
-        }
-
-        cornerPoints.add(new CornerPoint(location.getLatitude(), location.getLongitude()));
-
-        if(cornerPoints.size() >= 3){
-            createField = new AgrarianField(this.getApplicationContext(), cornerPoints);
-            mapFragment.getMapViewHandler().addField(createField);
-        }
-
+        Polyline p = new Polyline();
+        list.add(new GeoPoint(location.getLatitude(), location.getLongitude()));
+        p.setPoints(list);
+        mapFragment.getMapViewHandler().getMapView().getOverlayManager().add(p);
 
     }
 

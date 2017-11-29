@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 import android.content.Context;
 import android.os.Bundle;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -52,8 +53,16 @@ public class DamageField extends Field {
 
         //damageField specific attributes
         bundle.putString(KEY_EVALUATOR, this.evaluator);
+
         //store date as a string - is probably easier
-        bundle.putString(KEY_DATE, date.toString());
+        SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format2 = new SimpleDateFormat("hh:mm");
+        String parsedDate =
+                        context.getResources().getString(R.string.date_label)
+                        + " " + format1.format(date) + "\n" +
+                        context.getResources().getString(R.string.time_label)
+                         + " " + format2.format(date);
+        bundle.putString(KEY_DATE, parsedDate);
         return bundle;
     }
 

@@ -17,4 +17,9 @@
     <string name="title_activity_add_field">Add a field</string>
 
 
+    <!-- date -->
+    <string name="date_label">Date</string>
+    <string name="time_label">Time</string>
+
+
 </resources>

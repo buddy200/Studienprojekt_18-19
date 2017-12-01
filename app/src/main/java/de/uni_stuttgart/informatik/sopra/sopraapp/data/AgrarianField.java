@@ -27,7 +27,7 @@ public class AgrarianField extends Field {
 
     //default state
     private FieldStates state = FieldStates.NoDamage;
-    public String owner;
+    private String owner;
 
 
     /**
@@ -38,9 +38,9 @@ public class AgrarianField extends Field {
 
         //set default values
         owner = context.getResources().getString(R.string.owner_default_name);
-        this.name= context.getResources().getString(R.string.field_default_name);
-        this.county = context.getResources().getString(R.string.county_default_name);
-        this.color = agrarianFieldToColor(state);
+        this.setName(context.getResources().getString(R.string.field_default_name));
+        this.setCounty(context.getResources().getString(R.string.county_default_name));
+        this.setColor(agrarianFieldToColor(state));
     }
 
     /**
@@ -68,7 +68,7 @@ public class AgrarianField extends Field {
      * might take a bit, thats why its async -FB
      */
     public void setAutomaticCounty(){
-        county = "Loading..";
+        this.setCounty("Loading..");
 
         new AsyncReverseGeoCoding().execute(new double[]{
                 this.getCornerPoints().get(0).getWGS().getLatitude(),
@@ -83,11 +83,13 @@ public class AgrarianField extends Field {
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, this.name);
-        bundle.putSerializable(KEY_STATE, this.state);
-        bundle.putInt(KEY_COLOR, agrarianFieldToColor(this.state));
-        bundle.putString(KEY_COUNTY, this.county);
-        bundle.putDouble(KEY_SIZE, this.size);
+        bundle.putString(KEY_NAME, this.getName());
+        bundle.putSerializable(KEY_STATE, this.getState());
+        bundle.putInt(KEY_COLOR, agrarianFieldToColor(this.getState()));
+        bundle.putString(KEY_COUNTY, this.getCounty());
+        if(this.getSize() != null){
+            bundle.putDouble(KEY_SIZE, this.getSize());
+        }
 
         //agrarianField specific attributes
         bundle.putString(KEY_OWNER, this.owner);
@@ -97,7 +99,7 @@ public class AgrarianField extends Field {
 
     public void setState(FieldStates state) {
         this.state = state;
-        color = agrarianFieldToColor(state);
+        this.setColor(agrarianFieldToColor(state));
     }
 
 
@@ -111,7 +113,7 @@ public class AgrarianField extends Field {
         @Override
         protected String doInBackground(double[]... doubles) {
             //async task is weird.. TODO change this
-            setCounty(doubles[0][0], doubles[0][1]);
+            setCountyAddress(doubles[0][0], doubles[0][1]);
             return null;
         }
 
@@ -128,7 +130,7 @@ public class AgrarianField extends Field {
         protected void onProgressUpdate(Void... values) {}
 
 
-        private void setCounty(double lat, double lon){
+        private void setCountyAddress(double lat, double lon){
            // Log.d(TAG, "fetching location..");
             //uses the google geocoder, might be a part of the google maps api.. or not -FB
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
@@ -138,18 +140,26 @@ public class AgrarianField extends Field {
                 Address result;
 
                 if (addresses != null && !addresses.isEmpty()) {
-                    county = ""; //remove "loading..."
+                    setCounty(""); //remove "loading..."
+                    String county = "";
                     for(int i=0; i<= addresses.get(0).getMaxAddressLineIndex(); i++){
                         county += " " +  addresses.get(0).getAddressLine(i);
                     }
+                    setCounty(county);
                 }else {
-                    county = "No Location Set";
+                    setCounty("No Location Set");
                 }
             } catch (IOException ignored) {
                 //do something
             }
         }
     }
+
+    public FieldStates getState(){ return this.state;}
+
+    public String getOwner(){return this.owner;}
+
+    public void setOwner(String owner){this.owner = owner;}
 
 }
 

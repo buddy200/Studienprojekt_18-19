@@ -19,18 +19,17 @@ public class DamageField extends Field {
     private static final String KEY_DATE = "date";
     private static final String KEY_EVALUATOR = "evaluator";
 
-
-    public Date date;
-    public String evaluator;
+    private String parsedDate;
+    private String evaluator;
 
 
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
-        this.name= context.getResources().getString(R.string.field_default_name);
-        this.county = context.getResources().getString(R.string.county_default_name);
-        this.color = damageFieldToColor();
-        evaluator = context.getResources().getString(R.string.evaluator_default_name);
-        date = new Date(0);
+        this.setName(context.getResources().getString(R.string.field_default_name));
+        this.setCounty(context.getResources().getString(R.string.county_default_name));
+        this.setColor(damageFieldToColor());
+        this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
+        this.setDate(new Date(0));
     }
 
     /**
@@ -46,25 +45,37 @@ public class DamageField extends Field {
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, this.name);
-        bundle.putInt(KEY_COLOR, this.color);
-        bundle.putString(KEY_COUNTY, this.county);
-        bundle.putDouble(KEY_SIZE, this.size);
+        bundle.putString(KEY_NAME, this.getName());
+        bundle.putInt(KEY_COLOR, this.getColor());
+        bundle.putString(KEY_COUNTY, this.getCounty());
+        if(this.getSize() != null){
+            bundle.putDouble(KEY_SIZE, this.getSize());
+        }
 
         //damageField specific attributes
         bundle.putString(KEY_EVALUATOR, this.evaluator);
+        bundle.putString(KEY_DATE, parsedDate);
+        return bundle;
+    }
 
+    public String getParsedDate() { return parsedDate;}
+
+    public void setDate(Date date) {
         //store date as a string - is probably easier
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat format2 = new SimpleDateFormat("hh:mm");
         String parsedDate =
-                        context.getResources().getString(R.string.date_label)
+                context.getResources().getString(R.string.date_label)
                         + " " + format1.format(date) + "\n" +
                         context.getResources().getString(R.string.time_label)
-                         + " " + format2.format(date);
-        bundle.putString(KEY_DATE, parsedDate);
-        return bundle;
+                        + " " + format2.format(date);
+
+        this.parsedDate = parsedDate;
     }
+
+    public String getEvaluator() {return evaluator;}
+
+    public void setEvaluator(String evaluator) {this.evaluator = evaluator;}
 
 
 }

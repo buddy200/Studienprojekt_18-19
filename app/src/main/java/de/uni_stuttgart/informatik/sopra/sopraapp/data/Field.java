@@ -25,21 +25,20 @@ public abstract class Field {
     private static final String TAG = "Field";
 
     //keys
-    protected static final String KEY_NAME = "name";
-    protected static final String KEY_COLOR = "color";
-    protected static final String KEY_COUNTY = "county";
-    protected static final String KEY_SIZE = "size";
-    protected static final String KEY_EVALUATOR = "evaluator";
-
+    static final String KEY_NAME = "name";
+    static final String KEY_COLOR = "color";
+    static final String KEY_COUNTY = "county";
+    static final String KEY_SIZE = "size";
 
     protected Context context;
 
+
     //values for field and damage case
-    public String name;
-    public String county;
-    protected double size;
-    public int color;
-    protected GeoPoint centroid;
+    private String name;
+    private String county;
+    private int color;
+    private double size;
+    private GeoPoint centroid;
 
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
@@ -199,8 +198,8 @@ public abstract class Field {
     /**
      * @return the size of the field or @code{null} if the field isn't finished
      */
-    public double getSize() {
-        return finished ? size : null;
+    public Double getSize() {
+        return finished ? size : null; //sorry, ich kann keinen nullcheck für getSize() machen wenns vom typ double ist, mit Double gehts - F
     }
 
     public void setCornerPoints(List<CornerPoint> cornerPoints) {
@@ -214,6 +213,19 @@ public abstract class Field {
     public GeoPoint getCentroid(){ return this.centroid;}
 
     public abstract Bundle getBundle();
+
+    public String getName() {return name;}
+
+    public void setName(String name) {this.name = name;}
+
+    public String getCounty() {return county;}
+
+    public void setCounty(String county) {this.county = county;}
+
+    public int getColor() {return color;}
+
+    protected void setColor(int color){this.color = color;}
+
 
 
 }

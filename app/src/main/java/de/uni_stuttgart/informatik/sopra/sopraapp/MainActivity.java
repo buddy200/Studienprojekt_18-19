@@ -99,13 +99,12 @@ public class MainActivity extends FragmentActivity
         while(iter.hasNext()){
             Field f = iter.next();
             Bundle b = f.getBundle();
-            if(!f.name.contains(input)){
+            if(!f.getName().contains(input)){
                 //fieldToAdd is type agrarian
                 if(b.containsKey("state")){
                     //search for states and owners
                     if(! b.getSerializable("state").toString().contains(input)){
                         if( ! b.getString("owner").contains(input)){
-                            Log.e("OWNER", b.getString("owner"));
                             iter.remove();
                         }
                     }
@@ -115,7 +114,6 @@ public class MainActivity extends FragmentActivity
                 if(b.containsKey("evaluator")){
                     //search for evaluators
                     if(! b.getString("evaluator").contains(input)){
-                        Log.e("EVAL", b.getString("evaluator"));
                         iter.remove();
                     }
                 }

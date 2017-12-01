@@ -77,7 +77,7 @@ public class GlobalConstants {
         points3.add(new CornerPoint(48.840384, 8.841656));
         points3.add(new CornerPoint(48.840658, 8.841659));
         DamageField df = new DamageField(context, points3);
-        df.name = "Test";
+        df.setName("Test");
         return  df;
     }
 
@@ -128,19 +128,19 @@ public class GlobalConstants {
             //add a agrarian field
             if(j % 2 == 0){
                 AgrarianField f = new AgrarianField(context, points);
-                f.name = "AgrarianField Nr: " + String.valueOf(j);
+                f.setName("AgrarianField Nr: " + String.valueOf(j));
                 f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
                 f.setAutomaticCounty();
-                f.owner = (superheroes[(int)(Math.random()*superheroes.length)]);
+                f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
                 polis.add(f);
             //or a damage field
             }else {
                 DamageField f = new DamageField(context, points);
-                f.name = "DamageField Nr: " + String.valueOf(j);
-                f.date = new Date(0);
+                f.setName("DamageField Nr: " + String.valueOf(j));
+                f.setDate(new Date(0));
 
-                f.evaluator = (superheroes[(int)(Math.random()*superheroes.length)]);
+                f.setEvaluator(superheroes[(int)(Math.random()*superheroes.length)]);
                 polis.add(f);
             }
 

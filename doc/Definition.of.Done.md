@@ -3,15 +3,14 @@
 - [ ] Tests abgeschlossen
 	- [ ] Die Testabdeckung beträgt mindestens 75 %.
 	- [ ] Alle zur User Story assoziierten Test sind erfolgreich durchgelaufen.
+	- [ ] Die App wurde von mindestens 5 weiteren Leuten, die nicht bei der Entwicklung beteiligt waren, getestet.
 - [ ] Der Entwurf wurde aktualisiert.
 - [ ] Der Code ist kommentiert.
-- [ ] Das UML Diagramme sind auf aktuellem Stand.
-- [ ] Die GUI hält die Google Material Design Guidelines ein.
+- [ ] Die Google Material Design Guidelines wurden beim User Interface eingehalten.
 - [ ] Der Code folgt den Java Code Conventions.
 - [ ] Das Handbuch ist auf aktuellem Stand.
-- [ ] User Stories sind für das Feature erstellt und verständlich defniert.
-- [ ] Product Backlog ist angepasst
-- [ ] Alle Teammitglieder haben das gesamte vorhandene Material angesehen und geprüft.
+- [ ] Im Product Backlog sind alle bearbeiteten Issues als solche gekennzeichnet und eventuell neue Anforderungen als neue Issues eingetragen.
+- [ ] Alle Teammitglieder sind mit dem Stand der App und den Dokumenten einverstanden.
 
 ## Merge Request Template
 

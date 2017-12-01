@@ -32,7 +32,7 @@ Die Entwicklungsgeschichte befindet sich in [CHANGELOG.md](CHANGELOG.md).
 
 ## Verwendete Bibliotheken
 
-**TODO:** Verwendete Bibliotheken auflisten
+- osmdroid
 
 ## Lizenz
 

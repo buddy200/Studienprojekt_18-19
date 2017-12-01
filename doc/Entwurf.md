@@ -47,6 +47,8 @@ Klassendiagramm
 
 ## Beschreibung der wichtigen Klassenhierarchie 
 
+Zur besseren Übersicht wird auf Getter- und Settermethoden verzichtet. Weiter werden auf Android Methoden wie "OnCreate" verzichtet.
+
 ## Beschreibung der Klasse User
 Diese Klasse ist entweder vom Typ Landwirt oder vom Typ Gutachter, durch sie erfährt die App
 welcher Benutzertyp aktiv ist.

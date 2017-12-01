@@ -83,7 +83,7 @@ public class FieldPolygon extends Polygon {
 
             try {
                 FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                BottomSheetDetailDialogFragment.newInstance(field).show(fragmentManager, "test");
+                BottomSheetDetailDialogFragment.newInstance(field, false).show(fragmentManager, "test");
                 mapView.getController().setZoom(20);
                 mapView.getController().animateTo(new GeoPoint(field.getCentroid().getLatitude()-offset, field.getCentroid().getLongitude()));
             } catch (ClassCastException e) {

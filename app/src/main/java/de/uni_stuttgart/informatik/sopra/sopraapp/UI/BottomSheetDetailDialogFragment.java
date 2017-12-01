@@ -3,10 +3,16 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
@@ -31,17 +37,23 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
     private static final String KEY_EVALUATOR = "evaluator";
 
 
+    private static boolean mEdit = false;
 
-    public static BottomSheetDialogFragment newInstance(Field field) {
+
+    public static BottomSheetDialogFragment newInstance(Field field, boolean edit) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(field.getBundle());
+
+        mEdit = edit;
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
@@ -82,6 +94,42 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment {
         }
 
 
+        if(mEdit){
+            LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
+            bottomSheet.removeAllViews();
 
+            bottomSheet.addView(name);
+            name.setText("Set up new Field");
+
+           // bottomSheet.removeView(name);
+            EditText nameEdit = new EditText(getContext());
+            nameEdit.setText("Name..");
+            bottomSheet.addView(nameEdit);
+
+          //  bottomSheet.removeView(stateOrDate);
+            EditText stateOrDateEdit = new EditText(getContext());
+            stateOrDateEdit.setText("Date..");
+            stateOrDateEdit.setInputType(InputType.TYPE_CLASS_DATETIME);
+            bottomSheet.addView(stateOrDateEdit);
+
+           // bottomSheet.removeView(county);
+            EditText countyEdit = new EditText(getContext());
+            countyEdit.setText("Address..");
+            bottomSheet.addView(countyEdit);
+
+          //  bottomSheet.removeView(ownerOrEvaluator);
+            EditText ownerOrEvaluatorEdit = new EditText(getContext());
+            ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
+            bottomSheet.addView(ownerOrEvaluatorEdit);
+        }
+
+    }
+
+    public boolean getSth(){
+        return true;
+    }
+
+    public void setId(int id) {
+        this.getView().setId(id);
     }
 }

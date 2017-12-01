@@ -1,26 +1,26 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
-import android.graphics.Color;
-import android.graphics.Path;
+import android.app.Fragment;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.drawing.OsmPath;
-import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
@@ -28,11 +28,14 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener {
+    private static final String TAG = "AddFieldActivity";
 
     MapFragment mapFragment;
     MYLocationListener myLocationListener;
     Field createField;
     List<CornerPoint> cornerPoints;
+
+    AgrarianField fieldToAdd;
 
 
     @Override
@@ -85,12 +88,53 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_add_field, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_menu_done:
+                if(fieldToAdd != null){
+                   // FloatingActionButton fab  = (FloatingActionButton) findViewById(R.id.fab);
+                   // CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+
+                    BottomSheetDetailDialogFragment test = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
+                    test.show(getSupportFragmentManager(), "EditView");
+
+                    //test.setId(9999);
+
+                   // getSupportFragmentManager().findFragmentByTag("EditView").getId();
+                   // test.getFragmentManager().findFragmentByTag("EditView").getId()
+                   // p.setAnchorId(test.getId());
+                   // fab.setLayoutParams(p);
+                    Log.e(TAG, String.valueOf(test.getSth()));
+                }else {
+                    Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
+
+                }
+
+                break;
+
+        }
+        return true;
+    }
+
     ArrayList<GeoPoint> list = new ArrayList<>();
+    ArrayList<CornerPoint> listC = new ArrayList<>();
     public void addPoint(Location location){
         Polyline p = new Polyline();
         list.add(new GeoPoint(location.getLatitude(), location.getLongitude()));
+        listC.add(new CornerPoint(location.getLatitude(), location.getLongitude()));
         p.setPoints(list);
         mapFragment.getMapViewHandler().getMapView().getOverlayManager().add(p);
+
+        if(listC.size() > 2){
+            fieldToAdd = new AgrarianField(this.getApplicationContext(), listC);
+        }
 
     }
 

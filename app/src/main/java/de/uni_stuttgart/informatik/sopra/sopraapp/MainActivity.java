@@ -100,7 +100,7 @@ public class MainActivity extends FragmentActivity
             Field f = iter.next();
             Bundle b = f.getBundle();
             if(!f.name.contains(input)){
-                //f is type agrarian
+                //fieldToAdd is type agrarian
                 if(b.containsKey("state")){
                     //search for states and owners
                     if(! b.getSerializable("state").toString().contains(input)){
@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity
                     }
 
                 }
-                //f is type damage field
+                //fieldToAdd is type damage field
                 if(b.containsKey("evaluator")){
                     //search for evaluators
                     if(! b.getString("evaluator").contains(input)){
@@ -138,7 +138,7 @@ public class MainActivity extends FragmentActivity
 
         mapFragment.animateToPosition(field.getCentroid().getLatitude()-offset,
                 field.getCentroid().getLongitude());
-        BottomSheetDetailDialogFragment.newInstance(field).show(this.getSupportFragmentManager(), "SearchField");
+        BottomSheetDetailDialogFragment.newInstance(field, false).show(this.getSupportFragmentManager(), "SearchField");
 
     }
 

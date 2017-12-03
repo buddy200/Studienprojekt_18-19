@@ -27,7 +27,9 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 
 public class MainActivity extends FragmentActivity
-        implements MenuFragment.OnMenuFragmentInteractionListener, ItemListDialogFragment.Listener, MapFragment.OnCompleteListener {
+        implements MenuFragment.OnMenuFragmentInteractionListener, ItemListDialogFragment.Listener,
+        MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {
+
     private static final String TAG = "MainActivity";
     private MYLocationListener myLocationListener = new MYLocationListener();
 
@@ -148,6 +150,11 @@ public class MainActivity extends FragmentActivity
         mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
         myLocationListener.initializeLocationManager(this, mapFragment);
 
+
+    }
+
+    @Override
+    public void onButtonInteraction() {
 
     }
 }

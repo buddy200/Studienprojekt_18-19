@@ -3,7 +3,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:behavior_peekHeight="auto"
@@ -13,23 +12,41 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@android:color/background_light"
         android:id="@+id/bottomSheet"
         android:layout_gravity="top"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/topPanel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:id="@+id/field_detail_name"
-            android:text="-name-"/>
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:layout_gravity="left"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:id="@+id/field_detail_name"
+                android:text="-name-"/>
+
+            <Button
+                android:id="@+id/edit_finish_button"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

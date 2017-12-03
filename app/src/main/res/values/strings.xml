@@ -17,6 +17,8 @@
 
     <string name="title_activity_add_field">Add a field</string>
 
+    <string name="button_edit_name">Edit</string>
+    <string name="button_finish_name">Finish</string>
 
     <!-- date -->
     <string name="date_label">Date</string>

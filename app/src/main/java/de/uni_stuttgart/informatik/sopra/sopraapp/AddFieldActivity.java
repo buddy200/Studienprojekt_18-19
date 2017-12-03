@@ -27,7 +27,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
-public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener {
+public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {
     private static final String TAG = "AddFieldActivity";
 
     MapFragment mapFragment;
@@ -153,5 +153,10 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onButtonInteraction() {
+        Log.e(TAG, "button");
     }
 }

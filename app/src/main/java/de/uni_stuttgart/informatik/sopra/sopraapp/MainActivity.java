@@ -17,10 +17,11 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 
 /**
  * sopra_priv

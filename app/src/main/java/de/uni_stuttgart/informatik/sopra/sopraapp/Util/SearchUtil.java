@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp;
+package de.uni_stuttgart.informatik.sopra.sopraapp.Util;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +18,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 public class SearchUtil {
 
-    static boolean matchesFieldSearch(Field f, String input){
+    public static boolean matchesFieldSearch(Field f, String input){
         Bundle b = f.getBundle();
         if(!f.getName().contains(input)){
-            Log.e("dhwaidhioaw", (b.getSerializable("type").toString()));
-            Log.e("dhwaidhioaw", String.valueOf(b.getSerializable("type").toString().contains(input)));
+
             if(! b.getSerializable("type").toString().contains(input)) {
                 //fieldToAdd is type agrarian
                 if (b.containsKey("owner")) {

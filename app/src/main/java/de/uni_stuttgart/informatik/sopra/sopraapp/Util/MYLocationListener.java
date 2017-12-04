@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+package de.uni_stuttgart.informatik.sopra.sopraapp.Util;
 
 import android.Manifest;
 import android.content.Context;

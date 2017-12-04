@@ -23,7 +23,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 
 public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {
     private static final String TAG = "AddFieldActivity";

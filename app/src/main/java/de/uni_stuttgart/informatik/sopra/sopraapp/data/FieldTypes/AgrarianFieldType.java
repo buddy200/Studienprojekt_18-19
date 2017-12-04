@@ -2,6 +2,8 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes;
 
 import android.support.v4.content.ContextCompat;
 
+import java.io.Serializable;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.MainActivity;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
@@ -11,7 +13,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  * Mail: felix.burk@gmail.com
  */
 
-public enum AgrarianFieldType implements FieldType{
+public enum AgrarianFieldType implements FieldType, Serializable{
 
     Hemp(MainActivity.getmContext().getResources().getString(R.string.hemp), ContextCompat.getColor(MainActivity.getmContext(), R.color.hempTypeAgrarian)),
     Wheat(MainActivity.getmContext().getResources().getString(R.string.wheat), ContextCompat.getColor(MainActivity.getmContext(), R.color.wheatTypeAgrarian)),
@@ -21,6 +23,7 @@ public enum AgrarianFieldType implements FieldType{
 
     private String friendlyName;
     private int friendlyColor;
+//    private static final long serialVersionUID = 13L;
 
     AgrarianFieldType(String friendlyName, int friendlyColor){
         this.friendlyName = friendlyName;

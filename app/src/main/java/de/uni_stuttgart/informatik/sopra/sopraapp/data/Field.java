@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Triangle;
  * Created by larsb on 22.11.2017.
  */
 
-public abstract class Field {
+public abstract class Field implements Serializable{
 
 
     private static final String TAG = "Field";
@@ -32,7 +33,7 @@ public abstract class Field {
     static final String KEY_SIZE = "size";
     static final String KEY_TYPE = "type";
 
-    protected Context context;
+    protected transient Context context;
 
 
     //values for field and damage case
@@ -41,6 +42,8 @@ public abstract class Field {
     private String county;
     private int color;
     private double size;
+
+   private static final long serialVersionUID = 11L;
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
 
@@ -226,6 +229,10 @@ public abstract class Field {
     public int getColor() {return color;}
 
     protected void setColor(int color){this.color = color;}
+
+    public void setContext(Context context){
+        this.context = context;
+    }
 
 
     public FieldType getType() {return type;}

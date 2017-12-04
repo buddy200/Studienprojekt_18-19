@@ -1,10 +1,14 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
+import java.io.Serializable;
+
 /**
  * Created by Christian on 13.11.2017.
  */
 
-public class WGS84Coordinate {
+public class WGS84Coordinate implements Serializable {
+
+    private static final long serialVersionUID = 7L;
 
     /**
      * Breitengrad (N, S)

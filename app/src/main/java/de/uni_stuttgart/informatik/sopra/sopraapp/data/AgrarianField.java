@@ -20,12 +20,13 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldT
  * Created by Christian on 13.11.2017.
  */
 
-public class AgrarianField extends Field {
+public class AgrarianField extends Field implements Serializable{
     private static final String TAG = "AgrarianField";
 
     protected static final String KEY_OWNER = "owner";
     protected static final String KEY_DMGFIELDS = "dmg";
 
+    private static final long serialVersionUID = 9L;
 
     //default state
     private AgrarianFieldType state = AgrarianFieldType.Corn;

@@ -1,6 +1,10 @@
 # Einführung
 
-Der Benutzer soll mit der Benutzeroberfläche mit der App interagieren können. Die Benutzeroberfläche leitet alle Daten an das Datenmanagement weiter die der Nutzer hinzufügt. Der neue Datensatz wird nun vom Datenmanagement auf Vollständigkeit geprüft und eventuell zu brechende Daten werden von der Berechnungseinheit mithilfe der eingegebenen oder bereits vorhandenen Daten berechnet. Sobald die für einen Eintrag benötigten Daten alles berechnet ist wird dieser in die Datenbank eingefügt. Diese Datenbank wird auf dem Speicher des Geräts abgelegt. Fordert der Nutzer nun über die Benutzeroberfläche einen Datensatz an, wird dieser Auftrag weiter an das Datenmanagement geleitet. Von das aus wird der Auftrag an die Datenbank gegeben der dann die Daten aus dem Speicher liest und an das Datenmanagement zurückgibt. Diese bereitet die Daten eventuell noch für den Nutzer auf und gibt eventuell noch eine nötige Berechnung in Auftrag. Sobald alle gewünschten Daten vorhanden sind werden diese über die Benutzeroberfläche den Benutzer angezeigt.
+Grundlegend soll eine Drei-Schichten Architektur vorliegen.
+Die Benutzeröberfläche soll nur Daten anzeigen die sie bekommt und nur Daten weiterleiten. Sie soll vorallem keine Berechnungen durchführen.
+Die Anwendungslogik soll alle Berechnungen und Bearbeitungen durchführen die anfallen. Zum Beispiel die Erstellung eines neuen Feldes oder die Bearbeitung eines Schadensfal.
+Die Datenverabeitung soll die von der Anwendugslogik erstellten Daten an eine SQLLite Datenbankd senden und angefragte Daten von dieser Empfangen.
+
 # Komponentendiagramm
 
 ![Komponentendiagram](images/Komponentendiagramm.png)
@@ -40,97 +44,97 @@ Diese Komponente empfängt die Polygondaten die angezeigt werden sollen. Weiter 
 Klassendiagramm
 
 
-## Beschreibung der wichtigen Klassenhierarchie 
+## Beschreibung der wichtigen Klassenhierarchie
 
 Zur besseren Übersicht wird auf Getter- und Settermethoden und auf Android Methoden wie "OnCreate" verzichtet.
 
 ## Beschreibung der Klasse Field
 
-
+In dieser Klasse werden die Daten von Feldern und Schadensfällen gespeichert bzw. erstellt. Hier wird vorallem die Berechnung der Feldgröße erledigt. Weiter werden die Daten die für einen Schadensfall und einem Feld gleich sind defniert. Außerdem wird hier auch der Mittelpunkt des Feldes/Schadenfall berechnet.
 
 ## Beschreibung der Klasse AgrarianField
 
-
+In dieser Klasse wird noch zusätzlich gespeichert was auf dem Feld im Moment angebaut wird und das Feld dementsprechend farblich angepasst.
 
 ## Beschreibung der Klasse DamageField
 
-
+Hier werden hauptsächlich zusätzliche Daten zu einem Schadensfall gespeichert, wie z.B. das Datum wann ein Schaden entstanden ist.
 
 ## Beschreibung der Klasse FieldPolygon
 
+Diese Klasse ist dafür zuständig das Polygon von einem Feld/Schadensfall auf der Map mit den passenden Eckpukten zu zeichnen.
 
+## Beschreibung des Enum TypeOfCorn
 
-## Beschreibung des Enum FieldStates
-
-
+Hier werden die verschiednen Feldfrüchte definiert.
 
 ## Beschreibung der Klasse Vector
 
-
+In dieser Klasse werden Grundlegende Vector Berechnungen defniert. Zum Beispiel Normalisierung oder ob sie in die gleiche Richtung zeigen.
 
 ## Beschreibung der Klasse Triangle
 
-
+Hier wird die Fläche eines Dreiecks berechnet die von der Berechnung der Größe des Feldes nötig ist. Dafür wird der Abstand mithilfe der UTM Koordinaten berechnet.
 
 ## Beschreibung der Klasse CornerPoint
 
-
+Hier werden die Positionsdaten abgelegt
 
 ## Beschreibung der Klasse UTMCoordinate
 
-
+Hier werden die Koordinaten der Punkte im UTM-Format gespeichert
 
 ## Beschreibung der Klasse WGS84Coordinate
 
-
+Hier werden die Koordinaten der Punkte im WGS84-Format gespeichert
 
 ## Beschreibung der Klasse WGS84UTMConverter
 
-
+Hier werden WGS84 Kordinaten in UTM Koordinaten umgerechnet. Ebenfalls in die andere Richtung.
 
 ## Beschreibung der Klasse MathUtility
 
-
+Einige Hilfmethoden werden hier defniert, wie zum Beispiel die Umrechnung von  Grad in Bogenmaß oder Bogenmaß in Grad oder die Berechnung des Skalarprodukts.
 
 ## Beschreibung der Klasse ItemListDialogFragment
 
+Diese Klasse gibt die Daten der Felder und Schadensfälle als Liste auf dem Display aus und kann bei Bedarf geändert werden oder es können Schadensfälle hinzugefügt werden.
 
+## Beschreibung der Klasse BottomSheetDetailDialogFragment
 
-## Beschreibung der Klasse DetailDialogFragment
-
-
+Diese Klasse erzeugt die Anzeige wenn man auf ein Feld oder Schadensfall klickt. Diese zeigt dann die Daten an die hinterlegt sind (z.B Größe des Feldes, Name des Gutachter, etc).
 
 ## Beschreibung der Klasse MyLocationListener
 
-
+In dieser Klasse werden die Standort Daten des GPS-Sensors erfasst und falls dieser nicht zur Verfügung steht wird der Standort anhand des aktuellen Netzwerkstandort ermittelt. Der ermittelte Standort kann dann von andere Klassen abgerufen werden. 
 
 ## Beschreibung der Klasse MainActivity
 
-
+Diese Klasse ist der Startpunkt des Programms. Von hier werden alle UI Komponenten geladen.
 
 ## Beschreibung der Klasse MapFragment
 
-
+Diese Klasse komuniziert mit dem MapViewHanlder und der MainActivity. Weiter werden hier die Permissions vom Speicher Zugriff um die Map zu laden und um die Standortdaten abrufen zu können abgefragt.
 
 ## Beschreibung der Klasse MapViewHandler
 
-
+Diese Klasse stellt die Methoden zur KArteninteraktion bereit. Hier kann zu einer gegebenen Position animiert werden, ein Marker mit der aktuellen Position gesetzt werden und es werden die einzelnen Overlays die von FieldPolygon erzeugt werden auf die Karte gesetzt oder gelöscht.
 
 ## Beschreibung der Klasse AddFieldActivity
 
-
+Diese Klasse stellt eine neue Acitvity. Mit dieser ist es möglich neue Felder und Schadensfälle zu erstellen. Hier können die Eckpunkte per GPS eingetragen werden und die benötigten Informationen (z.B. Namen des Gutachter oder Bauer, Datum, etc).
 
 ## Beschreibung der Klasse User
 
-
+Diese Klasse soll die Nutzervewaltung regeln. Sie stellt login, logout und status methoden bereit und speichert Passwörter und Nutzernamen.
 
 ## Beschreibung der Klasse Bauer
 
-
+Diese Klasse regelt die Zugriffsbeschränkung die man als Bauer in der App hat. zum Beispiel das ein Bauer nur auf seine eigenen Felder zugreifen kann.
 
 ## Beschreibung der Klasse Gutachter
 
-
+Siehe Klasse Bauer
 
 
 

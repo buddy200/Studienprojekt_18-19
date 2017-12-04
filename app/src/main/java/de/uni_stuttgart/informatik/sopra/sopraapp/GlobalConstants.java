@@ -11,10 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
 
 /**
  * sopra_priv
@@ -130,7 +131,7 @@ public class GlobalConstants {
             //add a agrarian field
             AgrarianField f = new AgrarianField(context, points);
             f.setName("AgrarianField Nr: " + String.valueOf(j));
-            f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
+            f.setType(AgrarianFieldType.values()[(int)(Math.random()* AgrarianFieldType.values().length)]);
 
             f.setAutomaticCounty();
             f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
@@ -144,6 +145,7 @@ public class GlobalConstants {
                 }
                 DamageField dmg = new DamageField(context, pointsDmg);
                 dmg.setName("DamageField Nr: " + String.valueOf(j));
+                dmg.setType(DamageFieldType.values()[(int)(Math.random()* DamageFieldType.values().length)]);
                 dmg.setDate(new Date(0));
 
                 dmg.setEvaluator(superheroes[(int)(Math.random()*superheroes.length)]);

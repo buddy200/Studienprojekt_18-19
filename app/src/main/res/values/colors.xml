@@ -7,10 +7,19 @@
 
     <color name="fieldDefaultColor">#aaffffff</color>
 
-    <color name="stateNoDamage">#aa00ff00</color>
-    <color name="stateLightDamage">#aaff7f00</color>
-    <color name="stateHighDamage">#aaff0000</color>
-    <color name="stateDefault">#aa000000</color>
+    <!--Agrarian Types-->
+    <color name="hempTypeAgrarian">#aa00ff00</color>
+    <color name="wheatTypeAgrarian">#aab35900</color>
+    <color name="ryeTypeAgrarian">#aa00ac5c</color>
+    <color name="potatoesTypeAgrarian">#aa532a01</color>
+    <color name="cornTypeAgrarian">#aaffea00</color>
+    <color name="defaultTypeAgrarian">#aa000000</color>
+
+    <!-- Damage Types-->
+    <color name="hailTypeDmg">#aa81bed4</color>
+    <color name="snowTypeDmg">#aaa6a6a6</color>
+    <color name="alienTypeDmg">#aad304da</color>
+    <color name="defaultTypeDmg">#000000</color>
 
     <color name="transparent">#00000000</color>
 </resources>

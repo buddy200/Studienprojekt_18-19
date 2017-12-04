@@ -40,11 +40,8 @@ public class FieldPolygon extends Polygon {
         this.context = context;
 
         //init default values
-        this.setFillColor(ContextCompat.getColor(context, R.color.stateDefault));
         this.setTitle("");
-        //invisible borders
-        this.setStrokeColor(Color.argb(0,0,0,0));
-        
+
         textPaint = new Paint();
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
@@ -67,8 +64,9 @@ public class FieldPolygon extends Polygon {
             }
             textPaint.setTextSize(50);
             textPaint.setColor(Color.BLACK);
+            this.setStrokeColor(Color.argb(0,0,0,0));
 
-        //handle damage fields
+            //handle damage fields
         }else if(field instanceof DamageField){
             if(mapView.getZoomLevel() < 19){
                 super.draw(canvas, mapView, shadow);
@@ -76,6 +74,9 @@ public class FieldPolygon extends Polygon {
             }
             textPaint.setTextSize(40);
             textPaint.setColor(Color.RED);
+            this.setStrokeColor(Color.argb(255,0,0,0));
+            this.setStrokeWidth(1.0f);
+
         }
 
 

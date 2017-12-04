@@ -3,11 +3,13 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 import android.content.Context;
 import android.os.Bundle;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
 
 /**
  * Created by larsb on 22.11.2017.
@@ -26,6 +28,7 @@ public class DamageField extends Field {
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
         this.setName(context.getResources().getString(R.string.field_default_name));
+        this.setType(DamageFieldType.Aliens);
         this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(damageFieldToColor());
         this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
@@ -51,10 +54,12 @@ public class DamageField extends Field {
         if(this.getSize() != null){
             bundle.putDouble(KEY_SIZE, this.getSize());
         }
+        bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());
 
         //damageField specific attributes
         bundle.putString(KEY_EVALUATOR, this.evaluator);
         bundle.putString(KEY_DATE, parsedDate);
+
         return bundle;
     }
 

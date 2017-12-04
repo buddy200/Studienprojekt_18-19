@@ -1,9 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
-import android.app.Fragment;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +23,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {

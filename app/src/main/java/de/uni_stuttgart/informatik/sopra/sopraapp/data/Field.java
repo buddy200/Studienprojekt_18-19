@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Queue;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Triangle;
 
 /**
@@ -29,12 +30,14 @@ public abstract class Field {
     static final String KEY_COLOR = "color";
     static final String KEY_COUNTY = "county";
     static final String KEY_SIZE = "size";
+    static final String KEY_TYPE = "type";
 
     protected Context context;
 
 
     //values for field and damage case
     private String name;
+    private FieldType type;
     private String county;
     private int color;
     private double size;
@@ -225,5 +228,10 @@ public abstract class Field {
     protected void setColor(int color){this.color = color;}
 
 
+    public FieldType getType() {return type;}
 
+    public void setType(FieldType type) {
+        this.type = type;
+        this.setColor(type.toColor());
+    }
 }

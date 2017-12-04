@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
@@ -33,6 +36,8 @@ public class MainActivity extends FragmentActivity
     private static final String TAG = "MainActivity";
     private MYLocationListener myLocationListener = new MYLocationListener();
 
+    //i know this is bad, but there is no other way to get the context inside our AgrarianFieldType enum.. -D
+    private static Context mContext;
 
     MapFragment mapFragment;
     ArrayList<Field> testData;
@@ -40,6 +45,7 @@ public class MainActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
 
         setContentView(R.layout.activity_main);
 
@@ -53,9 +59,7 @@ public class MainActivity extends FragmentActivity
     //handle menu buttons interactions
     @Override
     public void onListButtonInteraction() {
-        ItemListDialogFragment.newInstance(testData, false).show(getSupportFragmentManager(), "FieldList");
-        //BottomSheetDetailDialogFragment.newInstance(testData.get(0)).show(this.getSupportFragmentManager(), "AgrarianField");
-
+        ItemListDialogFragment.newInstance(createList(testData), false).show(getSupportFragmentManager(), "FieldList");
     }
 
     @Override
@@ -89,8 +93,9 @@ public class MainActivity extends FragmentActivity
         Log.e(TAG, "Search for: " + input);
 
         // copy testData in search data list
-        // this copy is comparable to shallow copy in the C language
+        // we need a deep copy - because fields contain other fields
         ArrayList<Field> searchData = new ArrayList<>(testData);
+        ArrayList<Field> resultData = new ArrayList<>();
 
         /**
          * not optimal and dirty way of searching
@@ -100,30 +105,24 @@ public class MainActivity extends FragmentActivity
         Iterator<Field> iter = searchData.iterator();
         while(iter.hasNext()){
             Field f = iter.next();
-            Bundle b = f.getBundle();
-            if(!f.getName().contains(input)){
-                //fieldToAdd is type agrarian
-                if(b.containsKey("state")){
-                    //search for states and owners
-                    if(! b.getSerializable("state").toString().contains(input)){
-                        if( ! b.getString("owner").contains(input)){
-                            iter.remove();
-                        }
-                    }
 
-                }
-                //fieldToAdd is type damage field
-                if(b.containsKey("evaluator")){
-                    //search for evaluators
-                    if(! b.getString("evaluator").contains(input)){
-                        iter.remove();
+            if(SearchUtil.matchesFieldSearch(f, input)){
+                resultData.add(f);
+            }
+
+            if(f instanceof AgrarianField){
+                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
+                    Log.e("DMG", dmg.getType().toString());
+                    if(SearchUtil.matchesFieldSearch(dmg,input)){
+                        resultData.add(dmg);
                     }
                 }
             }
+
         }
 
-        if(searchData.size() != 0){
-            ItemListDialogFragment.newInstance(searchData, true).show(getSupportFragmentManager(), "SearchList" );
+        if(resultData.size() != 0){
+            ItemListDialogFragment.newInstance(resultData, true).show(getSupportFragmentManager(), "SearchList" );
         }else{
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
         }
@@ -156,5 +155,23 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onButtonInteraction() {
 
+    }
+
+    private ArrayList<Field> createList(ArrayList<Field> list){
+        ArrayList<Field> newList = new ArrayList<>();
+        for(Field f : list){
+            newList.add(f);
+            if(f instanceof AgrarianField){
+                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
+                    newList.add(dmg);
+                }
+            }
+        }
+
+        return newList;
+    }
+
+    public static Context getmContext(){
+        return mContext;
     }
 }

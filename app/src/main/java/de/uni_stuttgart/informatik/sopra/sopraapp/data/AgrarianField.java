@@ -6,14 +6,15 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 
 /**
  * Created by Christian on 13.11.2017.
@@ -23,12 +24,11 @@ public class AgrarianField extends Field {
     private static final String TAG = "AgrarianField";
 
     protected static final String KEY_OWNER = "owner";
-    protected static final String KEY_STATE = "state";
     protected static final String KEY_DMGFIELDS = "dmg";
 
 
     //default state
-    private FieldStates state = FieldStates.NoDamage;
+    private AgrarianFieldType state = AgrarianFieldType.Corn;
     private String owner;
 
     private ArrayList<DamageField> containedDamageFields;
@@ -43,28 +43,10 @@ public class AgrarianField extends Field {
         //set default values
         owner = context.getResources().getString(R.string.owner_default_name);
         this.setName(context.getResources().getString(R.string.field_default_name));
+        this.setType(AgrarianFieldType.Corn);
         this.setCounty(context.getResources().getString(R.string.county_default_name));
-        this.setColor(agrarianFieldToColor(state));
+        this.setColor(state.toColor());
         this.setContainedDamageFields(new ArrayList<DamageField>());
-    }
-
-    /**
-     * map field state to color
-     *
-     * @param field
-     * @return
-     */
-    protected int agrarianFieldToColor(FieldStates field) {
-        switch (field) {
-            case NoDamage:
-                return ContextCompat.getColor(context, R.color.stateNoDamage);
-            case LightDamage:
-                return ContextCompat.getColor(context, R.color.stateLightDamage);
-            case HighDamage:
-                return ContextCompat.getColor(context, R.color.stateHighDamage);
-            default:
-                return ContextCompat.getColor(context, R.color.stateDefault);
-        }
     }
 
     /**
@@ -90,26 +72,20 @@ public class AgrarianField extends Field {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_NAME, this.getName());
-        bundle.putSerializable(KEY_STATE, this.getState());
-        bundle.putInt(KEY_COLOR, agrarianFieldToColor(this.getState()));
+        bundle.putInt(KEY_COLOR, this.getType().toColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
         if(this.getSize() != null){
             bundle.putDouble(KEY_SIZE, this.getSize());
         }
+        bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());
 
         //agrarianField specific attributes
         bundle.putString(KEY_OWNER, this.owner);
-        bundle.putSerializable(KEY_STATE, this.state);
 
         return bundle;
     }
 
-    public void setState(FieldStates state) {
-        this.state = state;
-        this.setColor(agrarianFieldToColor(state));
-    }
-
-    private void setContainedDamageFields(ArrayList<DamageField> containedDamageFields) {
+    public void setContainedDamageFields(ArrayList<DamageField> containedDamageFields) {
         this.containedDamageFields = containedDamageFields;
     }
 
@@ -172,10 +148,6 @@ public class AgrarianField extends Field {
             }
         }
     }
-
-    public FieldStates getState(){ return this.state;}
-
-    public String getOwner(){return this.owner;}
 
     public void setOwner(String owner){this.owner = owner;}
 

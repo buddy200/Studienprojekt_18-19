@@ -25,4 +25,15 @@
     <string name="time_label">Time</string>
 
 
+    <!-- agrarian field types -->
+    <string name="hemp">Hanf</string>
+    <string name="wheat">Weizen</string>
+    <string name="rye">Roggen</string>
+    <string name="potatoes">Kartoffeln</string>
+    <string name="corn">Mais</string>
+
+    <!-- damage field types -->
+    <string name="hail">Hagel</string>
+    <string name="snow">Schnee</string>
+    <string name="aliens">Aliens</string>
 </resources>

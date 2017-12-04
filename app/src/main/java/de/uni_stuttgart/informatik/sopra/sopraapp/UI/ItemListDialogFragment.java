@@ -47,19 +47,11 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();
 
-        fieldList = new ArrayList<>();
+        fieldList = new ArrayList<>(fields);
         mSearch = search;
         ArrayList<Bundle> fieldBundles = new ArrayList<>();
         for (int i = 0; i < fields.size(); ++i) {
             fieldBundles.add(fields.get(i).getBundle());
-            fieldList.add(fields.get(i));
-
-            if(fields.get(i) instanceof AgrarianField){
-                for(DamageField dmg : ((AgrarianField) fields.get(i)).getContainedDamageFields()){
-                    fieldBundles.add(dmg.getBundle());
-                    fieldList.add(dmg);
-                }
-            }
         }
         Bundle listBundle = new Bundle();
         listBundle.putParcelableArrayList(ARG_ITEM_LIST, fieldBundles);
@@ -161,8 +153,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.text.setText(bundleListFields.get(position).getString("name"));
-            if(bundleListFields.get(position).getSerializable("state") != null){
-                holder.state.setText(bundleListFields.get(position).getSerializable("state").toString());
+            if(bundleListFields.get(position).getSerializable("type") != null){
+                holder.state.setText(bundleListFields.get(position).getSerializable("type").toString());
                 holder.state.setTextColor(bundleListFields.get(position).getInt("color"));
             }else {
                 holder.state.setText(" ");

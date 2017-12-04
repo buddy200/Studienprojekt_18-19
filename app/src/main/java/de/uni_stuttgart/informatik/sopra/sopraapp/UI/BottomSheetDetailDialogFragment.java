@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 
 /**
@@ -36,7 +30,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private static final String KEY_NAME = "name";
-    private static final String KEY_STATE = "state";
+    private static final String KEY_TYPE = "type";
     private static final String KEY_COLOR = "color";
     private static final String KEY_COUNTY = "county";
     private static final String KEY_OWNER = "owner";
@@ -119,7 +113,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         countyEdit.setText("Address..");
 
         Spinner state = view.findViewById(R.id.field_detail_state_spinner);
-        state.setAdapter(new ArrayAdapter<FieldStates>(getContext(), android.R.layout.simple_spinner_item, FieldStates.values()));
+        state.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
 
         EditText ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);
         ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
@@ -141,7 +135,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
         //is field agrarian?
         if (getArguments().getString(KEY_OWNER) != null) {
-            stateOrDate.setText(getArguments().getSerializable(KEY_STATE).toString());
+            stateOrDate.setText(getArguments().getSerializable(KEY_TYPE).toString());
             stateOrDate.setTextColor(getArguments().getInt(KEY_COLOR));
             ownerOrEvaluator.setText(getArguments().getString(KEY_OWNER));
         }

@@ -7,5 +7,17 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
  */
 
 public enum FieldStates {
-    NoDamage, LightDamage, HighDamage
+    NoDamage("NoDamage"),
+    LightDamage("LightDamage"),
+    HighDamage("HighDamage");
+
+    private String friendlyName;
+
+    private FieldStates(String friendlyName){
+        this.friendlyName = friendlyName;
+    }
+
+    @Override public String toString(){
+        return friendlyName;
+    }
 };

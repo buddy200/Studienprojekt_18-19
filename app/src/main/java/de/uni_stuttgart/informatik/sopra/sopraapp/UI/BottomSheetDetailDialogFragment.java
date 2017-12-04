@@ -5,19 +5,26 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 
 
 /**
@@ -75,28 +82,62 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_detail_dialog, container, false);
+        if(mEdit){
+            view = inflater.inflate(R.layout.fragment_item_detail_dialog_edit, container, false);
+        }
         configureBottomSheetBehaviour(view);
         return view;
     }
 
     private void configureBottomSheetBehaviour(View view) {
-        view.setMinimumHeight(700);
+
     }
 
+    String[] s = new String[10];
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TextView name = (TextView) view.findViewById(R.id.field_detail_name);
+        Button editFinish = (Button) view.findViewById(R.id.edit_finish_button);
+        editFinish.setOnClickListener(this);
+
+        if(!mEdit) noEditSetup(view, name, editFinish);
+        else editSetup(view, name, editFinish);
+
+    }
+
+    private void editSetup(View view, TextView name, Button editFinish) {
+        LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
+        RelativeLayout topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);
+
+        name.setText("Set up new Field");
+
+        // bottomSheet.removeView(name);
+        EditText nameEdit = view.findViewById(R.id.field_detail_name_edit);
+        nameEdit.setText("Name..");
+
+        EditText countyEdit = view.findViewById(R.id.field_detail_region_edit);
+        countyEdit.setText("Address..");
+
+        Spinner state = view.findViewById(R.id.field_detail_state_spinner);
+        state.setAdapter(new ArrayAdapter<FieldStates>(getContext(), android.R.layout.simple_spinner_item, FieldStates.values()));
+
+        EditText ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);
+        ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
+
+
+        editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));
+    }
+
+    private void noEditSetup(View view, TextView name, Button editFinish) {
         TextView stateOrDate = (TextView) view.findViewById(R.id.field_detail_state);
         TextView county = (TextView) view.findViewById(R.id.field_detail_region);
         TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         TextView size = (TextView) view.findViewById(R.id.field_detail_size);
-        Button editFinish = (Button) view.findViewById(R.id.edit_finish_button);
 
         name.setText(getArguments().getString(KEY_NAME));
         county.setText(getArguments().getString(KEY_COUNTY));
         size.setText(String.valueOf(getArguments().getDouble(KEY_SIZE)));
         editFinish.setText(getContext().getResources().getString(R.string.button_edit_name));
-        editFinish.setOnClickListener(this);
 
         //is field agrarian?
         if (getArguments().getString(KEY_OWNER) != null) {
@@ -109,48 +150,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
             stateOrDate.setText(getArguments().getString(KEY_DATE));
             ownerOrEvaluator.setText(getArguments().getString(KEY_EVALUATOR));
         }
-
-
-        if (mEdit) {
-            LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
-            RelativeLayout topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);
-            topPanel.removeAllViews();
-            bottomSheet.removeAllViews();
-            bottomSheet.addView(topPanel);
-
-            topPanel.addView(name);
-            name.setText("Set up new Field");
-
-            // bottomSheet.removeView(name);
-            EditText nameEdit = new EditText(getContext());
-            nameEdit.setText("Name..");
-            bottomSheet.addView(nameEdit);
-
-            //  bottomSheet.removeView(stateOrDate);
-            EditText stateOrDateEdit = new EditText(getContext());
-            stateOrDateEdit.setText("Date..");
-            stateOrDateEdit.setInputType(InputType.TYPE_CLASS_DATETIME);
-            bottomSheet.addView(stateOrDateEdit);
-
-            // bottomSheet.removeView(county);
-            EditText countyEdit = new EditText(getContext());
-            countyEdit.setText("Address..");
-            bottomSheet.addView(countyEdit);
-
-            //  bottomSheet.removeView(ownerOrEvaluator);
-            EditText ownerOrEvaluatorEdit = new EditText(getContext());
-            ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
-            bottomSheet.addView(ownerOrEvaluatorEdit);
-
-            topPanel.addView(editFinish);
-            editFinish.setOnClickListener(this);
-            editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));
-        }
-
-    }
-
-    public boolean getSth() {
-        return true;
     }
 
     public void setId(int id) {

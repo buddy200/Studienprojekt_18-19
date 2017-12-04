@@ -25,6 +25,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldStates;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.MYLocationListener;
 
 public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {
@@ -94,15 +95,17 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         return true;
     }
 
+    BottomSheetDetailDialogFragment test;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_menu_done:
                 if(fieldToAdd != null){
-                   // FloatingActionButton fab  = (FloatingActionButton) findViewById(R.id.fab);
+
+                    // FloatingActionButton fab  = (FloatingActionButton) findViewById(R.id.fab);
                    // CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
 
-                    BottomSheetDetailDialogFragment test = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
+                    test = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
                     test.show(getSupportFragmentManager(), "EditView");
 
                     //test.setId(9999);
@@ -111,7 +114,6 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
                    // test.getFragmentManager().findFragmentByTag("EditView").getId()
                    // p.setAnchorId(test.getId());
                    // fab.setLayoutParams(p);
-                    Log.e(TAG, String.valueOf(test.getSth()));
                 }else {
                     Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
 
@@ -157,6 +159,7 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
 
     @Override
     public void onButtonInteraction() {
+        fieldToAdd = new AgrarianField(getApplicationContext(), listC);
         Log.e(TAG, "button");
     }
 }

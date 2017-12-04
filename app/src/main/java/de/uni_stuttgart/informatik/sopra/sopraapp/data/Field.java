@@ -38,8 +38,6 @@ public abstract class Field {
     private String county;
     private int color;
     private double size;
-    private GeoPoint centroid;
-
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
 
@@ -171,7 +169,7 @@ public abstract class Field {
     /**
      * calculate centroid ( = center of gravity) of polygon
      */
-    public void calculateCentroid(){
+    public GeoPoint calculateCentroid(){
         double lowX0, lowY0, highX1, highY1;
 
         lowX0 = lowY0 = Double.MAX_VALUE;
@@ -192,7 +190,7 @@ public abstract class Field {
             }
         }
 
-        centroid = new GeoPoint(lowX0 + ((highX1 - lowX0) / 2), lowY0 + ((highY1 - lowY0) / 2));
+        return new GeoPoint(lowX0 + ((highX1 - lowX0) / 2), lowY0 + ((highY1 - lowY0) / 2));
     }
 
     /**
@@ -210,7 +208,7 @@ public abstract class Field {
         return cornerPoints;
     }
 
-    public GeoPoint getCentroid(){ return this.centroid;}
+    public GeoPoint getCentroid(){ return calculateCentroid();}
 
     public abstract Bundle getBundle();
 

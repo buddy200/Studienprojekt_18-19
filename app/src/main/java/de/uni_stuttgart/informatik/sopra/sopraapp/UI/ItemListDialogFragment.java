@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -46,11 +47,19 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();
 
-        fieldList = new ArrayList<>(fields);
+        fieldList = new ArrayList<>();
         mSearch = search;
         ArrayList<Bundle> fieldBundles = new ArrayList<>();
         for (int i = 0; i < fields.size(); ++i) {
             fieldBundles.add(fields.get(i).getBundle());
+            fieldList.add(fields.get(i));
+
+            if(fields.get(i) instanceof AgrarianField){
+                for(DamageField dmg : ((AgrarianField) fields.get(i)).getContainedDamageFields()){
+                    fieldBundles.add(dmg.getBundle());
+                    fieldList.add(dmg);
+                }
+            }
         }
         Bundle listBundle = new Bundle();
         listBundle.putParcelableArrayList(ARG_ITEM_LIST, fieldBundles);

@@ -45,7 +45,7 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100, 50, this);
+        testData = GlobalConstants.fieldTest(100, 5, this);
 
 
     }
@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onMapFragmentComplete() {
         mapFragment.getMapViewHandler().addFields(testData);
-        mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
+        //mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
         myLocationListener.initializeLocationManager(this, mapFragment);
 
 

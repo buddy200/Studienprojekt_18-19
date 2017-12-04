@@ -17,6 +17,8 @@ import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Polygon;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -44,8 +46,6 @@ public class FieldPolygon extends Polygon {
         this.setStrokeColor(Color.argb(0,0,0,0));
         
         textPaint = new Paint();
-        textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(50);
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
@@ -60,10 +60,24 @@ public class FieldPolygon extends Polygon {
     public void draw(Canvas canvas, MapView mapView, boolean shadow){
         //only draw names if zoomed in to certain level
         //TODO: show name depending to polygon size and zoom level
-        if(mapView.getZoomLevel() < 18){
-            super.draw(canvas, mapView, shadow);
-            return;
+        if(field instanceof AgrarianField){
+            if(mapView.getZoomLevel() < 18){
+                super.draw(canvas, mapView, shadow);
+                return;
+            }
+            textPaint.setTextSize(50);
+            textPaint.setColor(Color.BLACK);
+
+        //handle damage fields
+        }else if(field instanceof DamageField){
+            if(mapView.getZoomLevel() < 19){
+                super.draw(canvas, mapView, shadow);
+                return;
+            }
+            textPaint.setTextSize(40);
+            textPaint.setColor(Color.RED);
         }
+
 
         polyCentroidPoint = new Point();
         mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);

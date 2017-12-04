@@ -68,7 +68,7 @@ public class GlobalConstants {
 
         return polis;
     }
-
+/*
     public static DamageField damageFieldTest(Context context){
 
         List<CornerPoint> points3 = new ArrayList<>();
@@ -79,7 +79,7 @@ public class GlobalConstants {
         DamageField df = new DamageField(context, points3);
         df.setName("Test");
         return  df;
-    }
+    }*/
 
     /**
      * Same as polygonTest, only for fields, state is selected by random
@@ -91,6 +91,8 @@ public class GlobalConstants {
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
+        double MaxDmg = +0.0005;
+        double MinDmg = -0.0006;
 
         ArrayList<Field> polis = new ArrayList<>();
         double initialLat = GlobalConstants.START_POINT.getLatitude();
@@ -126,22 +128,26 @@ public class GlobalConstants {
             initialLat += 0.003;
 
             //add a agrarian field
-            if(j % 2 == 0){
-                AgrarianField f = new AgrarianField(context, points);
-                f.setName("AgrarianField Nr: " + String.valueOf(j));
-                f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
+            AgrarianField f = new AgrarianField(context, points);
+            f.setName("AgrarianField Nr: " + String.valueOf(j));
+            f.setState(FieldStates.values()[(int)(Math.random()*FieldStates.values().length)]);
 
-                f.setAutomaticCounty();
-                f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
-                polis.add(f);
+            f.setAutomaticCounty();
+            f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
+            polis.add(f);
             //or a damage field
-            }else {
-                DamageField f = new DamageField(context, points);
-                f.setName("DamageField Nr: " + String.valueOf(j));
-                f.setDate(new Date(0));
+            if(j % 2 == 0){
+                List<CornerPoint> pointsDmg = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    pointsDmg.add(new CornerPoint(initialLat +  MinDmg + (Math.random() * ((MaxDmg - MinDmg) )),
+                            initialLon + MinDmg + (Math.random() * ((MaxDmg - MinDmg) ))));
+                }
+                DamageField dmg = new DamageField(context, pointsDmg);
+                dmg.setName("DamageField Nr: " + String.valueOf(j));
+                dmg.setDate(new Date(0));
 
-                f.setEvaluator(superheroes[(int)(Math.random()*superheroes.length)]);
-                polis.add(f);
+                dmg.setEvaluator(superheroes[(int)(Math.random()*superheroes.length)]);
+                f.addContainedDamageField(dmg);
             }
 
 

@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -17,6 +18,7 @@ import java.util.Map;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -80,6 +82,14 @@ public class MapViewHandler {
     public void addFields(List<Field> fields){
         for(Field field : fields){
            map.getOverlayManager().add(fieldToPolygon(field));
+
+           //add contained damage fields if field is type agrarian
+           if(field instanceof AgrarianField){
+               for(DamageField dmg : ((AgrarianField) field).getContainedDamageFields()){
+                   map.getOverlayManager().add(fieldToPolygon(dmg));
+
+               }
+           }
 
         }
     }

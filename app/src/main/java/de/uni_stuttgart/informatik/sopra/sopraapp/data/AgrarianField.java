@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,11 +24,14 @@ public class AgrarianField extends Field {
 
     protected static final String KEY_OWNER = "owner";
     protected static final String KEY_STATE = "state";
+    protected static final String KEY_DMGFIELDS = "dmg";
 
 
     //default state
     private FieldStates state = FieldStates.NoDamage;
     private String owner;
+
+    private ArrayList<DamageField> containedDamageFields;
 
 
     /**
@@ -41,6 +45,7 @@ public class AgrarianField extends Field {
         this.setName(context.getResources().getString(R.string.field_default_name));
         this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(agrarianFieldToColor(state));
+        this.setContainedDamageFields(new ArrayList<DamageField>());
     }
 
     /**
@@ -78,6 +83,7 @@ public class AgrarianField extends Field {
 
     /**
      * bundle helper function
+     * TODO put damage fields in there somehow
      * @return
      */
     @Override
@@ -94,12 +100,24 @@ public class AgrarianField extends Field {
         //agrarianField specific attributes
         bundle.putString(KEY_OWNER, this.owner);
         bundle.putSerializable(KEY_STATE, this.state);
+
         return bundle;
     }
 
     public void setState(FieldStates state) {
         this.state = state;
         this.setColor(agrarianFieldToColor(state));
+    }
+
+    private void setContainedDamageFields(ArrayList<DamageField> containedDamageFields) {
+        this.containedDamageFields = containedDamageFields;
+    }
+
+    public ArrayList<DamageField> getContainedDamageFields() {
+        return containedDamageFields;
+    }
+    public void addContainedDamageField(DamageField dmgField){
+        containedDamageFields.add(dmgField);
     }
 
 

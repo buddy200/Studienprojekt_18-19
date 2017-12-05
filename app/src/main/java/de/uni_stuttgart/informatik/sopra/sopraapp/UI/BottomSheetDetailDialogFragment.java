@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
@@ -88,6 +90,10 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     }
 
     String[] s = new String[10];
+    EditText nameEdit;
+    EditText countyEdit;
+    Spinner type;
+    EditText ownerOrEvaluatorEdit;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TextView name = (TextView) view.findViewById(R.id.field_detail_name);
@@ -109,16 +115,16 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
         name.setText("Set up new Field");
 
-        EditText nameEdit = view.findViewById(R.id.field_detail_name_edit);
+        nameEdit = view.findViewById(R.id.field_detail_name_edit);
         nameEdit.setText("Name..");
 
-        EditText countyEdit = view.findViewById(R.id.field_detail_region_edit);
+        countyEdit = view.findViewById(R.id.field_detail_region_edit);
         countyEdit.setText("Address..");
 
-        Spinner state = view.findViewById(R.id.field_detail_state_spinner);
-        state.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
+        type = view.findViewById(R.id.field_detail_state_spinner);
+        type.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
 
-        EditText ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);
+        ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);
         ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
 
         editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));
@@ -158,14 +164,26 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         if(mListener != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
-                    mListener.onButtonInteraction();
+                    mListener.onFinishButtonInteraction();
                     break;
             }
         }
     }
 
+    public Bundle getData(){
+        Bundle b = new Bundle();
+        b.putString("name", nameEdit.getText().toString());
+        b.putSerializable("type", (Serializable) type.getSelectedItem());
+        if(countyEdit.getText() != null){
+            b.putString("address", countyEdit.getText().toString());
+        }
+        b.putString("ownerOrEvaluator", ownerOrEvaluatorEdit.getText().toString());
+
+        return b;
+    }
+
 
     public interface OnButtonInteraction {
-        public void onButtonInteraction();
+        public void onFinishButtonInteraction();
     }
 }

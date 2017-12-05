@@ -126,7 +126,7 @@ public class AgrarianField extends Field implements Serializable{
 
 
         private void setCountyAddress(double lat, double lon){
-           // Log.d(TAG, "fetching location..");
+            //Log.d(TAG, "fetching location..");
             //uses the google geocoder, might be a part of the google maps api.. or not -FB
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses = null;

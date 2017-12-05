@@ -87,7 +87,21 @@ public class MainActivity extends FragmentActivity
     public void onAddButtonInteraction(){
         //start Add Field Activity
         Intent i = new Intent(this, AddFieldActivity.class);
-        startActivity(i);
+        startActivityForResult(i, 2404);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 2404) {
+            if(data != null) {
+                AgrarianField newData = (AgrarianField) data.getSerializableExtra("field");
+                testData.add(newData);
+                Log.e("pos", newData.getCentroid().toDoubleString());
+                mapFragment.getMapViewHandler().addField(newData);
+
+            }
+        }
     }
 
     @Override
@@ -161,7 +175,7 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
-    public void onButtonInteraction() {
+    public void onFinishButtonInteraction() {
 
     }
 

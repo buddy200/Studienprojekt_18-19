@@ -79,7 +79,6 @@ public class FieldPolygon extends Polygon {
 
         }
 
-
         polyCentroidPoint = new Point();
         mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);
 

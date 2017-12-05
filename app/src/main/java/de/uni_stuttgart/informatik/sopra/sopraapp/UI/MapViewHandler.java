@@ -46,7 +46,6 @@ public class MapViewHandler {
     public void init(){
         map = new MapView(context);
         map.setTileSource(TileSourceFactory.MAPNIK);
-        //map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setUseDataConnection(true);
 

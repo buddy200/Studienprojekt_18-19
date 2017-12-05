@@ -80,7 +80,7 @@ Es ist möglich auch ohne Internetverbindung möglich auf dem Gerät angelegte F
 
 ### Feature 7 Aktuellen Standort erfassen
 
-Die App kann sobald einmal auf den "Loc" Botton geklickt worden ist den Standort erfassen und diesen dann alle zwei Sekunden aktualisieren.
+Die App kann sobald einmal auf den "Loc" Botton geklickt worden ist den Standort erfassen und diesen dann alle zwei Sekunden aktualisieren. Um dieses Feature nutzen zu können muss die Standorterfassung des Gerätes eingeschalten sein. Außerdem kann es einige Sekunden dauern bis ein Standort gefunden worden ist.
 ![Anzeige des akutellen Standorts]()
 Anzeige des akutellen Standorts
 

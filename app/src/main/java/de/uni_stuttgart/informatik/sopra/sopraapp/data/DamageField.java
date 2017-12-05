@@ -70,8 +70,8 @@ public class DamageField extends Field {
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat format2 = new SimpleDateFormat("hh:mm");
         String parsedDate =
-                context.getResources().getString(R.string.date_label)
-                        + " " + format1.format(date) + "\n" +
+                        context.getResources().getString(R.string.date_label)
+                        + " " + format1.format(date) + " " +
                         context.getResources().getString(R.string.time_label)
                         + " " + format2.format(date);
 

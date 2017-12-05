@@ -21,7 +21,7 @@
     <string name="button_finish_name">Finish</string>
 
     <!-- date -->
-    <string name="date_label">Date</string>
+    <string name="date_label">Day</string>
     <string name="time_label">Time</string>
 
 

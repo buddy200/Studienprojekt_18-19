@@ -94,6 +94,10 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         Button editFinish = (Button) view.findViewById(R.id.edit_finish_button);
         editFinish.setOnClickListener(this);
 
+        TextView size = (TextView) view.findViewById(R.id.field_detail_size);
+        size.setText(String.valueOf(getArguments().getDouble(KEY_SIZE)) + "m" + "\u00B2");
+
+
         if(!mEdit) noEditSetup(view, name, editFinish);
         else editSetup(view, name, editFinish);
 
@@ -105,7 +109,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
         name.setText("Set up new Field");
 
-        // bottomSheet.removeView(name);
         EditText nameEdit = view.findViewById(R.id.field_detail_name_edit);
         nameEdit.setText("Name..");
 
@@ -118,30 +121,30 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         EditText ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);
         ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
 
-
         editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));
     }
 
     private void noEditSetup(View view, TextView name, Button editFinish) {
-        TextView stateOrDate = (TextView) view.findViewById(R.id.field_detail_state);
+        TextView state = (TextView) view.findViewById(R.id.field_detail_state);
         TextView county = (TextView) view.findViewById(R.id.field_detail_region);
         TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
-        TextView size = (TextView) view.findViewById(R.id.field_detail_size);
+        TextView date = (TextView) view.findViewById(R.id.field_detail_date);
 
         name.setText(getArguments().getString(KEY_NAME));
         county.setText(getArguments().getString(KEY_COUNTY));
-        size.setText(String.valueOf(getArguments().getDouble(KEY_SIZE)));
         editFinish.setText(getContext().getResources().getString(R.string.button_edit_name));
+
+        state.setText(getArguments().getSerializable(KEY_TYPE).toString());
+        state.setTextColor(getArguments().getInt(KEY_COLOR));
 
         //is field agrarian?
         if (getArguments().getString(KEY_OWNER) != null) {
-            stateOrDate.setText(getArguments().getSerializable(KEY_TYPE).toString());
-            stateOrDate.setTextColor(getArguments().getInt(KEY_COLOR));
             ownerOrEvaluator.setText(getArguments().getString(KEY_OWNER));
+            date.setText("");
         }
         //is field damage?
         if (getArguments().getString(KEY_DATE) != null) {
-            stateOrDate.setText(getArguments().getString(KEY_DATE));
+            date.setText(getArguments().getString(KEY_DATE));
             ownerOrEvaluator.setText(getArguments().getString(KEY_EVALUATOR));
         }
     }

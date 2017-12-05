@@ -48,25 +48,10 @@
 
         </RelativeLayout>
 
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Agrarian"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Damage"/>
-
-        </RadioGroup>
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
             android:paddingBottom="@dimen/list_item_spacing_half"
             android:paddingLeft="@dimen/list_item_spacing"
             android:paddingRight="@dimen/list_item_spacing"
@@ -74,18 +59,36 @@
             android:id="@+id/field_detail_name_edit"
             android:text="-name-"/>
 
-        <EditText
+        <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:id="@+id/field_detail_region_edit"
-            android:text="-region-"/>
+            android:measureAllChildren="false">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:id="@+id/field_detail_region_edit"
+                android:text="-region-"/>
 
 
-        <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+            <DatePicker
+                android:id="@+id/field_detail_date_picker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        </ViewFlipper>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:measureAllChildren="false"
@@ -102,17 +105,7 @@
                 android:text="-state-"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-            <DatePicker
-                android:id="@+id/field_detail_date_picker"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-        </ViewFlipper>
+        </LinearLayout>
 
 
         <TextView

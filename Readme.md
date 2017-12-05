@@ -1,6 +1,6 @@
 # Field Manager
 
-![Screenshot vom Startbildschrim der App]()
+![Screenshot vom Startbildschrim der App](doc\images\Startscreen.png)
 Screenshot vom Startbildschrim der App
 
 Die App dient dazu Felder von Bauern zu erfassen und darin Schäden zu markieren. Dies geschiet mit einer Android App die ab Version 5.1 lauffähig ist. Sie soll Versicherungen und Bauern helfen Ihre Felder und vorallem die Schäden die in den Felder enstehen besser verwalten zu können als sie es im Moment tun.
@@ -15,40 +15,40 @@ Weiter ist es deutlich einfacher den Schaden wieder zu finden, weil man genau au
 
 Es können Felder  auf der Karte mithilfe der Standortsensoren des Handys eingezeichnet werden und weitere Daten hinzugefügt werden (z.B. Namen des Versicheurngsnehemers, Lage des Feldes) und geändert werden.
 
-![Nachdem klicken auf den add Button]()
+![Nachdem klicken auf den add Button](doc\images\BlankAddField.png)
 Nachdem klicken auf den add Button
 
-![Nachdem einfügen einiger Punkte]()
+![Nachdem einfügen einiger Punkte](doc\images\AddedPoints.png)
 Nachdem einfügen einiger Punkte
 
-![Nachdem kompletten umrunden des Feldes. Dateneintragung]()
+![Nachdem kompletten umrunden des Feldes. Dateneintragung](doc\images\addFileddata.png)
 Nachdem kompletten umrunden des Feldes. Dateneintragung
 
-![Fertige Feld auf der Karte]()
+![Fertige Feld auf der Karte](doc\images\FieldAdded.png)
 Fertige Feld auf der Karte
 
-### Feature 2 Erstellen und Veralten von Schadensfällen
+### Feature 2 Erstellen und Verwalten von Schadensfällen
 
 Es können zu einem Feld Schadensfälle hinzugefügt oder enfernt werden. Das Hinzufügen läuft nahezu identisch ab wie bei Feature 1. Allerdings können hier noch Daten wie zum Beispiel das Enstehungs Datum des Schadens eigetragen werden.
 
-![Hinzufügen eines Schadens in einem Feld]()
+![Hinzufügen eines Schadens in einem Feld](doc\images\.png)
 Hinzufügen eines Schadens in einem Feld
 
-![Nachdem einfügen des Schadens]()
+![Nachdem einfügen des Schadens](doc\images\.png)
 Nachdem einfügen des Schadens
 
 
-### Feature 3 Anzeigen aller Scahdensfälle und Felder in einer Liste
+### Feature 3 Anzeigen aller Schadensfälle und Felder in einer Liste
 
 Es wird ein List alle Schadensfälle und Felder sobald man auf den Button "list" drückt angezeigt. In dieser werden ein paar Informationen zu den Feldern und Schadensfällen angezeigt. Durch klicken auf einen Eintrag, werden alle Informationen die Verfügbar sind angezeigt und es wird zum jeweiligen Feld gezoomt. Es ist dann auch möglich den Eintrag zu berabeiten und einen Schadensfall hinzuzufügen.
 
-![Anzeige der Liste mit den wichtigsten Informationen]()
+![Anzeige der Liste mit den wichtigsten Informationen](doc\images\list.png)
 Anzeige der Liste mit den wichtigsten Informationen
 
-![Detailansicht einses FEldes/Schadensfall]()
+![Detailansicht einses FEldes/Schadensfall](doc\images\Detailansicht.png)
 Detailansicht einses FEldes/Schadensfall
 
-![Ein Feld oder Schadensfall bearbeiten]()
+![Ein Feld oder Schadensfall bearbeiten](doc\images\.png)
 Ein Feld oder Schadensfall bearbeiten
 
 
@@ -56,10 +56,10 @@ Ein Feld oder Schadensfall bearbeiten
 
 Ein durchsuch der Felder und Schadensfälle nach Verischerungsnehmer ist im Suchfeld möglich. Wenn ein oder mehrer passende Felder gefunden worden sind, werden diese wie in Feature 3 beschrieben angezeigt.
 
-![Das Suchfeld]()
-Das Suchfeld
+![Das Suchfeld](doc\images\Search.png)
+Suchfeld mit einer Eingabe
 
-![Die gefundenen Treffer von der Suche]()
+![Die gefundenen Treffer von der Suche](doc\images\Searchlist.png)
 Die gefundenen Treffer von der Suche
 
 
@@ -67,10 +67,10 @@ Die gefundenen Treffer von der Suche
 
 Sobald man auf ein Polygon von einem Feld oder Schadensfall klickt, wird eine Detailansicht gezeigt. Diese enthält alle Daten des Feldes/Schadensfall und kann bei Bedarf dort direkt geändert werden.
 
-![Ansicht eines Feldes]()
+![Ansicht eines Feldes](doc\images\FieldOverview.png)
 Ansicht eines Feldes
 
-![Detailansicht des Feldes]()
+![Detailansicht des Feldes](doc\images\Detailansicht.png)
 Detailansicht des Feldes
 
 
@@ -81,7 +81,7 @@ Es ist möglich auch ohne Internetverbindung möglich auf dem Gerät angelegte F
 ### Feature 7 Aktuellen Standort erfassen
 
 Die App kann sobald einmal auf den "Loc" Botton geklickt worden ist den Standort erfassen und diesen dann alle zwei Sekunden aktualisieren. Um dieses Feature nutzen zu können muss die Standorterfassung des Gerätes eingeschalten sein. Außerdem kann es einige Sekunden dauern bis ein Standort gefunden worden ist.
-![Anzeige des akutellen Standorts]()
+![Anzeige des akutellen Standorts](doc\images\currLoc.png)
 Anzeige des akutellen Standorts
 
 

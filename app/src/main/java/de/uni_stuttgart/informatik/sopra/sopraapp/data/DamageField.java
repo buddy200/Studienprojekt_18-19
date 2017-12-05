@@ -15,11 +15,13 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
  * Created by larsb on 22.11.2017.
  */
 
-public class DamageField extends Field {
+public class DamageField extends Field implements Serializable{
     private static final String TAG = "DamageField";
 
     private static final String KEY_DATE = "date";
     private static final String KEY_EVALUATOR = "evaluator";
+
+    private static final long serialVersionUID = 8L;
 
     private String parsedDate;
     private String evaluator;

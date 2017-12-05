@@ -20,6 +20,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.ExportImportFromFile;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 
@@ -42,6 +43,7 @@ public class MainActivity extends FragmentActivity
 
     MapFragment mapFragment;
     ArrayList<Field> testData;
+    ExportImportFromFile writerReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,11 @@ public class MainActivity extends FragmentActivity
 
         testData = GlobalConstants.fieldTest(100, 5, this);
 
+        //test for Date write/read
+        writerReader = new ExportImportFromFile(this);
+        writerReader.WriteFields(testData);
+        testData.clear();
+        testData = writerReader.readFields();
 
     }
 

@@ -1,10 +1,13 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
+import java.io.Serializable;
+
 /**
  * Created by Christian on 13.11.2017.
  */
 
-public class UTMCoordinate {
+public class UTMCoordinate implements Serializable{
+    private static final long serialVersionUID = 6L;
 
     private int zone;
 

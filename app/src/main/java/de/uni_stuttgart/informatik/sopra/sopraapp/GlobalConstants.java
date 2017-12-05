@@ -110,7 +110,9 @@ public class GlobalConstants {
         points2.add(new CornerPoint(48.840586, 8.844068));
         points2.add(new CornerPoint(48.840992, 8.840656));
         AgrarianField ff = new AgrarianField(context, points2);
+        DamageField df = new DamageField(context, points2);
         ff.setAutomaticCounty();
+        polis.add(df);
         polis.add(ff);
 
         for(int j=0; j<numberFields; j++) {

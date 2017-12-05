@@ -29,9 +29,9 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 public class FieldPolygon extends Polygon {
 
-    Context context;
-    Paint textPaint;
-    Field field;
+    private Context context;
+    private Paint textPaint;
+    private Field field;
 
     public FieldPolygon(Context context, Field field){
         super(context);

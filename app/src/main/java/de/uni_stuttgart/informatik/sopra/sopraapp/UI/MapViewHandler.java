@@ -118,6 +118,10 @@ public class MapViewHandler {
 
     }
 
+    public void invalidateMap(){
+        map.invalidate();
+    }
+
     /**
      * animate to a the given point on the map
      * @param point

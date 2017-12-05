@@ -26,8 +26,8 @@ public class CornerPoint implements Serializable{
      */
     private double angle;
 
-    public CornerPoint(double latitude, double logitude) {
-        wgs = new WGS84Coordinate(latitude, logitude);
+    public CornerPoint(double latitude, double longitude) {
+        wgs = new WGS84Coordinate(latitude, longitude);
         utm = WGS84UTMConverter.convert(wgs);
     }
 

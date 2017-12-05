@@ -76,7 +76,6 @@ public abstract class Field implements Serializable{
         } else {
             setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
         }
-        calculateCentroid();
     }
 
 

@@ -56,7 +56,7 @@ public class MainActivity extends FragmentActivity
 
         testData = GlobalConstants.fieldTest(100, 5, this);
 
-        //test for Date write/read
+        //bottomSheetDialog for Date write/read
         writerReader = new ExportImportFromFile(this);
         writerReader.WriteFields(testData);
         testData.clear();
@@ -114,7 +114,7 @@ public class MainActivity extends FragmentActivity
     public void onSearchButtonClicked(String input) {
         Log.e(TAG, "Search for: " + input);
 
-        // copy testData in search data list
+        // copy testData in search data listGeoPoints
         // we need a deep copy - because fields contain other fields
         ArrayList<Field> searchData = new ArrayList<>(testData);
         ArrayList<Field> resultData = new ArrayList<>();
@@ -134,7 +134,6 @@ public class MainActivity extends FragmentActivity
 
             if(f instanceof AgrarianField){
                 for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
-                    Log.e("DMG", dmg.getType().toString());
                     if(SearchUtil.matchesFieldSearch(dmg,input)){
                         resultData.add(dmg);
                     }

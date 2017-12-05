@@ -23,7 +23,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFrag
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
@@ -32,12 +31,16 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
 
     MapFragment mapFragment;
     MYLocationListener myLocationListener;
-    Field createField;
     List<CornerPoint> cornerPoints;
 
     AgrarianField fieldToAdd;
     AgrarianField fieldToAddFinal;
     Bundle resultBundle;
+
+    BottomSheetDetailDialogFragment bottomSheetDialog;
+
+    ArrayList<GeoPoint> listGeoPoints = new ArrayList<>();
+    ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
 
 
     @Override
@@ -51,31 +54,21 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
 
         cornerPoints = new ArrayList<>();
 
+        //back button on toolbar implementation
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         //floating action button listener stuff
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Location location = myLocationListener.getLocation();
-                if(location != null){
-
-                    addPoint(location);
-
-                    Snackbar.make(view, "Point at " +
-                            location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
-
-                }else {
-                    Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                }
+                onFabClick(view);
             }
         });
 
-
-        //back button on toolbar implementation
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        //override onClick for toolbar arrow button,
+        //to trigger going back to parent activty
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,60 +83,100 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_add_field, menu);
         return true;
     }
 
-    BottomSheetDetailDialogFragment test;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_menu_done:
-                if(fieldToAdd != null){
-                    myLocationListener.setFollow(false);
-                    if(fieldToAddFinal == null) {
-                        myLocationListener.setFollow(false);
-                        test = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
-                        test.show(getSupportFragmentManager(), "EditView");
-                    }else{
-                        myLocationListener.setFollow(false);
-                        Intent dataBack = new Intent();
-
-                        Log.e("is Null?", String.valueOf(fieldToAddFinal.getBundle() == null));
-                        //getIntent().putExtra("field", fieldToAdd.getBundle());
-                        dataBack.putExtra("field", fieldToAddFinal);
-                        setResult(RESULT_OK, dataBack);
-                        this.finish();
-                    }
-                }else {
-                    Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
-
-                }
-
+                onDoneButtonClick();
                 break;
-
         }
         return true;
     }
 
-    ArrayList<GeoPoint> list = new ArrayList<>();
-    ArrayList<CornerPoint> listC = new ArrayList<>();
-    public void addPoint(Location location){
+
+    private boolean enoughPoints = false;
+    public void addPoint(Location location) {
         Polyline p = new Polyline();
-        list.add(new GeoPoint(location.getLatitude(), location.getLongitude()));
-        listC.add(new CornerPoint(location.getLatitude(), location.getLongitude()));
-        p.setPoints(list);
+        GeoPoint g = new GeoPoint(location.getLatitude(), location.getLongitude());
+        listGeoPoints.add(g);
+        listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
+        p.setPoints(listGeoPoints);
         mapFragment.getMapViewHandler().getMapView().getOverlayManager().add(p);
 
-        if(listC.size() > 2){
-            fieldToAdd = new AgrarianField(this.getApplicationContext(), listC);
-            fieldToAdd.setName("NOT FINISHED");
+        if (listCornerPoints.size() > 2) {
+            enoughPoints = true;
         }
 
     }
 
+    @Override
+    public void onFinishButtonInteraction() {
+        fieldToAddFinal = new AgrarianField(getApplicationContext(), listCornerPoints);
+
+        //add data received from bottomSheetDialog
+        resultBundle = bottomSheetDialog.getData();
+        fieldToAddFinal.setName(resultBundle.getString("name"));
+        fieldToAddFinal.setType((FieldType) resultBundle.getSerializable("type"));
+        if (resultBundle.getString("address") != null) {
+            fieldToAddFinal.setCounty(resultBundle.getString("address"));
+        } else {
+            fieldToAddFinal.setAutomaticCounty();
+        }
+        fieldToAddFinal.setOwner(resultBundle.getString("ownerOrEvaluator"));
+
+        mapFragment.getMapViewHandler().addField(fieldToAddFinal);
+        mapFragment.getMapViewHandler().invalidateMap();
+        bottomSheetDialog.dismiss();
+
+    }
+
+    private void onDoneButtonClick() {
+        if (enoughPoints) {
+            myLocationListener.setFollow(false);
+
+            //add the new field
+            if (fieldToAddFinal == null) {
+                myLocationListener.setFollow(false);
+                AgrarianField fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+                bottomSheetDialog = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
+                bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
+
+            //done with editing - back to main
+            } else {
+                myLocationListener.setFollow(false);
+                Intent dataBack = new Intent();
+
+                Log.e("is Null?", String.valueOf(fieldToAddFinal.getBundle() == null));
+                //getIntent().putExtra("field", fieldToAdd.getBundle());
+                dataBack.putExtra("field", fieldToAddFinal);
+                setResult(RESULT_OK, dataBack);
+                this.finish();
+            }
+        }else {
+            Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    private void onFabClick(View view) {
+        Location location = myLocationListener.getLocation();
+        if(location != null){
+            addPoint(location);
+
+            Snackbar.make(view, "Point at " +
+                    location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }else {
+            Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
 
     @Override
     public void onMapFragmentComplete() {
@@ -161,22 +194,4 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         }
     }
 
-    @Override
-    public void onFinishButtonInteraction() {
-        fieldToAddFinal = new AgrarianField(getApplicationContext(), listC);
-        resultBundle = test.getData();
-        fieldToAddFinal.setName(resultBundle.getString("name"));
-        fieldToAddFinal.setType((FieldType) resultBundle.getSerializable("type"));
-        if(resultBundle.getString("address") != null){
-            fieldToAddFinal.setCounty(resultBundle.getString("address"));
-        }else{
-            fieldToAddFinal.setAutomaticCounty();
-        }
-        fieldToAddFinal.setOwner(resultBundle.getString("ownerOrEvaluator"));
-
-        mapFragment.getMapViewHandler().addField(fieldToAddFinal);
-        test.dismiss();
-
-        Log.e(TAG, "button");
-    }
 }

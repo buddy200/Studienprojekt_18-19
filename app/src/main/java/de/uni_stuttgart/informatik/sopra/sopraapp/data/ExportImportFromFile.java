@@ -84,6 +84,7 @@ public class ExportImportFromFile {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
+            context.deleteFile(filename);
             if (fis != null) {
                 try {
                     fis.close();

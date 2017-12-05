@@ -54,12 +54,9 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100, 5, this);
-
-        //test for Date write/read
+   //     testData = GlobalConstants.fieldTest(100, 5, this);
+        
         writerReader = new ExportImportFromFile(this);
-        writerReader.WriteFields(testData);
-        testData.clear();
         testData = writerReader.readFields();
 
     }
@@ -191,6 +188,13 @@ public class MainActivity extends FragmentActivity
         }
 
         return newList;
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+     //   testData.clear();
+        writerReader.WriteFields(testData);
     }
 
     public static Context getmContext(){

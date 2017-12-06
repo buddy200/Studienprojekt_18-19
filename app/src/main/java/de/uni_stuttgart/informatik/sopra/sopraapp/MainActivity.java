@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -52,9 +53,9 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100,4,getmContext());
+        //testData = GlobalConstants.fieldTest(100,4,getmContext());
         writerReader = new ExportImportFromFile(this);
-       // testData = writerReader.readFields();
+        testData = writerReader.readFields();
 
     }
 
@@ -81,7 +82,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
     }
 
     @Override
-    public void onFragmentMessage(String Tag, String action, Object data) {
+    public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
         Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
         switch (Tag){
             case "MapFragment":
@@ -141,11 +142,16 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                 break;
             case "BottomSheetDetail":
                 switch (action){
-                    case "edit":
-                        //TODO
+                    case "finishEdit":
+                        testData.add((Field) data);
+                        mapFragment.getMapViewHandler().addField((Field) data);
+                        mapFragment.getMapViewHandler().invalidateMap();
                         break;
 
-                    case "noEdit":
+                    case "startEdit":
+                        mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
+                        testData.remove((Field) data);
+                        BottomSheetDetailDialogFragment.newInstance(((Field) data), true).show(this.getSupportFragmentManager(), "EditField");
                         //TODO
                         break;
 

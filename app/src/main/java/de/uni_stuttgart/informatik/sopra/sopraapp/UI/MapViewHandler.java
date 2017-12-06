@@ -102,11 +102,12 @@ public class MapViewHandler {
 
     /**
      * add a list of fields
+     * first add damage fields to map, then the agrarian field
+     * because overlays are added first to last => first is "behind", last is "in front"
      * @param fields
      */
     public void addFields(List<Field> fields){
         for(Field field : fields){
-           map.getOverlayManager().add(fieldToPolygon(field));
 
            //add contained damage fields if field is type agrarian
            if(field instanceof AgrarianField){
@@ -115,6 +116,8 @@ public class MapViewHandler {
 
                }
            }
+
+           map.getOverlayManager().add(fieldToPolygon(field));
 
         }
     }
@@ -140,6 +143,15 @@ public class MapViewHandler {
         map.getOverlayManager().remove(currentLocMarker);
         currentLocMarker = new Marker(map);
         currentLocMarker.setPosition(point);
+
+        currentLocMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                //do nothing
+                return false;
+            }
+        });
+
         map.getOverlayManager().add(currentLocMarker);
 
     }

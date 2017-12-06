@@ -9,5 +9,5 @@ import android.support.annotation.Nullable;
  */
 
 public interface FragmentInteractionListener<T> {
-    public void onFragmentMessage(String Tag, @Nullable String action, @Nullable T data);
+    public void onFragmentMessage( String Tag, String action, @Nullable T data);
 }

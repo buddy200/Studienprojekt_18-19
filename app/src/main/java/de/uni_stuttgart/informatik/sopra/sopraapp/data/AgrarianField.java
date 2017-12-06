@@ -51,20 +51,6 @@ public class AgrarianField extends Field implements Serializable{
     }
 
     /**
-     * starts an async task that tries to get the SubAdminArea
-     * by reverse geocoding the first corner point of this field
-     * might take a bit, thats why its async -FB
-     */
-    public void setAutomaticCounty(){
-        this.setCounty("Loading..");
-
-        new AsyncReverseGeoCoding().execute(new double[]{
-                this.getCornerPoints().get(0).getWGS().getLatitude(),
-                this.getCornerPoints().get(0).getWGS().getLongitude()
-        });
-    }
-
-    /**
      * bundle helper function
      * TODO put damage fields in there somehow
      * @return
@@ -97,60 +83,8 @@ public class AgrarianField extends Field implements Serializable{
         containedDamageFields.add(dmgField);
     }
 
-
-    /**
-     * google asks its servers for reverse geo coding, this might take some time
-     * especially for 100+ fields
-     * try to call this only if necessary! -FB
-     */
-    private class AsyncReverseGeoCoding extends AsyncTask<double[], Void, String> {
-
-        @Override
-        protected String doInBackground(double[]... doubles) {
-            //async task is weird.. TODO change this
-            setCountyAddress(doubles[0][0], doubles[0][1]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-        }
-
-
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
-
-
-        private void setCountyAddress(double lat, double lon){
-            //Log.d(TAG, "fetching location..");
-            //uses the google geocoder, might be a part of the google maps api.. or not -FB
-            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            List<Address> addresses = null;
-            try {
-                addresses = geocoder.getFromLocation(lat, lon, 1);
-                Address result;
-
-                if (addresses != null && !addresses.isEmpty()) {
-                    setCounty(""); //remove "loading..."
-                    String county = "";
-                    for(int i=0; i<= addresses.get(0).getMaxAddressLineIndex(); i++){
-                        county += " " +  addresses.get(0).getAddressLine(i);
-                    }
-                    setCounty(county);
-                }else {
-                    setCounty("No Location Set");
-                }
-            } catch (IOException ignored) {
-                //do something
-            }
-        }
-    }
-
     public void setOwner(String owner){this.owner = owner;}
+    public String getOwner() {return owner;}
 
 }
 

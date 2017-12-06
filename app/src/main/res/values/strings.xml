@@ -7,6 +7,7 @@
     <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
     <string name="toastmsg_nothing_found">Keine Felder gefunden</string>
     <string name="toastmsg_not_enough_points">Nicht genügend Punkte,\ndu brauchst mindestens 3</string>
+    <string name="toastmsg_points_already_added">Es wurden bereits alle Punkte hinzugefügt</string>
 
     <string name="field_default_name">no field name</string>
     <string name="damage_case_defaut_name">no name</string>

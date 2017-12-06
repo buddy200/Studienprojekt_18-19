@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 
 /**
@@ -48,13 +56,13 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     private FragmentInteractionListener mListener;
 
-    private static Field field;
+    Field changedField;
 
     public static BottomSheetDialogFragment newInstance(Field field, boolean edit) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
-        field = field;
-        fragment.setArguments(field.getBundle());
+        args.putSerializable("mField", field);
+        fragment.setArguments(args);
 
         mEdit = edit;
         return fragment;
@@ -65,6 +73,8 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //prevent cancel by onTab outside of sheet if field is edited
+        if(mEdit) this.setCancelable(false);
     }
 
     @Override
@@ -94,7 +104,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     }
 
-    String[] s = new String[10];
     EditText nameEdit;
     EditText countyEdit;
     Spinner type;
@@ -109,54 +118,78 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         size.setText(String.valueOf(getArguments().getDouble(KEY_SIZE)) + "m" + "\u00B2");
 
 
-        if(!mEdit) noEditSetup(view, name, editFinish);
-        else editSetup(view, name, editFinish);
+        Field mField = (Field) getArguments().getSerializable("mField");
+
+        if(!mEdit) {noEditSetup(view, mField, name, editFinish);}
+        else {
+            editSetup(view, mField, name, editFinish);
+            changeData();
+        }
+
+
 
     }
 
-    private void editSetup(View view, TextView name, Button editFinish) {
+    private void editSetup(View view, Field mField, TextView name, Button editFinish) {
         LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
         RelativeLayout topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);
 
-        name.setText("Set up new Field");
-
         nameEdit = view.findViewById(R.id.field_detail_name_edit);
-        nameEdit.setText("Name..");
+        nameEdit.setText(mField.getName());
 
         countyEdit = view.findViewById(R.id.field_detail_region_edit);
-        countyEdit.setText("Address..");
+        countyEdit.setText(mField.getCounty());
 
         type = view.findViewById(R.id.field_detail_state_spinner);
-        type.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
-
         ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);
-        ownerOrEvaluatorEdit.setText("Owner or Evaluator Name");
+
+        if(mField instanceof AgrarianField){
+            name.setText("Edit AgrarianField");
+
+            List<AgrarianFieldType> statusCheck;
+            statusCheck = Arrays.asList(AgrarianFieldType.values());
+            type.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
+            type.setSelection(statusCheck.indexOf(mField.getType()));
+
+            ownerOrEvaluatorEdit.setText(((AgrarianField)mField).getOwner());
+
+        }else if(mField instanceof DamageField){
+            name.setText("Edit DamageField");
+
+            List<DamageFieldType> statusCheck;
+            statusCheck = Arrays.asList(DamageFieldType.values());
+            type.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
+            type.setSelection(statusCheck.indexOf(mField.getType()));
+
+            ownerOrEvaluatorEdit.setText(((DamageField)mField).getEvaluator());
+
+        }
 
         editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));
     }
 
-    private void noEditSetup(View view, TextView name, Button editFinish) {
+    private void noEditSetup(View view, Field mField, TextView name, Button editFinish) {
         TextView state = (TextView) view.findViewById(R.id.field_detail_state);
         TextView county = (TextView) view.findViewById(R.id.field_detail_region);
         TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         TextView date = (TextView) view.findViewById(R.id.field_detail_date);
 
-        name.setText(getArguments().getString(KEY_NAME));
-        county.setText(getArguments().getString(KEY_COUNTY));
+        name.setText(mField.getName());
+        county.setText(mField.getCounty());
         editFinish.setText(getContext().getResources().getString(R.string.button_edit_name));
 
-        state.setText(getArguments().getSerializable(KEY_TYPE).toString());
-        state.setTextColor(getArguments().getInt(KEY_COLOR));
+        state.setText(mField.getType().toString());
+        state.setTextColor(mField.getColor());
 
         //is field agrarian?
-        if (getArguments().getString(KEY_OWNER) != null) {
-            ownerOrEvaluator.setText(getArguments().getString(KEY_OWNER));
+        if (mField instanceof AgrarianField) {
+            ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());
             date.setText("");
         }
         //is field damage?
-        if (getArguments().getString(KEY_DATE) != null) {
-            date.setText(getArguments().getString(KEY_DATE));
-            ownerOrEvaluator.setText(getArguments().getString(KEY_EVALUATOR));
+        if (mField instanceof DamageField) {
+            date.setText(((DamageField)mField).getParsedDate());
+            ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
         }
     }
 
@@ -169,16 +202,16 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         if(mListener != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
-                    if(mEdit) mListener.onFragmentMessage(TAG, "edit", null);
-                    else mListener.onFragmentMessage(TAG, "noEdit", null);
-
+                    if(mEdit) mListener.onFragmentMessage(TAG, "finishEdit", changeData());
+                    else mListener.onFragmentMessage(TAG, "startEdit", getArguments().getSerializable("mField"));
+                    this.dismiss();
                     break;
             }
         }
     }
 
-    public Bundle getData(){
-        Bundle b = new Bundle();
+    public Field changeData(){
+        /*Bundle b = new Bundle();
         b.putString("name", nameEdit.getText().toString());
         b.putSerializable("type", (Serializable) type.getSelectedItem());
         if(countyEdit.getText() != null){
@@ -186,7 +219,25 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         }
         b.putString("ownerOrEvaluator", ownerOrEvaluatorEdit.getText().toString());
 
-        return b;
+        return b;*/
+
+        changedField = (Field) getArguments().getSerializable("mField");
+        changedField.setName(nameEdit.getText().toString());
+        changedField.setType((FieldType) type.getSelectedItem());
+
+        if(countyEdit.getText() != null) {
+            changedField.setCounty(countyEdit.getText().toString());
+        }else{
+            changedField.setAutomaticCounty();
+        }
+
+        if(changedField instanceof AgrarianField){
+            ((AgrarianField) changedField).setOwner(ownerOrEvaluatorEdit.getText().toString());
+        }else{
+            ((DamageField) changedField).setEvaluator(ownerOrEvaluatorEdit.getText().toString());
+        }
+
+        return changedField;
     }
 
 }

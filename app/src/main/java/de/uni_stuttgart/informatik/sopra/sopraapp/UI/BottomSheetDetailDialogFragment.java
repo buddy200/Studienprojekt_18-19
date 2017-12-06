@@ -189,9 +189,4 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         return b;
     }
 
-
-    public interface OnButtonInteraction {
-        void onEditFinishButtonInteraction();
-
-    }
 }

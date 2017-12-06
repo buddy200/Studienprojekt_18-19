@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
-public class AddFieldActivity extends AppCompatActivity implements BottomSheetDetailDialogFragment.OnButtonInteraction {
+public class AddFieldActivity extends AppCompatActivity implements FragmentInteractionListener<Object> {
     private static final String TAG = "AddFieldActivity";
 
     MapFragment mapFragment;
@@ -117,7 +118,69 @@ public class AddFieldActivity extends AppCompatActivity implements BottomSheetDe
 
     }
 
+    private void onDoneButtonClick() {
+        if (enoughPoints) {
+            myLocationListener.setFollow(false);
+
+            //add the new field
+            if (fieldToAddFinal == null) {
+                myLocationListener.setFollow(false);
+                AgrarianField fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+                bottomSheetDialog = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
+                bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
+
+                //done with editing - back to main
+            } else {
+                myLocationListener.setFollow(false);
+                Intent dataBack = new Intent();
+
+                Log.e("is Null?", String.valueOf(fieldToAddFinal.getBundle() == null));
+                //getIntent().putExtra("field", fieldToAdd.getBundle());
+                dataBack.putExtra("field", fieldToAddFinal);
+                setResult(RESULT_OK, dataBack);
+                this.finish();
+            }
+        }else {
+            Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void onFabClick(View view) {
+        Location location = myLocationListener.getLocation();
+        if(location != null){
+            addPoint(location);
+
+            Snackbar.make(view, "Point at " +
+                    location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }else {
+            Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
     @Override
+    public void onFragmentMessage(String Tag, @Nullable String action, @Nullable Object data) {
+        Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
+        switch (Tag){
+            case "MapFragment":
+                switch (action){
+                    case "complete":
+                        onMapFragmentComplete();
+                        break;
+                }
+                break;
+            case "BottomSheetDetail":
+                switch (action){
+                    case "edit":
+                        onEditFinishButtonInteraction();
+                        break;
+                }
+                break;
+
+        }
+    }
+
+
     public void onEditFinishButtonInteraction() {
         fieldToAddFinal = new AgrarianField(getApplicationContext(), listCornerPoints);
 
@@ -138,48 +201,6 @@ public class AddFieldActivity extends AppCompatActivity implements BottomSheetDe
 
     }
 
-    private void onDoneButtonClick() {
-        if (enoughPoints) {
-            myLocationListener.setFollow(false);
-
-            //add the new field
-            if (fieldToAddFinal == null) {
-                myLocationListener.setFollow(false);
-                AgrarianField fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
-                bottomSheetDialog = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
-                bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
-
-            //done with editing - back to main
-            } else {
-                myLocationListener.setFollow(false);
-                Intent dataBack = new Intent();
-
-                Log.e("is Null?", String.valueOf(fieldToAddFinal.getBundle() == null));
-                //getIntent().putExtra("field", fieldToAdd.getBundle());
-                dataBack.putExtra("field", fieldToAddFinal);
-                setResult(RESULT_OK, dataBack);
-                this.finish();
-            }
-        }else {
-            Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
-        }
-    }
-
-
-    private void onFabClick(View view) {
-        Location location = myLocationListener.getLocation();
-        if(location != null){
-            addPoint(location);
-
-            Snackbar.make(view, "Point at " +
-                    location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
-        }else {
-            Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-    }
-
-   /* @Override
     public void onMapFragmentComplete() {
         myLocationListener = new MYLocationListener();
         myLocationListener.setFollow(true);
@@ -193,6 +214,6 @@ public class AddFieldActivity extends AppCompatActivity implements BottomSheetDe
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
-    }*/
+    }
 
 }

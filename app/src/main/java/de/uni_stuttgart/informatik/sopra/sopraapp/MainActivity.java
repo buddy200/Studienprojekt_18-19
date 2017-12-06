@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
     @Override
     public void onFragmentMessage(String Tag, String action, Object data) {
-        Log.d("FragmentMessage", "TAG: " + Tag + " ACTION: " + action);
+        Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
         switch (Tag){
             case "MapFragment":
                 switch (action){
@@ -105,7 +105,14 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                         ItemListDialogFragment.newInstance(createList(testData), false).show(getSupportFragmentManager(), "FieldList");
                         break;
                     case "locButton":
-                        //TODO
+                        Location location = myLocationListener.getLocation();
+                        if (location != null) {
+                            mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+                            mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                        }
+                        else{
+                            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case "addButton":
                         Intent i = new Intent(this, AddFieldActivity.class);

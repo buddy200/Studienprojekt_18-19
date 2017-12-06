@@ -48,9 +48,11 @@ Anzeige der Liste mit den wichtigsten Informationen
 ![Detailansicht eines Feldes/Schadensfall](doc\images\Detailansicht.png)
 Detailansicht eines Feldes/Schadensfall
 
-![Ein Feld oder Schadensfall bearbeiten](doc\images\.png)
+![Ein Feld oder Schadensfall bearbeiten](doc\images\BeimBearbeite.png)
 Ein Feld oder Schadensfall bearbeiten
 
+![Nach der Bearbeitung](doc\images\NachBearbeiten.png)
+Nach der Bearbeitung
 
 ### Feature 4 Durchsuchen nach Versicherungsnehmer
 

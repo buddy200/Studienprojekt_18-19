@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -32,7 +34,7 @@ public class MapFragment extends Fragment {
 
     private boolean permissionGranted = true;
 
-    private OnCompleteListener mListener;
+    private FragmentInteractionListener mListener;
 
     //Please keep this method order!
     //Fragment lifecycle is in the same order
@@ -73,7 +75,7 @@ public class MapFragment extends Fragment {
 
             mapViewHandler = new MapViewHandler(getContext());
             cl.addView(mapViewHandler.getMapView());
-            mListener.onMapFragmentComplete();
+            mListener.onFragmentMessage(TAG,  "complete", null);
 
         } else {
             TextView v = new TextView(getContext());
@@ -87,9 +89,9 @@ public class MapFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            this.mListener = (OnCompleteListener) context;
+            this.mListener = (FragmentInteractionListener) context;
         } catch (final ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
+            throw new ClassCastException(context.toString() + " must implement FragmentInteractionListener");
         }
     }
 
@@ -157,7 +159,4 @@ public class MapFragment extends Fragment {
     }
 
 
-    public interface OnCompleteListener {
-        void onMapFragmentComplete();
-    }
 }

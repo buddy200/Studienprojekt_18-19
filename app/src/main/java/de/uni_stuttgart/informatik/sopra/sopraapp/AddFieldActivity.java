@@ -24,9 +24,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
-public class AddFieldActivity extends AppCompatActivity implements MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {
+public class AddFieldActivity extends AppCompatActivity implements BottomSheetDetailDialogFragment.OnButtonInteraction {
     private static final String TAG = "AddFieldActivity";
 
     MapFragment mapFragment;
@@ -117,7 +118,7 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
     }
 
     @Override
-    public void onFinishButtonInteraction() {
+    public void onEditFinishButtonInteraction() {
         fieldToAddFinal = new AgrarianField(getApplicationContext(), listCornerPoints);
 
         //add data received from bottomSheetDialog
@@ -178,7 +179,7 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         }
     }
 
-    @Override
+   /* @Override
     public void onMapFragmentComplete() {
         myLocationListener = new MYLocationListener();
         myLocationListener.setFollow(true);
@@ -192,6 +193,6 @@ public class AddFieldActivity extends AppCompatActivity implements MapFragment.O
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,7 +17,6 @@ import java.util.Iterator;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MenuFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -31,9 +31,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
  */
 
 
-public class MainActivity extends FragmentActivity
-        implements MenuFragment.OnMenuFragmentInteractionListener, ItemListDialogFragment.Listener,
-        MapFragment.OnCompleteListener, BottomSheetDetailDialogFragment.OnButtonInteraction {
+public class MainActivity extends FragmentActivity implements FragmentInteractionListener<Object> {
 
     private static final String TAG = "MainActivity";
     private MYLocationListener myLocationListener = new MYLocationListener();
@@ -54,36 +52,18 @@ public class MainActivity extends FragmentActivity
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-
+        testData = GlobalConstants.fieldTest(100,4,getmContext());
         writerReader = new ExportImportFromFile(this);
-        testData = writerReader.readFields();
-
-    }
-
-    //handle menu buttons interactions
-    @Override
-    public void onListButtonInteraction() {
-        ItemListDialogFragment.newInstance(createList(testData), false).show(getSupportFragmentManager(), "FieldList");
-    }
-
-    @Override
-    public void onLocationButtonInteraction() {
-     Location location = myLocationListener.getLocation();
-     if (location != null) {
-         mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
-         mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
-     }
-     else{
-         Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
-     }
+       // testData = writerReader.readFields();
 
     }
 
     @Override
-    public void onAddButtonInteraction(){
-        //start Add Field Activity
-        Intent i = new Intent(this, AddFieldActivity.class);
-        startActivityForResult(i, 2404);
+    public void onStop(){
+        super.onStop();
+     //   testData.clear();
+        writerReader.WriteFields(testData);
+
     }
 
     @Override
@@ -101,12 +81,73 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
-    public void onInfoButtonInteraction(){
-        //Todo
+    public void onFragmentMessage(String Tag, String action, Object data) {
+        Log.d("FragmentMessage", "TAG: " + Tag + " ACTION: " + action);
+        switch (Tag){
+            case "MapFragment":
+                switch (action){
+                    case "complete":
+                        mapFragment.getMapViewHandler().addFields(testData);
+                        //mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
+                        myLocationListener.initializeLocationManager(this, mapFragment);
+                        break;
+                }
+                break;
+            case "MapViewHandler":
+                switch (action){
+                    case "singleTabOnPoly":
+                        BottomSheetDetailDialogFragment.newInstance((Field) data, false).show(this.getSupportFragmentManager(), "DetailField");
+                }
+            case "MenuFragment":
+                switch (action){
+                    case "listButton":
+                        Log.d("TEST", String.valueOf(testData.size()));
+                        ItemListDialogFragment.newInstance(createList(testData), false).show(getSupportFragmentManager(), "FieldList");
+                        break;
+                    case "locButton":
+                        //TODO
+                        break;
+                    case "addButton":
+                        Intent i = new Intent(this, AddFieldActivity.class);
+                        startActivityForResult(i, 2404);
+                        break;
+                    case "infoButton":
+                        //TODO
+                        break;
+                    case "searchButton":
+                        onSearchButtonClicked((String) data);
+                        break;
+                }
+
+                break;
+            case "ItemListDialogFragment":
+                switch (action){
+                    case "itemClick":
+                        //offset to show centroid of polygon completely while bottom sheet is visible
+                        double offset = 0.001;
+
+                        mapFragment.animateToPosition(((Field) data).getCentroid().getLatitude()-offset,
+                                ((Field)data).getCentroid().getLongitude());
+                        BottomSheetDetailDialogFragment.newInstance(((Field) data), false).show(this.getSupportFragmentManager(), "DetailField");
+                        break;
+                }
+                break;
+            case "BottomSheetDetail":
+                switch (action){
+                    case "edit":
+                        //TODO
+                        break;
+
+                    case "noEdit":
+                        //TODO
+                        break;
+
+                }
+
+        }
+
     }
 
-
-    @Override
     public void onSearchButtonClicked(String input) {
         Log.e(TAG, "Search for: " + input);
 
@@ -146,34 +187,6 @@ public class MainActivity extends FragmentActivity
 
     }
 
-    //handle item clicked interaction from ItemListDialogFragment
-    @Override
-    public void onListItemClicked(Field field) {
-        //offset to show centroid of polygon completely while bottom sheet is visible
-        double offset = 0.001;
-
-        mapFragment.animateToPosition(field.getCentroid().getLatitude()-offset,
-                field.getCentroid().getLongitude());
-        BottomSheetDetailDialogFragment.newInstance(field, false).show(this.getSupportFragmentManager(), "SearchField");
-
-    }
-
-
-    //add received data to the mapFragment
-    @Override
-    public void onMapFragmentComplete() {
-        mapFragment.getMapViewHandler().addFields(testData);
-        //mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
-        myLocationListener.initializeLocationManager(this, mapFragment);
-
-
-    }
-
-    @Override
-    public void onFinishButtonInteraction() {
-
-    }
-
     private ArrayList<Field> createList(ArrayList<Field> list){
         ArrayList<Field> newList = new ArrayList<>();
         for(Field f : list){
@@ -188,14 +201,8 @@ public class MainActivity extends FragmentActivity
         return newList;
     }
 
-    @Override
-    public void onStop(){
-        super.onStop();
-     //   testData.clear();
-        writerReader.WriteFields(testData);
-    }
-
     public static Context getmContext(){
         return mContext;
     }
+
 }

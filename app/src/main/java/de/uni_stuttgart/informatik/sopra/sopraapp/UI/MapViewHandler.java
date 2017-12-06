@@ -1,7 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
-import android.util.Log;
+import android.view.MotionEvent;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
@@ -29,6 +30,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 public class MapViewHandler {
 
+    private static final String TAG = "MapViewHandler";
+
     private MapView map;
     private IMapController mapController;
     private Context context;
@@ -36,6 +39,9 @@ public class MapViewHandler {
 
     //map fields to Polygon Overlays
     private Map<Field, FieldPolygon> fieldPolyMap;
+
+    private FragmentInteractionListener mapInteractionListener;
+
 
     public MapViewHandler(Context context){
         this.context = context;
@@ -55,10 +61,31 @@ public class MapViewHandler {
         mapController.setZoom(GlobalConstants.DEFAULT_ZOOM);
         mapController.setCenter(GlobalConstants.START_POINT);
 
+        //setup listener for tabs on polygons
+        if (context instanceof FragmentInteractionListener) {
+            mapInteractionListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement MapInteractionListener");
+        }
+
     }
 
-    protected Polygon fieldToPolygon(Field field){
-        FieldPolygon polygon = new FieldPolygon(context, field);
+    protected Polygon fieldToPolygon(Field mfield){
+        final Field field = mfield;
+        FieldPolygon polygon = new FieldPolygon(context, field){
+            double offset = 0.00075;
+            @Override
+            public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView){
+                boolean tapped = contains(event);
+
+                //only show detail if map is zoomed in enough
+                if (tapped && mapView.getZoomLevel() > 13){
+                    mapInteractionListener.onFragmentMessage(TAG, "singleTabOnPoly", field);
+                }
+                return tapped;
+            }
+        };
 
         List<GeoPoint> polyPoints = new ArrayList<>();
         for (CornerPoint point : field.getCornerPoints()) {
@@ -70,7 +97,6 @@ public class MapViewHandler {
         polygon.setTitle(field.getName());
 
         fieldPolyMap.put(field, polygon);
-
         return polygon;
     }
 
@@ -134,4 +160,5 @@ public class MapViewHandler {
     public MapView getMapView(){
         return map;
     }
+
 }

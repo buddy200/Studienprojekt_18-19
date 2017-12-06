@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 
 
 /**
@@ -21,8 +22,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  * create an instance of this fragment.
  */
 public class MenuFragment extends Fragment implements View.OnClickListener{
+
     private static final String TAG = "MenuFragment";
-    private OnMenuFragmentInteractionListener mListener;
+
+    private FragmentInteractionListener mCallback;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -77,8 +80,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnMenuFragmentInteractionListener) {
-            mListener = (OnMenuFragmentInteractionListener) context;
+        if (context instanceof FragmentInteractionListener) {
+            mCallback = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnMenuFragmentInteractionListener");
@@ -88,33 +91,33 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mCallback = null;
     }
 
     @Override
     public void onClick(View v) {
 
-        if(mListener != null){
+        if(mCallback != null){
             switch (v.getId()) {
                 case R.id.button_list:
-                    mListener.onListButtonInteraction();
+                    mCallback.onFragmentMessage(TAG, "listButton", null);
                     break;
                 case R.id.button_location:
                     checkLocPermissions();
-                    mListener.onLocationButtonInteraction();
+                    mCallback.onFragmentMessage(TAG, "locButton", null);
                     break;
                 case R.id.button_add:
-                    mListener.onAddButtonInteraction();
+                    mCallback.onFragmentMessage(TAG, "addButton", null);
                     break;
                 case R.id.button_info:
-                    mListener.onInfoButtonInteraction();
+                    mCallback.onFragmentMessage(TAG, "infoButton", null);
                     break;
                 case R.id.edit_text:
                     //remove text if user clicks on search
                     input.setText("");
                     break;
                 case R.id.button_search:
-                    mListener.onSearchButtonClicked(input.getText().toString());
+                    mCallback.onFragmentMessage(TAG, "searchButton", input.getText().toString());
             }
         }
     }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -33,10 +34,13 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  */
 public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
+    private static final String TAG = "ItemListDialogFragment";
+
     // TODO: Customize parameter argument names
     private static final String ARG_ITEM_LIST_BUNDLE = "list_bundle";
     private static final String ARG_ITEM_LIST = "list";
-    private Listener mListener;
+
+    private FragmentInteractionListener mListener;
 
     //is this a list of searched items?
     static boolean mSearch;
@@ -77,11 +81,11 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        final Fragment parent = getParentFragment();
-        if (parent != null) {
-            mListener = (Listener) parent;
+
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
         } else {
-            mListener = (Listener) context;
+            throw new ClassCastException(context.toString() + " must implement FragmentInteractionListener");
         }
     }
 
@@ -89,11 +93,6 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     public void onDetach() {
         mListener = null;
         super.onDetach();
-    }
-
-
-    public interface Listener {
-        void onListItemClicked(Field field);
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
@@ -119,7 +118,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onListItemClicked(fieldList.get(getAdapterPosition()));
+                        mListener.onFragmentMessage(TAG, "itemClick", fieldList.get(getAdapterPosition()));
                         dismiss();
                     }
                 }

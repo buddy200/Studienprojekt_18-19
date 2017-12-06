@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
@@ -31,6 +32,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
+    private static final String TAG = "BottomSheetDetail";
+
     private static final String KEY_NAME = "name";
     private static final String KEY_TYPE = "type";
     private static final String KEY_COLOR = "color";
@@ -43,12 +46,14 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     private static boolean mEdit = false;
 
-    private OnButtonInteraction mListener;
+    private FragmentInteractionListener mListener;
 
+    private static Field field;
 
     public static BottomSheetDialogFragment newInstance(Field field, boolean edit) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
+        field = field;
         fragment.setArguments(field.getBundle());
 
         mEdit = edit;
@@ -65,11 +70,11 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnButtonInteraction) {
-            mListener = (OnButtonInteraction) context;
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnMenuFragmentInteractionListener");
+                    + " must implement FragmentInteractionListener");
         }
     }
 
@@ -164,7 +169,9 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         if(mListener != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
-                    mListener.onFinishButtonInteraction();
+                    if(mEdit) mListener.onFragmentMessage(TAG, "edit", null);
+                    else mListener.onFragmentMessage(TAG, "noEdit", null);
+
                     break;
             }
         }
@@ -184,6 +191,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
 
     public interface OnButtonInteraction {
-        public void onFinishButtonInteraction();
+        void onEditFinishButtonInteraction();
+
     }
 }

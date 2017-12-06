@@ -37,7 +37,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     List<CornerPoint> cornerPoints;
 
     Field fieldToAddFinal;
-    Bundle resultBundle;
 
     BottomSheetDetailDialogFragment bottomSheetDialog;
 

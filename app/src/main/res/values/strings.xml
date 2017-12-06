@@ -17,6 +17,7 @@
     <string name="damagefield_name_default">no name</string>
 
     <string name="title_activity_add_field">Add a field</string>
+    <string name="add_dmg_field">Add Damage</string>
 
     <string name="button_edit_name">Edit</string>
     <string name="button_finish_name">Finish</string>

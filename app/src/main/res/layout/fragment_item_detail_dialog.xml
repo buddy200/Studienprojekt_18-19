@@ -18,35 +18,22 @@
         android:layout_gravity="top"
         android:orientation="vertical">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/topPanel"
-            android:layout_width="match_parent"
+
+        <!-- this text will only auto scale in andorid 8, autoscale prior to this release
+        is not supported by android and there is no time to implement this by ourselfes -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:autoSizeTextType="uniform"
+            android:layout_gravity="left"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:id="@+id/field_detail_name"
+            android:text="-name-"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:layout_gravity="left"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:id="@+id/field_detail_name"
-                android:text="-name-"/>
-
-            <Button
-                android:id="@+id/edit_finish_button"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
-
-        </RelativeLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,6 +98,36 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/field_detail_policyholder"
             android:text="-name policyholer-"/>
+
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/topPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/add_damageField_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/edit_finish_button"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:text="@string/add_dmg_field"/>
+
+            <Button
+                android:id="@+id/edit_finish_button"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
 
 
     </LinearLayout>

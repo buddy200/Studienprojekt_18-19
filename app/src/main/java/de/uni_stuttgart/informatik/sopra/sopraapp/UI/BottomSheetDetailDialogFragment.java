@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -115,10 +112,11 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         editFinish.setOnClickListener(this);
 
         TextView size = (TextView) view.findViewById(R.id.field_detail_size);
-        size.setText(String.valueOf(getArguments().getDouble(KEY_SIZE)) + "m" + "\u00B2");
-
 
         Field mField = (Field) getArguments().getSerializable("mField");
+
+        size.setText(mField.getSize() + "m" + "\u00B2");
+
 
         if(!mEdit) {noEditSetup(view, mField, name, editFinish);}
         else {
@@ -173,6 +171,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         TextView county = (TextView) view.findViewById(R.id.field_detail_region);
         TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         TextView date = (TextView) view.findViewById(R.id.field_detail_date);
+        Button addDmg = (Button) view.findViewById(R.id.add_damageField_button);
 
         name.setText(mField.getName());
         county.setText(mField.getCounty());
@@ -188,6 +187,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         }
         //is field damage?
         if (mField instanceof DamageField) {
+            addDmg.setVisibility(View.INVISIBLE);
             date.setText(((DamageField)mField).getParsedDate());
             ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
         }
@@ -206,6 +206,8 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                     else mListener.onFragmentMessage(TAG, "startEdit", getArguments().getSerializable("mField"));
                     this.dismiss();
                     break;
+                case R.id.add_damageField_button:
+                    mListener.onFragmentMessage(TAG, "addDmgField", getArguments().getSerializable("mField"));
             }
         }
     }

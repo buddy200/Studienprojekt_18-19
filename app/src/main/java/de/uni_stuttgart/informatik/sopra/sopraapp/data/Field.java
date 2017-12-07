@@ -12,7 +12,6 @@ import org.osmdroid.util.GeoPoint;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -80,6 +79,7 @@ public abstract class Field implements Serializable{
             Log.e(TAG, "not enough corner points provided for field: " + name);
         } else {
             setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
+            finish();
         }
     }
 
@@ -103,8 +103,8 @@ public abstract class Field implements Serializable{
     }
 
     private void calculateSize() {
-        List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints.size());
-        Collections.copy(rmCopy, cornerPoints);
+        List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints);
+
         Queue<CornerPoint> outwardPoints = new LinkedList<>();
         List<Triangle> triangleList = new ArrayList<>();
 
@@ -122,24 +122,26 @@ public abstract class Field implements Serializable{
                 } else {
                     CornerPoint cp = outwardPoints.poll();
                     int index = rmCopy.indexOf(cp);
-                    int indexBefore = ((index == 0)? index-1 : rmCopy.size()-1);
+                    int indexBefore = ((index != 0)? index-1 : rmCopy.size()-1);
 
                     //two outward Points following
                     if (angleCheck(rmCopy.get(indexBefore).getAngle())) {
                         i--;
                         outwardPoints.add(cp);
                     } else {
-                        int indexTwoBefore = ((indexBefore == 0) ? indexBefore-1 : rmCopy.size()-1);
-                        int indexThreeBefore = ((indexTwoBefore == 0) ? indexTwoBefore-1 : rmCopy.size()-1);
-                        int indexAfter = ((index == rmCopy.size()-1) ? 0 : ++index);
+                        int indexTwoBefore = ((indexBefore != 0) ? indexBefore-1 : rmCopy.size()-1);
                         //make triangle
                         triangleList.add(new Triangle(rmCopy.get(indexTwoBefore), rmCopy.get(indexBefore), rmCopy.get(index)));
                         rmCopy.remove(indexBefore);
 
                         //recalculate angles
-                        CornerPoint cpBefore = rmCopy.get(indexTwoBefore);
+                        index = rmCopy.indexOf(cp);
+                        indexBefore = ((index != 0)? index-1 : rmCopy.size()-1);
+                        int indexAfter = ((index == rmCopy.size()-1) ? 0 : ++index);
+                        indexTwoBefore = ((indexBefore != 0) ? indexBefore-1 : rmCopy.size()-1);
+                        CornerPoint cpBefore = rmCopy.get(indexBefore);
                         cp.calculateAngle(cpBefore, rmCopy.get(indexAfter));
-                        cpBefore.calculateAngle(rmCopy.get(indexThreeBefore), cp);
+                        cpBefore.calculateAngle(rmCopy.get(indexTwoBefore), cp);
                         if(angleCheck(cp.getAngle())) {
                             outwardPoints.add(cp);
                         }
@@ -212,7 +214,10 @@ public abstract class Field implements Serializable{
     }
 
     public void setCornerPoints(List<CornerPoint> cornerPoints) {
-        this.cornerPoints = cornerPoints;
+        for(CornerPoint cp : cornerPoints){
+            addCornerPoint(cp);
+        }
+        //this.cornerPoints = cornerPoints;
     }
 
     public List<CornerPoint> getCornerPoints() {

@@ -137,6 +137,7 @@ public class GlobalConstants {
 
             f.setAutomaticCounty();
             f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
+            f.getSize();
             polis.add(f);
             //or a damage field
             if(j % 2 == 0){

@@ -15,6 +15,6 @@ public class MathUtility {
     }
 
     public static double scalarProduct(Vector a, Vector b) {
-        return a.getX()*b.getX() + a.getY()*b.getX();
+        return a.getX()*b.getX() + a.getY()*b.getY();
     }
 }

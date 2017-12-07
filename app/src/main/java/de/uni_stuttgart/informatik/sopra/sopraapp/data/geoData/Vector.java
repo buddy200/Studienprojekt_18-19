@@ -28,9 +28,13 @@ public class Vector {
 
     public Vector normalize() {
         double len = getLength();
-        double x1 = x/len;
-        double y1 = y/len;
-        return new Vector(x1,y1);
+        if (len != 0) {
+            double x1 = x / len;
+            double y1 = y / len;
+            return new Vector(x1, y1);
+        } else {
+            return new Vector(0,0);
+        }
     }
 
     public boolean equalDirection(Vector v) {
@@ -39,6 +43,14 @@ public class Vector {
 
     public boolean equals(Vector v) {
         return Math.abs(v.x - this.x ) < 0.001 && Math.abs(v.y - this.y) < 0.001;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Vector)
+            return this.equals((Vector)o);
+        else
+            return false;
     }
 
     /**
@@ -50,5 +62,10 @@ public class Vector {
         double x1 = x * Math.cos(angle) - y * Math.sin(angle);
         double y1 = x * Math.sin(angle) + y * Math.cos(angle);
         return new Vector(x1,y1);
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " X: " + x + " Y: " + y;
     }
 }

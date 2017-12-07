@@ -1,17 +1,15 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
-import java.io.Serializable;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 
 /**
  * Created by Christian on 13.11.2017.
  */
 
-public class UTMCoordinate implements Serializable{
-    private static final long serialVersionUID = 6L;
+public class UTMCoordinate {
 
-    private int zone;
+    private int zone = -100;
 
-    private boolean southernHemisphere;
 
     /**
      * the north Value
@@ -34,7 +32,7 @@ public class UTMCoordinate implements Serializable{
     }
 
     public void setZone(int zone) {
-        this.zone = zone;
+    		this.zone = zone;
     }
 
     public long getNorthing() {
@@ -54,6 +52,19 @@ public class UTMCoordinate implements Serializable{
     }
 
     public boolean isSouth() {
-        return southernHemisphere;
+        return northing < 0;
+    }
+    
+    @Override
+    public boolean equals(Object o ) {
+        if (o instanceof UTMCoordinate) {
+            return this.equals((UTMCoordinate)o);
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean equals(UTMCoordinate utm) {
+    	return this.zone == utm.zone && this.northing == utm.northing && this.easting == utm.easting;
     }
 }

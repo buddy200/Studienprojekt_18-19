@@ -1,7 +1,5 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
-import java.io.Serializable;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.MathUtility;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.UTMCoordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Vector;
@@ -12,12 +10,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84UTMConverter
  * Created by Christian on 13.11.2017.
  */
 
-public class CornerPoint implements Serializable{
+public class CornerPoint {
 
     private WGS84Coordinate wgs;
     private UTMCoordinate utm;
-
-    private static final long serialVersionUID = 10L;
 
     /**
      * the angle at this cornerpoint
@@ -26,9 +22,11 @@ public class CornerPoint implements Serializable{
      */
     private double angle;
 
-    public CornerPoint(double latitude, double longitude) {
-        wgs = new WGS84Coordinate(latitude, longitude);
-        utm = WGS84UTMConverter.convert(wgs);
+    public CornerPoint(double latitude, double logitude) {
+        if (latitude != Double.NaN && logitude != Double.NaN) {
+            wgs = new WGS84Coordinate(latitude, logitude);
+            utm = WGS84UTMConverter.convert(wgs);
+        }
     }
 
     public void calculateAngle(CornerPoint before, CornerPoint after) {
@@ -38,7 +36,10 @@ public class CornerPoint implements Serializable{
         if(utm.getZone() == utmBefore.getZone() && utm.getZone() == utmAfter.getZone()) {
             Vector v_before = new Vector((utmBefore.getEasting()- utm.getEasting()), (utmBefore.getNorthing()-utm.getNorthing()));
             Vector v_after = new Vector((utmAfter.getEasting()- utm.getEasting()), (utmAfter.getNorthing()-utm.getNorthing()));
-
+            if(v_before.getLength() == 0 || v_after.getLength() == 0) {
+            	angle = 0;
+            	return;
+            }
             //cos a = (v_a x v_b )/ (|v_a| * |v_b)|
             angle = Math.acos(MathUtility.scalarProduct(v_before,v_after)/(v_before.getLength() * v_after.getLength()));
 
@@ -69,7 +70,7 @@ public class CornerPoint implements Serializable{
     @Override
     public boolean equals(Object o ) {
         if (o instanceof CornerPoint) {
-            return wgs.equals( ((CornerPoint) o).getWGS());
+            return utm.equals( ((CornerPoint) o).getUtm());
         } else {
             return false;
         }

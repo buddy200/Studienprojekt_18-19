@@ -1,14 +1,10 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
-import java.io.Serializable;
-
 /**
  * Created by Christian on 13.11.2017.
  */
 
-public class WGS84Coordinate implements Serializable {
-
-    private static final long serialVersionUID = 7L;
+public class WGS84Coordinate {
 
     /**
      * Breitengrad (N, S)
@@ -16,7 +12,7 @@ public class WGS84Coordinate implements Serializable {
     private double latitude;
 
     /**
-     * LÃ¤ngengrad (E, W)
+     * Längengrad (E, W)
      */
     private double longitude;
 
@@ -47,5 +43,31 @@ public class WGS84Coordinate implements Serializable {
 
     public boolean equals(WGS84Coordinate wgs) {
         return Math.abs(wgs.getLongitude() - longitude) < 0.001 && Math.abs(wgs.getLatitude() - latitude) < 0.0001;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (o instanceof WGS84Coordinate)
+    		return this.equals((WGS84Coordinate)o);
+    	else
+    		return false;
+    }
+    
+    @Override
+    public String toString() {
+    	String s = "";
+    	s += Math.abs(latitude);
+    	if(latitude < 0) {
+    		s += "S ";
+    	} else {
+    		s += "N ";
+    	}
+    	s += Math.abs(longitude);
+    	if(longitude < 0) {
+    		s += "W";
+    	} else {
+    		s += "E";
+    	}
+    	return s;
     }
 }

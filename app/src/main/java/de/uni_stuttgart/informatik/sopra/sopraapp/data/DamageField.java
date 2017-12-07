@@ -35,6 +35,7 @@ public class DamageField extends Field implements Serializable{
         this.setColor(damageFieldToColor());
         this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
+
     }
 
     /**

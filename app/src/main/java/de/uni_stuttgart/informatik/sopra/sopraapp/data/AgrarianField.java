@@ -2,16 +2,11 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
@@ -48,6 +43,7 @@ public class AgrarianField extends Field implements Serializable{
         this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(state.toColor());
         this.setContainedDamageFields(new ArrayList<DamageField>());
+
     }
 
     /**

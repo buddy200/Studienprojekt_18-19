@@ -1,7 +1,4 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
-
-import android.support.annotation.NonNull;
-
 /**
  * Created by Christian on 13.11.2017.
  */
@@ -20,7 +17,7 @@ public class WGS84UTMConverter {
     // Polarabflachung f
     private final static double f = 1.0 / 298.2572236;
 
-    // Exzentrität e
+    // Exzentritaet e
     private final static double e = Math.sqrt(1 - b/a*b/a);
 
     // e prime
@@ -34,25 +31,28 @@ public class WGS84UTMConverter {
 
 
     public static UTMCoordinate convert(WGS84Coordinate wgs) {
-        UTMCoordinate utm = new UTMCoordinate();
-        final double utmZone = 1 + Math.floor((wgs.getLongitude() + 180) / 6);
-        utm.setZone((int)Math.round(utmZone)); // ugly i konw  ~CB
+
 
         // Ellipsoidische Länge lambda - wird nicht benötigt
         // Winkel zwischen der ellipsoidischen Meridianebene durch den Punkt auf der Kugel und der ellipsoidischen Nullmeridianebene
-		final double lambda = MathUtility.degToRad(wgs.getLongitude());
+        final double lambda = MathUtility.degToRad(wgs.getLongitude());
+
+        final int utmZone = 1 + (int) Math.floor((MathUtility.radToDeg(lambda) + 180) / 6);
 
         // Ellipsoidische Breite phi
         // Winkel zwischen der Ellispoidnormalen durch den Punkt auf der Kugel und dem ellipsoidischen Äquator (Ebene)
         final double phi = MathUtility.degToRad(wgs.getLatitude());
 
         //central merdian
-        final double centralMerdian = 3.0 + 6.0 * (utm.getZone() - 1.0) - 180.0;
+        final double centralMerdian = 3.0 + 6.0 * (utmZone - 1.0) - 180.0;
 
-        return getUtmCoordinateByMeridian(phi, lambda, centralMerdian);
+        UTMCoordinate utm = getUtmCoordinateByMeridian(phi, lambda, centralMerdian);
+        utm.setZone(utmZone);
+        return utm;
     }
     private static UTMCoordinate getUtmCoordinateByMeridian(double phi, double lambda, double centralMerdian) {
         UTMCoordinate utm = new UTMCoordinate();
+
         final double n = a / Math.sqrt(1.0 - Math.pow(e * Math.sin(phi), 2));
         final double t = Math.pow(Math.tan(phi), 2);
         final double c = e0Squared * Math.pow(Math.cos(phi), 2);
@@ -70,6 +70,7 @@ public class WGS84UTMConverter {
         double rechtswert = k0 * n * aA * (1.0 + aA * aA * ((1.0 - t + c)/6.0 + aA * aA * (5.0 - 18.0 * t + t*t + 72.0 * c - 58.0 * e0Squared) / 120.0));
         // Standard-Rechtswert (= Ostwert, easting), Versatz 500 km
         rechtswert += 500_000.0;
+
         // Hochwert vom Äquator aus (= Nordwert, northing)
         double hochwert = k0 * (m + n * Math.tan(phi)
                 * (aA * aA * (1.0/2.0 + aA * aA * ((5.0 - t + 9.0 * c + 4.0 * c * c) / 24.0 + aA * aA * (61.0 - 58.0 * t + t*t + 600.0 * c - 330.0 * e0Squared) / 720.0))));
@@ -120,8 +121,8 @@ public class WGS84UTMConverter {
 
         // Runden auf sechs Nachkommastellen
         WGS84Coordinate result = new WGS84Coordinate();
-        result.setLongitude( Math.round(1_000_000.0 * (MathUtility.radToDeg(zentralmeridianDerUTMZone + lambda)) / 1_000_000.0));
-        result.setLatitude( Math.round(1_000_000.0 * MathUtility.radToDeg(phi) / 1_000_000.0));
+        result.setLongitude( Math.round(1_000_000.0 * (zentralmeridianDerUTMZone + MathUtility.radToDeg(lambda))) / 1_000_000.0);
+        result.setLatitude( Math.round( MathUtility.radToDeg(1_000_000.0 *phi)) / 1_000_000.0);
         return result;
 
     }

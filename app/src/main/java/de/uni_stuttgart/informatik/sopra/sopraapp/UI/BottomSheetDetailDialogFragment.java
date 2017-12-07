@@ -89,6 +89,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         TextView size = (TextView) view.findViewById(R.id.field_detail_size);
 
         Field mField = (Field) getArguments().getSerializable("mField");
+        mField.finish();
 
         size.setText(mField.getSize() + "m" + "\u00B2");
 
@@ -103,6 +104,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     
     private void noEditSetup(View view, Field mField, TextView name, Button editFinish) {
         TextView state = (TextView) view.findViewById(R.id.field_detail_state);
+        TextView size = (TextView) view.findViewById(R.id.field_detail_size);
         TextView county = (TextView) view.findViewById(R.id.field_detail_region);
         TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         TextView date = (TextView) view.findViewById(R.id.field_detail_date);

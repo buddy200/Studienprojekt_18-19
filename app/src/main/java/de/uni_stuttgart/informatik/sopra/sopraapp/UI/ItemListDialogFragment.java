@@ -103,8 +103,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
             //the item is shown as a text view
             text = (TextView) itemView.findViewById(R.id.item_field_name);
-            state = (TextView) itemView.findViewById(R.id.state);
-            county = (TextView) itemView.findViewById(R.id.county);
+            state = (TextView) itemView.findViewById(R.id.item_field_state);
+            county = (TextView) itemView.findViewById(R.id.item_field_county);
             layout = (LinearLayout) itemView.findViewById(R.id.ll_item);
 
             // the on click listener for the item that is being clicked

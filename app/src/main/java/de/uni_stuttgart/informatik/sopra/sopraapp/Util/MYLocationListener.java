@@ -32,9 +32,7 @@ public class MYLocationListener implements LocationListener {
 
     public boolean follow = false;
 
-    /**
-     *
-     */
+
     public MYLocationListener() {
 
     }

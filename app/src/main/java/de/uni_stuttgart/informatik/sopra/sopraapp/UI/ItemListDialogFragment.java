@@ -36,16 +36,14 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     private FragmentInteractionListener mListener;
 
     //is this a list of searched items?
-    static boolean mSearch;
     private static ArrayList<Field> fieldList;
 
     // TODO: Customize parameters
-    public static ItemListDialogFragment newInstance(ArrayList<Field> fields, boolean search) {
+    public static ItemListDialogFragment newInstance(ArrayList<Field> fields) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();
 
         fieldList = new ArrayList<>(fields);
-        mSearch = search;
         ArrayList<Bundle> fieldBundles = new ArrayList<>();
         for (int i = 0; i < fields.size(); ++i) {
             fieldBundles.add(fields.get(i).getBundle());

@@ -21,6 +21,7 @@ import org.osmdroid.views.overlay.Polyline;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BSDetailDialogEditFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
@@ -144,7 +145,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 if(isDmgField) {
                     fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
                 }
-                bottomSheetDialog = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
+                bottomSheetDialog = (BottomSheetDetailDialogFragment) BSDetailDialogEditFragment.newInstance(fieldToAdd);
                 bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
 
              //done with editing - back to main
@@ -202,10 +203,19 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
                     case "startEdit":
                         mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
-                        BottomSheetDetailDialogFragment.newInstance(((Field) data), true).show(this.getSupportFragmentManager(), "EditField");
+                        BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
                         break;
                 }
-
+                break;
+            case "BSDetailDialogEditFragment":
+                switch (action) {
+                    case "finishEdit":
+                        fieldToAddFinal = (Field) data;
+                        mapFragment.getMapViewHandler().addField(fieldToAddFinal);
+                        mapFragment.getMapViewHandler().invalidateMap();
+                        break;
+                }
+                break;
         }
     }
 

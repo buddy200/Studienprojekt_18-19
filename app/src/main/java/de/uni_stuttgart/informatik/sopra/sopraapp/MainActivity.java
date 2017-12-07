@@ -15,6 +15,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BSDetailDialogEditFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
@@ -53,9 +54,9 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-      //  testData = GlobalConstants.fieldTest(100,4,getmContext());
+        testData = GlobalConstants.fieldTest(100,4,getmContext());
         writerReader = new ExportImportFromFile(this);
-        testData = writerReader.readFields();
+        //testData = writerReader.readFields();
 
     }
 
@@ -103,13 +104,13 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             case "MapViewHandler":
                 switch (action){
                     case "singleTabOnPoly":
-                        BottomSheetDetailDialogFragment.newInstance((Field) data, false).show(this.getSupportFragmentManager(), "DetailField");
+                        BottomSheetDetailDialogFragment.newInstance((Field) data).show(this.getSupportFragmentManager(), "DetailField");
                 }
             case "MenuFragment":
                 switch (action){
                     case "listButton":
                         Log.d("TEST", String.valueOf(testData.size()));
-                        ItemListDialogFragment.newInstance(createList(testData), false).show(getSupportFragmentManager(), "FieldList");
+                        ItemListDialogFragment.newInstance(createList(testData)).show(getSupportFragmentManager(), "FieldList");
                         break;
                     case "locButton":
                         Location location = myLocationListener.getLocation();
@@ -142,22 +143,16 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
                         mapFragment.animateToPosition(((Field) data).getCentroid().getLatitude()-offset,
                                 ((Field)data).getCentroid().getLongitude());
-                        BottomSheetDetailDialogFragment.newInstance(((Field) data), false).show(this.getSupportFragmentManager(), "DetailField");
+                        BottomSheetDetailDialogFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "DetailField");
                         break;
                 }
                 break;
             case "BottomSheetDetail":
                 switch (action){
-                    case "finishEdit":
-                        testData.add((Field) data);
-                        mapFragment.getMapViewHandler().addField((Field) data);
-                        mapFragment.getMapViewHandler().invalidateMap();
-                        break;
-
                     case "startEdit":
                         mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
                         testData.remove((Field) data);
-                        BottomSheetDetailDialogFragment.newInstance(((Field) data), true).show(this.getSupportFragmentManager(), "EditField");
+                        BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
                         //TODO
                         break;
                     case "addDmgField":
@@ -166,6 +161,15 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                         startActivityForResult(i, 2403);
                         break;
 
+                }
+                break;
+            case "BSDetailDialogEditFragment":
+                switch (action){
+                    case "finishEdit":
+                        testData.add((Field) data);
+                        mapFragment.getMapViewHandler().addField((Field) data);
+                        mapFragment.getMapViewHandler().invalidateMap();
+                        break;
                 }
 
         }
@@ -204,7 +208,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         }
 
         if(resultData.size() != 0){
-            ItemListDialogFragment.newInstance(resultData, true).show(getSupportFragmentManager(), "SearchList" );
+            ItemListDialogFragment.newInstance(resultData).show(getSupportFragmentManager(), "SearchList" );
         }else{
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
         }

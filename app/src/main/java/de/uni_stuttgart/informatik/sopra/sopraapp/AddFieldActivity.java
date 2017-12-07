@@ -46,6 +46,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
 
     boolean isDmgField = false;
+    Field parentField;
 
 
     @Override
@@ -92,11 +93,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     public void onStart() {
         super.onStart();
 
-        Field field = (Field) getIntent().getSerializableExtra("field");
-        if (field != null) {
+        parentField = (Field) getIntent().getSerializableExtra("parentField");
+        if (parentField != null) {
             //we add a dmg field!
             isDmgField = true;
-            mapFragment.getMapViewHandler().addField(field);
+            mapFragment.getMapViewHandler().addField(parentField);
             getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
         }
     }
@@ -153,8 +154,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 myLocationListener.setFollow(false);
                 Intent dataBack = new Intent();
 
-                Log.e("is Null?", String.valueOf(fieldToAddFinal.getBundle() == null));
-                //getIntent().putExtra("field", fieldToAdd.getBundle());
+                //if this is true we added a dmg file
+                Log.e(TAG, parentField.getName());
+                if(parentField != null){
+                    dataBack.putExtra("parentField", parentField);
+                }
                 dataBack.putExtra("field", fieldToAddFinal);
                 setResult(RESULT_OK, dataBack);
                 this.finish();

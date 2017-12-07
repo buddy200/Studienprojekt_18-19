@@ -82,8 +82,13 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         if (resultCode == RESULT_OK && requestCode == 2403) {
             if (data != null){
                 DamageField newDataDmg = (DamageField) data.getSerializableExtra("field");
-                testData.add(newDataDmg);
-                mapFragment.getMapViewHandler().addField(newDataDmg);
+                AgrarianField parent = (AgrarianField) data.getSerializableExtra("parentField");
+                Log.e(TAG, "is null? dmg " + String.valueOf(newDataDmg == null));
+                Log.e(TAG, "is null? field " + String.valueOf(parent == null));
+                parent.addContainedDamageField(newDataDmg);
+                testData.remove(parent);
+                testData.add(parent);
+                mapFragment.getMapViewHandler().invalidateMap();
             }
         }
     }
@@ -157,7 +162,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                         break;
                     case "addDmgField":
                         Intent i = new Intent(this, AddFieldActivity.class);
-                        i.putExtra("field", (Field) data);
+                        i.putExtra("parentField", (Field) data);
                         startActivityForResult(i, 2403);
                         break;
 

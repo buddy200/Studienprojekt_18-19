@@ -68,15 +68,21 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 2404) {
-            if(data != null) {
+        if (resultCode == RESULT_OK && requestCode == 2404) {
+            if (data != null) {
                 AgrarianField newData = (AgrarianField) data.getSerializableExtra("field");
                 testData.add(newData);
-                Log.e("pos", newData.getCentroid().toDoubleString());
                 mapFragment.getMapViewHandler().addField(newData);
 
+            }
+        }
+        if (resultCode == RESULT_OK && requestCode == 2403) {
+            if (data != null){
+                DamageField newDataDmg = (DamageField) data.getSerializableExtra("field");
+                testData.add(newDataDmg);
+                mapFragment.getMapViewHandler().addField(newDataDmg);
             }
         }
     }
@@ -153,6 +159,11 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                         testData.remove((Field) data);
                         BottomSheetDetailDialogFragment.newInstance(((Field) data), true).show(this.getSupportFragmentManager(), "EditField");
                         //TODO
+                        break;
+                    case "addDmgField":
+                        Intent i = new Intent(this, AddFieldActivity.class);
+                        i.putExtra("field", (Field) data);
+                        startActivityForResult(i, 2403);
                         break;
 
                 }

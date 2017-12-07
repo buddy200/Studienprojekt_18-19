@@ -116,7 +116,7 @@
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="@string/add_dmg_field"/>
+                android:text="@string/add_dmg_field_button"/>
 
             <Button
                 android:id="@+id/edit_finish_button"

@@ -26,6 +26,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
@@ -42,6 +43,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     ArrayList<GeoPoint> listGeoPoints = new ArrayList<>();
     ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
+
+    boolean isDmgField = false;
 
 
     @Override
@@ -82,6 +85,19 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_add);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Field field = (Field) getIntent().getSerializableExtra("field");
+        if (field != null) {
+            //we add a dmg field!
+            isDmgField = true;
+            mapFragment.getMapViewHandler().addField(field);
+            getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
+        }
     }
 
 
@@ -125,10 +141,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             if (fieldToAddFinal == null) {
                 myLocationListener.setFollow(false);
                 Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+                if(isDmgField) {
+                    fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
+                }
                 bottomSheetDialog = (BottomSheetDetailDialogFragment) BottomSheetDetailDialogFragment.newInstance(fieldToAdd, true);
                 bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
 
-                //done with editing - back to main
+             //done with editing - back to main
             } else {
                 myLocationListener.setFollow(false);
                 Intent dataBack = new Intent();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,6 +173,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         TextView date = (TextView) view.findViewById(R.id.field_detail_date);
         Button addDmg = (Button) view.findViewById(R.id.add_damageField_button);
+        addDmg.setOnClickListener(this);
 
         name.setText(mField.getName());
         county.setText(mField.getCounty());
@@ -207,7 +209,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                     this.dismiss();
                     break;
                 case R.id.add_damageField_button:
-                    mListener.onFragmentMessage(TAG, "addDmgField", getArguments().getSerializable("mField"));
+                    if(!mEdit) mListener.onFragmentMessage(TAG, "addDmgField", getArguments().getSerializable("mField"));
             }
         }
     }

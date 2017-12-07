@@ -62,7 +62,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
         Button add = view.findViewById(R.id.button_add);
         Button info = view.findViewById(R.id.button_info);
         Button search = view.findViewById(R.id.button_search);
-        input = view.findViewById(R.id.edit_text);
+        input = view.findViewById(R.id.search_edit_text);
 
         list.setOnClickListener(this);
         loc.setOnClickListener(this);
@@ -112,7 +112,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
                 case R.id.button_info:
                     mCallback.onFragmentMessage(TAG, "infoButton", null);
                     break;
-                case R.id.edit_text:
+                case R.id.search_edit_text:
                     //remove text if user clicks on search
                     input.setText("");
                     break;

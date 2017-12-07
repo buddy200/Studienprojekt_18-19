@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -105,7 +102,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             super(inflater.inflate(R.layout.fragment_item_list_dialog_item, parent, false));
 
             //the item is shown as a text view
-            text = (TextView) itemView.findViewById(R.id.text);
+            text = (TextView) itemView.findViewById(R.id.item_field_name);
             state = (TextView) itemView.findViewById(R.id.state);
             county = (TextView) itemView.findViewById(R.id.county);
             layout = (LinearLayout) itemView.findViewById(R.id.ll_item);

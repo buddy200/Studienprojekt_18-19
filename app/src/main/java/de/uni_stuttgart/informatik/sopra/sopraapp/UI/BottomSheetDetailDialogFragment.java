@@ -14,11 +14,9 @@ import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 
 /**
@@ -147,27 +145,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                     mListener.onFragmentMessage(TAG, "addDmgField", getArguments().getSerializable("mField"));
             }
         }
-    }
-
-    public Field changeData(){
-
-        changedField = (Field) getArguments().getSerializable("mField");
-        changedField.setName(nameEdit.getText().toString());
-        changedField.setType((FieldType) type.getSelectedItem());
-
-        if(countyEdit.getText() != null) {
-            changedField.setCounty(countyEdit.getText().toString());
-        }else{
-            changedField.setAutomaticCounty();
-        }
-
-        if(changedField instanceof AgrarianField){
-            ((AgrarianField) changedField).setOwner(ownerOrEvaluatorEdit.getText().toString());
-        }else{
-            ((DamageField) changedField).setEvaluator(ownerOrEvaluatorEdit.getText().toString());
-        }
-
-        return changedField;
     }
 
 }

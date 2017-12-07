@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -21,6 +23,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 /**
  * sopra_priv
@@ -58,6 +61,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
         return view;
     }
 
+    EditText nameEdit;
+    EditText countyEdit;
+    Spinner type;
+    EditText ownerOrEvaluatorEdit;
     @Override
     protected void setupView(View view, Field mField, TextView name, Button editFinish) {
         LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
@@ -94,6 +101,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
 
         }
 
+        nameEdit.setOnClickListener(this);
+        countyEdit.setOnClickListener(this);
+        ownerOrEvaluatorEdit.setOnClickListener(this);
+
         editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));
 
         changeData();
@@ -109,6 +120,27 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
                     break;
             }
         }
+    }
+
+    public Field changeData(){
+
+        changedField = (Field) getArguments().getSerializable("mField");
+        changedField.setName(nameEdit.getText().toString());
+        changedField.setType((FieldType) type.getSelectedItem());
+
+        if(countyEdit.getText() != null) {
+            changedField.setCounty(countyEdit.getText().toString());
+        }else{
+            changedField.setAutomaticCounty();
+        }
+
+        if(changedField instanceof AgrarianField){
+            ((AgrarianField) changedField).setOwner(ownerOrEvaluatorEdit.getText().toString());
+        }else{
+            ((DamageField) changedField).setEvaluator(ownerOrEvaluatorEdit.getText().toString());
+        }
+
+        return changedField;
     }
 
 }

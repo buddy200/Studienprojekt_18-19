@@ -5,34 +5,35 @@ import android.content.Context;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.UTMCoordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84UTMConverter;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class FieldTest {
 
-    Context context;
+    @Mock
+    private Context context;
 
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
         context = mock(Context.class);
-        doReturn("Sample Hello world string")
-                .when(context)
-                .getString(any(Integer.class));
+        when(context.getResources().getString(R.string.field_default_name))
+                .thenReturn("String");
 
     }
 

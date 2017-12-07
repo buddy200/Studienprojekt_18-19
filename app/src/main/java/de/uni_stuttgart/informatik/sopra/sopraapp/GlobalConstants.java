@@ -135,7 +135,7 @@ public class GlobalConstants {
             f.setName("AgrarianField Nr: " + String.valueOf(j));
             f.setType(AgrarianFieldType.values()[(int)(Math.random()* AgrarianFieldType.values().length)]);
 
-            f.setAutomaticCounty();
+            f.setCounty("Somewhere");
             f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
             f.getSize();
             polis.add(f);
@@ -150,6 +150,7 @@ public class GlobalConstants {
                 dmg.setName("DamageField Nr: " + String.valueOf(j));
                 dmg.setType(DamageFieldType.values()[(int)(Math.random()* DamageFieldType.values().length)]);
                 dmg.setDate(new Date(0));
+                dmg.setCounty("somewhere");
 
                 dmg.setEvaluator(superheroes[(int)(Math.random()*superheroes.length)]);
                 f.addContainedDamageField(dmg);

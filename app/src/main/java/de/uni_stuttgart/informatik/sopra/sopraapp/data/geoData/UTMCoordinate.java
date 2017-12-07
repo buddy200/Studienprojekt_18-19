@@ -1,12 +1,12 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import java.io.Serializable;
 
 /**
  * Created by Christian on 13.11.2017.
  */
 
-public class UTMCoordinate {
+public class UTMCoordinate implements Serializable{
 
     private int zone = -100;
 

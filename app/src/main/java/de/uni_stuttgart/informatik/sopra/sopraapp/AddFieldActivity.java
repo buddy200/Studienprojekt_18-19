@@ -24,12 +24,11 @@ import java.util.List;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BSDetailDialogEditFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 public class AddFieldActivity extends AppCompatActivity implements FragmentInteractionListener<Object> {
     private static final String TAG = "AddFieldActivity";
@@ -154,8 +153,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 myLocationListener.setFollow(false);
                 Intent dataBack = new Intent();
 
-                //if this is true we added a dmg file
-                Log.e(TAG, parentField.getName());
                 if(parentField != null){
                     dataBack.putExtra("parentField", parentField);
                 }

@@ -1,5 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
+import java.io.Serializable;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.MathUtility;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.UTMCoordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Vector;
@@ -10,7 +12,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84UTMConverter
  * Created by Christian on 13.11.2017.
  */
 
-public class CornerPoint {
+public class CornerPoint implements Serializable {
 
     private WGS84Coordinate wgs;
     private UTMCoordinate utm;

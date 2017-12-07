@@ -34,6 +34,7 @@ public class ExportImportFromFile {
      */
     public void WriteFields(ArrayList<Field> list) {
         try {
+            context.deleteFile(filename);
             fos = context.openFileOutput(filename, context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
             for (Field field : list) {
@@ -84,7 +85,6 @@ public class ExportImportFromFile {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            context.deleteFile(filename);
             if (fis != null) {
                 try {
                     fis.close();

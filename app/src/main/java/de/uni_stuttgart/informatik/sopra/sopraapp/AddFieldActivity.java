@@ -31,6 +31,14 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
+/**
+ * sopra_priv
+ * Created by Felix B on 10.11.17.
+ * Mail: felix.burk@gmail.com
+ *
+ * this activity lets users add fields depending
+ * on their position
+ */
 public class AddFieldActivity extends AppCompatActivity implements FragmentInteractionListener<Object> {
     private static final String TAG = "AddFieldActivity";
 
@@ -128,6 +136,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
 
     private boolean enoughPoints = false;
+
+    /**
+     * adds a new Point to the Field
+     * @param location
+     */
     public void addPoint(Location location) {
         Polyline p = new Polyline();
         GeoPoint g = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -142,6 +155,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     }
 
+    /**
+     * Handle clicks for the done button on top
+     * depending on the current state of our field to add
+     */
     private void onDoneButtonClick() {
         if (enoughPoints) {
             myLocationListener.setFollow(false);
@@ -173,6 +190,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         }
     }
 
+    /**
+     * handle Floating Action Button clicks
+     * depending on the current state of our field to add
+     * @param view
+     */
     private void onFabClick(View view) {
         if(fieldToAddFinal == null){
             Location location = myLocationListener.getLocation();
@@ -190,7 +212,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         }
     }
 
-
+    /**
+     * receive messages from fragments
+     * @param Tag of the fragment
+     * @param action the fragment performs
+     * @param data data the fragment sends
+     */
     @Override
     public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
         Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
@@ -228,6 +255,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         }
     }
 
+    /**
+     * as soon as the map fragment is completely initialized and displayed
+     * try to get the current user location
+     */
     public void onMapFragmentComplete() {
         myLocationListener = new MYLocationListener();
         myLocationListener.setFollow(true);

@@ -30,12 +30,20 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
  * sopra_priv
  * Created by Felix B on 07.12.17.
  * Mail: felix.burk@gmail.com
+ *
+ * A custom BottomSheetDetailDialogFragment to edit Fields
  */
 
 public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment {
 
     private static final String TAG = "BSDetailDialogEditFragment";
 
+    /**
+     * this factory method is used to generate an instance
+     * using the provided parameters
+     *
+     * @return A new instance of fragment BottomSheetDialogFragment.
+     */
     public static BottomSheetDialogFragment newInstance(Field field) {
         final BottomSheetDialogFragment fragment = new BSDetailDialogEditFragment();
         Bundle args = new Bundle();
@@ -46,7 +54,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
     }
 
 
-        @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -66,6 +74,14 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
     EditText countyEdit;
     Spinner type;
     EditText ownerOrEvaluatorEdit;
+
+    /**
+     * overwrite the setupView Method to setup the custom EditText fields and the Spinner
+     * @param view
+     * @param mField
+     * @param name
+     * @param editFinish
+     */
     @Override
     protected void setupView(View view, Field mField, TextView name, Button editFinish) {
         LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
@@ -119,6 +135,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
         changeData();
     }
 
+    /**
+     * handle clicks on buttons
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if(this.mListener != null) {
@@ -135,6 +155,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
         }
     }
 
+    /**
+     * add the changed data to a new Field
+     * @return
+     */
     public Field changeData(){
 
         changedField = (Field) getArguments().getSerializable("mField");

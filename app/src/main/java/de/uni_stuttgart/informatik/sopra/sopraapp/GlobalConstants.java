@@ -21,7 +21,9 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
  * sopra_priv
  * Created by Felix B on 14.11.17.
  * Mail: felix.burk@gmail.com
- * Class for testing - not used anymore
+ *
+ * Class for testing and constants
+ * most of it is not used anymore
  */
 
 public class GlobalConstants {

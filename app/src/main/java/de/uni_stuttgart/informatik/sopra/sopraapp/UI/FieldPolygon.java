@@ -25,6 +25,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * sopra_priv
  * Created by Felix B on 19.11.17.
  * Mail: felix.burk@gmail.com
+ *
+ * A custom Polygon overlay for the MapView
  */
 
 public class FieldPolygon extends Polygon {
@@ -46,13 +48,20 @@ public class FieldPolygon extends Polygon {
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
+
+    Point polyCentroidPoint;
+
     /**
      * overwriting the normal draw method, to display the name
      * in the center of gravity of the polygon
      * (this is the quickest way to get the title in a good position relative to the polygon
      * better would be a center point inside of it, but this might be a bit more difficult)
+     *
+     * TODO: instead of a color use tile overlays from .png files
+     * @param canvas
+     * @param mapView
+     * @param shadow
      */
-    Point polyCentroidPoint;
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow){
         //only draw names if zoomed in to certain level

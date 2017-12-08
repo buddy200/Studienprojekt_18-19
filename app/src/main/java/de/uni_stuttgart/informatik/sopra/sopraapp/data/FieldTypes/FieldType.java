@@ -4,11 +4,13 @@ import java.io.Serializable;
 
 /**
  * sopra_priv
- * Created by Felix B on 04.12.17.
- * Mail: felix.burk@gmail.com
+ * Created by Felix B on 18.11.17.
+ * Mail: felix.burk@gmail.
+ *
+ * a FieldType class interface for different types of different fields
  */
 
 public interface FieldType{
-    public String toString();
-    public int toColor();
+    String toString();
+    int toColor();
 }

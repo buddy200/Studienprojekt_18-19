@@ -8,10 +8,19 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * sopra_priv
  * Created by Felix B on 04.12.17.
  * Mail: felix.burk@gmail.com
+ *
+ * Helper for the search function
+ * this implements simple string matching
  */
 
 public class SearchUtil {
 
+    /**
+     * does a field match a search input?
+     * @param f Field
+     * @param input search input
+     * @return boolean
+     */
     public static boolean matchesFieldSearch(Field f, String input){
         Bundle b = f.getBundle();
 

@@ -10,7 +10,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 /**
  * sopra_priv
  * Created by Felix B on 18.11.17.
- * Mail: felix.burk@gmail.com
+ * Mail: felix.burk@gmail.
+ *
+ * a custom FieldType class containg the different types of AgrarianFields
+ * Strings and Colors are mapped with strings.xml and colors.xml
  */
 
 public enum AgrarianFieldType implements FieldType, Serializable{

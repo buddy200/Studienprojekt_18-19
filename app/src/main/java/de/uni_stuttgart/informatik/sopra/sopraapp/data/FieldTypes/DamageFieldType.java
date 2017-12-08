@@ -9,10 +9,12 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
 /**
  * sopra_priv
- * Created by Felix B on 04.12.17.
- * Mail: felix.burk@gmail.com
+ * Created by Felix B on 18.11.17.
+ * Mail: felix.burk@gmail.
+ *
+ * a custom FieldType class containg the different types of DamageFields
+ * Strings and Colors are mapped with strings.xml and colors.xml
  */
-
 public enum DamageFieldType implements FieldType, Serializable{
 
     Hail(MainActivity.getmContext().getResources().getString(R.string.hail), ContextCompat.getColor(MainActivity.getmContext(), R.color.hailTypeDmg)),

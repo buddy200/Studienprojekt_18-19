@@ -13,11 +13,15 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldT
 
 /**
  * Created by Christian on 13.11.2017.
+ *
+ * A custom Field Class representing Agrarian Fields
  */
 
 public class AgrarianField extends Field implements Serializable{
+
     private static final String TAG = "AgrarianField";
 
+    //keys for the bundles
     protected static final String KEY_OWNER = "owner";
     protected static final String KEY_DMGFIELDS = "dmg";
 
@@ -31,6 +35,7 @@ public class AgrarianField extends Field implements Serializable{
 
 
     /**
+     * constructor method
      * fields need at least 3 corner points to exist
      */
     public AgrarianField(Context context, List<CornerPoint> cPoints) {
@@ -55,7 +60,7 @@ public class AgrarianField extends Field implements Serializable{
 
     /**
      * bundle helper function
-     * TODO put damage fields in there somehow
+     * TODO put damage fields in there
      * @return
      */
     @Override
@@ -82,6 +87,7 @@ public class AgrarianField extends Field implements Serializable{
     public ArrayList<DamageField> getContainedDamageFields() {
         return containedDamageFields;
     }
+
     public void addContainedDamageField(DamageField dmgField){
         containedDamageFields.add(dmgField);
     }

@@ -26,6 +26,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * sopra_priv
  * Created by Felix B on 14.11.17.
  * Mail: felix.burk@gmail.com
+ *
+ * a handler class for the map view inside the MapViewFragment
  */
 
 public class MapViewHandler {
@@ -43,12 +45,19 @@ public class MapViewHandler {
     private FragmentInteractionListener mapInteractionListener;
 
 
+    /**
+     * constructor
+     * @param context
+     */
     public MapViewHandler(Context context){
         this.context = context;
         init();
 
     }
 
+    /**
+     * initialize the map
+     */
     public void init(){
         map = new MapView(context);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -71,6 +80,12 @@ public class MapViewHandler {
 
     }
 
+    /**
+     * convert Objects of Type Field to Polygons on the map
+     * and put both in a hashMap
+     * @param mfield
+     * @return
+     */
     protected Polygon fieldToPolygon(Field mfield){
         final Field field = mfield;
         FieldPolygon polygon = new FieldPolygon(context, field){
@@ -102,7 +117,7 @@ public class MapViewHandler {
 
     /**
      * add a list of fields
-     * first add damage fields to map, then the agrarian field
+     * first add AgrarianFields to map then DamageFields
      * because overlays are added first to last => first is "behind", last is "in front"
      * @param fields
      */
@@ -122,15 +137,19 @@ public class MapViewHandler {
         }
     }
 
+    /**
+     * add a single field
+     * @param field
+     */
     public void addField(Field field){
         map.getOverlayManager().add(fieldToPolygon(field));
     }
+
 
     /**
      * delete field polygon from the map
      * @param field
      */
-
     public void deleteFieldFromOverlay(Field field){
         map.getOverlayManager().remove(fieldPolyMap.get(field));
     }
@@ -156,6 +175,9 @@ public class MapViewHandler {
 
     }
 
+    /**
+     * redraw the map
+     */
     public void invalidateMap(){
         map.invalidate();
     }

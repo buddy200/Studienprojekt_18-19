@@ -31,8 +31,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
  * sopra_priv
  * Created by Felix B on 03.11.17.
  * Mail: felix.burk@gmail.com
+ *
+ * the main activity for our app, everything starts here
+ * the class is listening for every Interaction of its fragments
  */
-
 
 public class MainActivity extends FragmentActivity implements FragmentInteractionListener<Object> {
 
@@ -68,9 +70,16 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
     }
 
+    /**
+     * receives results from other activities
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //2404 is an added agrarian field
         if (resultCode == RESULT_OK && requestCode == 2404) {
             if (data != null) {
                 AgrarianField newData = (AgrarianField) data.getSerializableExtra("field");
@@ -79,6 +88,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
             }
         }
+        //2403 is an added damage field
         if (resultCode == RESULT_OK && requestCode == 2403) {
             if (data != null){
                 DamageField newDataDmg = (DamageField) data.getSerializableExtra("field");
@@ -91,6 +101,12 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         }
     }
 
+    /**
+     * receive messages from fragments
+     * @param Tag of the fragment
+     * @param action the fragment performs
+     * @param data data the fragment sends
+     */
     @Override
     public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
         Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
@@ -99,7 +115,6 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                 switch (action){
                     case "complete":
                         mapFragment.getMapViewHandler().addFields(dataFromFields);
-                        //mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
                         myLocationListener.initializeLocationManager(this, mapFragment);
                         break;
                 }
@@ -107,12 +122,11 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             case "MapViewHandler":
                 switch (action){
                     case "singleTabOnPoly":
-                        BottomSheetDetailDialogFragment.newInstance((Field) data).show(this.getSupportFragmentManager(), "DetailField");
+                        animateMapToFieldWithBS((Field) data);
                 }
             case "MenuFragment":
                 switch (action){
                     case "listButton":
-                        Log.d("TEST", String.valueOf(dataFromFields.size()));
                         ItemListDialogFragment.newInstance(createList(dataFromFields)).show(getSupportFragmentManager(), "FieldList");
                         break;
                     case "locButton":
@@ -141,12 +155,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             case "ItemListDialogFragment":
                 switch (action){
                     case "itemClick":
-                        //offset to show centroid of polygon completely while bottom sheet is visible
-                        double offset = 0.001;
-
-                        mapFragment.animateToPosition(((Field) data).getCentroid().getLatitude()-offset,
-                                ((Field)data).getCentroid().getLongitude());
-                        BottomSheetDetailDialogFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "DetailField");
+                        animateMapToFieldWithBS((Field) data);
                         break;
                 }
                 break;
@@ -196,6 +205,24 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
     }
 
+    /**
+     * animates the center of the map to the centroid of a field
+     * we need some offset because of the visible bottom sheet
+     * @param field
+     */
+    private void animateMapToFieldWithBS(Field field){
+        //offset get center on top of BottomSheet
+        double offset = 0.0007;
+
+        mapFragment.animateToPosition((field).getCentroid().getLatitude()-offset,
+                (field).getCentroid().getLongitude());
+        BottomSheetDetailDialogFragment.newInstance((field)).show(this.getSupportFragmentManager(), "DetailField");
+    }
+
+    /**
+     * search implementation
+     * @param input
+     */
     public void onSearchButtonClicked(String input) {
         Log.e(TAG, "Search for: " + input);
 
@@ -235,6 +262,12 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
     }
 
+    /**
+     * create a list of fields to display in the activity
+     * containing AgrarienFields and their Damage Fields
+     * @param list
+     * @return
+     */
     private ArrayList<Field> createList(ArrayList<Field> list){
         ArrayList<Field> newList = new ArrayList<>();
         for(Field f : list){
@@ -249,6 +282,11 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         return newList;
     }
 
+    /**
+     * get the context, this is necessary for FieldState enums
+     * without context it's not possible to get Enum names from strings.xml
+     * @return
+     */
     public static Context getmContext(){
         return mContext;
     }

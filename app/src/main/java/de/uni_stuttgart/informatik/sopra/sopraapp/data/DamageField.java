@@ -13,6 +13,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
 
 /**
  * Created by larsb on 22.11.2017.
+ *
+ * a custom field class, containing fields that represent damage
  */
 
 public class DamageField extends Field implements Serializable{
@@ -27,6 +29,11 @@ public class DamageField extends Field implements Serializable{
     private String evaluator;
 
 
+    /**
+     * constructor
+     * @param context
+     * @param cPoints
+     */
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
         this.setName(context.getResources().getString(R.string.field_default_name));
@@ -48,6 +55,10 @@ public class DamageField extends Field implements Serializable{
     }
 
 
+    /**
+     * bundle for passing data in the UI
+     * @return
+     */
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
@@ -68,6 +79,10 @@ public class DamageField extends Field implements Serializable{
 
     public String getParsedDate() { return parsedDate;}
 
+    /**
+     * return the date in a readable format
+     * @param date
+     */
     public void setDate(Date date) {
         //store date as a string - is probably easier
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");

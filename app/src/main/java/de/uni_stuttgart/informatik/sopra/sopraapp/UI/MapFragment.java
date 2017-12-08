@@ -36,11 +36,6 @@ public class MapFragment extends Fragment {
 
     private FragmentInteractionListener mListener;
 
-    //Please keep this method order!
-    //Fragment lifecycle is in the same order
-    //https://developer.android.com/images/fragment_lifecycle.png
-    //Every Method not overriding some fragment lifecycle stuff below
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +49,7 @@ public class MapFragment extends Fragment {
 
     }
 
-    //Weird Error without overwriting this method -FB
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,9 +97,12 @@ public class MapFragment extends Fragment {
 
     }
 
-    //Methods not for fragment lifecycle
-
-    //Handle requested Permissions
+    /**
+     * handle permission results
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -152,6 +150,10 @@ public class MapFragment extends Fragment {
         }
     }
 
+    /**
+     * add a location marker to the map
+     * @param point
+     */
     public void setCurrLocMarker(GeoPoint point) {
         mapViewHandler.setCurrLocMarker(point);
     }

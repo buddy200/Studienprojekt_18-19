@@ -24,14 +24,17 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Triangle;
 
 /**
  * Created by larsb on 22.11.2017.
+ *
+ * this class is used to generate custom fields containing differnt arguments
+ * and several utility methods
  */
 
 public abstract class Field implements Serializable{
-
-
     private static final String TAG = "Field";
+    private static final long serialVersionUID = 11L;
 
-    //keys
+
+    //keys for bundles
     static final String KEY_NAME = "name";
     static final String KEY_COLOR = "color";
     static final String KEY_COUNTY = "county";
@@ -40,15 +43,12 @@ public abstract class Field implements Serializable{
 
     protected transient Context context;
 
-
     //values for field and damage case
     private String name;
     private FieldType type;
     private String county;
     private int color;
     private double size;
-
-   private static final long serialVersionUID = 11L;
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
 
@@ -60,6 +60,11 @@ public abstract class Field implements Serializable{
 
     private boolean finished = false;
 
+    /**
+     * constructor only used in custom Field classes via super()
+     * @param context
+     * @param cPoints
+     */
     public Field(Context context, List<CornerPoint> cPoints) {
         this.context = context;
 
@@ -83,7 +88,10 @@ public abstract class Field implements Serializable{
         }
     }
 
-
+    /**
+     * add a corner point to the field
+     * @param cp
+     */
     public void addCornerPoint (CornerPoint cp) {
         if(!finished) {
             cornerPoints.add(cp);
@@ -93,6 +101,9 @@ public abstract class Field implements Serializable{
         }
     }
 
+    /**
+     * only used if there will be no corner points added anymore
+     */
     public void finish() {
         if (cornerPoints.size() > 2) {
             cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));
@@ -102,6 +113,9 @@ public abstract class Field implements Serializable{
         }
     }
 
+    /**
+     * calculate the size of the polygon
+     */
     private void calculateSize() {
         List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints);
 
@@ -158,10 +172,19 @@ public abstract class Field implements Serializable{
         }
     }
 
+    /**
+     * check if angles are okay
+     * @param angle
+     * @return
+     */
     private boolean angleCheck(double angle) {
         return rotation ? angle <= Math.PI : angle >= Math.PI;
     }
 
+    /**
+     * calculate angle sum, might be wrong
+     * @return
+     */
     private boolean angleSum() {
         double sum = 0;
         for(int i = 0; i < cornerPoints.size();i++) {
@@ -207,17 +230,17 @@ public abstract class Field implements Serializable{
 
 
     /**
+     * returns Double to be able to null check this
      * @return the size of the field or @code{null} if the field isn't finished
      */
     public Double getSize() {
-        return finished ? size : null; //sorry, ich kann keinen nullcheck für getSize() machen wenns vom typ double ist, mit Double gehts - F
+        return finished ? size : null;
     }
 
     public void setCornerPoints(List<CornerPoint> cornerPoints) {
         for(CornerPoint cp : cornerPoints){
             addCornerPoint(cp);
         }
-        //this.cornerPoints = cornerPoints;
     }
 
     public List<CornerPoint> getCornerPoints() {
@@ -247,6 +270,10 @@ public abstract class Field implements Serializable{
 
     public FieldType getType() {return type;}
 
+    /**
+     * sets the Field type and the color
+     * @param type
+     */
     public void setType(FieldType type) {
         this.type = type;
         this.setColor(type.toColor());
@@ -282,10 +309,7 @@ public abstract class Field implements Serializable{
         }
 
         @Override
-        protected void onPostExecute(String result) {
-
-        }
-
+        protected void onPostExecute(String result) {}
 
         @Override
         protected void onPreExecute() {}
@@ -301,7 +325,6 @@ public abstract class Field implements Serializable{
             List<Address> addresses = null;
             try {
                 addresses = geocoder.getFromLocation(lat, lon, 1);
-                Address result;
 
                 if (addresses != null && !addresses.isEmpty()) {
                     setCounty("Adress: "); //remove "loading..."
@@ -314,7 +337,7 @@ public abstract class Field implements Serializable{
                     setCounty("No Location Set");
                 }
             } catch (IOException ignored) {
-                //do something
+                ignored.printStackTrace();
             }
         }
     }

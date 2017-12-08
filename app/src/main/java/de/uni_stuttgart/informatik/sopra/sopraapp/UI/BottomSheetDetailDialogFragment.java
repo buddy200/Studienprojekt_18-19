@@ -23,6 +23,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * sopra_priv
  * Created by Felix B on 20.11.17.
  * Mail: felix.burk@gmail.com
+ *
+ * A custom BottomSheetDialogFragment to display information of Fields
  */
 
 public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -33,6 +35,12 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     Field changedField;
 
+    /**
+     * this factory method is used to generate an instance
+     * using the provided parameters
+     *
+     * @return A new instance of fragment BottomSheetDialogFragment.
+     */
     public static BottomSheetDialogFragment newInstance(Field field) {
         final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
         Bundle args = new Bundle();
@@ -47,7 +55,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //prevent cancel by onTab outside of sheet if field is edited
     }
 
     @Override
@@ -70,6 +77,10 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         return view;
     }
 
+    /**
+     * method to configure the behaviour of the bottom sheet
+     * @param view
+     */
     void configureBottomSheetBehaviour(View view) {
 
     }
@@ -96,10 +107,24 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     }
 
+    /**
+     * sets up the view, will be overwritten in custom BottomSheetDetailDialogFragments
+     * @param view
+     * @param mField
+     * @param name
+     * @param editFinish
+     */
     protected void setupView(View view, Field mField, TextView name, Button editFinish){
         noEditSetup(view, mField, name, editFinish);
     }
-    
+
+    /**
+     * the UI setup for this dialog, containg TextViews, nothing to edit
+     * @param view
+     * @param mField
+     * @param name
+     * @param editFinish
+     */
     private void noEditSetup(View view, Field mField, TextView name, Button editFinish) {
         TextView state = (TextView) view.findViewById(R.id.field_detail_state);
         TextView size = (TextView) view.findViewById(R.id.field_detail_size);
@@ -133,6 +158,10 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         this.getView().setId(id);
     }
 
+    /**
+     * handle button clicks
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if(mListener != null) {

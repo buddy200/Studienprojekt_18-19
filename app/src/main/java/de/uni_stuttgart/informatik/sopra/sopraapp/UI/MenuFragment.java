@@ -12,14 +12,12 @@ import android.widget.EditText;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnMenuFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MenuFragment#newInstance} factory method to
- * create an instance of this fragment.
+ /**
+ * sopra_priv
+ * Created by Felix B on 03.11.17.
+ * Mail: felix.burk@gmail.com
+ *
+ * A fragment to display the menu
  */
 public class MenuFragment extends Fragment implements View.OnClickListener{
 
@@ -32,16 +30,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * this factory method is used to generate an instance
+     * using the provided parameters
      *
      * @return A new instance of fragment MenuFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MenuFragment newInstance() {
         MenuFragment fragment = new MenuFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -94,6 +89,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
         mCallback = null;
     }
 
+     /**
+      * handle clicks on the buttons
+      * and tell the activity containing this fragment what button is pressed
+      * @param v
+      */
     @Override
     public void onClick(View v) {
 
@@ -103,7 +103,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
                     mCallback.onFragmentMessage(TAG, "listButton", null);
                     break;
                 case R.id.button_location:
-                    checkLocPermissions();
                     mCallback.onFragmentMessage(TAG, "locButton", null);
                     break;
                 case R.id.button_add:
@@ -122,27 +121,4 @@ public class MenuFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void checkLocPermissions() {
-        //TODO check Permissions
-    }
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnMenuFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListButtonInteraction();
-        void onLocationButtonInteraction();
-        void onAddButtonInteraction();
-        void onInfoButtonInteraction();
-        void onSearchButtonClicked(String text);
-    }
 }

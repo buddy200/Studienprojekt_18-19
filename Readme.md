@@ -15,7 +15,7 @@ Weiter ist es deutlich einfacher den Schaden wieder zu finden, weil man genau au
 
 Es können Felder auf der Karte mithilfe der Standortsensoren des Handys eingezeichnet werden und weitere Daten hinzugefügt werden (z.B. Namen des Versicheurngsnehemers, Lage des Feldes) und geändert werden.
 
-![Nachdem klicken auf den add Button](doc\images\BlankAddField.png)
+![Nachdem klicken auf den add Button](doc/images/BlankAddField.png)
 Nachdem klicken auf den add Button
 
 ![Nachdem einfügen einiger Punkte](doc\images\AddedPoints.png)

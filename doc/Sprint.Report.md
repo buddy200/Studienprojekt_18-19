@@ -12,5 +12,4 @@ In diesem Sprint wurden die bis zum [Meilenstein 4](meilenstein-url) erledigten 
 - Readme
 
 ## Tests/Testprotokolle/Nachweis der Testabdeckung
-
-*TODO: Testprotokolle und Abdeckung hier einfügen/verlinken*
+[ehfdhfh](/DebugCoverage/index.html)

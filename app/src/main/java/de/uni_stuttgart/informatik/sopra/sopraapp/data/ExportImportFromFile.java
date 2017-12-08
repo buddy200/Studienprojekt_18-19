@@ -1,15 +1,20 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
+import android.text.InputType;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
 /**
  * Created by larsb on 04.12.2017.
@@ -17,6 +22,8 @@ import java.util.ArrayList;
  */
 
 public class ExportImportFromFile {
+    private static final String TAG = "ExportImportFromFile";
+
     private String filename = "Appdata";
     private FileOutputStream fos;
     private ObjectOutputStream oos;
@@ -34,6 +41,7 @@ public class ExportImportFromFile {
      */
     public void WriteFields(ArrayList<Field> list) {
         try {
+            Log.e("DIR", context.getFilesDir().toString());
             context.deleteFile(filename);
             fos = context.openFileOutput(filename, context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
@@ -71,11 +79,23 @@ public class ExportImportFromFile {
         ArrayList<Field> list = new ArrayList<>();
         Field tempfield;
         try {
-            fis = context.openFileInput(filename);
-            ois = new ObjectInputStream(fis);
+            File file = context.getFileStreamPath(filename);
+
+            if(file == null || !file.exists()) {
+                Log.e(TAG ,"file not found");
+                InputStream fiis = context.getResources().openRawResource(
+                        context.getResources().getIdentifier("appdata",
+                                "raw", context.getPackageName()));
+                ois = new ObjectInputStream(fiis);
+
+            }else{
+                fis = context.openFileInput(filename);
+                ois = new ObjectInputStream(fis);
+            }
+
             while (true) {
                 tempfield = (Field) ois.readObject();
-                tempfield.setContext(context); //set the new App context
+                tempfield.setContext(context); //set the new App co/home/gin/Desktop/appdatantext
                 list.add(tempfield);
             }
         } catch (FileNotFoundException e) {

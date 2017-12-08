@@ -83,10 +83,8 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             if (data != null){
                 DamageField newDataDmg = (DamageField) data.getSerializableExtra("field");
                 AgrarianField parent = (AgrarianField) data.getSerializableExtra("parentField");
-                Log.e(TAG, "is null? dmg " + String.valueOf(newDataDmg == null));
-                Log.e(TAG, "is null? field " + String.valueOf(parent == null));
+
                 parent.addContainedDamageField(newDataDmg);
-                dataFromFields.remove(parent);
                 dataFromFields.add(parent);
                 mapFragment.getMapViewHandler().invalidateMap();
             }
@@ -156,11 +154,24 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                 switch (action){
                     case "startEdit":
                         mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
-                        dataFromFields.remove((Field) data);
+                        if(data instanceof AgrarianField){
+                            dataFromFields.remove((Field) data);
+                            for(DamageField d : ((AgrarianField) data).getContainedDamageFields()){
+                                dataFromFields.remove(d);
+                                mapFragment.getMapViewHandler().deleteFieldFromOverlay(d);
+                            }
+                        }else if(data instanceof DamageField){
+                            for(Field field : dataFromFields){
+                                if(((AgrarianField) field).getContainedDamageFields().contains((DamageField) data)){
+                                    ((AgrarianField) field).getContainedDamageFields().remove((DamageField) data);
+                                }
+                            }
+                        }
                         BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
                         //TODO
                         break;
                     case "addDmgField":
+                        dataFromFields.remove((Field) data);
                         Intent i = new Intent(this, AddFieldActivity.class);
                         i.putExtra("parentField", (Field) data);
                         startActivityForResult(i, 2403);

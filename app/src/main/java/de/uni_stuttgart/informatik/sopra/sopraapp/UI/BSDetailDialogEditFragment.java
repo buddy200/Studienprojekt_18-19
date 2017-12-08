@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -73,6 +74,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
         Button delete = (Button) view.findViewById(R.id.delete_button);
         delete.setText("Delete");
         delete.setOnClickListener(this);
+
+        if(this.getActivity() instanceof AddFieldActivity){
+            delete.setVisibility(View.INVISIBLE);
+        }
 
         nameEdit = view.findViewById(R.id.field_detail_name_edit);
         nameEdit.setText(mField.getName());

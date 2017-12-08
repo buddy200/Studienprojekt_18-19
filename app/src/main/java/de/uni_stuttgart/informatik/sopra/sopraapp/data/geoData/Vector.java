@@ -1,14 +1,18 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
 /**
- * Created by Christian on 15.11.2017.
+ * a two-dimensional vector
  */
-
 public class Vector {
 
     private double x;
     private double y;
 
+    /**
+     * initializes a two-dimensional vector
+     * @param x the first coordinate
+     * @param y the second coordinate
+     */
     public Vector(double x , double y) {
         this.x = x;
         this.y = y;
@@ -22,10 +26,19 @@ public class Vector {
         return y;
     }
 
+    /**
+     * returns the length of this vector
+     * @return the length of this vector
+     */
     public double getLength() {
         return Math.sqrt(x*x + y*y);
     }
 
+    /**
+     * normalizes this vector so that length = 1
+     * 
+     * @return the normalized vector 
+     */
     public Vector normalize() {
         double len = getLength();
         if (len != 0) {
@@ -37,6 +50,12 @@ public class Vector {
         }
     }
 
+    /**
+     * checks if a given vector has the same direction as this vector
+     * 
+     * @param v the vector to compare direction
+     * @return true if the vectors have the same direction, else false
+     */
     public boolean equalDirection(Vector v) {
         return v.normalize().equals(this.normalize());
     }
@@ -55,8 +74,9 @@ public class Vector {
 
     /**
      * rotate this vector counterclockwise
-     * @param angle
-     * @return
+     * 
+     * @param angle the angle this vector gets rotated
+     * @return the rotated vector
      */
     public Vector rotate (double angle) {
         double x1 = x * Math.cos(angle) - y * Math.sin(angle);

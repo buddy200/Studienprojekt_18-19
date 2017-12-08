@@ -3,20 +3,19 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 import java.io.Serializable;
 
 /**
- * Created by Christian on 13.11.2017.
+ * a coordinate in the WGS84 coordinate system (latitude and longitude)
  */
-
 public class WGS84Coordinate implements Serializable{
 
     /**
-     * Breitengrad (N, S)
+     * latitude (N, S)
      */
-    private double latitude;
+    private double latitude; //Breitengrad
 
     /**
-     * L?ngengrad (E, W)
+     * longitude (E, W)
      */
-    private double longitude;
+    private double longitude; //Laengengrad
 
     public  WGS84Coordinate() {
         this(0,0);

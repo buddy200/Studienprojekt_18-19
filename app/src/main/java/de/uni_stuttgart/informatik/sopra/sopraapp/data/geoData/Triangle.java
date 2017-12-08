@@ -3,21 +3,32 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 
 /**
- * Created by Christian on 15.11.2017.
+ * represents a simple triangle
  */
-
 public class Triangle {
 
     private CornerPoint a;
     private CornerPoint b;
     private CornerPoint c;
 
+    /**
+     * initializes a triangle of three CornerPoints
+     * 
+     * @param a the first CornerPoint
+     * @param b the second CornerPoint
+     * @param c the  third CornerPoint
+     */
     public Triangle(CornerPoint a, CornerPoint b, CornerPoint c) {
         this.a = a;
         this.b = b;
         this.c = c;
     }
-
+    
+    /**
+     * calculates the size of this triangle
+     * 
+     * @return the size of this trianlge
+     */
     public double getSize() {
         UTMCoordinate utmA = a.getUtm();
         UTMCoordinate utmB = b.getUtm();

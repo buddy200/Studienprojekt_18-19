@@ -25,14 +25,14 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
  */
 
 public class GlobalConstants {
-/*
+
     // Uni Stuttgart - compsci building
     public static final GeoPoint START_POINT = new GeoPoint( 48.745424, 9.106488 );
 
 
     //default zoom value for the mapFragment
     public static final int DEFAULT_ZOOM = 20;
-*/
+
     /**
      * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh
      * creates a rectangle containing n polygons with m points, close to START_POINT  - FB

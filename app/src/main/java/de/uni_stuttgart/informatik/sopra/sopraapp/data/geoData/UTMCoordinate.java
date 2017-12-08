@@ -3,25 +3,25 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 import java.io.Serializable;
 
 /**
- * Created by Christian on 13.11.2017.
+ * a coordinate in the UTM (Universal Transverse Mercator) coordinate system 
  */
-
 public class UTMCoordinate implements Serializable{
 
+	/**
+	 * the zone of this UTMCoordinate
+	 * if not set, the default value is -100
+	 */
     private int zone = -100;
 
+    /**
+     * the northing of this UTMCoordinate
+     */
+    private long northing; //Hochwert
 
     /**
-     * the north Value
-     *
+     * the easting of this UTMCoordinate
      */
-    private long northing;
-
-    /**
-     * the east value (based of the middle merdian)
-     *
-     */
-    private long easting;
+    private long easting; //Rechtswert
 
     public UTMCoordinate() {
 
@@ -51,6 +51,11 @@ public class UTMCoordinate implements Serializable{
         this.easting = easting;
     }
 
+    /**
+     * returns if this Coordinate is on the southern hemisphere
+     * 
+     * @return true if the coordinate is on the southern hemisphere, else false
+     */
     public boolean isSouth() {
         return northing < 0;
     }

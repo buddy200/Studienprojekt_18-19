@@ -21,17 +21,18 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
  * sopra_priv
  * Created by Felix B on 14.11.17.
  * Mail: felix.burk@gmail.com
+ * Class for testing - not used anymore
  */
 
 public class GlobalConstants {
-
+/*
     // Uni Stuttgart - compsci building
     public static final GeoPoint START_POINT = new GeoPoint( 48.745424, 9.106488 );
 
 
     //default zoom value for the mapFragment
     public static final int DEFAULT_ZOOM = 20;
-
+*/
     /**
      * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh
      * creates a rectangle containing n polygons with m points, close to START_POINT  - FB
@@ -39,6 +40,7 @@ public class GlobalConstants {
      * @param numberPoints m
      * @return ArrayList of polygons
      */
+    /*
     public static List<Polygon> polygonTest(int numberPolygons, int numberPoints){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
@@ -88,7 +90,7 @@ public class GlobalConstants {
      * @param numberCornerPoints
      * @return
      */
-    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints, Context context){
+/*    public static ArrayList<Field> fieldTest(int numberFields, int numberCornerPoints, Context context){
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
@@ -163,5 +165,5 @@ public class GlobalConstants {
         return polis;
     }
 
-
+*/
 }

@@ -37,10 +37,17 @@ public class AgrarianField extends Field implements Serializable{
         super(context, cPoints);
 
         //set default values
-        owner = context.getResources().getString(R.string.owner_default_name);
-        this.setName(context.getResources().getString(R.string.field_default_name));
+        if(context != null){
+            owner = context.getResources().getString(R.string.owner_default_name);
+            this.setName(context.getResources().getString(R.string.field_default_name));
+            this.setCounty(context.getResources().getString(R.string.county_default_name));
+        }else{
+            owner = "no owner";
+            this.setName("no name");
+            this.setCounty("no county");
+        }
+
         this.setType(AgrarianFieldType.Corn);
-        this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(state.toColor());
         this.setContainedDamageFields(new ArrayList<DamageField>());
 

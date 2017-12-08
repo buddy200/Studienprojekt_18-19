@@ -1,40 +1,34 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Context;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.InstrumentationTestCase;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.ArrayList;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.UTMCoordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84UTMConverter;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+@RunWith(AndroidJUnit4.class)
+public class FieldTest extends InstrumentationTestCase {
 
+    @Rule
+    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<MainActivity>(
+            MainActivity.class);
 
-@RunWith(MockitoJUnitRunner.class)
-public class FieldTest {
-
-    @Mock
-    private Context context;
-
-    @Before
-    public void setup(){
-        MockitoAnnotations.initMocks(this);
-        context = mock(Context.class);
-        when(context.getResources().getString(R.string.field_default_name))
-                .thenReturn("String");
-
+    Context context;
+    @Test
+    public void useAppContext() throws Exception {
+        MainActivity activity = rule.getActivity();
+        context = activity;
     }
 
     @Test
@@ -51,7 +45,6 @@ public class FieldTest {
         cpS.add(c);
         cpS.add(d);
         Field field = new AgrarianField(context, cpS);
-        field.finish();
 
         assertEquals(7140, field.getSize(), 10);
         assertTrue(field.getCornerPoints().size() == 4);
@@ -63,7 +56,6 @@ public class FieldTest {
         cpSS.add(a);
         Field field2 = new AgrarianField(context, cpS);
 
-        field2.finish();
         assertEquals(7140, field2.getSize(), 10);
     }
 
@@ -134,7 +126,7 @@ public class FieldTest {
         cp1 = new CornerPoint(wgs.getLatitude(), wgs.getLongitude());
         cpSSSS.add(cp1);
 
-        Field field = new AgrarianField(context, null);
+        Field field = new AgrarianField(context, cpSSSS);
         field.finish();
         assertEquals(5, field.getSize(),0.0001);
     }

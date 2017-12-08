@@ -35,10 +35,10 @@ public class SearchTest {
 
     @Test
     public void testSuccessfulSearches(){
-        testSearch("Agrarian");
+        testSearch("Feld");
         //is a list displayed?
         onView(withId(R.layout.fragment_item_list_dialog));
-        withId(R.id.item_field_name).toString().contains("Agrarian");
+        withId(R.id.item_field_name).toString().contains("Feld");
         pressBack();
 
         testSearch("Mais");
@@ -51,7 +51,7 @@ public class SearchTest {
         //is a list displayed?
         onView(withId(R.layout.fragment_item_list_dialog));
         withId(R.id.item_field_county).toString().contains("Stuttgart");
-        pressBack();
+        //pressBack();
     }
 
     @Test
@@ -69,9 +69,8 @@ public class SearchTest {
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
-    private void testSearch(String searchQuery){
+    static void testSearch(String searchQuery){
         Log.d(TAG, "search for: " + searchQuery);
-
         onView(withId(R.id.search_edit_text))
                 .perform(typeText(searchQuery), closeSoftKeyboard());
 

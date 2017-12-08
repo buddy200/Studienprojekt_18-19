@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
@@ -59,18 +60,17 @@ public abstract class Field implements Serializable{
 
     private boolean finished = false;
 
-
-
-    public Field() {
-
-    }
-
     public Field(Context context, List<CornerPoint> cPoints) {
         this.context = context;
 
         //set default attributes
-        this.name = context.getResources().getString(R.string.field_default_name);
-        this.county = context.getResources().getString(R.string.county_default_name);
+        if(context != null){
+            this.name = context.getResources().getString(R.string.field_default_name);
+            this.county = context.getResources().getString(R.string.county_default_name);
+        }else {
+            this.name = "no name";
+            this.county = "no county";
+        }
         this.size = 0.0;
         this.color = R.color.fieldDefaultColor;
 

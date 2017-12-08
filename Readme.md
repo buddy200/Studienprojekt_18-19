@@ -27,20 +27,34 @@ Nachdem kompletten umrunden des Feldes. Dateneintragung
 ![Fertiges Feld auf der Karte](doc\images\FieldAdded.png)
 Fertiges Feld auf der Karte
 
+![Ein Feld oder Schadensfall bearbeiten](doc\images\BeimBearbeite.png)
+Ein Feld oder Schadensfall bearbeiten
+
+![Nach der Bearbeitung](doc\images\NachBearbeiten.png)
+Nach der Bearbeitung
+
 ### Feature 2 Erstellen und Verwalten von Schadensfällen
 
-Es können zu einem Feld Schadensfälle hinzugefügt oder entfernt werden. Das Hinzufügen läuft nahezu identisch ab wie bei Feature 1. Allerdings können hier noch Daten wie zum Beispiel das Enstehungs Datum des Schadens eigetragen werden.
+Es können zu einem Feld Schadensfälle hinzugefügt oder entfernt werden. Das Hinzufügen und editieren läuft nahezu identisch ab wie bei Feature 1. Allerdings können hier noch Daten wie zum Beispiel das Enstehungs Datum des Schadens eigetragen werden.
 
-![Hinzufügen eines Schadens in einem Feld](doc\images\.png)
+
+
+![Hinzufügen eines Schadens in einem Feld](doc\images\fieldgamageadd.png)
 Hinzufügen eines Schadens in einem Feld
 
-![Nachdem einfügen des Schadens](doc\images\.png)
+![Schadensfall vor der Fertigstellung](doc\images\DamageTrack.png)
+Schadensfall vor der Fertigstellung
+
+![Dateneingabe zum Schadensfall](doc\images\damageDate.png)
+Dateneingabe zum Schadensfall
+
+![Nachdem einfügen des Schadens](doc\images\damageEnd.png)
 Nachdem einfügen des Schadens
 
 
 ### Feature 3 Anzeigen aller Schadensfälle und Felder in einer Liste
 
-Es wird ein Liste alle Schadensfälle und Felder sobald man auf den Button "list" drückt angezeigt. In dieser werden ein paar Informationen zu den Feldern und Schadensfällen angezeigt. Durch klicken auf einen Eintrag, werden alle Informationen die Verfügbar sind angezeigt und es wird zum jeweiligen Feld oder Schadensfall gezoomt. Es ist dann auch möglich den Eintrag zu bearbeiten, löschen und einen Schadensfall hinzuzufügen.
+Es wird ein Liste alle Schadensfälle und Felder sobald man auf den Button "list" drückt angezeigt. In dieser werden ein paar Informationen zu den Feldern und Schadensfällen angezeigt. Durch klicken auf einen Eintrag, werden alle Informationen die Verfügbar sind angezeigt und es wird zum jeweiligen Feld oder Schadensfall gezoomt. Es ist dann auch möglich den Eintrag zu bearbeiten, löschen und einen Schadensfall hinzuzufügen (Siehe Feature 1 und 2).
 
 ![Anzeige der Liste mit den wichtigsten Informationen](doc\images\list.png)
 Anzeige der Liste mit den wichtigsten Informationen
@@ -48,11 +62,7 @@ Anzeige der Liste mit den wichtigsten Informationen
 ![Detailansicht eines Feldes/Schadensfall](doc\images\Detailansicht.png)
 Detailansicht eines Feldes/Schadensfall
 
-![Ein Feld oder Schadensfall bearbeiten](doc\images\BeimBearbeite.png)
-Ein Feld oder Schadensfall bearbeiten
 
-![Nach der Bearbeitung](doc\images\NachBearbeiten.png)
-Nach der Bearbeitung
 
 ### Feature 4 Durchsuchen nach Versicherungsnehmer
 

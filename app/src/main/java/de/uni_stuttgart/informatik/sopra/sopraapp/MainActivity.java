@@ -56,16 +56,14 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100,4, getmContext());
         writerReader = new ExportImportFromFile(this);
-        //testData = writerReader.readFields();
+        testData = writerReader.readFields();
 
     }
 
     @Override
     public void onStop(){
         super.onStop();
-     //   testData.clear();
         writerReader.WriteFields(testData);
 
     }

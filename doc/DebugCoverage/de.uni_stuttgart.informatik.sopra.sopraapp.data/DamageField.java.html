@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DamageField.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.data</a> &gt; <span class="el_source">DamageField.java</span></div><h1>DamageField.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+
+/**
+ * Created by larsb on 22.11.2017.
+ */
+
+public class DamageField extends Field implements Serializable{
+    private static final String TAG = &quot;DamageField&quot;;
+
+    private static final String KEY_DATE = &quot;date&quot;;
+    private static final String KEY_EVALUATOR = &quot;evaluator&quot;;
+
+    private static final long serialVersionUID = 8L;
+
+    private String parsedDate;
+    private String evaluator;
+
+
+    public DamageField(Context context, List&lt;CornerPoint&gt; cPoints) {
+<span class="fc" id="L31">        super(context, cPoints);</span>
+<span class="fc" id="L32">        this.setName(context.getResources().getString(R.string.field_default_name));</span>
+<span class="fc" id="L33">        this.setType(DamageFieldType.Aliens);</span>
+<span class="fc" id="L34">        this.setCounty(context.getResources().getString(R.string.county_default_name));</span>
+<span class="fc" id="L35">        this.setColor(damageFieldToColor());</span>
+<span class="fc" id="L36">        this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));</span>
+<span class="fc" id="L37">        this.setDate(new Date(0));</span>
+
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * map type of damage to color
+     * TODO
+     * @return
+     */
+    private int damageFieldToColor() {
+<span class="fc" id="L47">        return R.color.fieldDefaultColor;</span>
+    }
+
+
+    @Override
+    public Bundle getBundle() {
+<span class="fc" id="L53">        Bundle bundle = new Bundle();</span>
+<span class="fc" id="L54">        bundle.putString(KEY_NAME, this.getName());</span>
+<span class="fc" id="L55">        bundle.putInt(KEY_COLOR, this.getColor());</span>
+<span class="fc" id="L56">        bundle.putString(KEY_COUNTY, this.getCounty());</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if(this.getSize() != null){</span>
+<span class="fc" id="L58">            bundle.putDouble(KEY_SIZE, this.getSize());</span>
+        }
+<span class="fc" id="L60">        bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());</span>
+
+        //damageField specific attributes
+<span class="fc" id="L63">        bundle.putString(KEY_EVALUATOR, this.evaluator);</span>
+<span class="fc" id="L64">        bundle.putString(KEY_DATE, parsedDate);</span>
+
+<span class="fc" id="L66">        return bundle;</span>
+    }
+
+<span class="fc" id="L69">    public String getParsedDate() { return parsedDate;}</span>
+
+    public void setDate(Date date) {
+        //store date as a string - is probably easier
+<span class="fc" id="L73">        SimpleDateFormat format1 = new SimpleDateFormat(&quot;dd-MM-yyyy&quot;);</span>
+<span class="fc" id="L74">        SimpleDateFormat format2 = new SimpleDateFormat(&quot;hh:mm&quot;);</span>
+<span class="fc" id="L75">        String parsedDate =</span>
+<span class="fc" id="L76">                        context.getResources().getString(R.string.date_label)</span>
+<span class="fc" id="L77">                        + &quot; &quot; + format1.format(date) + &quot; &quot; +</span>
+<span class="fc" id="L78">                        context.getResources().getString(R.string.time_label)</span>
+<span class="fc" id="L79">                        + &quot; &quot; + format2.format(date);</span>
+
+<span class="fc" id="L81">        this.parsedDate = parsedDate;</span>
+<span class="fc" id="L82">    }</span>
+
+<span class="fc" id="L84">    public String getEvaluator() {return evaluator;}</span>
+
+<span class="fc" id="L86">    public void setEvaluator(String evaluator) {this.evaluator = evaluator;}</span>
+
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

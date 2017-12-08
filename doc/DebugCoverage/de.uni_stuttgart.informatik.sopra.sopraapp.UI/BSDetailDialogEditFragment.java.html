@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BSDetailDialogEditFragment.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.UI</a> &gt; <span class="el_source">BSDetailDialogEditFragment.java</span></div><h1>BSDetailDialogEditFragment.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.Arrays;
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 07.12.17.
+ * Mail: felix.burk@gmail.com
+ */
+
+<span class="fc" id="L35">public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment {</span>
+
+    private static final String TAG = &quot;BSDetailDialogEditFragment&quot;;
+
+    public static BottomSheetDialogFragment newInstance(Field field) {
+<span class="fc" id="L40">        final BottomSheetDialogFragment fragment = new BSDetailDialogEditFragment();</span>
+<span class="fc" id="L41">        Bundle args = new Bundle();</span>
+<span class="fc" id="L42">        args.putSerializable(&quot;mField&quot;, field);</span>
+<span class="fc" id="L43">        fragment.setArguments(args);</span>
+
+<span class="fc" id="L45">        return fragment;</span>
+    }
+
+
+        @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L51">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc" id="L53">        this.setCancelable(false);</span>
+<span class="fc" id="L54">    }</span>
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L60">        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_edit, container, false);</span>
+<span class="fc" id="L61">        configureBottomSheetBehaviour(view);</span>
+<span class="fc" id="L62">        return view;</span>
+    }
+
+    EditText nameEdit;
+    EditText countyEdit;
+    Spinner type;
+    EditText ownerOrEvaluatorEdit;
+    @Override
+    protected void setupView(View view, Field mField, TextView name, Button editFinish) {
+<span class="fc" id="L71">        LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);</span>
+<span class="fc" id="L72">        RelativeLayout topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);</span>
+
+<span class="fc" id="L74">        Button delete = (Button) view.findViewById(R.id.delete_button);</span>
+<span class="fc" id="L75">        delete.setText(&quot;Delete&quot;);</span>
+<span class="fc" id="L76">        delete.setOnClickListener(this);</span>
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if(this.getActivity() instanceof AddFieldActivity){</span>
+<span class="fc" id="L79">            delete.setVisibility(View.INVISIBLE);</span>
+        }
+
+<span class="fc" id="L82">        nameEdit = view.findViewById(R.id.field_detail_name_edit);</span>
+<span class="fc" id="L83">        nameEdit.setText(mField.getName());</span>
+
+<span class="fc" id="L85">        countyEdit = view.findViewById(R.id.field_detail_region_edit);</span>
+<span class="fc" id="L86">        countyEdit.setText(mField.getCounty());</span>
+
+<span class="fc" id="L88">        type = view.findViewById(R.id.field_detail_state_spinner);</span>
+<span class="fc" id="L89">        ownerOrEvaluatorEdit = view.findViewById(R.id.field_detail_policyholder_edit);</span>
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if(mField instanceof AgrarianField){</span>
+<span class="fc" id="L92">            name.setText(&quot;Edit AgrarianField&quot;);</span>
+
+            List&lt;AgrarianFieldType&gt; statusCheck;
+<span class="fc" id="L95">            statusCheck = Arrays.asList(AgrarianFieldType.values());</span>
+<span class="fc" id="L96">            type.setAdapter(new ArrayAdapter&lt;AgrarianFieldType&gt;(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));</span>
+<span class="fc" id="L97">            type.setSelection(statusCheck.indexOf(mField.getType()));</span>
+
+<span class="fc" id="L99">            ownerOrEvaluatorEdit.setText(((AgrarianField)mField).getOwner());</span>
+
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        }else if(mField instanceof DamageField){</span>
+<span class="fc" id="L102">            name.setText(&quot;Edit DamageField&quot;);</span>
+
+            List&lt;DamageFieldType&gt; statusCheck;
+<span class="fc" id="L105">            statusCheck = Arrays.asList(DamageFieldType.values());</span>
+<span class="fc" id="L106">            type.setAdapter(new ArrayAdapter&lt;DamageFieldType&gt;(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));</span>
+<span class="fc" id="L107">            type.setSelection(statusCheck.indexOf(mField.getType()));</span>
+
+<span class="fc" id="L109">            ownerOrEvaluatorEdit.setText(((DamageField)mField).getEvaluator());</span>
+
+        }
+
+<span class="fc" id="L113">        nameEdit.setOnClickListener(this);</span>
+<span class="fc" id="L114">        countyEdit.setOnClickListener(this);</span>
+<span class="fc" id="L115">        ownerOrEvaluatorEdit.setOnClickListener(this);</span>
+
+<span class="fc" id="L117">        editFinish.setText(getContext().getResources().getString(R.string.button_finish_name));</span>
+
+<span class="fc" id="L119">        changeData();</span>
+<span class="fc" id="L120">    }</span>
+
+    @Override
+    public void onClick(View v) {
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if(this.mListener != null) {</span>
+<span class="pc bpc" id="L125" title="2 of 3 branches missed.">            switch (v.getId()) {</span>
+                case R.id.edit_finish_button:
+<span class="fc" id="L127">                    this.mListener.onFragmentMessage(TAG, &quot;finishEdit&quot;, changeData());</span>
+<span class="fc" id="L128">                    this.dismiss();</span>
+<span class="fc" id="L129">                    break;</span>
+                case R.id.delete_button:
+<span class="nc" id="L131">                    this.mListener.onFragmentMessage(TAG, &quot;delete&quot;, changedField);</span>
+<span class="nc" id="L132">                    this.dismiss();</span>
+                    break;
+            }
+        }
+<span class="fc" id="L136">    }</span>
+
+    public Field changeData(){
+
+<span class="fc" id="L140">        changedField = (Field) getArguments().getSerializable(&quot;mField&quot;);</span>
+<span class="fc" id="L141">        changedField.setName(nameEdit.getText().toString());</span>
+<span class="fc" id="L142">        changedField.setType((FieldType) type.getSelectedItem());</span>
+
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if(!countyEdit.getText().toString().equals(&quot;&quot;)) {</span>
+<span class="fc" id="L145">            changedField.setCounty(countyEdit.getText().toString());</span>
+        }else{
+<span class="nc" id="L147">            changedField.setAutomaticCounty();</span>
+        }
+
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if(changedField instanceof AgrarianField){</span>
+<span class="fc" id="L151">            ((AgrarianField) changedField).setOwner(ownerOrEvaluatorEdit.getText().toString());</span>
+        }else{
+<span class="fc" id="L153">            ((DamageField) changedField).setEvaluator(ownerOrEvaluatorEdit.getText().toString());</span>
+        }
+
+<span class="fc" id="L156">        return changedField;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

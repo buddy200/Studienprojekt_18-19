@@ -95,7 +95,7 @@ public class ExportImportFromFile {
 
             while (true) {
                 tempfield = (Field) ois.readObject();
-                tempfield.setContext(context); //set the new App co/home/gin/Desktop/appdatantext
+                tempfield.setContext(context);
                 list.add(tempfield);
             }
         } catch (FileNotFoundException e) {

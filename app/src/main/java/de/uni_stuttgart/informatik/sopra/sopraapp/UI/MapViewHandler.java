@@ -108,6 +108,7 @@ public class MapViewHandler {
      */
     public void addFields(List<Field> fields){
         for(Field field : fields){
+            map.getOverlayManager().add(fieldToPolygon(field));
 
            //add contained damage fields if field is type agrarian
            if(field instanceof AgrarianField){
@@ -117,7 +118,6 @@ public class MapViewHandler {
                }
            }
 
-           map.getOverlayManager().add(fieldToPolygon(field));
 
         }
     }

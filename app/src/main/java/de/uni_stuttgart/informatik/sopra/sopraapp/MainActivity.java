@@ -42,9 +42,9 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
     //i know this is bad, but there is no other way to get the context inside our AgrarianFieldType enum.. -D
     private static Context mContext;
 
-    MapFragment mapFragment;
-    ArrayList<Field> testData;
-    ExportImportFromFile writerReader;
+    private MapFragment mapFragment;
+    private ArrayList<Field> dataFromFields;
+    private ExportImportFromFile writerReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +56,15 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        testData = GlobalConstants.fieldTest(100,4, getmContext());
         writerReader = new ExportImportFromFile(this);
-        //testData = writerReader.readFields();
+        dataFromFields = writerReader.readFields();
 
     }
 
     @Override
     public void onStop(){
         super.onStop();
-     //   testData.clear();
-        writerReader.WriteFields(testData);
+        writerReader.WriteFields(dataFromFields);
 
     }
 
@@ -76,7 +74,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         if (resultCode == RESULT_OK && requestCode == 2404) {
             if (data != null) {
                 AgrarianField newData = (AgrarianField) data.getSerializableExtra("field");
-                testData.add(newData);
+                dataFromFields.add(newData);
                 mapFragment.getMapViewHandler().addField(newData);
 
             }
@@ -88,8 +86,8 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                 Log.e(TAG, "is null? dmg " + String.valueOf(newDataDmg == null));
                 Log.e(TAG, "is null? field " + String.valueOf(parent == null));
                 parent.addContainedDamageField(newDataDmg);
-                testData.remove(parent);
-                testData.add(parent);
+                dataFromFields.remove(parent);
+                dataFromFields.add(parent);
                 mapFragment.getMapViewHandler().invalidateMap();
             }
         }
@@ -102,7 +100,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             case "MapFragment":
                 switch (action){
                     case "complete":
-                        mapFragment.getMapViewHandler().addFields(testData);
+                        mapFragment.getMapViewHandler().addFields(dataFromFields);
                         //mapFragment.getMapViewHandler().addField(GlobalConstants.damageFieldTest(this));
                         myLocationListener.initializeLocationManager(this, mapFragment);
                         break;
@@ -116,8 +114,8 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             case "MenuFragment":
                 switch (action){
                     case "listButton":
-                        Log.d("TEST", String.valueOf(testData.size()));
-                        ItemListDialogFragment.newInstance(createList(testData)).show(getSupportFragmentManager(), "FieldList");
+                        Log.d("TEST", String.valueOf(dataFromFields.size()));
+                        ItemListDialogFragment.newInstance(createList(dataFromFields)).show(getSupportFragmentManager(), "FieldList");
                         break;
                     case "locButton":
                         Location location = myLocationListener.getLocation();
@@ -158,7 +156,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                 switch (action){
                     case "startEdit":
                         mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
-                        testData.remove((Field) data);
+                        dataFromFields.remove((Field) data);
                         BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
                         //TODO
                         break;
@@ -173,7 +171,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
             case "BSDetailDialogEditFragment":
                 switch (action){
                     case "finishEdit":
-                        testData.add((Field) data);
+                        dataFromFields.add((Field) data);
                         mapFragment.getMapViewHandler().addField((Field) data);
                         mapFragment.getMapViewHandler().invalidateMap();
                         break;
@@ -190,9 +188,9 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
     public void onSearchButtonClicked(String input) {
         Log.e(TAG, "Search for: " + input);
 
-        // copy testData in search data listGeoPoints
+        // copy dataFromFields in search data listGeoPoints
         // we need a deep copy - because fields contain other fields
-        ArrayList<Field> searchData = new ArrayList<>(testData);
+        ArrayList<Field> searchData = new ArrayList<>(dataFromFields);
         ArrayList<Field> resultData = new ArrayList<>();
 
         /**

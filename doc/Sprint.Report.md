@@ -7,9 +7,12 @@ In diesem Sprint wurden die bis zum [Meilenstein 4](meilenstein-url) erledigten 
 - Definition of Done
 - Issues in GitLab
 - Entwurf
- 	- Klassendiagramm und dazugehörige Beschreibungen
- 	- Komponentendiagramm und dazugehörige Beschreibungen
+ 	- Klassendiagramm und dazugehÃ¶rige Beschreibungen
+ 	- Komponentendiagramm und dazugehÃ¶rige Beschreibungen
 - Readme
 
 ## Tests/Testprotokolle/Nachweis der Testabdeckung
-[ehfdhfh](https://www.google.de/)
+![Testabdeckung der App](images/Test.png)
+Testabdeckung der App
+
+Genauere Details befinden sich in der Datei TestCoverage/TestCoverage.html .

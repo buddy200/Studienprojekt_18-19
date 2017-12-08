@@ -17,18 +17,15 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
 
 /**
  * Created by larsb on 21.11.2017.
+ * This class fetch the GPS-Sensor data form the device and save the actual location.
  */
 
 public class MYLocationListener implements LocationListener {
 
     private LocationManager locationManager;
-    private String locationProvider;
     private Location location;
     private Context context;
     private MapFragment mapFragment;
-    private Criteria criteria;
-    private Thread thread;
-    private boolean locationUpdateEnable = true;
 
     public boolean follow = false;
 
@@ -37,6 +34,11 @@ public class MYLocationListener implements LocationListener {
 
     }
 
+    /**
+     * initilize the Location Manager with teh actual context und mapFragment and start the location finding
+     * @param context
+     * @param mapFragment
+     */
     public void initializeLocationManager(Context context, MapFragment mapFragment) {
         this.mapFragment = mapFragment;
         this.context = context;
@@ -88,6 +90,10 @@ public class MYLocationListener implements LocationListener {
 
     }
 
+    /**
+     * get the actual location from the GPS or Network Sensor (depending on wich is better)
+     * @return
+     */
     public Location getLocation() {
         try {
 
@@ -112,6 +118,10 @@ public class MYLocationListener implements LocationListener {
         return location;
     }
 
+    /**
+     * set follow on enabled or disabled
+     * @param b
+     */
     public void setFollow(boolean b){
         follow = b;
     }

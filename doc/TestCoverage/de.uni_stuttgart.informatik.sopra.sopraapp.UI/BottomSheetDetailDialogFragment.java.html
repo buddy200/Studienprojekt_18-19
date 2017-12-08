@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BottomSheetDetailDialogFragment.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.UI</a> &gt; <span class="el_source">BottomSheetDetailDialogFragment.java</span></div><h1>BottomSheetDetailDialogFragment.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+
+
+/**
+ * sopra_priv
+ * Created by Felix B on 20.11.17.
+ * Mail: felix.burk@gmail.com
+ */
+
+<span class="fc" id="L28">public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {</span>
+
+    private static final String TAG = &quot;BottomSheetDetail&quot;;
+
+    protected FragmentInteractionListener mListener;
+
+    Field changedField;
+
+    public static BottomSheetDialogFragment newInstance(Field field) {
+<span class="fc" id="L37">        final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();</span>
+<span class="fc" id="L38">        Bundle args = new Bundle();</span>
+<span class="fc" id="L39">        args.putSerializable(&quot;mField&quot;, field);</span>
+<span class="fc" id="L40">        fragment.setArguments(args);</span>
+
+<span class="fc" id="L42">        return fragment;</span>
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L48">        super.onCreate(savedInstanceState);</span>
+
+        //prevent cancel by onTab outside of sheet if field is edited
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L55">        super.onAttach(context);</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L57">            mListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L59">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement FragmentInteractionListener&quot;);
+        }
+<span class="fc" id="L62">    }</span>
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L68">        View view = inflater.inflate(R.layout.fragment_item_detail_dialog, container, false);</span>
+<span class="fc" id="L69">        configureBottomSheetBehaviour(view);</span>
+<span class="fc" id="L70">        return view;</span>
+    }
+
+    void configureBottomSheetBehaviour(View view) {
+
+<span class="fc" id="L75">    }</span>
+
+    EditText nameEdit;
+    EditText countyEdit;
+    Spinner type;
+    EditText ownerOrEvaluatorEdit;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L83">        TextView name = (TextView) view.findViewById(R.id.field_detail_name);</span>
+<span class="fc" id="L84">        Button editFinish = (Button) view.findViewById(R.id.edit_finish_button);</span>
+<span class="fc" id="L85">        editFinish.setOnClickListener(this);</span>
+
+<span class="fc" id="L87">        TextView size = (TextView) view.findViewById(R.id.field_detail_size);</span>
+
+<span class="fc" id="L89">        Field mField = (Field) getArguments().getSerializable(&quot;mField&quot;);</span>
+<span class="fc" id="L90">        mField.finish();</span>
+
+<span class="fc" id="L92">        size.setText(mField.getSize() + &quot;m&quot; + &quot;\u00B2&quot;);</span>
+
+
+<span class="fc" id="L95">       setupView(view, mField, name, editFinish);</span>
+
+<span class="fc" id="L97">    }</span>
+
+    protected void setupView(View view, Field mField, TextView name, Button editFinish){
+<span class="fc" id="L100">        noEditSetup(view, mField, name, editFinish);</span>
+<span class="fc" id="L101">    }</span>
+    
+    private void noEditSetup(View view, Field mField, TextView name, Button editFinish) {
+<span class="fc" id="L104">        TextView state = (TextView) view.findViewById(R.id.field_detail_state);</span>
+<span class="fc" id="L105">        TextView size = (TextView) view.findViewById(R.id.field_detail_size);</span>
+<span class="fc" id="L106">        TextView county = (TextView) view.findViewById(R.id.field_detail_region);</span>
+<span class="fc" id="L107">        TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);</span>
+<span class="fc" id="L108">        TextView date = (TextView) view.findViewById(R.id.field_detail_date);</span>
+<span class="fc" id="L109">        Button addDmg = (Button) view.findViewById(R.id.add_damageField_button);</span>
+<span class="fc" id="L110">        addDmg.setOnClickListener(this);</span>
+
+<span class="fc" id="L112">        name.setText(mField.getName());</span>
+<span class="fc" id="L113">        county.setText(mField.getCounty());</span>
+<span class="fc" id="L114">        editFinish.setText(getContext().getResources().getString(R.string.button_edit_name));</span>
+
+<span class="fc" id="L116">        state.setText(mField.getType().toString());</span>
+<span class="fc" id="L117">        state.setTextColor(mField.getColor());</span>
+
+        //is field agrarian?
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (mField instanceof AgrarianField) {</span>
+<span class="fc" id="L121">            ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());</span>
+<span class="fc" id="L122">            date.setText(&quot;&quot;);</span>
+        }
+        //is field damage?
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (mField instanceof DamageField) {</span>
+<span class="fc" id="L126">            addDmg.setVisibility(View.INVISIBLE);</span>
+<span class="fc" id="L127">            date.setText(((DamageField)mField).getParsedDate());</span>
+<span class="fc" id="L128">            ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());</span>
+        }
+<span class="fc" id="L130">    }</span>
+
+    public void setId(int id) {
+<span class="nc" id="L133">        this.getView().setId(id);</span>
+<span class="nc" id="L134">    }</span>
+
+    @Override
+    public void onClick(View v) {
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if(mListener != null) {</span>
+<span class="pc bpc" id="L139" title="1 of 3 branches missed.">            switch (v.getId()) {</span>
+                case R.id.edit_finish_button:
+<span class="fc" id="L141">                    mListener.onFragmentMessage(TAG, &quot;startEdit&quot;, getArguments().getSerializable(&quot;mField&quot;));</span>
+<span class="fc" id="L142">                    this.dismiss();</span>
+<span class="fc" id="L143">                    break;</span>
+                case R.id.add_damageField_button:
+<span class="fc" id="L145">                    mListener.onFragmentMessage(TAG, &quot;addDmgField&quot;, getArguments().getSerializable(&quot;mField&quot;));</span>
+            }
+        }
+<span class="fc" id="L148">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

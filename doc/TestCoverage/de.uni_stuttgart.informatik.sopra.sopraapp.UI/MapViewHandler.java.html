@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MapViewHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.UI</a> &gt; <span class="el_source">MapViewHandler.java</span></div><h1>MapViewHandler.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+
+import android.content.Context;
+import android.view.MotionEvent;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polygon;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 14.11.17.
+ * Mail: felix.burk@gmail.com
+ */
+
+public class MapViewHandler {
+
+    private static final String TAG = &quot;MapViewHandler&quot;;
+
+    private MapView map;
+    private IMapController mapController;
+    private Context context;
+    private Marker currentLocMarker;
+
+    //map fields to Polygon Overlays
+    private Map&lt;Field, FieldPolygon&gt; fieldPolyMap;
+
+    private FragmentInteractionListener mapInteractionListener;
+
+
+<span class="fc" id="L46">    public MapViewHandler(Context context){</span>
+<span class="fc" id="L47">        this.context = context;</span>
+<span class="fc" id="L48">        init();</span>
+
+<span class="fc" id="L50">    }</span>
+
+    public void init(){
+<span class="fc" id="L53">        map = new MapView(context);</span>
+<span class="fc" id="L54">        map.setTileSource(TileSourceFactory.MAPNIK);</span>
+<span class="fc" id="L55">        map.setMultiTouchControls(true);</span>
+<span class="fc" id="L56">        map.setUseDataConnection(true);</span>
+
+<span class="fc" id="L58">        fieldPolyMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L60">        mapController = map.getController();</span>
+<span class="fc" id="L61">        mapController.setZoom(GlobalConstants.DEFAULT_ZOOM);</span>
+<span class="fc" id="L62">        mapController.setCenter(GlobalConstants.START_POINT);</span>
+
+        //setup listener for tabs on polygons
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L66">            mapInteractionListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L68">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement MapInteractionListener&quot;);
+        }
+
+<span class="fc" id="L72">    }</span>
+
+    protected Polygon fieldToPolygon(Field mfield){
+<span class="fc" id="L75">        final Field field = mfield;</span>
+<span class="fc" id="L76">        FieldPolygon polygon = new FieldPolygon(context, field){</span>
+<span class="fc" id="L77">            double offset = 0.00075;</span>
+            @Override
+            public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView){
+<span class="nc" id="L80">                boolean tapped = contains(event);</span>
+
+                //only show detail if map is zoomed in enough
+<span class="nc bnc" id="L83" title="All 4 branches missed.">                if (tapped &amp;&amp; mapView.getZoomLevel() &gt; 13){</span>
+<span class="nc" id="L84">                    mapInteractionListener.onFragmentMessage(TAG, &quot;singleTabOnPoly&quot;, field);</span>
+                }
+<span class="nc" id="L86">                return tapped;</span>
+            }
+        };
+
+<span class="fc" id="L90">        List&lt;GeoPoint&gt; polyPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (CornerPoint point : field.getCornerPoints()) {</span>
+<span class="fc" id="L92">            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));</span>
+<span class="fc" id="L93">        }</span>
+
+<span class="fc" id="L95">        polygon.setPoints(polyPoints);</span>
+<span class="fc" id="L96">        polygon.setFillColor(field.getColor());</span>
+<span class="fc" id="L97">        polygon.setTitle(field.getName());</span>
+
+<span class="fc" id="L99">        fieldPolyMap.put(field, polygon);</span>
+<span class="fc" id="L100">        return polygon;</span>
+    }
+
+    /**
+     * add a list of fields
+     * first add damage fields to map, then the agrarian field
+     * because overlays are added first to last =&gt; first is &quot;behind&quot;, last is &quot;in front&quot;
+     * @param fields
+     */
+    public void addFields(List&lt;Field&gt; fields){
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for(Field field : fields){</span>
+<span class="fc" id="L111">            map.getOverlayManager().add(fieldToPolygon(field));</span>
+
+           //add contained damage fields if field is type agrarian
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">           if(field instanceof AgrarianField){</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">               for(DamageField dmg : ((AgrarianField) field).getContainedDamageFields()){</span>
+<span class="fc" id="L116">                   map.getOverlayManager().add(fieldToPolygon(dmg));</span>
+
+<span class="fc" id="L118">               }</span>
+           }
+
+
+<span class="fc" id="L122">        }</span>
+<span class="fc" id="L123">    }</span>
+
+    public void addField(Field field){
+<span class="fc" id="L126">        map.getOverlayManager().add(fieldToPolygon(field));</span>
+<span class="fc" id="L127">    }</span>
+
+    /**
+     * delete field polygon from the map
+     * @param field
+     */
+
+    public void deleteFieldFromOverlay(Field field){
+<span class="fc" id="L135">        map.getOverlayManager().remove(fieldPolyMap.get(field));</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * set a Marker with the current Location on the map
+     * @param point
+     */
+    public void setCurrLocMarker(GeoPoint point){
+<span class="fc" id="L143">        map.getOverlayManager().remove(currentLocMarker);</span>
+<span class="fc" id="L144">        currentLocMarker = new Marker(map);</span>
+<span class="fc" id="L145">        currentLocMarker.setPosition(point);</span>
+
+<span class="fc" id="L147">        currentLocMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {</span>
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                //do nothing
+<span class="nc" id="L151">                return false;</span>
+            }
+        });
+
+<span class="fc" id="L155">        map.getOverlayManager().add(currentLocMarker);</span>
+
+<span class="fc" id="L157">    }</span>
+
+    public void invalidateMap(){
+<span class="fc" id="L160">        map.invalidate();</span>
+<span class="fc" id="L161">    }</span>
+
+    /**
+     * animate to a the given point on the map
+     * @param point
+     */
+    public void animateAndZoomTo(GeoPoint point) {
+<span class="fc" id="L168">        mapController.setZoom(20);</span>
+<span class="fc" id="L169">        mapController.animateTo(point);</span>
+<span class="fc" id="L170">    }</span>
+
+    public MapView getMapView(){
+<span class="fc" id="L173">        return map;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MapFragment.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.UI</a> &gt; <span class="el_source">MapFragment.java</span></div><h1>MapFragment.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.osmdroid.util.GeoPoint;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 03.11.17.
+ * Mail: felix.burk@gmail.com
+ */
+
+<span class="fc" id="L29">public class MapFragment extends Fragment {</span>
+    private static final String TAG = &quot;MapFragment&quot;;
+
+    private ConstraintLayout cl;
+    private MapViewHandler mapViewHandler;
+
+<span class="fc" id="L35">    private boolean permissionGranted = true;</span>
+
+    private FragmentInteractionListener mListener;
+
+    //Please keep this method order!
+    //Fragment lifecycle is in the same order
+    //https://developer.android.com/images/fragment_lifecycle.png
+    //Every Method not overriding some fragment lifecycle stuff below
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L46">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)</span>
+                != PackageManager.PERMISSION_GRANTED) {
+
+<span class="fc" id="L51">            permissionGranted = false;</span>
+<span class="fc" id="L52">            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);</span>
+        }
+
+<span class="fc" id="L55">    }</span>
+
+    //Weird Error without overwriting this method -FB
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L61">        return inflater.inflate(R.layout.fragment_map, container, false);</span>
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+<span class="fc" id="L67">        cl = getView().findViewById(R.id.cl);</span>
+<span class="fc" id="L68">    }</span>
+
+    TextView v;
+    @Override
+    public void onStart() {
+<span class="fc" id="L73">        super.onStart();</span>
+
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (permissionGranted) {</span>
+
+<span class="fc" id="L77">            mapViewHandler = new MapViewHandler(getContext());</span>
+<span class="fc" id="L78">            cl.addView(mapViewHandler.getMapView());</span>
+<span class="fc" id="L79">            mListener.onFragmentMessage(TAG,  &quot;complete&quot;, null);</span>
+
+        } else {
+<span class="fc" id="L82">            v = new TextView(getContext());</span>
+<span class="fc" id="L83">            v.setText(&quot;Permission not granted - sorry&quot;);</span>
+<span class="fc" id="L84">            cl.addView(v);</span>
+        }
+<span class="fc" id="L86">    }</span>
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L90">        super.onAttach(context);</span>
+
+        try {
+<span class="fc" id="L93">            this.mListener = (FragmentInteractionListener) context;</span>
+<span class="nc" id="L94">        } catch (final ClassCastException e) {</span>
+<span class="nc" id="L95">            throw new ClassCastException(context.toString() + &quot; must implement FragmentInteractionListener&quot;);</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">    }</span>
+
+    @Override
+    public void onActivityCreated(Bundle savedInstance) {
+<span class="fc" id="L101">        super.onActivityCreated(savedInstance);</span>
+
+<span class="fc" id="L103">    }</span>
+
+    //Methods not for fragment lifecycle
+
+    //Handle requested Permissions
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+<span class="pc bpc" id="L111" title="1 of 3 branches missed.">        switch (requestCode) {</span>
+            case 0:
+<span class="pc bpc" id="L113" title="2 of 4 branches missed.">                if (grantResults.length &gt; 0</span>
+                        &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+<span class="fc" id="L116">                    permissionGranted = true;</span>
+
+<span class="fc" id="L118">                    v.setVisibility(View.INVISIBLE);</span>
+                    //okay this is invoking the usual fragment lifecycle, not good -FB
+                    //but it works really well actually
+                    // TODO change this!
+<span class="fc" id="L122">                    this.onStop();</span>
+<span class="fc" id="L123">                    this.onStart();</span>
+                } else {
+
+                    //no permission - no map
+                }
+                break;
+            case 1:
+                //GPS Permission check
+<span class="pc bpc" id="L131" title="2 of 4 branches missed.">                if (grantResults.length &gt; 0</span>
+                        &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+<span class="nc" id="L134">                    Toast.makeText(getActivity(), &quot;Keine Standort Berechtigung&quot;, Toast.LENGTH_SHORT).show();</span>
+                }
+<span class="nc" id="L136">                break;</span>
+            default:
+<span class="nc" id="L138">                Log.e(TAG, &quot;requested permission not handled&quot;);</span>
+        }
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * animate to given position
+     *
+     * @param lat
+     * @param lon
+     */
+    public void animateToPosition(double lat, double lon) {
+<span class="fc" id="L149">        GeoPoint startPoint = new GeoPoint(lat, lon);</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (mapViewHandler != null) {</span>
+<span class="fc" id="L151">            mapViewHandler.animateAndZoomTo(startPoint);</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+    public void setCurrLocMarker(GeoPoint point) {
+<span class="fc" id="L156">        mapViewHandler.setCurrLocMarker(point);</span>
+<span class="fc" id="L157">    }</span>
+
+    public MapViewHandler getMapViewHandler() {
+<span class="fc" id="L160">        return mapViewHandler;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

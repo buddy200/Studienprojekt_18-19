@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Field.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.data</a> &gt; <span class="el_source">Field.java</span></div><h1>Field.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
+
+import org.osmdroid.util.GeoPoint;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Queue;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Triangle;
+
+/**
+ * Created by larsb on 22.11.2017.
+ */
+
+public abstract class Field implements Serializable{
+
+
+    private static final String TAG = &quot;Field&quot;;
+
+    //keys
+    static final String KEY_NAME = &quot;name&quot;;
+    static final String KEY_COLOR = &quot;color&quot;;
+    static final String KEY_COUNTY = &quot;county&quot;;
+    static final String KEY_SIZE = &quot;size&quot;;
+    static final String KEY_TYPE = &quot;type&quot;;
+
+    protected transient Context context;
+
+
+    //values for field and damage case
+    private String name;
+    private FieldType type;
+    private String county;
+    private int color;
+    private double size;
+
+   private static final long serialVersionUID = 11L;
+
+<span class="fc" id="L53">    private List&lt;CornerPoint&gt; cornerPoints = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * the rotation of the polygon
+     * true if counterclockwise
+     */
+<span class="fc" id="L59">    private boolean rotation = false;</span>
+
+<span class="fc" id="L61">    private boolean finished = false;</span>
+
+<span class="fc" id="L63">    public Field(Context context, List&lt;CornerPoint&gt; cPoints) {</span>
+<span class="fc" id="L64">        this.context = context;</span>
+
+        //set default attributes
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if(context != null){</span>
+<span class="fc" id="L68">            this.name = context.getResources().getString(R.string.field_default_name);</span>
+<span class="fc" id="L69">            this.county = context.getResources().getString(R.string.county_default_name);</span>
+        }else {
+<span class="fc" id="L71">            this.name = &quot;no name&quot;;</span>
+<span class="fc" id="L72">            this.county = &quot;no county&quot;;</span>
+        }
+<span class="fc" id="L74">        this.size = 0.0;</span>
+<span class="fc" id="L75">        this.color = R.color.fieldDefaultColor;</span>
+
+
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (cPoints.size() &lt; 2) {</span>
+<span class="nc" id="L79">            Log.e(TAG, &quot;not enough corner points provided for field: &quot; + name);</span>
+        } else {
+<span class="fc" id="L81">            setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here</span>
+<span class="fc" id="L82">            finish();</span>
+        }
+<span class="fc" id="L84">    }</span>
+
+
+    public void addCornerPoint (CornerPoint cp) {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if(!finished) {</span>
+<span class="fc" id="L89">            cornerPoints.add(cp);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (cornerPoints.size() &gt; 2) {</span>
+<span class="fc" id="L91">                cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);</span>
+            }
+        }
+<span class="fc" id="L94">    }</span>
+
+    public void finish() {
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (cornerPoints.size() &gt; 2) {</span>
+<span class="fc" id="L98">            cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));</span>
+<span class="fc" id="L99">            cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size() - 1), cornerPoints.get(1));</span>
+<span class="fc" id="L100">            calculateSize();</span>
+<span class="fc" id="L101">            finished = true;</span>
+        }
+<span class="fc" id="L103">    }</span>
+
+    private void calculateSize() {
+<span class="fc" id="L106">        List&lt;CornerPoint&gt; rmCopy = new ArrayList&lt;&gt;(cornerPoints);</span>
+
+<span class="fc" id="L108">        Queue&lt;CornerPoint&gt; outwardPoints = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L109">        List&lt;Triangle&gt; triangleList = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if(angleSum()) {</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            for (CornerPoint cp : cornerPoints) {</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                if (angleCheck(cp.getAngle())) {</span>
+<span class="fc" id="L114">                    outwardPoints.add(cp);</span>
+                }
+<span class="fc" id="L116">            }</span>
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            for (int i = 0; i &lt; cornerPoints.size() - 2; i++) {</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                if (outwardPoints.isEmpty()) {</span>
+<span class="fc" id="L120">                    triangleList.add(new Triangle(rmCopy.get(0), rmCopy.get(1), rmCopy.get(2)));</span>
+<span class="fc" id="L121">                    rmCopy.remove(1);</span>
+                } else {
+<span class="fc" id="L123">                    CornerPoint cp = outwardPoints.poll();</span>
+<span class="fc" id="L124">                    int index = rmCopy.indexOf(cp);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                    int indexBefore = ((index != 0)? index-1 : rmCopy.size()-1);</span>
+
+                    //two outward Points following
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                    if (angleCheck(rmCopy.get(indexBefore).getAngle())) {</span>
+<span class="fc" id="L129">                        i--;</span>
+<span class="fc" id="L130">                        outwardPoints.add(cp);</span>
+                    } else {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">                        int indexTwoBefore = ((indexBefore != 0) ? indexBefore-1 : rmCopy.size()-1);</span>
+                        //make triangle
+<span class="fc" id="L134">                        triangleList.add(new Triangle(rmCopy.get(indexTwoBefore), rmCopy.get(indexBefore), rmCopy.get(index)));</span>
+<span class="fc" id="L135">                        rmCopy.remove(indexBefore);</span>
+
+                        //recalculate angles
+<span class="fc" id="L138">                        index = rmCopy.indexOf(cp);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                        indexBefore = ((index != 0)? index-1 : rmCopy.size()-1);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                        int indexAfter = ((index == rmCopy.size()-1) ? 0 : ++index);</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                        indexTwoBefore = ((indexBefore != 0) ? indexBefore-1 : rmCopy.size()-1);</span>
+<span class="fc" id="L142">                        CornerPoint cpBefore = rmCopy.get(indexBefore);</span>
+<span class="fc" id="L143">                        cp.calculateAngle(cpBefore, rmCopy.get(indexAfter));</span>
+<span class="fc" id="L144">                        cpBefore.calculateAngle(rmCopy.get(indexTwoBefore), cp);</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                        if(angleCheck(cp.getAngle())) {</span>
+<span class="fc" id="L146">                            outwardPoints.add(cp);</span>
+                        }
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">                        if(angleCheck(cpBefore.getAngle())) {</span>
+<span class="nc" id="L149">                            outwardPoints.add(cpBefore);</span>
+                        }
+                    }
+                }
+            }
+
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            for (Triangle t : triangleList) {</span>
+<span class="fc" id="L156">                size += t.getSize();</span>
+<span class="fc" id="L157">            }</span>
+        }
+<span class="fc" id="L159">    }</span>
+
+    private boolean angleCheck(double angle) {
+<span class="fc bfc" id="L162" title="All 6 branches covered.">        return rotation ? angle &lt;= Math.PI : angle &gt;= Math.PI;</span>
+    }
+
+    private boolean angleSum() {
+<span class="fc" id="L166">        double sum = 0;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        for(int i = 0; i &lt; cornerPoints.size();i++) {</span>
+<span class="fc" id="L168">            sum += cornerPoints.get(i).getAngle();</span>
+        }
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (Math.abs(sum - (Math.PI * (cornerPoints.size()+2)))&lt; 0.001) {</span>
+<span class="fc" id="L171">            rotation = true;</span>
+<span class="fc" id="L172">            return true;</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        } else if(Math.abs(sum - (Math.PI * (cornerPoints.size()-2)))&lt; 0.001) {</span>
+<span class="fc" id="L174">            return true;</span>
+        } else {
+            //either wrong calculation or crossing lines in input polygon
+<span class="fc" id="L177">            return false;</span>
+        }
+    }
+
+    /**
+     * calculate centroid ( = center of gravity) of polygon
+     */
+    public GeoPoint calculateCentroid(){
+        double lowX0, lowY0, highX1, highY1;
+
+<span class="fc" id="L187">        lowX0 = lowY0 = Double.MAX_VALUE;</span>
+<span class="fc" id="L188">        highX1 = highY1 = Double.MIN_VALUE;</span>
+
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        for(CornerPoint point : getCornerPoints()){</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">            if(lowX0 &gt; point.getWGS().getLatitude()){</span>
+<span class="fc" id="L192">                lowX0 = point.getWGS().getLatitude();</span>
+            }
+<span class="fc bfc" id="L194" title="All 2 branches covered.">            if(lowY0 &gt; point.getWGS().getLongitude()){</span>
+<span class="fc" id="L195">                lowY0 = point.getWGS().getLongitude();</span>
+            }
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            if(highX1 &lt; point.getWGS().getLatitude()){</span>
+<span class="fc" id="L198">                highX1 = point.getWGS().getLatitude();</span>
+            }
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            if(highY1 &lt; point.getWGS().getLongitude()){</span>
+<span class="fc" id="L201">                highY1 = point.getWGS().getLongitude();</span>
+            }
+<span class="fc" id="L203">        }</span>
+
+<span class="fc" id="L205">        return new GeoPoint(lowX0 + ((highX1 - lowX0) / 2), lowY0 + ((highY1 - lowY0) / 2));</span>
+    }
+
+
+    /**
+     * @return the size of the field or @code{null} if the field isn't finished
+     */
+    public Double getSize() {
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        return finished ? size : null; //sorry, ich kann keinen nullcheck für getSize() machen wenns vom typ double ist, mit Double gehts - F</span>
+    }
+
+    public void setCornerPoints(List&lt;CornerPoint&gt; cornerPoints) {
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for(CornerPoint cp : cornerPoints){</span>
+<span class="fc" id="L218">            addCornerPoint(cp);</span>
+<span class="fc" id="L219">        }</span>
+        //this.cornerPoints = cornerPoints;
+<span class="fc" id="L221">    }</span>
+
+    public List&lt;CornerPoint&gt; getCornerPoints() {
+<span class="fc" id="L224">        return cornerPoints;</span>
+    }
+
+<span class="fc" id="L227">    public GeoPoint getCentroid(){ return calculateCentroid();}</span>
+
+    public abstract Bundle getBundle();
+
+<span class="fc" id="L231">    public String getName() {return name;}</span>
+
+<span class="fc" id="L233">    public void setName(String name) {this.name = name;}</span>
+
+<span class="fc" id="L235">    public String getCounty() {return county;}</span>
+
+<span class="fc" id="L237">    public void setCounty(String county) {this.county = county;}</span>
+
+<span class="fc" id="L239">    public int getColor() {return color;}</span>
+
+<span class="fc" id="L241">    protected void setColor(int color){this.color = color;}</span>
+
+    public void setContext(Context context){
+<span class="fc" id="L244">        this.context = context;</span>
+<span class="fc" id="L245">    }</span>
+
+
+<span class="fc" id="L248">    public FieldType getType() {return type;}</span>
+
+    public void setType(FieldType type) {
+<span class="fc" id="L251">        this.type = type;</span>
+<span class="fc" id="L252">        this.setColor(type.toColor());</span>
+<span class="fc" id="L253">    }</span>
+
+    /**
+     * starts an async task that tries to get the SubAdminArea
+     * by reverse geocoding the first corner point of this field
+     * might take a bit, thats why its async -FB
+     */
+    public void setAutomaticCounty(){
+<span class="nc" id="L261">        this.setCounty(&quot;Loading..&quot;);</span>
+
+<span class="nc" id="L263">        new AsyncReverseGeoCoding().execute(new double[]{</span>
+<span class="nc" id="L264">                this.getCornerPoints().get(0).getWGS().getLatitude(),</span>
+<span class="nc" id="L265">                this.getCornerPoints().get(0).getWGS().getLongitude()</span>
+        });
+<span class="nc" id="L267">    }</span>
+
+
+    /**
+     * google asks its servers for reverse geo coding, this might take some time
+     * especially for 100+ fields
+     * try to call this only if necessary! -FB
+     */
+<span class="nc" id="L275">    private class AsyncReverseGeoCoding extends AsyncTask&lt;double[], Void, String&gt; {</span>
+
+        @Override
+        protected String doInBackground(double[]... doubles) {
+            //async task is weird.. TODO change this
+<span class="nc" id="L280">            setCountyAddress(doubles[0][0], doubles[0][1]);</span>
+<span class="nc" id="L281">            return null;</span>
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+<span class="nc" id="L287">        }</span>
+
+
+        @Override
+<span class="nc" id="L291">        protected void onPreExecute() {}</span>
+
+        @Override
+<span class="nc" id="L294">        protected void onProgressUpdate(Void... values) {}</span>
+
+
+        private void setCountyAddress(double lat, double lon){
+<span class="nc" id="L298">            Log.e(TAG, &quot;fetching location..&quot;);</span>
+            //uses the google geocoder, might be a part of the google maps api.. or not -FB
+<span class="nc" id="L300">            Geocoder geocoder = new Geocoder(context, Locale.getDefault());</span>
+<span class="nc" id="L301">            List&lt;Address&gt; addresses = null;</span>
+            try {
+<span class="nc" id="L303">                addresses = geocoder.getFromLocation(lat, lon, 1);</span>
+                Address result;
+
+<span class="nc bnc" id="L306" title="All 4 branches missed.">                if (addresses != null &amp;&amp; !addresses.isEmpty()) {</span>
+<span class="nc" id="L307">                    setCounty(&quot;Adress: &quot;); //remove &quot;loading...&quot;</span>
+<span class="nc" id="L308">                    String county = &quot;&quot;;</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">                    for(int i=0; i&lt;= addresses.get(0).getMaxAddressLineIndex(); i++){</span>
+<span class="nc" id="L310">                        county += &quot; &quot; +  addresses.get(0).getAddressLine(i);</span>
+                    }
+<span class="nc" id="L312">                    setCounty(county);</span>
+<span class="nc" id="L313">                }else {</span>
+<span class="nc" id="L314">                    setCounty(&quot;No Location Set&quot;);</span>
+                }
+<span class="nc" id="L316">            } catch (IOException ignored) {</span>
+                //do something
+<span class="nc" id="L318">            }</span>
+<span class="nc" id="L319">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

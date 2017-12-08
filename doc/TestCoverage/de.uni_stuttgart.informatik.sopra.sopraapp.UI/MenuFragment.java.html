@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MenuFragment.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.UI</a> &gt; <span class="el_source">MenuFragment.java</span></div><h1>MenuFragment.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link OnMenuFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link MenuFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class MenuFragment extends Fragment implements View.OnClickListener{
+
+    private static final String TAG = &quot;MenuFragment&quot;;
+
+    private FragmentInteractionListener mCallback;
+
+<span class="fc" id="L30">    public MenuFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment MenuFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static MenuFragment newInstance() {
+<span class="nc" id="L42">        MenuFragment fragment = new MenuFragment();</span>
+<span class="nc" id="L43">        Bundle args = new Bundle();</span>
+<span class="nc" id="L44">        fragment.setArguments(args);</span>
+<span class="nc" id="L45">        return fragment;</span>
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L50">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L51">    }</span>
+
+    EditText input;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+<span class="fc" id="L58">        View view = inflater.inflate(R.layout.fragment_menu, container, false);</span>
+
+<span class="fc" id="L60">        Button list = view.findViewById(R.id.button_list);</span>
+<span class="fc" id="L61">        Button loc = view.findViewById(R.id.button_location);</span>
+<span class="fc" id="L62">        Button add = view.findViewById(R.id.button_add);</span>
+<span class="fc" id="L63">        Button info = view.findViewById(R.id.button_info);</span>
+<span class="fc" id="L64">        Button search = view.findViewById(R.id.button_search);</span>
+<span class="fc" id="L65">        input = view.findViewById(R.id.search_edit_text);</span>
+
+<span class="fc" id="L67">        list.setOnClickListener(this);</span>
+<span class="fc" id="L68">        loc.setOnClickListener(this);</span>
+<span class="fc" id="L69">        info.setOnClickListener(this);</span>
+<span class="fc" id="L70">        add.setOnClickListener(this);</span>
+<span class="fc" id="L71">        search.setOnClickListener(this);</span>
+<span class="fc" id="L72">        input.setOnClickListener(this);</span>
+
+<span class="fc" id="L74">        return view;</span>
+    }
+
+
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L81">        super.onAttach(context);</span>
+
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L84">            mCallback = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L86">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement OnMenuFragmentInteractionListener&quot;);
+        }
+<span class="fc" id="L89">    }</span>
+
+    @Override
+    public void onDetach() {
+<span class="fc" id="L93">        super.onDetach();</span>
+<span class="fc" id="L94">        mCallback = null;</span>
+<span class="fc" id="L95">    }</span>
+
+    @Override
+    public void onClick(View v) {
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if(mCallback != null){</span>
+<span class="pc bpc" id="L101" title="3 of 7 branches missed.">            switch (v.getId()) {</span>
+                case R.id.button_list:
+<span class="fc" id="L103">                    mCallback.onFragmentMessage(TAG, &quot;listButton&quot;, null);</span>
+<span class="fc" id="L104">                    break;</span>
+                case R.id.button_location:
+<span class="nc" id="L106">                    checkLocPermissions();</span>
+<span class="nc" id="L107">                    mCallback.onFragmentMessage(TAG, &quot;locButton&quot;, null);</span>
+<span class="nc" id="L108">                    break;</span>
+                case R.id.button_add:
+<span class="fc" id="L110">                    mCallback.onFragmentMessage(TAG, &quot;addButton&quot;, null);</span>
+<span class="fc" id="L111">                    break;</span>
+                case R.id.button_info:
+<span class="nc" id="L113">                    mCallback.onFragmentMessage(TAG, &quot;infoButton&quot;, null);</span>
+<span class="nc" id="L114">                    break;</span>
+                case R.id.search_edit_text:
+                    //remove text if user clicks on search
+<span class="fc" id="L117">                    input.setText(&quot;&quot;);</span>
+<span class="fc" id="L118">                    break;</span>
+                case R.id.button_search:
+<span class="fc" id="L120">                    mCallback.onFragmentMessage(TAG, &quot;searchButton&quot;, input.getText().toString());</span>
+            }
+        }
+<span class="fc" id="L123">    }</span>
+
+    private void checkLocPermissions() {
+        //TODO check Permissions
+<span class="nc" id="L127">    }</span>
+
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * &lt;p&gt;
+     * See the Android Training lesson &lt;a href=
+     * &quot;http://developer.android.com/training/basics/fragments/communicating.html&quot;
+     * &gt;Communicating with Other Fragments&lt;/a&gt; for more information.
+     */
+    public interface OnMenuFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onListButtonInteraction();
+        void onLocationButtonInteraction();
+        void onAddButtonInteraction();
+        void onInfoButtonInteraction();
+        void onSearchButtonClicked(String text);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ExportImportFromFile.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.data</a> &gt; <span class="el_source">ExportImportFromFile.java</span></div><h1>ExportImportFromFile.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+
+import android.content.Context;
+import android.text.InputType;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+
+/**
+ * Created by larsb on 04.12.2017.
+ * This Class Write and Read Fields to/from the internal storage
+ */
+
+public class ExportImportFromFile {
+    private static final String TAG = &quot;ExportImportFromFile&quot;;
+
+<span class="fc" id="L27">    private String filename = &quot;Appdata&quot;;</span>
+    private FileOutputStream fos;
+    private ObjectOutputStream oos;
+    private FileInputStream fis;
+    private ObjectInputStream ois;
+    private Context context;
+
+<span class="fc" id="L34">    public ExportImportFromFile(Context context) {</span>
+<span class="fc" id="L35">        this.context = context;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * write all fields form the list to a file in the internal storage
+     * @param list
+     */
+    public void WriteFields(ArrayList&lt;Field&gt; list) {
+        try {
+<span class="fc" id="L44">            Log.e(&quot;DIR&quot;, context.getFilesDir().toString());</span>
+<span class="fc" id="L45">            context.deleteFile(filename);</span>
+<span class="fc" id="L46">            fos = context.openFileOutput(filename, context.MODE_PRIVATE);</span>
+<span class="fc" id="L47">            oos = new ObjectOutputStream(fos);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            for (Field field : list) {</span>
+<span class="fc" id="L49">                oos.writeObject(field);</span>
+<span class="fc" id="L50">            }</span>
+
+<span class="nc" id="L52">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="nc" id="L54">        } catch (IOException e) {</span>
+<span class="nc" id="L55">            e.printStackTrace();</span>
+        } finally {
+<span class="pc bpc" id="L57" title="7 of 8 branches missed.">            if (fos != null) {</span>
+                try {
+<span class="pc" id="L59">                    fos.close();</span>
+<span class="nc" id="L60">                } catch (IOException e) {</span>
+<span class="nc" id="L61">                    e.printStackTrace();</span>
+<span class="pc" id="L62">                }</span>
+            }
+<span class="pc bpc" id="L64" title="7 of 8 branches missed.">            if (oos != null) {</span>
+                try {
+<span class="pc" id="L66">                    oos.close();</span>
+<span class="nc" id="L67">                } catch (IOException e) {</span>
+<span class="nc" id="L68">                    e.printStackTrace();</span>
+<span class="pc" id="L69">                }</span>
+            }
+        }
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Read fields from the file in the internal storage
+     * @return
+     */
+    public ArrayList&lt;Field&gt; readFields() {
+<span class="fc" id="L79">        ArrayList&lt;Field&gt; list = new ArrayList&lt;&gt;();</span>
+        Field tempfield;
+        try {
+<span class="fc" id="L82">            File file = context.getFileStreamPath(filename);</span>
+
+<span class="pc bpc" id="L84" title="1 of 4 branches missed.">            if(file == null || !file.exists()) {</span>
+<span class="fc" id="L85">                Log.e(TAG ,&quot;file not found&quot;);</span>
+<span class="fc" id="L86">                InputStream fiis = context.getResources().openRawResource(</span>
+<span class="fc" id="L87">                        context.getResources().getIdentifier(&quot;appdata&quot;,</span>
+<span class="fc" id="L88">                                &quot;raw&quot;, context.getPackageName()));</span>
+<span class="fc" id="L89">                ois = new ObjectInputStream(fiis);</span>
+
+<span class="fc" id="L91">            }else{</span>
+<span class="fc" id="L92">                fis = context.openFileInput(filename);</span>
+<span class="fc" id="L93">                ois = new ObjectInputStream(fis);</span>
+            }
+
+            while (true) {
+<span class="fc" id="L97">                tempfield = (Field) ois.readObject();</span>
+<span class="fc" id="L98">                tempfield.setContext(context);</span>
+<span class="fc" id="L99">                list.add(tempfield);</span>
+            }
+<span class="nc" id="L101">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L102">            e.printStackTrace();</span>
+<span class="fc" id="L103">        } catch (IOException e) {</span>
+<span class="fc" id="L104">            e.printStackTrace();</span>
+<span class="nc" id="L105">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L106">            e.printStackTrace();</span>
+        } finally {
+<span class="pc bpc" id="L108" title="6 of 8 branches missed.">            if (fis != null) {</span>
+                try {
+<span class="pc" id="L110">                    fis.close();</span>
+<span class="nc" id="L111">                } catch (IOException e) {</span>
+<span class="nc" id="L112">                    e.printStackTrace();</span>
+<span class="pc" id="L113">                }</span>
+            }
+<span class="pc bpc" id="L115" title="7 of 8 branches missed.">            if (ois != null) {</span>
+                try {
+<span class="pc" id="L117">                    ois.close();</span>
+<span class="nc" id="L118">                } catch (IOException e) {</span>
+<span class="nc" id="L119">                    e.printStackTrace();</span>
+<span class="pc" id="L120">                }</span>
+            }
+        }
+<span class="fc" id="L123">        return list;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

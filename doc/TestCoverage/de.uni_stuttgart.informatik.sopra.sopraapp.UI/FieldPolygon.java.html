@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FieldPolygon.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.UI</a> &gt; <span class="el_source">FieldPolygon.java</span></div><h1>FieldPolygon.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.MotionEvent;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.Polygon;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 19.11.17.
+ * Mail: felix.burk@gmail.com
+ */
+
+public class FieldPolygon extends Polygon {
+
+    private Context context;
+    private Paint textPaint;
+    private Field field;
+
+    public FieldPolygon(Context context, Field field){
+<span class="fc" id="L37">        super(context);</span>
+
+<span class="fc" id="L39">        this.field = field;</span>
+<span class="fc" id="L40">        this.context = context;</span>
+
+        //init default values
+<span class="fc" id="L43">        this.setTitle(&quot;&quot;);</span>
+
+<span class="fc" id="L45">        textPaint = new Paint();</span>
+<span class="fc" id="L46">        textPaint.setTextAlign(Paint.Align.CENTER);</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * overwriting the normal draw method, to display the name
+     * in the center of gravity of the polygon
+     * (this is the quickest way to get the title in a good position relative to the polygon
+     * better would be a center point inside of it, but this might be a bit more difficult)
+     */
+    Point polyCentroidPoint;
+    @Override
+    public void draw(Canvas canvas, MapView mapView, boolean shadow){
+        //only draw names if zoomed in to certain level
+        //TODO: show name depending to polygon size and zoom level
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if(field instanceof AgrarianField){</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if(mapView.getZoomLevel() &lt; 18){</span>
+<span class="nc" id="L62">                super.draw(canvas, mapView, shadow);</span>
+<span class="nc" id="L63">                return;</span>
+            }
+<span class="fc" id="L65">            textPaint.setTextSize(50);</span>
+<span class="fc" id="L66">            textPaint.setColor(Color.BLACK);</span>
+<span class="fc" id="L67">            this.setStrokeColor(Color.argb(0,0,0,0));</span>
+
+            //handle damage fields
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        }else if(field instanceof DamageField){</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if(mapView.getZoomLevel() &lt; 19){</span>
+<span class="nc" id="L72">                super.draw(canvas, mapView, shadow);</span>
+<span class="nc" id="L73">                return;</span>
+            }
+<span class="fc" id="L75">            textPaint.setTextSize(40);</span>
+<span class="fc" id="L76">            textPaint.setColor(Color.RED);</span>
+<span class="fc" id="L77">            this.setStrokeColor(Color.argb(255,0,0,0));</span>
+<span class="fc" id="L78">            this.setStrokeWidth(1.0f);</span>
+
+        }
+
+<span class="fc" id="L82">        polyCentroidPoint = new Point();</span>
+<span class="fc" id="L83">        mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);</span>
+
+<span class="fc" id="L85">        canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);</span>
+
+<span class="fc" id="L87">        super.draw(canvas, mapView, shadow);</span>
+<span class="fc" id="L88">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

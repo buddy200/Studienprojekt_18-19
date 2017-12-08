@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AgrarianField.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.sopraapp.data</a> &gt; <span class="el_source">AgrarianField.java</span></div><h1>AgrarianField.java</h1><pre class="source lang-java linenums">
+package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
+
+/**
+ * Created by Christian on 13.11.2017.
+ */
+
+public class AgrarianField extends Field implements Serializable{
+    private static final String TAG = &quot;AgrarianField&quot;;
+
+    protected static final String KEY_OWNER = &quot;owner&quot;;
+    protected static final String KEY_DMGFIELDS = &quot;dmg&quot;;
+
+    private static final long serialVersionUID = 9L;
+
+    //default state
+<span class="fc" id="L27">    private AgrarianFieldType state = AgrarianFieldType.Corn;</span>
+    private String owner;
+
+    private ArrayList&lt;DamageField&gt; containedDamageFields;
+
+
+    /**
+     * fields need at least 3 corner points to exist
+     */
+    public AgrarianField(Context context, List&lt;CornerPoint&gt; cPoints) {
+<span class="fc" id="L37">        super(context, cPoints);</span>
+
+        //set default values
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if(context != null){</span>
+<span class="fc" id="L41">            owner = context.getResources().getString(R.string.owner_default_name);</span>
+<span class="fc" id="L42">            this.setName(context.getResources().getString(R.string.field_default_name));</span>
+<span class="fc" id="L43">            this.setCounty(context.getResources().getString(R.string.county_default_name));</span>
+        }else{
+<span class="fc" id="L45">            owner = &quot;no owner&quot;;</span>
+<span class="fc" id="L46">            this.setName(&quot;no name&quot;);</span>
+<span class="fc" id="L47">            this.setCounty(&quot;no county&quot;);</span>
+        }
+
+<span class="fc" id="L50">        this.setType(AgrarianFieldType.Corn);</span>
+<span class="fc" id="L51">        this.setColor(state.toColor());</span>
+<span class="fc" id="L52">        this.setContainedDamageFields(new ArrayList&lt;DamageField&gt;());</span>
+
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * bundle helper function
+     * TODO put damage fields in there somehow
+     * @return
+     */
+    @Override
+    public Bundle getBundle() {
+<span class="fc" id="L63">        Bundle bundle = new Bundle();</span>
+<span class="fc" id="L64">        bundle.putString(KEY_NAME, this.getName());</span>
+<span class="fc" id="L65">        bundle.putInt(KEY_COLOR, this.getType().toColor());</span>
+<span class="fc" id="L66">        bundle.putString(KEY_COUNTY, this.getCounty());</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if(this.getSize() != null){</span>
+<span class="fc" id="L68">            bundle.putDouble(KEY_SIZE, this.getSize());</span>
+        }
+<span class="fc" id="L70">        bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());</span>
+
+        //agrarianField specific attributes
+<span class="fc" id="L73">        bundle.putString(KEY_OWNER, this.owner);</span>
+
+<span class="fc" id="L75">        return bundle;</span>
+    }
+
+    public void setContainedDamageFields(ArrayList&lt;DamageField&gt; containedDamageFields) {
+<span class="fc" id="L79">        this.containedDamageFields = containedDamageFields;</span>
+<span class="fc" id="L80">    }</span>
+
+    public ArrayList&lt;DamageField&gt; getContainedDamageFields() {
+<span class="fc" id="L83">        return containedDamageFields;</span>
+    }
+    public void addContainedDamageField(DamageField dmgField){
+<span class="fc" id="L86">        containedDamageFields.add(dmgField);</span>
+<span class="fc" id="L87">    }</span>
+
+<span class="fc" id="L89">    public void setOwner(String owner){this.owner = owner;}</span>
+<span class="fc" id="L90">    public String getOwner() {return owner;}</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

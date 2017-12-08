@@ -12,5 +12,7 @@ In diesem Sprint wurden die bis zum [Meilenstein 4](meilenstein-url) erledigten 
 - Readme
 
 ## Tests/Testprotokolle/Nachweis der Testabdeckung
+![Testabdeckung der App](images/Test.png)
+Testabdeckung der App
 
-*TODO: Testprotokolle und Abdeckung hier einfügen/verlinken*
+Genauere Details befinden sich in der Datei TestCoverage/TestCoverage.html .

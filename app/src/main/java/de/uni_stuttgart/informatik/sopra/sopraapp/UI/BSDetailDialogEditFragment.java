@@ -136,7 +136,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
         changedField.setName(nameEdit.getText().toString());
         changedField.setType((FieldType) type.getSelectedItem());
 
-        if(countyEdit.getText() != null) {
+        if(!countyEdit.getText().toString().equals("")) {
             changedField.setCounty(countyEdit.getText().toString());
         }else{
             changedField.setAutomaticCounty();

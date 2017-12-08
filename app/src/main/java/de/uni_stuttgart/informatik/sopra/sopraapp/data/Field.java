@@ -295,7 +295,7 @@ public abstract class Field implements Serializable{
 
 
         private void setCountyAddress(double lat, double lon){
-            //Log.d(TAG, "fetching location..");
+            Log.e(TAG, "fetching location..");
             //uses the google geocoder, might be a part of the google maps api.. or not -FB
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses = null;
@@ -304,7 +304,7 @@ public abstract class Field implements Serializable{
                 Address result;
 
                 if (addresses != null && !addresses.isEmpty()) {
-                    setCounty(""); //remove "loading..."
+                    setCounty("Adress: "); //remove "loading..."
                     String county = "";
                     for(int i=0; i<= addresses.get(0).getMaxAddressLineIndex(); i++){
                         county += " " +  addresses.get(0).getAddressLine(i);

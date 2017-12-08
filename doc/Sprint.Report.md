@@ -1,10 +1,15 @@
-# Sprint Report ([1,2])
+# Sprint Report 1
 
-In diesem Sprint wurden die bis zum [Meilenstein X](meilenstein-url) erledigten User Stories abgearbeitet.
+In diesem Sprint wurden die bis zum [Meilenstein 4](meilenstein-url) erledigten User Stories abgearbeitet.
 
 ## Verbesserte Dokumente
 
-*TODO: Dokumente aufführen die verbessert wurden.*
+- Definition of Done
+- Issues in GitLab
+- Entwurf
+ 	- Klassendiagramm und dazugehörige Beschreibungen
+ 	- Komponentendiagramm und dazugehörige Beschreibungen
+- Readme
 
 ## Tests/Testprotokolle/Nachweis der Testabdeckung
 

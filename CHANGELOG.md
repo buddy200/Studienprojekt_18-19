@@ -2,70 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres currently NOT REALLY to [Semantic Versioning](http://semver.org/) despite the formatting of the version numbers.
 
-## Unreleased
 
-### Added
+## Version 0.1 - 2017-12-08
+Initiale Version der App wurde Released
 
-- added something
-- added something else
 
-### Changed
-- Definition of Done Ergänzt
-- changed something
-- changed something else
 
-### Deprecated
 
-- deprecated something
-- deprecated something else
 
-### Removed
-
-- removed something
-- removed something else
-
-### Fixed
-
-- fixed something
-- fixed something else
-
-### Security
-
-- made some security relevant changes
-- made other security relevant changes
-
-## [X.Y.Z] - XXXX-XX-XX
-
-### Added
-
-- added something
-- added something else
-
-### Changed
-
-- changed something
-- changed something else
-
-### Deprecated
-
-- deprecated something
-- deprecated something else
-
-### Removed
-
-- removed something
-- removed something else
-
-### Fixed
-
-- fixed something
-- fixed something else
-
-### Security
-
-- made some security relevant changes
-- made other security relevant changes
-
+<!---
 ## [X.Y.Z] - XXXX-XX-XX (TEMPLATE for new versions)
 
 ### Added
@@ -98,3 +43,4 @@ This project adheres currently NOT REALLY to [Semantic Versioning](http://semver
 - made some security relevant changes
 - made other security relevant changes
 
+--->

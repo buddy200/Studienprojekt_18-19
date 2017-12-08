@@ -5,6 +5,8 @@
     android:id="@+id/add_activity_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:screenOrientation="portrait"
+    android:configChanges="keyboardHidden|orientation|screenSize"
     tools:context="de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity">
 
     <android.support.design.widget.AppBarLayout

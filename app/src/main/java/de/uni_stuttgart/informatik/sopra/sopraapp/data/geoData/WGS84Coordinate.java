@@ -14,7 +14,7 @@ public class WGS84Coordinate implements Serializable{
     private double latitude;
 
     /**
-     * Längengrad (E, W)
+     * L?ngengrad (E, W)
      */
     private double longitude;
 

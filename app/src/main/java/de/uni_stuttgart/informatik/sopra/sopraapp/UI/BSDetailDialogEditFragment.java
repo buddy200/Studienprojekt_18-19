@@ -70,6 +70,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
         LinearLayout bottomSheet = (LinearLayout) view.findViewById(R.id.bottomSheet);
         RelativeLayout topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);
 
+        Button delete = (Button) view.findViewById(R.id.delete_button);
+        delete.setText("Delete");
+        delete.setOnClickListener(this);
+
         nameEdit = view.findViewById(R.id.field_detail_name_edit);
         nameEdit.setText(mField.getName());
 
@@ -116,6 +120,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDetailDialogFragment 
             switch (v.getId()) {
                 case R.id.edit_finish_button:
                     this.mListener.onFragmentMessage(TAG, "finishEdit", changeData());
+                    this.dismiss();
+                    break;
+                case R.id.delete_button:
+                    this.mListener.onFragmentMessage(TAG, "delete", changedField);
                     this.dismiss();
                     break;
             }

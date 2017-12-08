@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -52,6 +53,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setContentView(R.layout.activity_add_field);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,6 +102,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             mapFragment.getMapViewHandler().addField(parentField);
             getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
         }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
 

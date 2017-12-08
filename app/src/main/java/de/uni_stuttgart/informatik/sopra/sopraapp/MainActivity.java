@@ -2,6 +2,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +52,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         mContext = this;
 
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
@@ -173,6 +175,10 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                     case "finishEdit":
                         testData.add((Field) data);
                         mapFragment.getMapViewHandler().addField((Field) data);
+                        mapFragment.getMapViewHandler().invalidateMap();
+                        break;
+                    case "delete":
+                        //we don't need to delete the field in the map this already happend in start edit
                         mapFragment.getMapViewHandler().invalidateMap();
                         break;
                 }

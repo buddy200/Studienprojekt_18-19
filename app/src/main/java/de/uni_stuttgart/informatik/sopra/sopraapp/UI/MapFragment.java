@@ -67,6 +67,7 @@ public class MapFragment extends Fragment {
         cl = getView().findViewById(R.id.cl);
     }
 
+    TextView v;
     @Override
     public void onStart() {
         super.onStart();
@@ -78,7 +79,7 @@ public class MapFragment extends Fragment {
             mListener.onFragmentMessage(TAG,  "complete", null);
 
         } else {
-            TextView v = new TextView(getContext());
+            v = new TextView(getContext());
             v.setText("Permission not granted - sorry");
             cl.addView(v);
         }
@@ -114,6 +115,7 @@ public class MapFragment extends Fragment {
 
                     permissionGranted = true;
 
+                    v.setVisibility(View.INVISIBLE);
                     //okay this is invoking the usual fragment lifecycle, not good -FB
                     //but it works really well actually
                     // TODO change this!

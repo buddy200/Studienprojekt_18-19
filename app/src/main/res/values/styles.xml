@@ -1,11 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!--
+        <item name="colorPrimaryLight">@color/colorPrimaryLight</item>
+        <item name="colorPrimaryText">@color/primaryText</item>
+        <item name="colorSecondaryText">@color/secondaryText</item>
+        <item name="colorDivider">@color/dividerColor</item>
+        <item name="colorTextIcons">@color/colorWhite</item> -->
+
+
     </style>
 
     <style name="AppTheme.NoActionBar">

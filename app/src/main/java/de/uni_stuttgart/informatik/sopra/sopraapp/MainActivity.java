@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
@@ -36,7 +40,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
  * the class is listening for every Interaction of its fragments
  */
 
-public class MainActivity extends FragmentActivity implements FragmentInteractionListener<Object> {
+public class MainActivity extends AppCompatActivity implements FragmentInteractionListener<Object> {
 
     private static final String TAG = "MainActivity";
     private MYLocationListener myLocationListener = new MYLocationListener();
@@ -55,6 +59,10 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
 
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Test");
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
@@ -124,34 +132,6 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
                     case "singleTabOnPoly":
                         animateMapToFieldWithBS((Field) data);
                 }
-            case "MenuFragment":
-                switch (action){
-                    case "listButton":
-                        ItemListDialogFragment.newInstance(createList(dataFromFields)).show(getSupportFragmentManager(), "FieldList");
-                        break;
-                    case "locButton":
-                        Location location = myLocationListener.getLocation();
-                        if (location != null) {
-                            mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
-                            mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
-                        }
-                        else{
-                            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case "addButton":
-                        Intent i = new Intent(this, AddFieldActivity.class);
-                        startActivityForResult(i, 2404);
-                        break;
-                    case "infoButton":
-                        //TODO
-                        break;
-                    case "searchButton":
-                        onSearchButtonClicked((String) data);
-                        break;
-                }
-
-                break;
             case "ItemListDialogFragment":
                 switch (action){
                     case "itemClick":
@@ -291,4 +271,41 @@ public class MainActivity extends FragmentActivity implements FragmentInteractio
         return mContext;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_toolbar_add:
+                Intent i = new Intent(this, AddFieldActivity.class);
+                startActivityForResult(i, 2404);
+                break;
+            case R.id.action_toolbar_list:
+                ItemListDialogFragment.newInstance(createList(dataFromFields)).show(getSupportFragmentManager(), "FieldList");
+                break;
+            case R.id.action_toolbar_location:
+                Location location = myLocationListener.getLocation();
+                if (location != null) {
+                    mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+                    mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                }
+                else{
+                    Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }

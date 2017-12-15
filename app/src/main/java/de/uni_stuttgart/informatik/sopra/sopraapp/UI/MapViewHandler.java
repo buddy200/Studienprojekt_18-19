@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 
 import org.osmdroid.api.IMapController;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -170,7 +172,9 @@ public class MapViewHandler {
                 return false;
             }
         });
+        Drawable dr = context.getResources().getDrawable(R.drawable.ic_person_pin);
 
+        currentLocMarker.setIcon(dr);
         map.getOverlayManager().add(currentLocMarker);
 
     }

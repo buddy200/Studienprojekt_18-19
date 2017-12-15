@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_toolbar_list"
+        android:icon="@drawable/ic_list"
+        android:orderInCategory="300"
+        android:title="User"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_toolbar_location"
+        android:orderInCategory="100"
+        android:title="User"
+        android:icon="@drawable/ic_my_location"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_toolbar_add"
+        android:orderInCategory="400"
+        android:title="User"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"/>
+
+</menu>

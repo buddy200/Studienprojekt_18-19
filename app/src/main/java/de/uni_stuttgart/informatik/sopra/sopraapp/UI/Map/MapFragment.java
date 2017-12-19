@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+package de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,11 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.osmdroid.util.GeoPoint;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 
 /**
  * sopra_priv
@@ -26,15 +24,16 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * Mail: felix.burk@gmail.com
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements MapContract.MapFragment {
     private static final String TAG = "MapFragment";
 
     private ConstraintLayout cl;
-    private MapViewHandler mapViewHandler;
 
     private boolean permissionGranted = true;
 
     private FragmentInteractionListener mListener;
+
+    private MapViewHandler mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,21 +62,31 @@ public class MapFragment extends Fragment {
     }
 
     TextView v;
+
     @Override
-    public void onStart() {
-        super.onStart();
-
+    public void onResume(){
+        super.onResume();
+        cl.removeAllViews();
         if (permissionGranted) {
-
-            mapViewHandler = new MapViewHandler(getContext());
-            cl.addView(mapViewHandler.getMapView());
-            mListener.onFragmentMessage(TAG,  "complete", null);
+            cl.addView(mPresenter.getMap());
 
         } else {
             v = new TextView(getContext());
             v.setText("Permission not granted - sorry");
             cl.addView(v);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.start();
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
     @Override
@@ -99,6 +108,7 @@ public class MapFragment extends Fragment {
 
     /**
      * handle permission results
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -114,11 +124,7 @@ public class MapFragment extends Fragment {
                     permissionGranted = true;
 
                     v.setVisibility(View.INVISIBLE);
-                    //okay this is invoking the usual fragment lifecycle, not good -FB
-                    //but it works really well actually
-                    // TODO change this!
-                    this.onStop();
-                    this.onStart();
+                    cl.addView(mPresenter.getMap());
                 } else {
 
                     //no permission - no map
@@ -137,30 +143,12 @@ public class MapFragment extends Fragment {
         }
     }
 
-    /**
-     * animate to given position
-     *
-     * @param lat
-     * @param lon
-     */
-    public void animateToPosition(double lat, double lon) {
-        GeoPoint startPoint = new GeoPoint(lat, lon);
-        if (mapViewHandler != null) {
-            mapViewHandler.animateAndZoomTo(startPoint);
-        }
+    public void setPresenter(MapViewHandler presenter){
+        mPresenter = presenter;
     }
 
-    /**
-     * add a location marker to the map
-     * @param point
-     */
-    public void setCurrLocMarker(GeoPoint point) {
-        mapViewHandler.setCurrLocMarker(point);
+    @Override
+    public void setPresenter(BasePresenter presenter) {
+
     }
-
-    public MapViewHandler getMapViewHandler() {
-        return mapViewHandler;
-    }
-
-
 }

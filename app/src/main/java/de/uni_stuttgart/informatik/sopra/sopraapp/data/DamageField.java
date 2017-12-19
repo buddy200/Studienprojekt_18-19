@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
 
 /**
@@ -28,6 +29,8 @@ public class DamageField extends Field implements Serializable{
     private String parsedDate;
     private String evaluator;
 
+    private DamageFieldType type = DamageFieldType.Aliens;
+
 
     /**
      * constructor
@@ -37,7 +40,7 @@ public class DamageField extends Field implements Serializable{
     public DamageField(Context context, List<CornerPoint> cPoints) {
         super(context, cPoints);
         this.setName(context.getResources().getString(R.string.field_default_name));
-        this.setType(DamageFieldType.Aliens);
+        this.setType(type);
         this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(damageFieldToColor());
         this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));

@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+package de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map;
 
 import android.content.Context;
 import android.graphics.Canvas;

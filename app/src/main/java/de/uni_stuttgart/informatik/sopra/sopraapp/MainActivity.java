@@ -7,7 +7,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,19 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BSDetailDialogEditFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.ItemListDialogFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.ExportImportFromFile;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 
@@ -40,17 +39,17 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
  * the class is listening for every Interaction of its fragments
  */
 
-public class MainActivity extends AppCompatActivity implements FragmentInteractionListener<Object> {
+public class MainActivity extends AppCompatActivity implements FragmentInteractionListener<Object>, AppDataManager.DataChangeListener {
 
     private static final String TAG = "MainActivity";
-    private MYLocationListener myLocationListener = new MYLocationListener();
 
     //i know this is bad, but there is no other way to get the context inside our AgrarianFieldType enum.. -D
     private static Context mContext;
 
     private MapFragment mapFragment;
-    private ArrayList<Field> dataFromFields;
-    private ExportImportFromFile writerReader;
+    private MapViewHandler mapHandler;
+
+    AppDataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +65,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        writerReader = new ExportImportFromFile(this);
-        dataFromFields = writerReader.readFields();
+        dataManager = new AppDataManager(this);
+
+        mapHandler = new MapViewHandler(this, dataManager, mapFragment);
+
+        mapFragment.setPresenter(mapHandler);
 
     }
 
     @Override
     public void onStop(){
+        dataManager.saveData();
         super.onStop();
-        writerReader.WriteFields(dataFromFields);
-
     }
 
     /**
@@ -91,9 +92,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         if (resultCode == RESULT_OK && requestCode == 2404) {
             if (data != null) {
                 AgrarianField newData = (AgrarianField) data.getSerializableExtra("field");
-                dataFromFields.add(newData);
-                mapFragment.getMapViewHandler().addField(newData);
-
+                dataManager.addField(newData);
             }
         }
         //2403 is an added damage field
@@ -103,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 AgrarianField parent = (AgrarianField) data.getSerializableExtra("parentField");
 
                 parent.addContainedDamageField(newDataDmg);
-                dataFromFields.add(parent);
-                mapFragment.getMapViewHandler().invalidateMap();
+                dataManager.addField(parent);
             }
         }
     }
@@ -119,14 +117,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
         Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
         switch (Tag){
-            case "MapFragment":
-                switch (action){
-                    case "complete":
-                        mapFragment.getMapViewHandler().addFields(dataFromFields);
-                        myLocationListener.initializeLocationManager(this, mapFragment);
-                        break;
-                }
-                break;
             case "MapViewHandler":
                 switch (action){
                     case "singleTabOnPoly":
@@ -142,25 +132,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             case "BottomSheetDetail":
                 switch (action){
                     case "startEdit":
-                        mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
-                        if(data instanceof AgrarianField){
-                            dataFromFields.remove((Field) data);
-                            for(DamageField d : ((AgrarianField) data).getContainedDamageFields()){
-                                dataFromFields.remove(d);
-                                mapFragment.getMapViewHandler().deleteFieldFromOverlay(d);
-                            }
-                        }else if(data instanceof DamageField){
-                            for(Field field : dataFromFields){
-                                if(((AgrarianField) field).getContainedDamageFields().contains((DamageField) data)){
-                                    ((AgrarianField) field).getContainedDamageFields().remove((DamageField) data);
-                                }
-                            }
-                        }
-                        BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
                         //TODO
+                        BSDetailDialogEditFragment bsDetail = (BSDetailDialogEditFragment) getSupportFragmentManager().findFragmentById(R.id.bottom_sheet_container);
+                        bsDetail = BSDetailDialogEditFragment.newInstance((Field) data);
+                        bsDetail.show(getSupportFragmentManager(),"test" );
+                        new BSEditHandler((Field) data, dataManager, bsDetail);
                         break;
                     case "addDmgField":
-                        dataFromFields.remove((Field) data);
                         Intent i = new Intent(this, AddFieldActivity.class);
                         i.putExtra("parentField", (Field) data);
                         startActivityForResult(i, 2403);
@@ -168,19 +146,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
                 }
                 break;
-            case "BSDetailDialogEditFragment":
-                switch (action){
-                    case "finishEdit":
-                        dataFromFields.add((Field) data);
-                        mapFragment.getMapViewHandler().addField((Field) data);
-                        mapFragment.getMapViewHandler().invalidateMap();
-                        break;
-                    case "delete":
-                        //we don't need to delete the field in the map this already happend in start edit
-                        mapFragment.getMapViewHandler().invalidateMap();
-                        break;
-                }
-
         }
 
     }
@@ -193,8 +158,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     private void animateMapToFieldWithBS(Field field){
         //offset get center on top of BottomSheet
         double offset = 0.0007;
-
-        mapFragment.animateToPosition((field).getCentroid().getLatitude()-offset,
+        mapHandler.animateAndZoomTo((field).getCentroid().getLatitude()-offset,
                 (field).getCentroid().getLongitude());
         BottomSheetDetailDialogFragment.newInstance((field)).show(this.getSupportFragmentManager(), "DetailField");
     }
@@ -208,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         // copy dataFromFields in search data listGeoPoints
         // we need a deep copy - because fields contain other fields
-        ArrayList<Field> searchData = new ArrayList<>(dataFromFields);
+        ArrayList<Field> searchData = new ArrayList<>(dataManager.getFields());
         ArrayList<Field> resultData = new ArrayList<>();
 
         /**
@@ -291,13 +255,15 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 startActivityForResult(i, 2404);
                 break;
             case R.id.action_toolbar_list:
-                ItemListDialogFragment.newInstance(createList(dataFromFields)).show(getSupportFragmentManager(), "FieldList");
+                ItemListDialogFragment.newInstance(createList(dataManager.getFields())).show(getSupportFragmentManager(), "FieldList");
                 break;
             case R.id.action_toolbar_location:
+                MYLocationListener myLocationListener = new MYLocationListener();
+                myLocationListener.initializeLocationManager(this, mapHandler);
                 Location location = myLocationListener.getLocation();
                 if (location != null) {
-                    mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
-                    mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                    mapHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
+                    mapHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
                 }
                 else{
                     Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
@@ -307,5 +273,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDataChange() {
+        mapHandler.reloadWithData(dataManager.getFields());
     }
 }

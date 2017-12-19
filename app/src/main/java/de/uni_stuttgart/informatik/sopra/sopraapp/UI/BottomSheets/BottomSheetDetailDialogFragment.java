@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -154,9 +154,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         }
     }
 
-    public void setId(int id) {
-        this.getView().setId(id);
-    }
 
     /**
      * handle button clicks

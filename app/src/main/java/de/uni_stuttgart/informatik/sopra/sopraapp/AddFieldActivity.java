@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
@@ -24,13 +23,12 @@ import org.osmdroid.views.overlay.Polyline;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BSDetailDialogEditFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheetDetailDialogFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -58,6 +56,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     boolean isDmgField = false;
     Field parentField;
 
+    private MapViewHandler mMapViewHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +117,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_add);
 
+        mMapViewHandler = new MapViewHandler(this, null, mapFragment);
+
+        mapFragment.setPresenter(mMapViewHandler);
+
     }
 
     @Override
@@ -128,8 +131,22 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (parentField != null) {
             //we add a dmg field!
             isDmgField = true;
-            mapFragment.getMapViewHandler().addField(parentField);
+            mMapViewHandler.addField(parentField);
             getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
+        }
+
+
+        myLocationListener = new MYLocationListener();
+        myLocationListener.initializeLocationManager(this, mMapViewHandler);
+        myLocationListener.setFollow(true);
+        Location location = myLocationListener.getLocation();
+        if (location != null) {
+            mMapViewHandler.animateAndZoomTo(myLocationListener.getLocation().getLatitude(),
+                    myLocationListener.getLocation().getLongitude());
+            mMapViewHandler.setCurrLocMarker(myLocationListener.getLocation().getLatitude(),
+                    myLocationListener.getLocation().getLongitude());
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -168,7 +185,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         listGeoPoints.add(g);
         listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
         p.setPoints(listGeoPoints);
-        mapFragment.getMapViewHandler().getMapView().getOverlayManager().add(p);
+        mMapViewHandler.addPolyline(p);
 
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;
@@ -181,7 +198,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      * depending on the current state of our field to add
      */
     private void onDoneButtonClick() {
-        if (enoughPoints) {
+        /*if (enoughPoints) {
             myLocationListener.setFollow(false);
 
             //add the new field
@@ -208,7 +225,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
         }else {
             Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
-        }
+        }*/
     }
 
     /**
@@ -254,12 +271,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 switch (action){
                     case "finishEdit":
                         fieldToAddFinal = (Field) data;
-                        mapFragment.getMapViewHandler().addField(fieldToAddFinal);
-                        mapFragment.getMapViewHandler().invalidateMap();
+                        mMapViewHandler.addField(fieldToAddFinal);
+                        mMapViewHandler.invalidateMap();
                         break;
 
                     case "startEdit":
-                        mapFragment.getMapViewHandler().deleteFieldFromOverlay((Field) data);
+                        mMapViewHandler.deleteFieldFromOverlay((Field) data);
                         BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
                         break;
                 }
@@ -268,8 +285,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 switch (action) {
                     case "finishEdit":
                         fieldToAddFinal = (Field) data;
-                        mapFragment.getMapViewHandler().addField(fieldToAddFinal);
-                        mapFragment.getMapViewHandler().invalidateMap();
+                        mMapViewHandler.addField(fieldToAddFinal);
+                        mMapViewHandler.invalidateMap();
                         break;
                 }
                 break;
@@ -281,18 +298,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      * try to get the current user location
      */
     public void onMapFragmentComplete() {
-        myLocationListener = new MYLocationListener();
-        myLocationListener.setFollow(true);
-        myLocationListener.initializeLocationManager(this, mapFragment);
-        Location location = myLocationListener.getLocation();
-        if (location != null) {
-            GeoPoint userLocation = new GeoPoint(myLocationListener.getLocation().getLatitude(),
-                    myLocationListener.getLocation().getLongitude());
-            mapFragment.getMapViewHandler().animateAndZoomTo(userLocation);
-            mapFragment.setCurrLocMarker(userLocation);
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
-        }
+
     }
 
 }

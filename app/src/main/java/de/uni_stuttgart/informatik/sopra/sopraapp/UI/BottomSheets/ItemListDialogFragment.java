@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
 import android.os.Bundle;

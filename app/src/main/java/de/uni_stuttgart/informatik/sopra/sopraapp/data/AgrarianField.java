@@ -27,8 +27,8 @@ public class AgrarianField extends Field implements Serializable{
 
     private static final long serialVersionUID = 9L;
 
-    //default state
-    private AgrarianFieldType state = AgrarianFieldType.Corn;
+    //default type
+    private AgrarianFieldType type = AgrarianFieldType.Corn;
     private String owner;
 
     private ArrayList<DamageField> containedDamageFields;
@@ -53,7 +53,7 @@ public class AgrarianField extends Field implements Serializable{
         }
 
         this.setType(AgrarianFieldType.Corn);
-        this.setColor(state.toColor());
+        this.setColor(type.toColor());
         this.setContainedDamageFields(new ArrayList<DamageField>());
 
     }

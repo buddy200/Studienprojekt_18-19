@@ -1,7 +1,8 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.UI;
+package de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 
 import org.osmdroid.api.IMapController;
@@ -10,6 +11,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -32,7 +35,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * a handler class for the map view inside the MapViewFragment
  */
 
-public class MapViewHandler {
+public class MapViewHandler implements MapContract.MapHandler {
 
     private static final String TAG = "MapViewHandler";
 
@@ -46,15 +49,25 @@ public class MapViewHandler {
 
     private FragmentInteractionListener mapInteractionListener;
 
+    private AppDataManager mDataManager;
+
+    @Nullable
+    private MapFragment mMapFragment;
+
 
     /**
      * constructor
      * @param context
      */
-    public MapViewHandler(Context context){
+    public MapViewHandler(Context context, @Nullable AppDataManager dataManager, MapFragment mapFragment){
         this.context = context;
-        init();
+        mDataManager = dataManager;
+        mMapFragment = mapFragment;
+    }
 
+    @Override
+    public void start() {
+        init();
     }
 
     /**
@@ -80,16 +93,20 @@ public class MapViewHandler {
                     + " must implement MapInteractionListener");
         }
 
+        if(mDataManager != null){
+            reloadWithData(mDataManager.getFields());
+        }
+
     }
 
     /**
      * convert Objects of Type Field to Polygons on the map
      * and put both in a hashMap
-     * @param mfield
+     * @param mField
      * @return
      */
-    protected Polygon fieldToPolygon(Field mfield){
-        final Field field = mfield;
+    public Polygon fieldToPolygon(Field mField){
+        final Field field = mField;
         FieldPolygon polygon = new FieldPolygon(context, field){
             double offset = 0.00075;
             @Override
@@ -158,12 +175,13 @@ public class MapViewHandler {
 
     /**
      * set a Marker with the current Location on the map
-     * @param point
+     * @param lat
+     * @param lon
      */
-    public void setCurrLocMarker(GeoPoint point){
+    public void setCurrLocMarker(double lat, double lon){
         map.getOverlayManager().remove(currentLocMarker);
         currentLocMarker = new Marker(map);
-        currentLocMarker.setPosition(point);
+        currentLocMarker.setPosition(new GeoPoint(lat, lon));
 
         currentLocMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
@@ -186,17 +204,34 @@ public class MapViewHandler {
         map.invalidate();
     }
 
+
     /**
-     * animate to a the given point on the map
-     * @param point
+     * @param lat
+     * @param lon
      */
-    public void animateAndZoomTo(GeoPoint point) {
+    public void animateAndZoomTo(double lat, double lon) {
         mapController.setZoom(20);
-        mapController.animateTo(point);
+        mapController.animateTo(new GeoPoint(lat, lon));
     }
 
-    public MapView getMapView(){
+    @Override
+    public void addPolyline(Polyline p) {
+        map.getOverlayManager().add(p);
+    }
+
+    public void reloadWithData(ArrayList<Field> fields) {
+        fieldPolyMap.clear();
+        map.getOverlayManager().overlays().clear();
+        addFields(fields);
+        map.invalidate();
+    }
+
+    public MapView getMap() {
         return map;
+    }
+
+    public void requestPermissions(String[] strings, int i) {
+        mMapFragment.requestPermissions(strings, i);
     }
 
 }

@@ -3,7 +3,6 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.Util;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,9 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
 
-import org.osmdroid.util.GeoPoint;
-
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.MapFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 
 /**
  * Created by larsb on 21.11.2017.
@@ -25,7 +22,7 @@ public class MYLocationListener implements LocationListener {
     private LocationManager locationManager;
     private Location location;
     private Context context;
-    private MapFragment mapFragment;
+    private MapViewHandler mMapViewHandler;
 
     public boolean follow = false;
 
@@ -35,12 +32,12 @@ public class MYLocationListener implements LocationListener {
     }
 
     /**
-     * initilize the Location Manager with teh actual context und mapFragment and start the location finding
+     * initilize the Location Manager with teh actual context und mapHandler and start the location finding
      * @param context
-     * @param mapFragment
+     * @param mapHandler
      */
-    public void initializeLocationManager(Context context, MapFragment mapFragment) {
-        this.mapFragment = mapFragment;
+    public void initializeLocationManager(Context context, MapViewHandler mapHandler) {
+        this.mMapViewHandler = mapHandler;
         this.context = context;
         //get the location manager
         this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -50,7 +47,7 @@ public class MYLocationListener implements LocationListener {
                 //Check Permission for fine location
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-                    mapFragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    mapHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 }
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);
@@ -69,9 +66,9 @@ public class MYLocationListener implements LocationListener {
     public void onLocationChanged(Location location) {
         if(location != null){
             if(follow){
-                mapFragment.animateToPosition(location.getLatitude(), location.getLongitude());
+                mMapViewHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
             }
-            mapFragment.setCurrLocMarker(new GeoPoint(location.getLatitude(), location.getLongitude()));
+            mMapViewHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
         }
     }
 
@@ -102,7 +99,7 @@ public class MYLocationListener implements LocationListener {
             //Check Permission for fine location
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-                mapFragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                mMapViewHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

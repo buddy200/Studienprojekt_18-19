@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BaseView;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 
 /**
  * sopra_priv
@@ -10,10 +11,9 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * Mail: felix.burk@gmail.com
  */
 
-public interface BSEditContract {
+interface BSEditContract {
 
     interface BottomSheet extends BaseView {
-        void setPresenter(Presenter p);
 
         boolean isVisible();
 
@@ -31,5 +31,8 @@ public interface BSEditContract {
         void deleteCurrentField();
 
         void changeField(Field f);
+
+        Field getVisibleField();
+
     }
 }

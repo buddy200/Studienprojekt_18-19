@@ -1,8 +1,11 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -13,23 +16,26 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 public class BSEditHandler implements BSEditContract.Presenter {
 
+    private static final String TAG = "BSEditHandler";
+
     @NonNull
     private final AppDataManager mDataManager;
 
     @NonNull
-    private final BSDetailDialogEditFragment mEditFragment;
+    private final BSEditContract.BottomSheet mEditFragment;
 
-    private final Field mField;
+    private Field mField;
 
     /**
      * @param field may be null for a new field
      * @param dataManager
      * @param editFragment
      */
-    public BSEditHandler(Field field, @NonNull AppDataManager dataManager, @NonNull BSDetailDialogEditFragment editFragment){
+    public BSEditHandler(Field field, @NonNull AppDataManager dataManager, @NonNull BSEditContract.BottomSheet editFragment){
         mDataManager = dataManager;
         mEditFragment = editFragment;
         mField = field;
+        Log.e(TAG, String.valueOf(mField.getName()));
 
         mEditFragment.setPresenter(this);
     }
@@ -48,13 +54,23 @@ public class BSEditHandler implements BSEditContract.Presenter {
 
     @Override
     public void deleteCurrentField() {
-        mDataManager.removeField(mField);
+        if(mField != null) {
+            Log.e("removed", String.valueOf(mField.getName()));
+            mDataManager.removeField(mField);
+        }
     }
 
     @Override
     public void changeField(Field f) {
-        mDataManager.removeField(mField);
-        mDataManager.addField(f);
+        Log.e("current", mField.getName());
+        this.deleteCurrentField();
+        mDataManager.addAgrarianField(f);
+        mField = f;
     }
 
+    public Field getVisibleField() {
+        Log.e("index", String.valueOf(mDataManager.getFields().indexOf(mField)));
+        Log.e("index", mField.getName());
+        return mField;
+    }
 }

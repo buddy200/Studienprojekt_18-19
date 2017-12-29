@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+package de.uni_stuttgart.informatik.sopra.sopraapp.data.managers;
 
 import android.content.Context;
 import android.text.InputType;
@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * Created by larsb on 04.12.2017.

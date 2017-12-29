@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,6 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
     private static final String TAG = "BSDetailDialogEditFragment";
 
     private BSEditContract.Presenter mPresenter;
-    private Field mFieldToChange;
 
     private TextView headingText;
     private EditText fieldName;
@@ -59,11 +59,8 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
      *
      * @return A new instance of fragment BottomSheetDialogFragment.
      */
-    public static BSDetailDialogEditFragment newInstance(Field field) {
+    public static BSDetailDialogEditFragment newInstance() {
         final BSDetailDialogEditFragment fragment = new BSDetailDialogEditFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("mField", field);
-        fragment.setArguments(args);
 
         return fragment;
     }
@@ -108,10 +105,9 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
 
 
     @Override
-    public void onResume(){
-        super.onResume();
+    public void onStart(){
+        super.onStart();
         mPresenter.start();
-        mFieldToChange = (Field) getArguments().getSerializable("mField");
     }
 
     /**
@@ -136,8 +132,8 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
 
 
     @Override
-    public void setPresenter(BSEditContract.Presenter p) {
-        mPresenter = p;
+    public void setPresenter(BasePresenter p) {
+        mPresenter = (BSEditContract.Presenter) p;
     }
 
 
@@ -192,8 +188,26 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
      * @return
      */
     public Field changedField(){
+        Field mFieldToChange;
 
-        mFieldToChange = (Field) getArguments().getSerializable("mField");
+        if(mPresenter.getVisibleField() instanceof AgrarianField){
+             mFieldToChange = new AgrarianField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+            ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
+
+            for(DamageField dmg : ((AgrarianField) mPresenter.getVisibleField()).getContainedDamageFields()){
+                ((AgrarianField) mFieldToChange).addContainedDamageField(dmg);
+            }
+
+        }else if(mPresenter.getVisibleField() instanceof DamageField){
+            mFieldToChange = new DamageField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+            ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
+
+        }else{
+            return null;
+        }
+        Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());
+
+
         mFieldToChange.setName(fieldName.getText().toString());
         mFieldToChange.setType((FieldType) fieldSpinner.getSelectedItem());
 
@@ -203,17 +217,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
             mFieldToChange.setAutomaticCounty();
         }
 
-        if(mFieldToChange instanceof AgrarianField){
-            ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
-        }else{
-            ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
-        }
-
+        Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());
         return mFieldToChange;
-    }
-
-    @Override
-    public void setPresenter(BasePresenter presenter) {
-
     }
 }

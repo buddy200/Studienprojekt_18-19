@@ -8,12 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -27,11 +26,13 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * A custom BottomSheetDialogFragment to display information of Fields
  */
 
-public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {
 
     private static final String TAG = "BottomSheetDetail";
 
     protected FragmentInteractionListener mListener;
+    private BSEditContract.Presenter mPresenter;
+
 
     Field changedField;
 
@@ -41,12 +42,8 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
      *
      * @return A new instance of fragment BottomSheetDialogFragment.
      */
-    public static BottomSheetDialogFragment newInstance(Field field) {
-        final BottomSheetDialogFragment fragment = new BottomSheetDetailDialogFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("mField", field);
-        fragment.setArguments(args);
-
+    public static BottomSheetDetailDialogFragment newInstance() {
+        final BottomSheetDetailDialogFragment fragment = new BottomSheetDetailDialogFragment();
         return fragment;
     }
 
@@ -68,6 +65,12 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.start();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -85,61 +88,42 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     }
 
-    EditText nameEdit;
-    EditText countyEdit;
-    Spinner type;
-    EditText ownerOrEvaluatorEdit;
+    private TextView name;
+    private TextView state;
+    private TextView size;
+    private TextView county;
+    private TextView ownerOrEvaluator;
+    private TextView date;
+    private Button addDmg;
+    private Button edit;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        TextView name = (TextView) view.findViewById(R.id.field_detail_name);
-        Button editFinish = (Button) view.findViewById(R.id.edit_finish_button);
-        editFinish.setOnClickListener(this);
+        name = (TextView) view.findViewById(R.id.field_detail_name);
+        edit = (Button) view.findViewById(R.id.edit_finish_button);
+        edit.setOnClickListener(this);
 
-        TextView size = (TextView) view.findViewById(R.id.field_detail_size);
-
-        Field mField = (Field) getArguments().getSerializable("mField");
-        mField.finish();
-
-        size.setText(mField.getSize() + "m" + "\u00B2");
-
-
-       setupView(view, mField, name, editFinish);
-
-    }
-
-    /**
-     * sets up the view, will be overwritten in custom BottomSheetDetailDialogFragments
-     * @param view
-     * @param mField
-     * @param name
-     * @param editFinish
-     */
-    protected void setupView(View view, Field mField, TextView name, Button editFinish){
-        noEditSetup(view, mField, name, editFinish);
-    }
-
-    /**
-     * the UI setup for this dialog, containg TextViews, nothing to edit
-     * @param view
-     * @param mField
-     * @param name
-     * @param editFinish
-     */
-    private void noEditSetup(View view, Field mField, TextView name, Button editFinish) {
-        TextView state = (TextView) view.findViewById(R.id.field_detail_state);
-        TextView size = (TextView) view.findViewById(R.id.field_detail_size);
-        TextView county = (TextView) view.findViewById(R.id.field_detail_region);
-        TextView ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
-        TextView date = (TextView) view.findViewById(R.id.field_detail_date);
-        Button addDmg = (Button) view.findViewById(R.id.add_damageField_button);
+        size = (TextView) view.findViewById(R.id.field_detail_size);
+        state = (TextView) view.findViewById(R.id.field_detail_state);
+        size = (TextView) view.findViewById(R.id.field_detail_size);
+        county = (TextView) view.findViewById(R.id.field_detail_region);
+        ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
+        date = (TextView) view.findViewById(R.id.field_detail_date);
+        addDmg = (Button) view.findViewById(R.id.add_damageField_button);
         addDmg.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void fillData(Field mField) {
         name.setText(mField.getName());
         county.setText(mField.getCounty());
-        editFinish.setText(getContext().getResources().getString(R.string.button_edit_name));
+        edit.setText(getContext().getResources().getString(R.string.button_edit_name));
 
         state.setText(mField.getType().toString());
         state.setTextColor(mField.getColor());
+
+        size.setText(mField.getSize() + "m" + "\u00B2");
 
         //is field agrarian?
         if (mField instanceof AgrarianField) {
@@ -152,7 +136,14 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
             date.setText(((DamageField)mField).getParsedDate());
             ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
         }
+
     }
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+    }
+
 
 
     /**
@@ -164,13 +155,17 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         if(mListener != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
-                    mListener.onFragmentMessage(TAG, "startEdit", getArguments().getSerializable("mField"));
+                    mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
                 case R.id.add_damageField_button:
-                    mListener.onFragmentMessage(TAG, "addDmgField", getArguments().getSerializable("mField"));
+                    mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
             }
         }
     }
 
+    @Override
+    public void setPresenter(BasePresenter presenter) {
+        mPresenter = (BSEditContract.Presenter) presenter;
+    }
 }

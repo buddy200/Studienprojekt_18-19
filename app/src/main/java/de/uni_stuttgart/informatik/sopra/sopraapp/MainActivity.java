@@ -25,7 +25,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
@@ -74,37 +74,15 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
-    public void onStop(){
-        dataManager.saveData();
-        super.onStop();
+    public void onStart(){
+        super.onStart();
+        dataManager.readData();
     }
 
-    /**
-     * receives results from other activities
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //2404 is an added agrarian field
-        if (resultCode == RESULT_OK && requestCode == 2404) {
-            if (data != null) {
-                AgrarianField newData = (AgrarianField) data.getSerializableExtra("field");
-                dataManager.addField(newData);
-            }
-        }
-        //2403 is an added damage field
-        if (resultCode == RESULT_OK && requestCode == 2403) {
-            if (data != null){
-                DamageField newDataDmg = (DamageField) data.getSerializableExtra("field");
-                AgrarianField parent = (AgrarianField) data.getSerializableExtra("parentField");
-
-                parent.addContainedDamageField(newDataDmg);
-                dataManager.addField(parent);
-            }
-        }
+    public void onStop(){
+        super.onStop();
+        dataManager.saveData();
     }
 
     /**
@@ -133,10 +111,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action){
                     case "startEdit":
                         //TODO
-                        BSDetailDialogEditFragment bsDetail = (BSDetailDialogEditFragment) getSupportFragmentManager().findFragmentById(R.id.bottom_sheet_container);
-                        bsDetail = BSDetailDialogEditFragment.newInstance((Field) data);
-                        bsDetail.show(getSupportFragmentManager(),"test" );
+                        BSDetailDialogEditFragment bsDetail = BSDetailDialogEditFragment.newInstance();
                         new BSEditHandler((Field) data, dataManager, bsDetail);
+                        bsDetail.show(getSupportFragmentManager(),"test" );
                         break;
                     case "addDmgField":
                         Intent i = new Intent(this, AddFieldActivity.class);
@@ -160,50 +137,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         double offset = 0.0007;
         mapHandler.animateAndZoomTo((field).getCentroid().getLatitude()-offset,
                 (field).getCentroid().getLongitude());
-        BottomSheetDetailDialogFragment.newInstance((field)).show(this.getSupportFragmentManager(), "DetailField");
-    }
-
-    /**
-     * search implementation
-     * @param input
-     */
-    public void onSearchButtonClicked(String input) {
-        Log.e(TAG, "Search for: " + input);
-
-        // copy dataFromFields in search data listGeoPoints
-        // we need a deep copy - because fields contain other fields
-        ArrayList<Field> searchData = new ArrayList<>(dataManager.getFields());
-        ArrayList<Field> resultData = new ArrayList<>();
-
-        /**
-         * not optimal and dirty way of searching
-         * but it's fast to implement and probably enough for our use case
-         * - ah and this is case sensitive right now... TODO
-         */
-        Iterator<Field> iter = searchData.iterator();
-        while(iter.hasNext()){
-            Field f = iter.next();
-
-            if(SearchUtil.matchesFieldSearch(f, input)){
-                resultData.add(f);
-            }
-
-            if(f instanceof AgrarianField){
-                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
-                    if(SearchUtil.matchesFieldSearch(dmg,input)){
-                        resultData.add(dmg);
-                    }
-                }
-            }
-
-        }
-
-        if(resultData.size() != 0){
-            ItemListDialogFragment.newInstance(resultData).show(getSupportFragmentManager(), "SearchList" );
-        }else{
-            Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
-        }
-
+        BottomSheetDetailDialogFragment bs = BottomSheetDetailDialogFragment.newInstance();
+        new BSEditHandler(field, dataManager, bs);
+        bs.show(this.getSupportFragmentManager(), "DetailField");
     }
 
     /**
@@ -277,6 +213,54 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onDataChange() {
-        mapHandler.reloadWithData(dataManager.getFields());
+        Log.e("dATA CHANGE", "HAA");
+        if(mapHandler != null){
+            mapHandler.reload();
+        }
     }
+
+    /**
+     * search implementation
+     * @param input
+     */
+    /*
+    public void onSearchButtonClicked(String input) {
+        Log.e(TAG, "Search for: " + input);
+
+        // copy dataFromFields in search data listGeoPoints
+        // we need a deep copy - because fields contain other fields
+        ArrayList<Field> searchData = new ArrayList<>(dataManager.getFields());
+        ArrayList<Field> resultData = new ArrayList<>();
+
+        /**
+         * not optimal and dirty way of searching
+         * but it's fast to implement and probably enough for our use case
+         * - ah and this is case sensitive right now... TODO
+         */
+    /*
+        Iterator<Field> iter = searchData.iterator();
+        while(iter.hasNext()){
+            Field f = iter.next();
+
+            if(SearchUtil.matchesFieldSearch(f, input)){
+                resultData.add(f);
+            }
+
+            if(f instanceof AgrarianField){
+                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
+                    if(SearchUtil.matchesFieldSearch(dmg,input)){
+                        resultData.add(dmg);
+                    }
+                }
+            }
+
+        }
+
+        if(resultData.size() != 0){
+            ItemListDialogFragment.newInstance(resultData).show(getSupportFragmentManager(), "SearchList" );
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
+        }
+
+    }*/
 }

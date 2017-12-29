@@ -1,9 +1,13 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+package de.uni_stuttgart.informatik.sopra.sopraapp.data.managers;
 
 import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
  * sopra_priv
@@ -27,24 +31,35 @@ public class AppDataManager {
         }
 
         writerReader = new ExportImportFromFile(context);
-        dataFromFields = writerReader.readFields();
+        readData();
 
     }
 
     public void readData(){
         dataFromFields = writerReader.readFields();
+        dataChange();
     }
 
     public void saveData(){
         writerReader.WriteFields(dataFromFields);
     }
 
-    public void addField(Field f){
+    public void addAgrarianField(Field f){
+        Log.e("added field", f.getName());
         dataFromFields.add(f);
         dataChange();
     }
 
+    public void addDamageField(DamageField dmg, AgrarianField parent){
+        parent.addContainedDamageField(dmg);
+        dataChange();
+    }
+
     public void removeField(Field f){
+        Log.e("tes rm", f.getName());
+        Log.e("is in?", String.valueOf(dataFromFields.contains(f)));
+        dataFromFields.remove(f);
+
         if(f instanceof DamageField){
             for(Field field : dataFromFields){
                 if(((AgrarianField)field).getContainedDamageFields().contains(f)){
@@ -52,6 +67,7 @@ public class AppDataManager {
                 }
             }
         }else{
+            Log.e("tes rm", f.getName());
             dataFromFields.remove(f);
         }
         dataChange();

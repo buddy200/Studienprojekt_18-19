@@ -153,6 +153,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onStop(){
         super.onStop();
+
     }
 
 
@@ -277,7 +278,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
                     case "startEdit":
                         mMapViewHandler.deleteFieldFromOverlay((Field) data);
-                        BSDetailDialogEditFragment.newInstance(((Field) data)).show(this.getSupportFragmentManager(), "EditField");
+                        BSDetailDialogEditFragment.newInstance().show(this.getSupportFragmentManager(), "EditField");
                         break;
                 }
                 break;

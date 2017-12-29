@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import org.osmdroid.api.IMapController;
@@ -22,7 +23,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -114,7 +115,7 @@ public class MapViewHandler implements MapContract.MapHandler {
                 boolean tapped = contains(event);
 
                 //only show detail if map is zoomed in enough
-                if (tapped && mapView.getZoomLevel() > 13){
+                if (tapped && mapView.getZoomLevel() > 13) {
                     mapInteractionListener.onFragmentMessage(TAG, "singleTabOnPoly", field);
                 }
                 return tapped;
@@ -219,10 +220,19 @@ public class MapViewHandler implements MapContract.MapHandler {
         map.getOverlayManager().add(p);
     }
 
+    public void reload(){
+        reloadWithData(mDataManager.getFields());
+    }
+
     public void reloadWithData(ArrayList<Field> fields) {
         fieldPolyMap.clear();
         map.getOverlayManager().overlays().clear();
+        if(currentLocMarker != null){
+            map.getOverlayManager().add(currentLocMarker);
+        }
+        Log.e("field length", String.valueOf(fields.size()));
         addFields(fields);
+
         map.invalidate();
     }
 

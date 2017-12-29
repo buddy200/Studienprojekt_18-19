@@ -237,6 +237,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             enoughPoints = false;
             listGeoPoints.clear();
             listCornerPoints.clear();
+            fabLabel.setVisibility(View.VISIBLE);
+            fabLabel.setText("Add a Corner Point at your current position");
 
         }else {
             Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();

@@ -5,7 +5,7 @@
     tools:context=".MainActivity">
 
     <item android:id="@+id/action_menu_done"
-        android:title="DONE"
+        android:title="Enough Points"
         android:orderInCategory="100"
 
         app:showAsAction="ifRoom"

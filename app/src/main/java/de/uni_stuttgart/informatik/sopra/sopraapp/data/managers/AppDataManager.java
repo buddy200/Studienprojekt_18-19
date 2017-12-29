@@ -45,7 +45,6 @@ public class AppDataManager {
     }
 
     public void addAgrarianField(Field f){
-        Log.e("added field", f.getName());
         dataFromFields.add(f);
         dataChange();
     }
@@ -56,8 +55,6 @@ public class AppDataManager {
     }
 
     public void removeField(Field f){
-        Log.e("tes rm", f.getName());
-        Log.e("is in?", String.valueOf(dataFromFields.contains(f)));
         dataFromFields.remove(f);
 
         if(f instanceof DamageField){
@@ -67,7 +64,6 @@ public class AppDataManager {
                 }
             }
         }else{
-            Log.e("tes rm", f.getName());
             dataFromFields.remove(f);
         }
         dataChange();
@@ -76,6 +72,7 @@ public class AppDataManager {
     private void dataChange(){
         if(listener != null){
             listener.onDataChange();
+            saveData();
         }
     }
 

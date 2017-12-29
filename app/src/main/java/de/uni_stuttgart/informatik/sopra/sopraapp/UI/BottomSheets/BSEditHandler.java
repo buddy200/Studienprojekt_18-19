@@ -55,22 +55,18 @@ public class BSEditHandler implements BSEditContract.Presenter {
     @Override
     public void deleteCurrentField() {
         if(mField != null) {
-            Log.e("removed", String.valueOf(mField.getName()));
             mDataManager.removeField(mField);
         }
     }
 
     @Override
     public void changeField(Field f) {
-        Log.e("current", mField.getName());
         this.deleteCurrentField();
         mDataManager.addAgrarianField(f);
         mField = f;
     }
 
     public Field getVisibleField() {
-        Log.e("index", String.valueOf(mDataManager.getFields().indexOf(mField)));
-        Log.e("index", mField.getName());
         return mField;
     }
 }

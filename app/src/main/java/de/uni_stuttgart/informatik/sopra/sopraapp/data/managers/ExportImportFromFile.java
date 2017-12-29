@@ -42,7 +42,7 @@ public class ExportImportFromFile {
      */
     public void WriteFields(ArrayList<Field> list) {
         try {
-            Log.e("DIR", context.getFilesDir().toString());
+            Log.e(TAG, "Writing to.." + context.getFilesDir().toString());
             context.deleteFile(filename);
             fos = context.openFileOutput(filename, context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
@@ -77,14 +77,16 @@ public class ExportImportFromFile {
      * @return
      */
     public ArrayList<Field> readFields() {
+        Log.e(TAG, "Reading data..");
         ArrayList<Field> list = new ArrayList<>();
+        InputStream fiis = null;
         Field tempfield;
         try {
             File file = context.getFileStreamPath(filename);
 
             if(file == null || !file.exists()) {
                 Log.e(TAG ,"file not found");
-                InputStream fiis = context.getResources().openRawResource(
+                fiis = context.getResources().openRawResource(
                         context.getResources().getIdentifier("appdata",
                                 "raw", context.getPackageName()));
                 ois = new ObjectInputStream(fiis);
@@ -94,9 +96,10 @@ public class ExportImportFromFile {
                 ois = new ObjectInputStream(fis);
             }
 
-            while (true) {
+            while ((fis != null && fis.available() > 0) || (fiis != null && fiis.available() > 0)) {
                 tempfield = (Field) ois.readObject();
                 tempfield.setContext(context);
+                Log.e(TAG, tempfield.getName());
                 list.add(tempfield);
             }
         } catch (FileNotFoundException e) {

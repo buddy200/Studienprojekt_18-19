@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
@@ -24,12 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 
 /**
  * sopra_priv
@@ -39,7 +44,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * this activity lets users add fields depending
  * on their position
  */
-public class AddFieldActivity extends AppCompatActivity implements FragmentInteractionListener<Object> {
+public class AddFieldActivity extends AppCompatActivity implements FragmentInteractionListener<Object>, AppDataManager.DataChangeListener {
     private static final String TAG = "AddFieldActivity";
 
     MapFragment mapFragment;
@@ -48,7 +53,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     Field fieldToAddFinal;
 
-    BottomSheetDetailDialogFragment bottomSheetDialog;
+    BSDetailDialogEditFragment bottomSheetDialog;
 
     ArrayList<GeoPoint> listGeoPoints = new ArrayList<>();
     ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
@@ -57,6 +62,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     Field parentField;
 
     private MapViewHandler mMapViewHandler;
+    private AppDataManager dataManager;
+
+    private TextView fabLabel;
+    private MenuItem menuItemDone;
+    private Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +76,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_add_field);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_activity_add_field);
 
@@ -83,41 +94,25 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 onFabClick(view);
             }
         });
-
-
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        onBackPressed();
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to go back and loose the created data?").setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener);
+        fabLabel = (TextView) findViewById(R.id.fab_label);
 
         //override onClick for toolbar arrow button,
         //to trigger going back to parent activty
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder.show();
+                generateSaveDialog().show();
             }
         });
 
-        final MenuItem menuItem = toolbar.getMenu().add(Menu.NONE, 1000, Menu.NONE, R.string.done);
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menuItemDone = toolbar.getMenu().add(Menu.NONE, 1000, Menu.NONE, R.string.done);
+        menuItemDone.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        invalidateOptionsMenu();
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_add);
 
-        mMapViewHandler = new MapViewHandler(this, null, mapFragment);
+        dataManager = new AppDataManager(this);
+        mMapViewHandler = new MapViewHandler(this, dataManager, mapFragment);
 
         mapFragment.setPresenter(mMapViewHandler);
 
@@ -148,12 +143,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
+        dataManager.readData();
     }
 
     @Override
     public void onStop(){
         super.onStop();
-
+        mMapViewHandler.destroy();
     }
 
 
@@ -188,10 +184,38 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         p.setPoints(listGeoPoints);
         mMapViewHandler.addPolyline(p);
 
+        fabLabel.setText("You need " + String.valueOf(3-listCornerPoints.size()) + " more");
+
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;
+            fabLabel.setVisibility(View.INVISIBLE);
+            menuItemDone.setVisible(true);
+            menuItemDone.setTitle("Enough Points");
+
         }
 
+    }
+
+    private AlertDialog.Builder generateSaveDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        onBackPressed();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to go back? fields not visible on screen will be dismissed").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener);
+
+        return builder;
     }
 
     /**
@@ -199,34 +223,24 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      * depending on the current state of our field to add
      */
     private void onDoneButtonClick() {
-        /*if (enoughPoints) {
-            myLocationListener.setFollow(false);
-
-            //add the new field
-            if (fieldToAddFinal == null) {
-                myLocationListener.setFollow(false);
-                Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
-                if(isDmgField) {
-                    fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
-                }
-                bottomSheetDialog = (BottomSheetDetailDialogFragment) BSDetailDialogEditFragment.newInstance(fieldToAdd);
-                bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
-
-             //done with editing - back to main
-            } else {
-                myLocationListener.setFollow(false);
-                Intent dataBack = new Intent();
-
-                if(parentField != null){
-                    dataBack.putExtra("parentField", parentField);
-                }
-                dataBack.putExtra("field", fieldToAddFinal);
-                setResult(RESULT_OK, dataBack);
-                this.finish();
+        if (enoughPoints) {
+            //myLocationListener.setFollow(false);
+            Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+            if(isDmgField) {
+                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
             }
+            bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
+            BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
+            bottomSheetDialog.setPresenter(handler);
+            bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
+
+            enoughPoints = false;
+            listGeoPoints.clear();
+            listCornerPoints.clear();
+
         }else {
             Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
-        }*/
+        }
     }
 
     /**
@@ -268,29 +282,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                         break;
                 }
                 break;
-            case "BottomSheetDetail":
-                switch (action){
-                    case "finishEdit":
-                        fieldToAddFinal = (Field) data;
-                        mMapViewHandler.addField(fieldToAddFinal);
-                        mMapViewHandler.invalidateMap();
-                        break;
-
-                    case "startEdit":
-                        mMapViewHandler.deleteFieldFromOverlay((Field) data);
-                        BSDetailDialogEditFragment.newInstance().show(this.getSupportFragmentManager(), "EditField");
-                        break;
-                }
-                break;
-            case "BSDetailDialogEditFragment":
-                switch (action) {
-                    case "finishEdit":
-                        fieldToAddFinal = (Field) data;
-                        mMapViewHandler.addField(fieldToAddFinal);
-                        mMapViewHandler.invalidateMap();
-                        break;
-                }
-                break;
         }
     }
 
@@ -300,6 +291,14 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      */
     public void onMapFragmentComplete() {
 
+    }
+
+    @Override
+    public void onDataChange() {
+        Log.e("dATA CHANGE", "HAA");
+        if(mMapViewHandler != null){
+            mMapViewHandler.reload();
+        }
     }
 
 }

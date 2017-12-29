@@ -244,4 +244,8 @@ public class MapViewHandler implements MapContract.MapHandler {
         mMapFragment.requestPermissions(strings, i);
     }
 
+    public void destroy(){
+        map.onDetach();
+    }
+
 }

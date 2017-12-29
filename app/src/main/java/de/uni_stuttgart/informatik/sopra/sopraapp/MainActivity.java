@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import org.osmdroid.config.Configuration;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -74,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
         dataManager.readData();
@@ -83,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     public void onStop(){
         super.onStop();
         dataManager.saveData();
+        mapHandler.destroy();
     }
 
     /**

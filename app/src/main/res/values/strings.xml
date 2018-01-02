@@ -41,4 +41,8 @@
     <string name="hail">Hagel</string>
     <string name="snow">Schnee</string>
     <string name="aliens">Aliens</string>
+
+
+    <!-- UI -->
+    <string name="navigate_Button">navigate</string>
 </resources>

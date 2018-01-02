@@ -127,6 +127,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" />
 
+            <Button
+                android:id="@+id/button_nav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/add_damageField_button"
+                android:text="@string/navigate_Button" />
+
         </RelativeLayout>
 
 

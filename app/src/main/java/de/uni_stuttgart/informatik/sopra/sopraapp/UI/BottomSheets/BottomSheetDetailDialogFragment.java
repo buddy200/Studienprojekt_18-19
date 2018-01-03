@@ -2,15 +2,23 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
@@ -101,12 +109,15 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     private Button addDmg;
     private Button edit;
     private Button navButton;
+    private ImageView imageView;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         name = (TextView) view.findViewById(R.id.field_detail_name);
         edit = (Button) view.findViewById(R.id.edit_finish_button);
         edit.setOnClickListener(this);
+
+        imageView = (ImageView) view.findViewById(R.id.imageView);
 
         size = (TextView) view.findViewById(R.id.field_detail_size);
         state = (TextView) view.findViewById(R.id.field_detail_state);
@@ -143,6 +154,18 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
             addDmg.setVisibility(View.INVISIBLE);
             date.setText(((DamageField)mField).getParsedDate());
             ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
+
+            if(((DamageField) mField).getpath() != null) {
+                Log.e("photo", ((DamageField) mField).getpath());
+                Bitmap myBitmap = BitmapFactory.decodeFile(((DamageField) mField).getpath());
+
+
+                imageView.setImageBitmap(myBitmap);
+
+            }
+            else{
+                Log.e("photo", "Kein Photo");
+            }
         }
 
     }

@@ -21,6 +21,7 @@
 
         <!-- this text will only auto scale in andorid 8, autoscale prior to this release
         is not supported by android and there is no time to implement this by ourselfes -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,6 +135,15 @@
                 android:layout_alignParentTop="true"
                 android:layout_toStartOf="@+id/add_damageField_button"
                 android:text="@string/navigate_Button" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_damageField_button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="47dp"
+                app:srcCompat="@android:drawable/btn_star" />
 
         </RelativeLayout>
 

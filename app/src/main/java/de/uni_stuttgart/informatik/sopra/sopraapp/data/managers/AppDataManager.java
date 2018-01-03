@@ -57,15 +57,31 @@ public class AppDataManager {
     public void removeField(Field f){
         dataFromFields.remove(f);
 
-        if(f instanceof DamageField){
-            for(Field field : dataFromFields){
-                if(((AgrarianField)field).getContainedDamageFields().contains(f)){
-                    ((AgrarianField)field).getContainedDamageFields().remove(f);
+       /* if(f instanceof DamageField){
+            for(Field field : dataFromFields) {
+                if (field instanceof AgrarianField) {
+                    if (((AgrarianField) field).getContainedDamageFields().contains(f)) {
+                        ((AgrarianField) field).getContainedDamageFields().remove(f);
+                    }
                 }
             }
-        }else{
-            dataFromFields.remove(f);
-        }
+        }else{*/
+            
+          /*  if(f instanceof AgrarianField) {
+
+
+
+
+
+
+
+
+               for (Field damagefield : ((AgrarianField) f).getContainedDamageFields()){
+                    removeField(damagefield);
+                }
+                dataFromFields.remove(f);
+            }
+        }*/
         dataChange();
     }
 

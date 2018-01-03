@@ -45,4 +45,7 @@
 
     <!-- UI -->
     <string name="navigate_Button">navigate</string>
+    <string name="add_photo_button">Add photo</string>
+    <string name="edit_field_finish_button">Finish</string>
+    <string name="edit_field_delete_button">Delete</string>
 </resources>

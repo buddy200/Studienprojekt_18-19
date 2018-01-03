@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import java.io.Serializable;
@@ -28,6 +29,16 @@ public class DamageField extends Field implements Serializable{
 
     private String parsedDate;
     private String evaluator;
+
+    public String getpath() {
+        return path;
+    }
+
+    public void setpath(String path) {
+        this.path = path;
+    }
+
+    private String path;
 
     private DamageFieldType type = DamageFieldType.Aliens;
 
@@ -91,7 +102,7 @@ public class DamageField extends Field implements Serializable{
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat format2 = new SimpleDateFormat("hh:mm");
         String parsedDate =
-                        context.getResources().getString(R.string.date_label)
+                context.getResources().getString(R.string.date_label)
                         + " " + format1.format(date) + " " +
                         context.getResources().getString(R.string.time_label)
                         + " " + format2.format(date);

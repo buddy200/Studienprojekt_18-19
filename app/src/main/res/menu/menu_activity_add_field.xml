@@ -4,9 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <item
+        android:id="@+id/action_menu_toggleLoc"
+        android:orderInCategory="103"
+        android:title="@string/toggleLoc_Button"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_menu_redo"
+        android:orderInCategory="102"
+        android:title="@string/redo_Button"
+    app:showAsAction="never"/>
     <item android:id="@+id/action_menu_done"
-        android:title="Enough Points"
-        android:orderInCategory="100"
+        android:title="@string/done_Button"
+        android:orderInCategory="101"
 
         app:showAsAction="ifRoom"
         />

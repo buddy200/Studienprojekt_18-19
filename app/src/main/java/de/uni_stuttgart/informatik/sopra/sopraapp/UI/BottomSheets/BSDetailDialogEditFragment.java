@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -21,6 +22,7 @@ import java.util.List;
 import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -52,6 +54,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
     private EditText fieldPolicyHolder;
     private Button finishButton;
     private Button deleteButton;
+    private Button addPhotoButton;
 
     /**
      * this factory method is used to generate an instance
@@ -89,12 +92,15 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
 
         finishButton = view.findViewById(R.id.edit_finish_button);
         deleteButton = view.findViewById(R.id.delete_button);
+        addPhotoButton = view.findViewById(R.id.add_Photo_Button);
 
         finishButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
 
-        finishButton.setText("Finish");
-        deleteButton.setText("Delete");
+        addPhotoButton.setOnClickListener(this);
+
+//        finishButton.setText("Finish");
+//        deleteButton.setText("Delete");
 
         return view;
     }
@@ -116,7 +122,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
      */
     @Override
     public void onClick(View v) {
-        if(this.mPresenter != null) {
+        if (this.mPresenter != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
                     mPresenter.changeField(changedField());
@@ -124,6 +130,12 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
                     break;
                 case R.id.delete_button:
                     mPresenter.deleteCurrentField();
+                    this.dismiss();
+                    break;
+                case R.id.add_Photo_Button:
+                    mPresenter.changeField(changedField());
+                    takePhoto();
+                    mPresenter.changeField(mPresenter.getVisibleField());
                     this.dismiss();
                     break;
             }
@@ -149,6 +161,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         }
 
         if(f instanceof AgrarianField){
+            addPhotoButton.setVisibility(View.INVISIBLE);
             headingText.setText("AgrarFeld");
             datePicker.setVisibility(View.INVISIBLE);
             datePicker.removeAllViews();
@@ -191,7 +204,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         Field mFieldToChange;
 
         if(mPresenter.getVisibleField() instanceof AgrarianField){
-             mFieldToChange = new AgrarianField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+            mFieldToChange = new AgrarianField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
             ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
 
             for(DamageField dmg : ((AgrarianField) mPresenter.getVisibleField()).getContainedDamageFields()){
@@ -220,4 +233,13 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());
         return mFieldToChange;
     }
+
+    public void takePhoto (){
+        PhotoManager photoManager = new PhotoManager(getActivity());
+        if(mPresenter.getVisibleField() instanceof DamageField){
+            String s = photoManager.dispatchTakePictureIntent();
+            ((DamageField) mPresenter.getVisibleField()).setpath(s);
+        }
+    }
+
 }

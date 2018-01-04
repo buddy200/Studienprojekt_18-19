@@ -19,17 +19,17 @@
         android:orientation="vertical">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:layout_gravity="left"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:id="@+id/heading"
-                android:text="-name-"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:layout_gravity="left"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:id="@+id/heading"
+            android:text="-name-"/>
 
 
         <EditText
@@ -124,7 +124,8 @@
                 android:paddingTop="@dimen/list_item_spacing_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:text="@string/edit_field_finish_button"/>
 
             <Button
                 android:id="@+id/delete_button"
@@ -133,7 +134,16 @@
                 android:paddingTop="@dimen/list_item_spacing_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/edit_finish_button"/>
+                android:layout_toStartOf="@id/edit_finish_button"
+                android:text="@string/edit_field_delete_button"/>
+
+            <Button
+                android:id="@+id/add_Photo_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/delete_button"
+                android:text="@string/add_photo_button" />
 
         </RelativeLayout>
 

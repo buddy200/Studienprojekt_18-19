@@ -1,14 +1,24 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
@@ -33,6 +43,8 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     protected FragmentInteractionListener mListener;
     private BSEditContract.Presenter mPresenter;
 
+
+    private Field mField;
 
     Field changedField;
 
@@ -96,12 +108,16 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     private TextView date;
     private Button addDmg;
     private Button edit;
+    private Button navButton;
+    private ImageView imageView;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         name = (TextView) view.findViewById(R.id.field_detail_name);
         edit = (Button) view.findViewById(R.id.edit_finish_button);
         edit.setOnClickListener(this);
+
+        imageView = (ImageView) view.findViewById(R.id.imageView);
 
         size = (TextView) view.findViewById(R.id.field_detail_size);
         state = (TextView) view.findViewById(R.id.field_detail_state);
@@ -111,11 +127,14 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         date = (TextView) view.findViewById(R.id.field_detail_date);
         addDmg = (Button) view.findViewById(R.id.add_damageField_button);
         addDmg.setOnClickListener(this);
+        navButton = (Button) view.findViewById(R.id.button_nav);
+        navButton.setOnClickListener(this);
 
     }
 
     @Override
     public void fillData(Field mField) {
+        this.mField = mField;
         name.setText(mField.getName());
         county.setText(mField.getCounty());
         edit.setText(getContext().getResources().getString(R.string.button_edit_name));
@@ -127,6 +146,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
         //is field agrarian?
         if (mField instanceof AgrarianField) {
+            imageView.setVisibility(View.INVISIBLE);
             ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());
             date.setText("");
         }
@@ -135,6 +155,15 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
             addDmg.setVisibility(View.INVISIBLE);
             date.setText(((DamageField)mField).getParsedDate());
             ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
+
+            if(((DamageField) mField).getpath() != null) {
+                Log.e("photo", ((DamageField) mField).getpath());
+                Bitmap myBitmap = BitmapFactory.decodeFile(((DamageField) mField).getpath());
+
+                imageView.setImageBitmap(myBitmap);
+            }
+            else{
+            }
         }
 
     }
@@ -152,7 +181,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
      */
     @Override
     public void onClick(View v) {
-        if(mListener != null) {
+        if (mListener != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
                     mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
@@ -160,6 +189,18 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                     break;
                 case R.id.add_damageField_button:
                     mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
+                    break;
+                case R.id.button_nav:
+                    //call a googlemaps intent with the position of the centroid point from the field object
+                    String geoString = "geo:" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude()) + "?q=" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude());
+                    Uri gmmIntentUri = Uri.parse(geoString);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    }
+
+                    break;
             }
         }
     }

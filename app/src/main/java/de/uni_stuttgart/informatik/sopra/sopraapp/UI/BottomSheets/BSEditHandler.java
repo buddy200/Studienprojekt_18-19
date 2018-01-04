@@ -5,6 +5,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.util.Log;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 

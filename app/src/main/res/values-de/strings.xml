@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Field Manager</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="done">Fertig</string>
+    <string name="toastmsg_nolocation">Keine Standortdaten verfügebar. Standorterfassung aktiviert?</string>
+    <string name="toastmsg_not_enough_points">Nicht genügend Punkte, mindestends 3 Punkte werden benötigt</string>
+    <string name="toastmsg_points_already_added">Alle Punkte wurden bereits hinzugefügt</string>
+    <string name="toastmsg_toggle_Loc_Off">Automatischer Zoom aus</string>
+    <string name="toastmsg_toggle_Loc_On">Automatischer Zoom an</string>
+    <string name="field_default_name">Kein Feldname</string>
+    <string name="damage_case_defaut_name">Kein Name</string>
+    <string name="owner_default_name">Kein Besitzer</string>
+    <string name="evaluator_default_name">Kein Gutachter</string>
+    <string name="county_default_name">Kein Ort</string>
+    <string name="damagefield_name_default">Kein Name</string>
+    <string name="title_activity_add_field">Feld hinzufügen</string>
+    <string name="title_activity_add_fieldAgrar">Agrarfeld hinzufügen</string>
+    <string name="title_activity_add_fieldDmg">Schadensfall hinzufügen</string>
+    <string name="add_dmg_field_button">Schaden hinzufügen</string>
+    <string name="button_edit_name">editieren</string>
+    <string name="button_finish_name">Fertig</string>
+    <string name="date_label">Tag</string>
+    <string name="time_label">Zeit</string>
+    <string name="hemp">Hanf</string>
+    <string name="wheat">Weizen</string>
+    <string name="rye">Roggen</string>
+    <string name="potatoes">Kartoffeln</string>
+    <string name="corn">Mais</string>
+    <string name="hail">Hagel</string>
+    <string name="snow">Schnee</string>
+    <string name="aliens">Aliens</string>
+    <string name="navigate_Button">Navigiere zu</string>
+    <string name="add_photo_button">neues Photo</string>
+    <string name="edit_field_finish_button">Fertig</string>
+    <string name="edit_field_delete_button">Löschen</string>
+    <string name="done_Button">genügend Punkte</string>
+    <string name="toggleLoc_Button">Automatischer Zoom An/Aus</string>
+    <string name="redo_Button">Lösche letzten Punkt</string>
+    <string name="toastmsg_nothing_found">Keine Felder gefunden</string>
+    <string name="go_back_message">Sind Sie sicher, dass Sie zurückgehen möchten? Felder, die auf dem Bildschirm nicht sichtbar sind, werden verworfen</string>
+</resources>

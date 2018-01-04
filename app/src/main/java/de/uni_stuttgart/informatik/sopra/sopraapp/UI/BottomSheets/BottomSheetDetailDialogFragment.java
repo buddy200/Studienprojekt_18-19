@@ -146,6 +146,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
         //is field agrarian?
         if (mField instanceof AgrarianField) {
+            imageView.setVisibility(View.INVISIBLE);
             ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());
             date.setText("");
         }
@@ -159,12 +160,9 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                 Log.e("photo", ((DamageField) mField).getpath());
                 Bitmap myBitmap = BitmapFactory.decodeFile(((DamageField) mField).getpath());
 
-
                 imageView.setImageBitmap(myBitmap);
-
             }
             else{
-                Log.e("photo", "Kein Photo");
             }
         }
 

@@ -18,7 +18,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
  * sopra_priv
  * Created by Felix B on 10.11.17.
  * Mail: felix.burk@gmail.com
- *
+ * <p>
  * this activity lets users add fields depending
  * on their position
  */
@@ -68,6 +70,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     private MenuItem menuItemDone;
     private Toolbar toolbar;
 
+    private boolean enoughPoints = false;
+
+    private Polyline p;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         toolbar.setTitle(R.string.title_activity_add_field);
 
         cornerPoints = new ArrayList<>();
+        p = new Polyline();
 
         //back button on toolbar implementation
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -144,10 +151,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
         dataManager.readData();
+        OnMapClick();
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         mMapViewHandler.destroy();
     }
@@ -165,26 +173,80 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             case R.id.action_menu_done:
                 onDoneButtonClick();
                 break;
+            case R.id.action_menu_toggleLoc:
+                onToggleLocButtonClick();
+                break;
+            case R.id.action_menu_redo:
+                onRedoButtonClick();
+                break;
         }
         return true;
     }
 
+    /*
+     * removes the last added Point from the new field, and redraw the Polyline
+     */
+    private void onRedoButtonClick() {
+        listGeoPoints.remove(listGeoPoints.size() - 1);
+        listCornerPoints.remove(listCornerPoints.size() - 1);
+        p.setPoints(listGeoPoints);
+        mMapViewHandler.addPolyline(p);
+    }
 
-    private boolean enoughPoints = false;
+    private void onToggleLocButtonClick() {
+        if (myLocationListener.getFollow()) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.toastmsg_toggle_Loc_Off), Toast.LENGTH_SHORT).show();
+            myLocationListener.setFollow(false);
+        } else {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.toastmsg_toggle_Loc_On), Toast.LENGTH_SHORT).show();
+            myLocationListener.setFollow(true);
+        }
+    }
+
+    /*
+     * adds a point to the field with a click on the map
+     */
+    public void OnMapClick() {
+        MapEventsReceiver mReceive = new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint point) {
+                Location location = new Location("Loc");
+                location.setLatitude(point.getLatitude());
+                location.setLongitude(point.getLongitude());
+                addPoint(location);
+
+                Snackbar.make(mapFragment.getView(), "Point at " +
+                        location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                return false;
+            }
+        };
+
+
+        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
+        mMapViewHandler.getMap().getOverlays().add(OverlayEvents);
+    }
+
 
     /**
      * adds a new Point to the Field
+     *
      * @param location
      */
+
     public void addPoint(Location location) {
-        Polyline p = new Polyline();
         GeoPoint g = new GeoPoint(location.getLatitude(), location.getLongitude());
         listGeoPoints.add(g);
         listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
         p.setPoints(listGeoPoints);
         mMapViewHandler.addPolyline(p);
 
-        fabLabel.setText("You need " + String.valueOf(3-listCornerPoints.size()) + " more");
+        fabLabel.setText("You need " + String.valueOf(3 - listCornerPoints.size()) + " more");
 
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;
@@ -200,7 +262,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         onBackPressed();
                         break;
@@ -212,7 +274,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
         };
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to go back? fields not visible on screen will be dismissed").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage(getResources().getString(R.string.go_back_message)).setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener);
 
         return builder;
@@ -226,7 +288,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (enoughPoints) {
             //myLocationListener.setFollow(false);
             Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
-            if(isDmgField) {
+            if (isDmgField) {
                 fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
             }
             bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
@@ -238,7 +300,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             listGeoPoints.clear();
             listCornerPoints.clear();
 
-        }else {
+        } else {
             Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();
         }
     }
@@ -246,37 +308,39 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     /**
      * handle Floating Action Button clicks
      * depending on the current state of our field to add
+     *
      * @param view
      */
     private void onFabClick(View view) {
-        if(fieldToAddFinal == null){
+        if (fieldToAddFinal == null) {
             Location location = myLocationListener.getLocation();
-            if(location != null){
+            if (location != null) {
                 addPoint(location);
 
                 Snackbar.make(view, "Point at " +
                         location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
-            }else {
+            } else {
                 Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
-        }else {
+        } else {
             Snackbar.make(view, R.string.toastmsg_points_already_added, Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 
     /**
      * receive messages from fragments
-     * @param Tag of the fragment
+     *
+     * @param Tag    of the fragment
      * @param action the fragment performs
-     * @param data data the fragment sends
+     * @param data   data the fragment sends
      */
     @Override
     public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
-        Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
-        switch (Tag){
+        Log.d(TAG, "MSG TAG: " + Tag + " ACTION: " + action);
+        switch (Tag) {
             case "MapFragment":
-                switch (action){
+                switch (action) {
                     case "complete":
                         onMapFragmentComplete();
                         break;
@@ -296,7 +360,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onDataChange() {
         Log.e("dATA CHANGE", "HAA");
-        if(mMapViewHandler != null){
+        if (mMapViewHandler != null) {
             mMapViewHandler.reload();
         }
     }

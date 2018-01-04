@@ -135,9 +135,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
                 case R.id.add_Photo_Button:
                     mPresenter.changeField(changedField());
                     takePhoto();
-                    Log.e("photo",((DamageField) mPresenter.getVisibleField()).getpath() + "1");
                     mPresenter.changeField(mPresenter.getVisibleField());
-                    Log.e("photo", "hallo");
                     this.dismiss();
                     break;
             }
@@ -240,11 +238,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         PhotoManager photoManager = new PhotoManager(getActivity());
         if(mPresenter.getVisibleField() instanceof DamageField){
             String s = photoManager.dispatchTakePictureIntent();
-            Log.e("photo", s);
             ((DamageField) mPresenter.getVisibleField()).setpath(s);
-        //    mPresenter.changeField(mPresenter.getVisibleField());
-
-
         }
     }
 

@@ -56,7 +56,7 @@ public class AppDataManager {
 
     public void removeField(Field f){
         dataFromFields.remove(f);
-
+//only a quickfix todo: make a implementation that works
        /* if(f instanceof DamageField){
             for(Field field : dataFromFields) {
                 if (field instanceof AgrarianField) {

@@ -122,6 +122,10 @@ public class MYLocationListener implements LocationListener {
     public void setFollow(boolean b){
         follow = b;
     }
+
+    public boolean getFollow(){
+        return follow;
+    }
 }
 
 

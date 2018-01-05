@@ -93,6 +93,9 @@ public abstract class Field implements Serializable{
      * @param cp
      */
     public void addCornerPoint (CornerPoint cp) {
+        if(cornerPoints.size() == 1) {
+            setAutomaticCounty();
+        }
         if(!finished) {
             cornerPoints.add(cp);
             if (cornerPoints.size() > 2) {

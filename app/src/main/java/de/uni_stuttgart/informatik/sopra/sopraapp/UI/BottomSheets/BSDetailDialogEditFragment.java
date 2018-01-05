@@ -224,10 +224,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         mFieldToChange.setName(fieldName.getText().toString());
         mFieldToChange.setType((FieldType) fieldSpinner.getSelectedItem());
 
-        if(!fieldRegion.getText().toString().equals("")) {
+        if(!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {
             mFieldToChange.setCounty(fieldRegion.getText().toString());
         }else{
-            mFieldToChange.setAutomaticCounty();
+        //    mFieldToChange.setAutomaticCounty();
         }
 
         Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());

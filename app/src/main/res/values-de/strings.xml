@@ -39,4 +39,6 @@
     <string name="redo_Button">Lösche letzten Punkt</string>
     <string name="toastmsg_nothing_found">Keine Felder gefunden</string>
     <string name="go_back_message">Sind Sie sicher, dass Sie zurückgehen möchten? Felder, die auf dem Bildschirm nicht sichtbar sind, werden verworfen</string>
+    <string name="button_add_next_Foto_text">Nächstes Foto</string>
+    <string name="Button_foto_finish_text">beenden</string>
 </resources>

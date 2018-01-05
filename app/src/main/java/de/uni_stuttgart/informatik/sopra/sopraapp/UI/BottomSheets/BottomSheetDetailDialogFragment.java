@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,14 +112,19 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     private Button edit;
     private Button navButton;
     private ImageView imageView;
+    private RecyclerView recyclerView;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
+        recyclerView.setLayoutManager(layoutManager);
         name = (TextView) view.findViewById(R.id.field_detail_name);
         edit = (Button) view.findViewById(R.id.edit_finish_button);
         edit.setOnClickListener(this);
 
-        imageView = (ImageView) view.findViewById(R.id.imageView);
 
         size = (TextView) view.findViewById(R.id.field_detail_size);
         state = (TextView) view.findViewById(R.id.field_detail_state);
@@ -146,21 +153,19 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
         //is field agrarian?
         if (mField instanceof AgrarianField) {
-            imageView.setVisibility(View.INVISIBLE);
             ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());
             date.setText("");
         }
         //is field damage?
         if (mField instanceof DamageField) {
             addDmg.setVisibility(View.INVISIBLE);
+            county.setVisibility(View.INVISIBLE);
             date.setText(((DamageField)mField).getParsedDate());
             ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
 
-            if(((DamageField) mField).getpath() != null) {
-                Log.e("photo", ((DamageField) mField).getpath());
-                Bitmap myBitmap = BitmapFactory.decodeFile(((DamageField) mField).getpath());
-
-                imageView.setImageBitmap(myBitmap);
+            if(((DamageField) mField).getpaths() != null) {
+                GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), ((DamageField) mField).getpaths());
+                recyclerView.setAdapter(galleryAdapter);
             }
             else{
             }

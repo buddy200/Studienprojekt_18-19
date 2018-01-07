@@ -40,6 +40,7 @@ public abstract class Field implements Serializable{
     static final String KEY_COUNTY = "county";
     static final String KEY_SIZE = "size";
     static final String KEY_TYPE = "type";
+    static final String KEY_CONVERTEDSIZE = "convertedSize";
 
     protected transient Context context;
 
@@ -49,6 +50,8 @@ public abstract class Field implements Serializable{
     private String county;
     private int color;
     private double size;
+
+    private String conSize;
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
 
@@ -112,6 +115,7 @@ public abstract class Field implements Serializable{
             cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));
             cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size() - 1), cornerPoints.get(1));
             calculateSize();
+            convertSize();
             finished = true;
         }
     }
@@ -172,6 +176,28 @@ public abstract class Field implements Serializable{
             for (Triangle t : triangleList) {
                 size += t.getSize();
             }
+        }
+    }
+
+    /*
+     * Convert the size of the field in a readable format
+     */
+    private void convertSize(){
+        if (this.size > 1000000){
+            this.conSize = (String.valueOf(size/1000000)) + "km" + "\u00B2";
+            return;
+        }
+        if (this.size > 10000 && this.size <= 1000000){
+            this.conSize = (String.valueOf(size/10000)) + "ha";
+            return;
+        }
+        if (this.size > 100 && this.size <= 10000){
+            this.conSize = (String.valueOf(size/100)) + "a";
+            return;
+        }
+        else{
+            this.conSize = (String.valueOf(size)) + "m" + "\u00B2";
+            return;
         }
     }
 
@@ -268,6 +294,10 @@ public abstract class Field implements Serializable{
 
     public void setContext(Context context){
         this.context = context;
+    }
+
+    public String getConvertedSize() {
+        return conSize;
     }
 
 

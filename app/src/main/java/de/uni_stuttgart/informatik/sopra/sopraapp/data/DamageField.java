@@ -74,6 +74,7 @@ public class DamageField extends Field implements Serializable{
         bundle.putString(KEY_NAME, this.getName());
         bundle.putInt(KEY_COLOR, this.getColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
+        bundle.putString(KEY_CONVERTEDSIZE, this.getConvertedSize());
         if(this.getSize() != null){
             bundle.putDouble(KEY_SIZE, this.getSize());
         }

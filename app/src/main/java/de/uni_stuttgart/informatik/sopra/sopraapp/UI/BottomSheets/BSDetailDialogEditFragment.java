@@ -191,7 +191,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
 
 
         fieldName.setText(f.getName());
-        fieldSize.setText(String.valueOf(f.getSize()));
+        fieldSize.setText(f.getConvertedSize());
 
     }
 

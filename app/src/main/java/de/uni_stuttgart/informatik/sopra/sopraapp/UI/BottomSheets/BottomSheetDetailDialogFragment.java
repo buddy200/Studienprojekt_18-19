@@ -2,25 +2,18 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
@@ -149,7 +142,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         state.setText(mField.getType().toString());
         state.setTextColor(mField.getColor());
 
-        size.setText(mField.getSize() + "m" + "\u00B2");
+        size.setText(mField.getConvertedSize());
 
         //is field agrarian?
         if (mField instanceof AgrarianField) {

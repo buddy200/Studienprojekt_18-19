@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/background_light"
-        android:id="@+id/bottomSheet"
+        android:id="@+id/bottomSheetFoto"
         android:layout_gravity="top"
         android:orientation="vertical">
 

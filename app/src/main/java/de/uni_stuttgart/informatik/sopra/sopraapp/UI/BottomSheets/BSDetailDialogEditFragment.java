@@ -1,9 +1,11 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,9 +100,6 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         deleteButton.setOnClickListener(this);
 
         addPhotoButton.setOnClickListener(this);
-
-//        finishButton.setText("Finish");
-//        deleteButton.setText("Delete");
 
         return view;
     }
@@ -214,6 +213,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         }else if(mPresenter.getVisibleField() instanceof DamageField){
             mFieldToChange = new DamageField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
             ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
+            ((DamageField) mFieldToChange).setpaths(((DamageField) mPresenter.getVisibleField()).getpaths());
 
         }else{
             return null;
@@ -224,16 +224,19 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         mFieldToChange.setName(fieldName.getText().toString());
         mFieldToChange.setType((FieldType) fieldSpinner.getSelectedItem());
 
-        if(!fieldRegion.getText().toString().equals("")) {
+        if(!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {
             mFieldToChange.setCounty(fieldRegion.getText().toString());
         }else{
-            mFieldToChange.setAutomaticCounty();
+        //    mFieldToChange.setAutomaticCounty();
         }
 
         Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());
         return mFieldToChange;
     }
 
+    /*
+     * create a PhotoManager object and save the fielpath from the picture in the damageField
+     */
     public void takePhoto (){
         PhotoManager photoManager = new PhotoManager(getActivity());
         if(mPresenter.getVisibleField() instanceof DamageField){

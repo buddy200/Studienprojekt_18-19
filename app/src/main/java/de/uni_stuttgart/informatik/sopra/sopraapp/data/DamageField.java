@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,21 +25,14 @@ public class DamageField extends Field implements Serializable{
 
     private static final String KEY_DATE = "date";
     private static final String KEY_EVALUATOR = "evaluator";
+    private static final String KEY_IMAGES = "images";
 
     private static final long serialVersionUID = 8L;
 
     private String parsedDate;
     private String evaluator;
 
-    public String getpath() {
-        return path;
-    }
-
-    public void setpath(String path) {
-        this.path = path;
-    }
-
-    private String path;
+    private ArrayList<PictureData> paths;
 
     private DamageFieldType type = DamageFieldType.Aliens;
 
@@ -56,6 +50,7 @@ public class DamageField extends Field implements Serializable{
         this.setColor(damageFieldToColor());
         this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
+        this.paths = new ArrayList<>();
 
     }
 
@@ -87,6 +82,7 @@ public class DamageField extends Field implements Serializable{
         //damageField specific attributes
         bundle.putString(KEY_EVALUATOR, this.evaluator);
         bundle.putString(KEY_DATE, parsedDate);
+        bundle.putSerializable(KEY_IMAGES, paths);
 
         return bundle;
     }
@@ -114,6 +110,19 @@ public class DamageField extends Field implements Serializable{
 
     public void setEvaluator(String evaluator) {this.evaluator = evaluator;}
 
+
+    public ArrayList<PictureData> getpaths() {
+        return paths;
+    }
+
+    public void setpaths (ArrayList<PictureData> data){
+        this.paths = data;
+    }
+
+    public void setpath(String path) {
+        PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);
+        paths.add(pictureData);
+    }
 
 }
 

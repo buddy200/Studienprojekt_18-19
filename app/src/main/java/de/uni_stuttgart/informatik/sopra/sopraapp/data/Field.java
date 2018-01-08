@@ -93,6 +93,9 @@ public abstract class Field implements Serializable{
      * @param cp
      */
     public void addCornerPoint (CornerPoint cp) {
+        if(cornerPoints.size() == 1) {
+            setAutomaticCounty();
+        }
         if(!finished) {
             cornerPoints.add(cp);
             if (cornerPoints.size() > 2) {
@@ -117,6 +120,7 @@ public abstract class Field implements Serializable{
      * calculate the size of the polygon
      */
     private void calculateSize() {
+        size = 0;
         List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints);
 
         Queue<CornerPoint> outwardPoints = new LinkedList<>();

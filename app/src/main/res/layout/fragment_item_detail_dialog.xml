@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/background_light"
-        android:id="@+id/bottomSheet"
+        android:id="@+id/bottomSheetFoto"
         android:layout_gravity="top"
         android:orientation="vertical">
 
@@ -136,14 +136,13 @@
                 android:layout_toStartOf="@+id/add_damageField_button"
                 android:text="@string/navigate_Button" />
 
-            <ImageView
-                android:id="@+id/imageView"
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/imagegallery"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@+id/add_damageField_button"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="47dp"
-                app:srcCompat="@android:drawable/btn_star" />
+                android:layout_height="match_parent"
+                />
 
         </RelativeLayout>
 

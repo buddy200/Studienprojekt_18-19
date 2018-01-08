@@ -56,4 +56,6 @@
     <string name="redo_Button">Redo last point</string>
     <string name="toastmsg_nothing_found">No fields found</string>
     <string name="go_back_message">Are you sure you want to go back? fields not visible on screen will be dismissed</string>
+    <string name="button_add_next_Foto_text">add another Foto</string>
+    <string name="Button_foto_finish_text">finish</string>
 </resources>

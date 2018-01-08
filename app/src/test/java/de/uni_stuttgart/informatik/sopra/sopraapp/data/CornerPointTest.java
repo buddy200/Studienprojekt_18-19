@@ -29,7 +29,7 @@ public class CornerPointTest {
 	public void testAngle() {
 		CornerPoint cp  = new CornerPoint(0, 0);
 		CornerPoint cp1  = new CornerPoint(0, 1);
-		CornerPoint cp2  = new CornerPoint(1, 0);
+		CornerPoint cp2  = new CornerPoint(1,0);
 		
 		cp.calculateAngle(cp1, cp2);
 		assertEquals(Math.PI/2, cp.getAngle(), 0.001);
@@ -46,5 +46,10 @@ public class CornerPointTest {
 		assertFalse(cp.equals(cp2));
 		assertFalse(cp.equals(cp1));
 		assertFalse(cp.equals(new UTMCoordinate()));
+
+		cp1 = new CornerPoint(-1,0);
+		cp.calculateAngle(cp1, cp2);
+		assertEquals(Math.PI, cp.getAngle(), 0.001);
+
 	}
 }

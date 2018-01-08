@@ -50,7 +50,8 @@ public class WGS84UTMConverter {
         utm.setZone(utmZone);
         return utm;
     }
-    private static UTMCoordinate getUtmCoordinateByMeridian(double phi, double lambda, double centralMerdian) {
+
+    public static UTMCoordinate getUtmCoordinateByMeridian(double phi, double lambda, double centralMerdian) {
         UTMCoordinate utm = new UTMCoordinate();
 
         final double n = a / Math.sqrt(1.0 - Math.pow(e * Math.sin(phi), 2));

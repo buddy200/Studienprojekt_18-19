@@ -49,7 +49,6 @@ public class CornerPoint implements Serializable {
         UTMCoordinate utmAfter = after.getUtm();
         Vector v_before;
         Vector v_after;
-        //TODO test
         double centralMerdian = 3.0 + 6.0 * (this.utm.getZone() - 1.0) - 180.0;
         if(utm.getZone() == utmBefore.getZone()) {
             v_before = new Vector((utmBefore.getEasting()- utm.getEasting()), (utmBefore.getNorthing()-utm.getNorthing()));
@@ -112,6 +111,10 @@ public class CornerPoint implements Serializable {
 
     public double getAngle() {
         return angle;
+    }
+
+    public void setUtm(UTMCoordinate utm) {
+        this.utm = utm;
     }
 
     @Override

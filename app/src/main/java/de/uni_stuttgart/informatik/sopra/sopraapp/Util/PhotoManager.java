@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by larsb on 20.12.2017.
@@ -52,6 +55,7 @@ public class PhotoManager {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
                 return photoFile.getAbsolutePath();
             }
 
@@ -75,4 +79,5 @@ public class PhotoManager {
         Log.e("Path", mCurrentPhotoPath);
         return image;
     }
+
 }

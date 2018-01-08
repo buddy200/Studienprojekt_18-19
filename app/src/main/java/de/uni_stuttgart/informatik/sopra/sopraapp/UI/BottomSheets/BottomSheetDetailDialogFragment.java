@@ -112,7 +112,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
         recyclerView.setLayoutManager(layoutManager);
         name = (TextView) view.findViewById(R.id.field_detail_name);
         edit = (Button) view.findViewById(R.id.edit_finish_button);
@@ -131,6 +131,8 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         navButton.setOnClickListener(this);
 
     }
+
+
 
     @Override
     public void fillData(Field mField) {

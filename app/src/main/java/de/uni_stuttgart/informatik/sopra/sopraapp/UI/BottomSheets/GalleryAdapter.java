@@ -20,13 +20,18 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
  * This class creates the photo gallery from one damageField
  */
 
+
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
     private ArrayList<PictureData> galleryList;
     private Context context;
+    private final BitmapFactory.Options options;
+    private static final int IMAGE_SCALE = 5;
 
     public GalleryAdapter(Context context, ArrayList<PictureData> galleryList) {
         this.galleryList = galleryList;
         this.context = context;
+        options = new BitmapFactory.Options();
+
     }
 
     @Override
@@ -45,9 +50,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         File imgFile = new  File(galleryList.get(i).getImage_path());
         if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            options.inSampleSize = IMAGE_SCALE;
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
             viewHolder.img.setImageBitmap(myBitmap);
         }
+        imgFile = null;
     }
 
     @Override

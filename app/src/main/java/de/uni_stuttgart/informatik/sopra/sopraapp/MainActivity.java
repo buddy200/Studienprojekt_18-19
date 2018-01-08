@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import org.osmdroid.config.Configuration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -272,4 +273,20 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
 
     }*/
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      /*  if (resultCode != RESULT_OK && mPresenter.getVisibleField() instanceof DamageField && requestCode == REQUEST_TAKE_PHOTO){
+
+
+            String path = ((DamageField) mPresenter.getVisibleField()).getpaths().get(((DamageField) mPresenter.getVisibleField()).getpaths().size()-1).getImage_path();
+            File f = new File(path);
+            f.delete();
+            ((DamageField) mPresenter.getVisibleField()).getpaths().remove(((DamageField) mPresenter.getVisibleField()).getpaths().size()-1);
+        }*/
+      Log.e("test", "rtgeu8gsfjhihugiz");
+    }
 }

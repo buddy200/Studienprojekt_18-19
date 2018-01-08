@@ -60,7 +60,7 @@
                 android:paddingTop="5dp"
                 android:paddingLeft="5dp"
                 android:paddingBottom="5dp"
-                android:text="Add a Corner Point at your current position"
+                android:text="@string/add_activity_ActionButtonText"
                 android:paddingRight="20dp"
                 android:textStyle="bold"
                 android:textColor="#FAFAFA"

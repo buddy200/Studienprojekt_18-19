@@ -58,4 +58,11 @@
     <string name="go_back_message">Are you sure you want to go back? fields not visible on screen will be dismissed</string>
     <string name="button_add_next_Foto_text">add another Foto</string>
     <string name="Button_foto_finish_text">finish</string>
+    <string name="add_activity_added">" added"</string>
+    <string name="add_activity_pointAt">"point at "</string>
+    <string name="add_Activity_YouNeed">"You need "</string>
+    <string name="add_activity_needMore">" Points more"</string>
+    <string name="word_yes">yes</string>
+    <string name="word_no">no</string>
+    <string name="add_activity_ActionButtonText">Add a Corner Point at your current position</string>
 </resources>

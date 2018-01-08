@@ -215,8 +215,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 location.setLongitude(point.getLongitude());
                 addPoint(location);
 
-                Snackbar.make(mapFragment.getView(), "Point at " +
-                        location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
+                Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
+                        location.getLatitude() + " " + location.getLongitude() +getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
                 return false;
             }
@@ -246,13 +246,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         p.setPoints(listGeoPoints);
         mMapViewHandler.addPolyline(p);
 
-        fabLabel.setText("You need " + String.valueOf(3 - listCornerPoints.size()) + " more");
+        fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
 
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;
             fabLabel.setVisibility(View.INVISIBLE);
             menuItemDone.setVisible(true);
-            menuItemDone.setTitle("Enough Points");
+            menuItemDone.setTitle(getResources().getString(R.string.done_Button));
 
         }
 
@@ -274,8 +274,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
         };
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.go_back_message)).setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener);
+        builder.setMessage(getResources().getString(R.string.go_back_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
+                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
 
         return builder;
     }
@@ -317,8 +317,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             if (location != null) {
                 addPoint(location);
 
-                Snackbar.make(view, "Point at " +
-                        location.getLatitude() + " " + location.getLongitude() + " added", Snackbar.LENGTH_SHORT)
+                Snackbar.make(view, getResources().getString(R.string.add_activity_pointAt) +
+                        location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
             } else {
                 Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();

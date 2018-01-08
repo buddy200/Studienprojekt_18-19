@@ -41,4 +41,11 @@
     <string name="go_back_message">Sind Sie sicher, dass Sie zurückgehen möchten? Felder, die auf dem Bildschirm nicht sichtbar sind, werden verworfen</string>
     <string name="button_add_next_Foto_text">Nächstes Foto</string>
     <string name="Button_foto_finish_text">beenden</string>
+    <string name="add_activity_added">" hinzugefügt"</string>
+    <string name="add_activity_pointAt">"Punkt bei "</string>
+    <string name="add_Activity_YouNeed">"Sie brauchen "</string>
+    <string name="add_activity_needMore">" Punkte mehr"</string>
+    <string name="word_yes">ja</string>
+    <string name="word_no">nein</string>
+    <string name="add_activity_ActionButtonText">Füge Eckpunkt an aktueller Position hinzu</string>
 </resources>

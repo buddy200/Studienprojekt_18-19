@@ -264,7 +264,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         p.setPoints(listGeoPoints);
         mMapViewHandler.addPolyline(p);
         mMapViewHandler.invalidateMap();
-        calcIntersection(location);
+
 
         fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
 
@@ -275,6 +275,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             menuItemDone.setTitle(getResources().getString(R.string.done_Button));
 
         }
+        calcIntersection(location);
 
     }
 
@@ -344,11 +345,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      */
     private void onDoneButtonClick() {
         if (enoughPoints) {
-            //myLocationListener.setFollow(false);
-            Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+            Field fieldToAdd;
             if (isDmgField) {
                 fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
             } else {
+                fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
                 if (fieldToAdd instanceof AgrarianField) {
                     Vector<Double> line = new Vector<>();
                     Vector<Double> startVector = new Vector<>();
@@ -359,12 +360,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                         line.add(((lastVector.get(1) - currentVector.get(1)) / (lastVector.get(0) - currentVector.get(0))));
                         line.add(currentVector.get(1) - line.get(0) * currentVector.get(0));
                         linesFromAgrarianField.add(line);
+                        ((AgrarianField) fieldToAdd).setLinesFormField(linesFromAgrarianField);
 
                     } else {
                         lastVector = currentVector;
                     }
 
-                    ((AgrarianField) fieldToAdd).setLinesFormField(linesFromAgrarianField);
+
                 }
             }
             bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();

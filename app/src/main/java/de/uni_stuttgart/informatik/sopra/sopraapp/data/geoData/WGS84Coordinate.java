@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /**
  * a coordinate in the WGS84 coordinate system (latitude and longitude)
+ *
+ * @author Christian
  */
 public class WGS84Coordinate implements Serializable{
 

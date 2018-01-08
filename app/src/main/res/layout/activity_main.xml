@@ -8,6 +8,7 @@
     android:configChanges="keyboardHidden|orientation|screenSize"
     tools:context="de.uni_stuttgart.informatik.sopra.sopraapp.MainActivity">
 
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,6 +2,8 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
 /**
  * a two-dimensional vector
+ *
+ * @author Christian
  */
 public class Vector {
 

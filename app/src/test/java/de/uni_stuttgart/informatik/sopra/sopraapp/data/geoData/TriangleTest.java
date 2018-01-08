@@ -5,6 +5,8 @@ import org.junit.Test;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class TriangleTest {
 
@@ -23,6 +25,13 @@ public class TriangleTest {
 		assertEquals(3570, t2.getSize(),15);
 	}
 
-	
+	@Test
+	public void testBorderTriangle() {
+		CornerPoint a = new CornerPoint(0,0);
+		CornerPoint b = new CornerPoint(0,12);
+		CornerPoint c = new CornerPoint(6,0);
+		Triangle t = new Triangle(a,b,c);
+		assertTrue(t.getSize() > 0);
+	}
 
 }

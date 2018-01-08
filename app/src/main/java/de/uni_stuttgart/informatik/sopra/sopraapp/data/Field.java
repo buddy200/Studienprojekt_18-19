@@ -124,6 +124,7 @@ public abstract class Field implements Serializable{
      * calculate the size of the polygon
      */
     private void calculateSize() {
+        size = 0;
         List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints);
 
         Queue<CornerPoint> outwardPoints = new LinkedList<>();

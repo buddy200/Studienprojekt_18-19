@@ -100,14 +100,15 @@ public class DamageField extends Field implements Serializable{
     public void setDate(Date date) {
         //store date as a string - is probably easier
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat format2 = new SimpleDateFormat("hh:mm");
         String parsedDate =
                 context.getResources().getString(R.string.date_label)
-                        + " " + format1.format(date) + " " +
-                        context.getResources().getString(R.string.time_label)
-                        + " " + format2.format(date);
+                        + " " + format1.format(date);
 
         this.parsedDate = parsedDate;
+    }
+
+    public void setDate(String date){
+        this.parsedDate = date;
     }
 
     public String getEvaluator() {return evaluator;}

@@ -109,31 +109,42 @@
             android:orientation="horizontal">
 
 
-            <Button
+            <ImageButton
                 android:id="@+id/add_damageField_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/edit_finish_button"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="@string/add_dmg_field_button"/>
+                android:paddingBottom="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/button_nav"
+                android:background="@null"
+                android:src="@drawable/ic_damage" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/edit_finish_button"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
+                android:paddingBottom="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_mode_edit_black_24px"
                 android:layout_alignParentRight="true" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_nav"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:paddingBottom="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/add_damageField_button"
+                android:layout_toStartOf="@+id/edit_finish_button"
+                android:background="@null"
+                android:src="@drawable/ic_navigation_black_24px"
                 android:text="@string/navigate_Button" />
 
 
@@ -141,7 +152,7 @@
                 android:id="@+id/imagegallery"
                 android:layout_width="match_parent"
                 android:layout_below="@+id/add_damageField_button"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 />
 
         </RelativeLayout>

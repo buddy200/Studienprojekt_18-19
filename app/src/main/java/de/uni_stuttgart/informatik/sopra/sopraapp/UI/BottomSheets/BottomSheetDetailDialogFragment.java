@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -108,9 +109,9 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     private TextView county;
     private TextView ownerOrEvaluator;
     private TextView date;
-    private Button addDmg;
-    private Button edit;
-    private Button navButton;
+    private ImageButton addDmg;
+    private ImageButton edit;
+    private ImageButton navButton;
     private ImageView imageView;
     private RecyclerView recyclerView;
 
@@ -122,7 +123,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(layoutManager);
         name = (TextView) view.findViewById(R.id.field_detail_name);
-        edit = (Button) view.findViewById(R.id.edit_finish_button);
+        edit = (ImageButton) view.findViewById(R.id.edit_finish_button);
         edit.setOnClickListener(this);
 
 
@@ -132,9 +133,9 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         county = (TextView) view.findViewById(R.id.field_detail_region);
         ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         date = (TextView) view.findViewById(R.id.field_detail_date);
-        addDmg = (Button) view.findViewById(R.id.add_damageField_button);
+        addDmg = (ImageButton) view.findViewById(R.id.add_damageField_button);
         addDmg.setOnClickListener(this);
-        navButton = (Button) view.findViewById(R.id.button_nav);
+        navButton = (ImageButton) view.findViewById(R.id.button_nav);
         navButton.setOnClickListener(this);
 
     }
@@ -144,7 +145,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         this.mField = mField;
         name.setText(mField.getName());
         county.setText(mField.getCounty());
-        edit.setText(getContext().getResources().getString(R.string.button_edit_name));
+        edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
 
         state.setText(mField.getType().toString());
         state.setTextColor(mField.getColor());

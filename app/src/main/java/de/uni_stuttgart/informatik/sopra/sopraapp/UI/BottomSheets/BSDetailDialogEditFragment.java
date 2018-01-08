@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -42,21 +44,21 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener{
 
-    private static final String TAG = "BSDetailDialogEditFragment";
+    private static final String TAG = "BSDetailDialogEditFrmgt";
 
     private BSEditContract.Presenter mPresenter;
 
     private TextView headingText;
+    private TextView dateText;
     private EditText fieldName;
-    private ViewFlipper viewFlipper;
     private EditText fieldRegion;
-    private DatePicker datePicker;
     private Spinner fieldSpinner;
     private TextView fieldSize;
     private EditText fieldPolicyHolder;
-    private Button finishButton;
-    private Button deleteButton;
-    private Button addPhotoButton;
+    private Button pickDate;
+    private ImageButton finishButton;
+    private ImageButton deleteButton;
+    private ImageButton addPhotoButton;
 
     /**
      * this factory method is used to generate an instance
@@ -85,17 +87,20 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         configureBottomSheetBehaviour(view);
 
         headingText = view.findViewById(R.id.heading);
+        dateText = view.findViewById(R.id.text_date);
         fieldName = view.findViewById(R.id.field_detail_name_edit);
         fieldRegion = view.findViewById(R.id.field_detail_region_edit);
-        datePicker = view.findViewById(R.id.field_detail_date_picker);
         fieldSpinner = view.findViewById(R.id.field_detail_state_spinner);
         fieldSize = view.findViewById(R.id.field_detail_size);
         fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);
+
+        pickDate = view.findViewById(R.id.button_pick_date);
 
         finishButton = view.findViewById(R.id.edit_finish_button);
         deleteButton = view.findViewById(R.id.delete_button);
         addPhotoButton = view.findViewById(R.id.add_Photo_Button);
 
+        pickDate.setOnClickListener(this);
         finishButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
 
@@ -137,6 +142,18 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
                     mPresenter.changeField(mPresenter.getVisibleField());
                     this.dismiss();
                     break;
+                case R.id.button_pick_date:
+                    Log.e(TAG, "pick date");
+                    DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                        public void onDateSet(DatePicker view, int selectedYear,
+                                              int selectedMonth, int selectedDay) {
+                            dateText.setText(selectedDay + " - " + (selectedMonth + 1) + " - "
+                                    + selectedYear);
+                        }
+                    };
+                    DatePickerDialog datePicker = new DatePickerDialog(getContext(), listener,2017,1,8);
+                    datePicker.show();
+                    break;
             }
         }
     }
@@ -162,9 +179,10 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         if(f instanceof AgrarianField){
             addPhotoButton.setVisibility(View.INVISIBLE);
             headingText.setText("AgrarFeld");
-            datePicker.setVisibility(View.INVISIBLE);
-            datePicker.removeAllViews();
             fieldRegion.setText(f.getCounty());
+
+            dateText.setVisibility(View.INVISIBLE);
+            pickDate.setVisibility(View.INVISIBLE);
 
             List<AgrarianFieldType> statusCheck;
             statusCheck = Arrays.asList(AgrarianFieldType.values());
@@ -177,6 +195,8 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         }else if(f instanceof DamageField){
             headingText.setText("DamageFeld");
             fieldRegion.setVisibility(View.INVISIBLE);
+
+            dateText.setText(((DamageField) f).getParsedDate());
 
             List<DamageFieldType> statusCheck;
             statusCheck = Arrays.asList(DamageFieldType.values());
@@ -215,10 +235,11 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
             ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
             ((DamageField) mFieldToChange).setpaths(((DamageField) mPresenter.getVisibleField()).getpaths());
 
+            ((DamageField) mFieldToChange).setDate(dateText.getText().toString());
+
         }else{
             return null;
         }
-        Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());
 
 
         mFieldToChange.setName(fieldName.getText().toString());
@@ -230,7 +251,6 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         //    mFieldToChange.setAutomaticCounty();
         }
 
-        Log.e("HCHEIHAO", mPresenter.getVisibleField().getName());
         return mFieldToChange;
     }
 

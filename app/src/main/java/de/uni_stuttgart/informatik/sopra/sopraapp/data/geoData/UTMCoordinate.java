@@ -3,7 +3,9 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 import java.io.Serializable;
 
 /**
- * a coordinate in the UTM (Universal Transverse Mercator) coordinate system 
+ * a coordinate in the UTM (Universal Transverse Mercator) coordinate system
+ *
+ * @author Christian
  */
 public class UTMCoordinate implements Serializable{
 

@@ -4,6 +4,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 
 /**
  * represents a simple triangle
+ *
+ * @author Christian
  */
 public class Triangle {
 

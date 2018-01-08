@@ -40,8 +40,8 @@ public class CornerPoint implements Serializable {
 
     /**
      * calculate the angle of two corner points
-     * @param before
-     * @param after
+     * @param before the Cornerpoint infront of this Cornerpoint
+     * @param after the Cornerpoint behind of this Cornerpoint
      */
     public void calculateAngle(CornerPoint before, CornerPoint after) {
 

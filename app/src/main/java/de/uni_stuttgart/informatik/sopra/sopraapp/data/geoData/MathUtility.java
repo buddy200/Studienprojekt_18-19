@@ -2,6 +2,8 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
 /**
  * cointains some mathematical funktions and formulas
+ *
+ * @author Christian
  */
 public class MathUtility {
 
@@ -20,7 +22,7 @@ public class MathUtility {
 	 * transforms an angle from radian to degree
 	 * 
 	 * @param angle the angle to transform in radian
-	 * @return the transformed angle in decree
+	 * @return the transformed angle in degree
 	 */
     public static double radToDeg(double angle) {
         return (angle/(Math.PI) )* 180;

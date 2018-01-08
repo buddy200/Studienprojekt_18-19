@@ -1,8 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
+
 /**
  * Created by Christian on 13.11.2017.
  */
-//TODO Test, make english, compare to 2 alg.
 public class WGS84UTMConverter {
 
     // Stauchungsfaktor des Zentralmeridians = UTM-Skalierungsfaktor
@@ -33,7 +33,7 @@ public class WGS84UTMConverter {
     public static UTMCoordinate convert(WGS84Coordinate wgs) {
 
 
-        // Ellipsoidische Länge lambda - wird nicht benötigt
+        // Ellipsoidische Länge lambda
         // Winkel zwischen der ellipsoidischen Meridianebene durch den Punkt auf der Kugel und der ellipsoidischen Nullmeridianebene
         final double lambda = MathUtility.degToRad(wgs.getLongitude());
 

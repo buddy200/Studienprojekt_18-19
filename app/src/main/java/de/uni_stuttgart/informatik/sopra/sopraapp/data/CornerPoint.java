@@ -47,24 +47,57 @@ public class CornerPoint implements Serializable {
 
         UTMCoordinate utmBefore = before.getUtm();
         UTMCoordinate utmAfter = after.getUtm();
-        if(utm.getZone() == utmBefore.getZone() && utm.getZone() == utmAfter.getZone()) {
-            Vector v_before = new Vector((utmBefore.getEasting()- utm.getEasting()), (utmBefore.getNorthing()-utm.getNorthing()));
-            Vector v_after = new Vector((utmAfter.getEasting()- utm.getEasting()), (utmAfter.getNorthing()-utm.getNorthing()));
-            if(v_before.getLength() == 0 || v_after.getLength() == 0) {
-            	angle = 0;
-            	return;
-            }
-            //cos a = (v_a x v_b )/ (|v_a| * |v_b)|
-            angle = Math.acos(MathUtility.scalarProduct(v_before,v_after)/(v_before.getLength() * v_after.getLength()));
-
-            Vector rotated = v_after.rotate(angle);
-            if(rotated.equalDirection(v_before)) {
-                angle = 2*Math.PI - angle;
-            }
-
-            //maybe remove itself if angle = 180°
+        Vector v_before;
+        Vector v_after;
+        //TODO test
+        double centralMerdian = 3.0 + 6.0 * (this.utm.getZone() - 1.0) - 180.0;
+        if(utm.getZone() == utmBefore.getZone()) {
+            v_before = new Vector((utmBefore.getEasting()- utm.getEasting()), (utmBefore.getNorthing()-utm.getNorthing()));
         } else {
-            //TODO
+            double merdian;
+            if(utm.getZone() < utmBefore.getZone()) {
+                merdian = centralMerdian + 3;
+            } else {
+                merdian = centralMerdian - 3;
+            }
+            double deltaLat = before.getWGS().getLatitude() - wgs.getLatitude();
+            double deltaLong = before.getWGS().getLongitude() - wgs.getLongitude();
+
+            double lat = deltaLat/deltaLong * (merdian - wgs.getLongitude()) + wgs.getLatitude();
+
+            UTMCoordinate utm = WGS84UTMConverter.getUtmCoordinateByMeridian(MathUtility.degToRad(lat),MathUtility.degToRad(merdian), centralMerdian);
+            v_before = new Vector((utm.getEasting()- this.utm.getEasting()), (utm.getNorthing()- this.utm.getNorthing()));
+        }
+
+        if(utm.getZone() == utmAfter.getZone()) {
+            v_after = new Vector((utmAfter.getEasting()- utm.getEasting()), (utmAfter.getNorthing()-utm.getNorthing()));
+        } else {
+            double merdian;
+            if(utm.getZone() < utmAfter.getZone()) {
+                merdian = centralMerdian + 3;
+            } else {
+                merdian = centralMerdian - 3;
+            }
+            double deltaLat = after.getWGS().getLatitude() - wgs.getLatitude();
+            double deltaLong = after.getWGS().getLongitude() - wgs.getLongitude();
+
+            double lat = deltaLat/deltaLong * (merdian - wgs.getLongitude()) + wgs.getLatitude();
+
+            UTMCoordinate utm = WGS84UTMConverter.getUtmCoordinateByMeridian(MathUtility.degToRad(lat),MathUtility.degToRad(merdian), centralMerdian);
+            v_after = new Vector((utm.getEasting()- this.utm.getEasting()), (utm.getNorthing()- this.utm.getNorthing()));
+        }
+
+
+        if(v_before.getLength() == 0 || v_after.getLength() == 0) {
+            angle = 0;
+            return;
+        }
+        //cos a = (v_a x v_b )/ (|v_a| * |v_b)|
+        angle = Math.acos(MathUtility.scalarProduct(v_before,v_after)/(v_before.getLength() * v_after.getLength()));
+
+        Vector rotated = v_after.rotate(angle);
+        if(rotated.equalDirection(v_before)) {
+            angle = 2*Math.PI - angle;
         }
 
     }

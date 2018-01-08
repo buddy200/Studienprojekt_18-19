@@ -17,22 +17,28 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.R;
  */
 public enum DamageFieldType implements FieldType, Serializable{
 
-    Hail(MainActivity.getmContext().getResources().getString(R.string.hail), ContextCompat.getColor(MainActivity.getmContext(), R.color.hailTypeDmg)),
-    Snow(MainActivity.getmContext().getResources().getString(R.string.snow), ContextCompat.getColor(MainActivity.getmContext(), R.color.snowTypeDmg)),
-    Aliens(MainActivity.getmContext().getResources().getString(R.string.aliens), ContextCompat.getColor(MainActivity.getmContext(), R.color.alienTypeDmg));
+    Hail(MainActivity.getmContext().getResources().getString(R.string.hail), ContextCompat.getColor(MainActivity.getmContext(), R.color.hailTypeDmg), 0.25),
+    Snow(MainActivity.getmContext().getResources().getString(R.string.snow), ContextCompat.getColor(MainActivity.getmContext(), R.color.snowTypeDmg), 0.2),
+    Aliens(MainActivity.getmContext().getResources().getString(R.string.aliens), ContextCompat.getColor(MainActivity.getmContext(), R.color.alienTypeDmg), 0.3);
 
 
     private String friendlyName;
     private int friendlyColor;
+    private double insuranceMoneyPerSquaremeter;
     private static final long serialVersionUID = 12L;
 
-    DamageFieldType(String friendlyName, int friendlyColor){
+    DamageFieldType(String friendlyName, int friendlyColor, double insuranceMoneyPerSquaremeter){
         this.friendlyName = friendlyName;
         this.friendlyColor = friendlyColor;
+        this.insuranceMoneyPerSquaremeter = insuranceMoneyPerSquaremeter;
     }
 
     @Override public String toString(){
         return friendlyName;
+    }
+
+    public double getInsuranceMoneyPerSquaremeter(){
+        return insuranceMoneyPerSquaremeter;
     }
 
     public int toColor() {

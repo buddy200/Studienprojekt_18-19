@@ -25,7 +25,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private ArrayList<PictureData> galleryList;
     private Context context;
     private final BitmapFactory.Options options;
-    private static final int IMAGE_SCALE = 5;
+    private static final int IMAGE_SCALE = 6;
 
     public GalleryAdapter(Context context, ArrayList<PictureData> galleryList) {
         this.galleryList = galleryList;

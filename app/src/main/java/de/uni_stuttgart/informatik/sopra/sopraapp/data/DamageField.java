@@ -32,6 +32,9 @@ public class DamageField extends Field implements Serializable{
     private String parsedDate;
     private String evaluator;
 
+
+
+    private double insuranceMoney;
     private ArrayList<PictureData> paths;
 
     private DamageFieldType type = DamageFieldType.Aliens;
@@ -124,6 +127,15 @@ public class DamageField extends Field implements Serializable{
         PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);
         paths.add(pictureData);
     }
+
+    public void  calcInsuranceAmount(AgrarianField field){
+           insuranceMoney =  this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * field.getType().getInsuranceMoneyPerSquaremeter();
+    }
+
+    public double getInsuranceMoney() {
+        return insuranceMoney;
+    }
+
 
 }
 

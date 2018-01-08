@@ -23,7 +23,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class PhotoManager {
 
-    static final int REQUEST_TAKE_PHOTO = 1;
+    public static final int REQUEST_TAKE_PHOTO = 1;
 
     String mCurrentPhotoPath;
 

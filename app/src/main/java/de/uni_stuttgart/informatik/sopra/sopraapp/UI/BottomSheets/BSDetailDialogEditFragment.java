@@ -37,7 +37,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
  * A custom BottomSheetDetailDialogFragment to edit Fields
  */
 
-public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener{
+public class
+BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener{
 
     private static final String TAG = "BSDetailDialogEditFragment";
 
@@ -202,6 +203,7 @@ public class BSDetailDialogEditFragment extends BottomSheetDialogFragment implem
         if(mPresenter.getVisibleField() instanceof AgrarianField){
             mFieldToChange = new AgrarianField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
             ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
+            ((AgrarianField) mFieldToChange).setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());
 
             for(DamageField dmg : ((AgrarianField) mPresenter.getVisibleField()).getContainedDamageFields()){
                 ((AgrarianField) mFieldToChange).addContainedDamageField(dmg);

@@ -27,6 +27,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDet
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
@@ -279,14 +280,27 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-      /*  if (resultCode != RESULT_OK && mPresenter.getVisibleField() instanceof DamageField && requestCode == REQUEST_TAKE_PHOTO){
+        String temp = "0";
+        Field field = null;
+       if (resultCode != RESULT_OK &&  requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
 
+           for (int i = 0; i < dataManager.getFields().size(); i++) {
+               field = dataManager.getFields().get(i);
 
-            String path = ((DamageField) mPresenter.getVisibleField()).getpaths().get(((DamageField) mPresenter.getVisibleField()).getpaths().size()-1).getImage_path();
-            File f = new File(path);
-            f.delete();
-            ((DamageField) mPresenter.getVisibleField()).getpaths().remove(((DamageField) mPresenter.getVisibleField()).getpaths().size()-1);
-        }*/
-      Log.e("test", "rtgeu8gsfjhihugiz");
+               if (field instanceof DamageField)  {
+                   if(((DamageField) field).getpaths() != null &&((DamageField) field).getpaths().size() > 0){
+                   String path = (((DamageField) field).getpaths().get(((DamageField) field).getpaths().size() - 1)).getImage_path();
+                   if (temp.compareTo(path) > 0) {
+                       dataManager.removeField(field);
+                       temp = path;
+                   }
+               }}
+           }
+           File f = new File(temp);
+           f.delete();
+           ((DamageField) field).getpaths().remove(((DamageField) field).getpaths().size() - 1);
+           dataManager.addAgrarianField(field);
+           dataManager.saveData();
+       }
     }
 }

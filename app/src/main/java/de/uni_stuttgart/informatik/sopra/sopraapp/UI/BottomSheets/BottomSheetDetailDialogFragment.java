@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +105,6 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     private Button addDmg;
     private Button edit;
     private Button navButton;
-    private ImageView imageView;
     private RecyclerView recyclerView;
 
     @Override
@@ -112,7 +112,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         name = (TextView) view.findViewById(R.id.field_detail_name);
         edit = (Button) view.findViewById(R.id.edit_finish_button);

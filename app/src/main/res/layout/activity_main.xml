@@ -23,6 +23,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="invisible"
+        layout="@layout/search_details"
+        />
+
     <FrameLayout
         android:id="@+id/bottom_sheet_container"
         android:layout_width="match_parent"
@@ -32,8 +41,7 @@
         android:id="@+id/map_fragment"
         class="de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content" />
 
     <!-- background tint workaround -->
     <RelativeLayout

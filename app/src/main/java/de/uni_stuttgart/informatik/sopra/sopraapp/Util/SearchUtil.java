@@ -2,6 +2,8 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.Util;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 /**
@@ -14,6 +16,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  */
 
 public class SearchUtil {
+
+    static String searchFor[] =  {
+            "Name", "Owner", "State", "Date"
+    };
 
     /**
      * does a field match a search input?
@@ -55,4 +61,11 @@ public class SearchUtil {
         return true;
     }
 
+    public static String[] getSearchFor() {
+        return searchFor;
+    }
+
+
+    public static void searchForType(ArrayList<Field> fields, String query, String type) {
+    }
 }

@@ -302,6 +302,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         return builder;
     }
 
+    private void calcLastIntersection(Field field){
+
+    }
+
     public void calcIntersection(Location location) {
         currentVector = new Vector<>();
         currentVector.add(location.getLatitude());
@@ -330,8 +334,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                             Toast.makeText(this, getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                             onRedoButtonClick();
                             return;
-                        } else {
-
                         }
                     }
                 }
@@ -348,11 +350,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (enoughPoints) {
             //myLocationListener.setFollow(false);
             bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
-            Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
-            BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
+            Field fieldToAdd;
             if (isDmgField) {
                 fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
-                handler = new BSEditHandler(fieldToAdd, (AgrarianField) parentField, dataManager, bottomSheetDialog);
             } else {
                 fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
                 if (fieldToAdd instanceof AgrarianField) {
@@ -370,14 +370,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                     } else {
                         lastVector = currentVector;
                     }
-
-
                 }
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
-
-   //         bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
-      //      BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
+            bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
+            BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
             bottomSheetDialog.setPresenter(handler);
             bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
 

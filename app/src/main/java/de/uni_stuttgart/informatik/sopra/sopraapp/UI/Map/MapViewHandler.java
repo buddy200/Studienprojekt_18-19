@@ -85,14 +85,14 @@ public class MapViewHandler implements MapContract.MapHandler {
         mapController = map.getController();
         mapController.setZoom(GlobalConstants.DEFAULT_ZOOM);
 
-        mapController.setCenter(GlobalConstants.START_POINT);
+        mapController.setCenter(GlobalConstants.getLastLocationOnMap());
        // mapController.setInvertedTiles(true);
 
         if(currentLocMarker != null){
             mapController.setCenter(currentLocMarker.getPosition());
         }
         else{
-            mapController.setCenter(GlobalConstants.START_POINT);
+            mapController.setCenter(GlobalConstants.getLastLocationOnMap());
         }
 
         //setup listener for tabs on polygons

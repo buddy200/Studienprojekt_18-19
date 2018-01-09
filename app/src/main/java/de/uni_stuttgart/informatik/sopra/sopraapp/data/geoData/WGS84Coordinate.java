@@ -45,7 +45,7 @@ public class WGS84Coordinate implements Serializable{
     }
 
     public boolean equals(WGS84Coordinate wgs) {
-        return Math.abs(wgs.getLongitude() - longitude) < 0.001 && Math.abs(wgs.getLatitude() - latitude) < 0.0001;
+        return Math.abs(wgs.getLongitude() - longitude) < 0.000001 && Math.abs(wgs.getLatitude() - latitude) < 0.000001;
     }
     
     @Override

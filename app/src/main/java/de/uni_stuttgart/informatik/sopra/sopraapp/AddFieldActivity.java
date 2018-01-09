@@ -258,7 +258,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      */
 
     public void addPoint(Location location) {
-        GeoPoint g = new GeoPoint(location.getLatitude(), location.getLongitude());
+        GeoPoint g = new GeoPoint(location);
         listGeoPoints.add(g);
         listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
         p.setPoints(listGeoPoints);
@@ -369,6 +369,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
                 }
             }
+            GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
+
             bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
             BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
             bottomSheetDialog.setPresenter(handler);

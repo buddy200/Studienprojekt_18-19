@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -15,11 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.osmdroid.config.Configuration;
+import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
@@ -28,7 +26,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialog
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -198,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         switch (id){
             case R.id.action_toolbar_add:
+                GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));
                 Intent i = new Intent(this, AddFieldActivity.class);
                 startActivityForResult(i, 2404);
                 break;
@@ -211,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 if (location != null) {
                     mapHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
                     mapHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
+                    GlobalConstants.setLastLocationOnMap(new GeoPoint(location));
                 }
                 else{
                     Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();

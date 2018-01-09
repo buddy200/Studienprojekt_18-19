@@ -28,8 +28,17 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
 
 public class GlobalConstants {
 
-    // Uni Stuttgart - compsci building
-    public static final GeoPoint START_POINT = new GeoPoint( 48.745424, 9.106488 );
+
+    public static GeoPoint getLastLocationOnMap() {
+        return lastLocationOnMap;
+    }
+
+    public static void setLastLocationOnMap(GeoPoint lastLocationOnMap) {
+        GlobalConstants.lastLocationOnMap = lastLocationOnMap;
+    }
+
+    // Init Uni Stuttgart - compsci building else last location on map
+    public static GeoPoint lastLocationOnMap = new GeoPoint( 48.745424, 9.106488 );
 
 
     //default zoom value for the mapFragment
@@ -37,7 +46,7 @@ public class GlobalConstants {
 
     /**
      * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh
-     * creates a rectangle containing n polygons with m points, close to START_POINT  - FB
+     * creates a rectangle containing n polygons with m points, close to lastLocationOnMap  - FB
      * @param numberPolygons n
      * @param numberPoints m
      * @return ArrayList of polygons
@@ -49,8 +58,8 @@ public class GlobalConstants {
         double Min = -0.001;
 
         List<Polygon> polis = new ArrayList<>();
-        double initialLat = GlobalConstants.START_POINT.getLatitude();
-        double initialLon = GlobalConstants.START_POINT.getLongitude();
+        double initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
+        double initialLon = GlobalConstants.lastLocationOnMap.getLongitude();
 
         for(int j=0; j<numberPolygons; j++) {
             Polygon p = new Polygon();
@@ -63,7 +72,7 @@ public class GlobalConstants {
             }
             if(j % (int) Math.sqrt(numberPolygons) == 0){
                 initialLon += 0.003;
-                initialLat = GlobalConstants.START_POINT.getLatitude();
+                initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
             }
             initialLat += 0.003;
 
@@ -100,8 +109,8 @@ public class GlobalConstants {
         double MinDmg = -0.0006;
 
         ArrayList<Field> polis = new ArrayList<>();
-        double initialLat = GlobalConstants.START_POINT.getLatitude();
-        double initialLon = GlobalConstants.START_POINT.getLongitude();
+        double initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
+        double initialLon = GlobalConstants.lastLocationOnMap.getLongitude();
 
         String[] superheroes = {
                 "BATMAN", "Superman", "Superwoman", "Spiderman", "THE INCREDIBLE HULK"
@@ -130,7 +139,7 @@ public class GlobalConstants {
             }
             if(j % (int) Math.sqrt(numberFields) == 0){
                 initialLon += 0.003;
-                initialLat = GlobalConstants.START_POINT.getLatitude();
+                initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
             }
             initialLat += 0.003;
 

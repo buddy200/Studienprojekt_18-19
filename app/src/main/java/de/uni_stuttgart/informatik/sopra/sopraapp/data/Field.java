@@ -186,19 +186,15 @@ public abstract class Field implements Serializable{
     private void convertSize(){
         if (this.size > 1000000){
             this.conSize = (String.valueOf(size/1000000)) + "km" + "\u00B2";
-            return;
         }
-        if (this.size > 10000 && this.size <= 1000000){
+        else if (this.size > 10000 && this.size <= 1000000){
             this.conSize = (String.valueOf(size/10000)) + "ha";
-            return;
         }
-        if (this.size > 100 && this.size <= 10000){
+        else if (this.size > 100 && this.size <= 10000){
             this.conSize = (String.valueOf(size/100)) + "a";
-            return;
         }
         else{
             this.conSize = (String.valueOf(size)) + "m" + "\u00B2";
-            return;
         }
     }
 

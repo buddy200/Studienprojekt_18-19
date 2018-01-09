@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Vector;
 
 /**
  * Created by Christian on 13.11.2017.
@@ -32,6 +33,10 @@ public class AgrarianField extends Field implements Serializable{
     private String owner;
 
     private ArrayList<DamageField> containedDamageFields;
+
+
+
+    private ArrayList<java.util.Vector<Double>> linesFormField;
 
 
     /**
@@ -69,6 +74,7 @@ public class AgrarianField extends Field implements Serializable{
         bundle.putString(KEY_NAME, this.getName());
         bundle.putInt(KEY_COLOR, this.getType().toColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
+        bundle.putString(KEY_CONVERTEDSIZE, this.getConvertedSize());
         if(this.getSize() != null){
             bundle.putDouble(KEY_SIZE, this.getSize());
         }
@@ -95,5 +101,14 @@ public class AgrarianField extends Field implements Serializable{
     public void setOwner(String owner){this.owner = owner;}
     public String getOwner() {return owner;}
 
+
+
+    public ArrayList<java.util.Vector<Double>> getLinesFormField() {
+        return linesFormField;
+    }
+
+    public void setLinesFormField(ArrayList<java.util.Vector<Double>> linesFormField) {
+        this.linesFormField = linesFormField;
+    }
 }
 

@@ -13,4 +13,5 @@ import java.io.Serializable;
 public interface FieldType{
     String toString();
     int toColor();
+    double getInsuranceMoneyPerSquaremeter();
 }

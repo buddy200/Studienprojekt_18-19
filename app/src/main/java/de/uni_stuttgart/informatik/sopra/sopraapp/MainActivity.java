@@ -12,9 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.support.v7.widget.SearchView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +31,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialog
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -179,10 +185,52 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         return mContext;
     }
 
+    private View expandSearch;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
+        expandSearch = findViewById(R.id.search_bar);
+        final Spinner test = findViewById(R.id.spinner_search);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+                android.R.layout.simple_spinner_item, SearchUtil.getSearchFor());
+        test.setAdapter(adapter);
+        test.setSelection(0);
+
+        adapter.notifyDataSetChanged();
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                expandSearch.setVisibility(View.VISIBLE);
+                expandSearch.bringToFront();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                expandSearch.setVisibility(View.INVISIBLE);
+                return true;
+            }
+        });
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SearchUtil.searchForType(dataManager.getFields(), query, test.getSelectedItem().toString());
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //do nothing
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -215,6 +263,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                     Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.action_toolbar_search:
+                //handleSearch();
+                break;
         }
 
 
@@ -223,7 +274,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onDataChange() {
-        Log.e("dATA CHANGE", "HAA");
         if(mapHandler != null){
             mapHandler.reload();
         }
@@ -231,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     /**
      * search implementation
-     * @param input
+     * @param
      */
     /*
     public void onSearchButtonClicked(String input) {

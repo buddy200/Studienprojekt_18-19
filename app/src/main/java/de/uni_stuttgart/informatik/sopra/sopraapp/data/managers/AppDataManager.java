@@ -16,6 +16,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  */
 
 public class AppDataManager {
+    private static final String TAG = "AppDataManager";
+
 
     private ArrayList<Field> dataFromFields;
     private ExportImportFromFile writerReader;
@@ -49,39 +51,42 @@ public class AppDataManager {
         dataChange();
     }
 
+    /**
+     * this is broken! completly ..
+     * ich werd das mal so lassen weil hier eh alles umgebaut wird
+     * @param dmg
+     * @param parent
+     */
     public void addDamageField(DamageField dmg, AgrarianField parent){
+        Log.e(TAG, "added damage field: " + dmg.getName() + " to parent; " + parent.getName());
+        removeField(parent);
         parent.addContainedDamageField(dmg);
+        addAgrarianField(parent);
+        dataFromFields.add(dmg);
         dataChange();
     }
 
+    /**
+     * this is broken! mostly ..
+     * ich werd das mal so lassen weil hier eh alles umgebaut wird
+     * @param f
+     */
     public void removeField(Field f){
-        dataFromFields.remove(f);
-//only a quickfix todo: make a implementation that works
-       /* if(f instanceof DamageField){
-            for(Field field : dataFromFields) {
-                if (field instanceof AgrarianField) {
+        if(f instanceof DamageField){
+            for(Field field : dataFromFields){
+                if(field instanceof AgrarianField) {
                     if (((AgrarianField) field).getContainedDamageFields().contains(f)) {
                         ((AgrarianField) field).getContainedDamageFields().remove(f);
+                        Log.e("removed field damage", f.getName());
                     }
                 }
             }
-        }else{*/
-            
-          /*  if(f instanceof AgrarianField) {
+        }else if(f instanceof AgrarianField){
+            dataFromFields.removeAll(((AgrarianField)f).getContainedDamageFields());
+        }
+        dataFromFields.remove(f);
+        Log.e("removed field", f.getName());
 
-
-
-
-
-
-
-
-               for (Field damagefield : ((AgrarianField) f).getContainedDamageFields()){
-                    removeField(damagefield);
-                }
-                dataFromFields.remove(f);
-            }
-        }*/
         dataChange();
     }
 

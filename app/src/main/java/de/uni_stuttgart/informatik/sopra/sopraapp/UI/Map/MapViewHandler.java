@@ -152,17 +152,17 @@ public class MapViewHandler implements MapContract.MapHandler {
      */
     public void addFields(List<Field> fields){
         for(Field field : fields){
-            map.getOverlayManager().add(fieldToPolygon(field));
-
            //add contained damage fields if field is type agrarian
            if(field instanceof AgrarianField){
-               for(DamageField dmg : ((AgrarianField) field).getContainedDamageFields()){
-                   map.getOverlayManager().add(fieldToPolygon(dmg));
-
-               }
+               map.getOverlayManager().add(fieldToPolygon(field));
            }
+        }
 
-
+        for(Field field : fields){
+            //add contained damage fields if field is type agrarian
+            if(field instanceof DamageField){
+                map.getOverlayManager().add(fieldToPolygon(field));
+            }
         }
     }
 

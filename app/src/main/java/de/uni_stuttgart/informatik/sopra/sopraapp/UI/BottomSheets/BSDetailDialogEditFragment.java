@@ -141,7 +141,6 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
                     this.dismiss();
                     break;
                 case R.id.button_pick_date:
-                    Log.e(TAG, "pick date");
                     DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                         public void onDateSet(DatePicker view, int selectedYear,
                                               int selectedMonth, int selectedDay) {

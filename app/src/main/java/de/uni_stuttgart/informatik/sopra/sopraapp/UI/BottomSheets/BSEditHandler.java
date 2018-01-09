@@ -26,6 +26,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
     private final BSEditContract.BottomSheet mEditFragment;
 
     private Field mField;
+    private AgrarianField parentField;
 
     /**
      * @param field may be null for a new field
@@ -38,6 +39,15 @@ public class BSEditHandler implements BSEditContract.Presenter {
         mField = field;
         Log.e(TAG, String.valueOf(mField.getName()));
 
+        mEditFragment.setPresenter(this);
+    }
+
+    public BSEditHandler(Field field, AgrarianField parent, @NonNull AppDataManager dataManager, @NonNull BSEditContract.BottomSheet editFragment){
+        mDataManager = dataManager;
+        mEditFragment = editFragment;
+        mField = field;
+        Log.e(TAG, "parent: " + String.valueOf(mField.getName()));
+        parentField = parent;
         mEditFragment.setPresenter(this);
     }
 
@@ -57,13 +67,18 @@ public class BSEditHandler implements BSEditContract.Presenter {
     public void deleteCurrentField() {
         if(mField != null) {
             mDataManager.removeField(mField);
+            Log.e(TAG, "IMPORTTANT removing.. " + mField.getName());
         }
     }
 
     @Override
     public void changeField(Field f) {
         this.deleteCurrentField();
-        mDataManager.addAgrarianField(f);
+        if(parentField == null){
+            mDataManager.addAgrarianField(f);
+        }else {
+            mDataManager.addDamageField((DamageField) f, parentField);
+        }
         mField = f;
     }
 

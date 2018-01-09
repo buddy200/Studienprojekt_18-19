@@ -133,6 +133,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (parentField != null) {
             //we add a dmg field!
             isDmgField = true;
+            Log.e(TAG, "paaaaarnet " + parentField.getName());
             mMapViewHandler.addField(parentField);
             getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
         }
@@ -287,12 +288,14 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     private void onDoneButtonClick() {
         if (enoughPoints) {
             //myLocationListener.setFollow(false);
+            bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
             Field fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+            BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
             if (isDmgField) {
                 fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
+                handler = new BSEditHandler(fieldToAdd, (AgrarianField) parentField, dataManager, bottomSheetDialog);
+
             }
-            bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
-            BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
             bottomSheetDialog.setPresenter(handler);
             bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
 

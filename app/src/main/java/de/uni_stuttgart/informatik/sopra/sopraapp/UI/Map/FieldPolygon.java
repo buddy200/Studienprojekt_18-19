@@ -1,10 +1,14 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Shader;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +20,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Polygon;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.MainActivity;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -34,6 +39,7 @@ public class FieldPolygon extends Polygon {
     private Context context;
     private Paint textPaint;
     private Field field;
+    private BitmapShader bitmapShader;
 
     public FieldPolygon(Context context, Field field){
         super(context);
@@ -46,6 +52,11 @@ public class FieldPolygon extends Polygon {
 
         textPaint = new Paint();
         textPaint.setTextAlign(Paint.Align.CENTER);
+
+        Bitmap patternBMP = BitmapFactory.decodeResource(MainActivity.getmContext().getResources(), R.mipmap.field);
+        bitmapShader = new BitmapShader(patternBMP, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        mFillPaint.setShader(bitmapShader);
+
     }
 
 

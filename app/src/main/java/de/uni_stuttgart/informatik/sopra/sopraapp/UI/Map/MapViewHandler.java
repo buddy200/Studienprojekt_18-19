@@ -137,7 +137,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         }
 
         polygon.setPoints(polyPoints);
-        polygon.setFillColor(field.getColor());
+        //polygon.setFillColor(field.getColor());
         polygon.setTitle(field.getName());
 
         fieldPolyMap.put(field, polygon);
@@ -189,6 +189,9 @@ public class MapViewHandler implements MapContract.MapHandler {
      * @param lon
      */
     public void setCurrLocMarker(double lat, double lon){
+        if(map == null){
+            return;
+        }
         map.getOverlayManager().remove(currentLocMarker);
         currentLocMarker = new Marker(map);
         currentLocMarker.setPosition(new GeoPoint(lat, lon));
@@ -220,8 +223,10 @@ public class MapViewHandler implements MapContract.MapHandler {
      * @param lon
      */
     public void animateAndZoomTo(double lat, double lon) {
-        mapController.setZoom(20);
-        mapController.animateTo(new GeoPoint(lat, lon));
+        if(map != null){
+            mapController.setZoom(20);
+            mapController.animateTo(new GeoPoint(lat, lon));
+        }
     }
 
     @Override

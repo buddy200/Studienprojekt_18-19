@@ -160,6 +160,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
         dataManager.readData();
+        if(parentField != null) {
+            for (Field field : dataManager.getFields()) {
+                if (field.getTimestamp() == parentField.getTimestamp()) {
+                    parentField = field;
+                }
+            }
+        }
         OnMapClick();
     }
 
@@ -365,7 +372,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
             Field fieldToAdd;
             if (isDmgField) {
-                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints);
+                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, (AgrarianField) parentField);
+                if(parentField instanceof AgrarianField){
+                    ((AgrarianField) parentField).addContainedDamageField((DamageField)fieldToAdd);
+                     //   dataManager.dataChange();
+                }
+
             } else {
                 fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
                 if (fieldToAdd instanceof AgrarianField) {
@@ -444,7 +456,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     @Override
     public void onDataChange() {
-        Log.e("dATA CHANGE", "HAA");
         if (mMapViewHandler != null) {
             mMapViewHandler.reload();
         }
@@ -463,17 +474,14 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                     if (((DamageField) field).getpaths() != null && ((DamageField) field).getpaths().size() > 0) {
                         String path = (((DamageField) field).getpaths().get(((DamageField) field).getpaths().size() - 1)).getImage_path();
                         if (temp.compareTo(path) > 0) {
-                            dataManager.removeField(field);
                             temp = path;
                         }
                     }
                 }
             }
             File f = new File(temp);
-            f.delete();
             ((DamageField) field).getpaths().remove(((DamageField) field).getpaths().size() - 1);
-            dataManager.addAgrarianField(field);
-            dataManager.saveData();
+            dataManager.dataChange();
         }
     }
 

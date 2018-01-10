@@ -193,6 +193,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                 case R.id.add_damageField_button:
                     GlobalConstants.setLastLocationOnMap(mPresenter.getVisibleField().getCentroid());
                     mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
+                    dismiss();
                     break;
                 case R.id.button_nav:
                     //call a googlemaps intent with the position of the centroid point from the field object

@@ -16,22 +16,22 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
 
 /**
  * Created by larsb on 22.11.2017.
- *
+ * <p>
  * a custom field class, containing fields that represent damage
  */
 
-public class DamageField extends Field implements Serializable{
+public class DamageField extends Field implements Serializable {
     private static final String TAG = "DamageField";
 
     private static final String KEY_DATE = "date";
     private static final String KEY_EVALUATOR = "evaluator";
     private static final String KEY_IMAGES = "images";
+    private static final String KEY_INSURANCEMONEY = "insuranceMoney";
 
     private static final long serialVersionUID = 8L;
 
     private String parsedDate;
     private String evaluator;
-
 
 
     private double insuranceMoney;
@@ -40,12 +40,16 @@ public class DamageField extends Field implements Serializable{
     private DamageFieldType type = DamageFieldType.Aliens;
 
 
+    private AgrarianField parentField;
+
+
     /**
      * constructor
+     *
      * @param context
      * @param cPoints
      */
-    public DamageField(Context context, List<CornerPoint> cPoints) {
+    public DamageField(Context context, List<CornerPoint> cPoints, AgrarianField parentField) {
         super(context, cPoints);
         this.setName(context.getResources().getString(R.string.field_default_name));
         this.setType(type);
@@ -54,12 +58,15 @@ public class DamageField extends Field implements Serializable{
         this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
         this.paths = new ArrayList<>();
+        this.parentField = parentField;
+        this.insuranceMoney = calcInsuranceAmount();
 
     }
 
     /**
      * map type of damage to color
      * TODO
+     *
      * @return
      */
     private int damageFieldToColor() {
@@ -69,16 +76,19 @@ public class DamageField extends Field implements Serializable{
 
     /**
      * bundle for passing data in the UI
+     *
      * @return
      */
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
+        bundle.putLong(KEY_TIMESTAMP, this.getTimestamp());
+        bundle.putDouble(KEY_INSURANCEMONEY,  this.getInsuranceMoney());
         bundle.putString(KEY_NAME, this.getName());
         bundle.putInt(KEY_COLOR, this.getColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
         bundle.putString(KEY_CONVERTEDSIZE, this.getConvertedSize());
-        if(this.getSize() != null){
+        if (this.getSize() != null) {
             bundle.putDouble(KEY_SIZE, this.getSize());
         }
         bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());
@@ -91,10 +101,13 @@ public class DamageField extends Field implements Serializable{
         return bundle;
     }
 
-    public String getParsedDate() { return parsedDate;}
+    public String getParsedDate() {
+        return parsedDate;
+    }
 
     /**
      * return the date in a readable format
+     *
      * @param date
      */
     public void setDate(Date date) {
@@ -107,34 +120,39 @@ public class DamageField extends Field implements Serializable{
         this.parsedDate = parsedDate;
     }
 
-    public void setDate(String date){
+    public void setDate(String date) {
         this.parsedDate = date;
     }
 
-    public String getEvaluator() {return evaluator;}
+    public String getEvaluator() {
+        return evaluator;
+    }
 
-    public void setEvaluator(String evaluator) {this.evaluator = evaluator;}
+    public void setEvaluator(String evaluator) {
+        this.evaluator = evaluator;
+    }
 
 
     public ArrayList<PictureData> getpaths() {
         return paths;
     }
 
-    public void setpaths (ArrayList<PictureData> data){
-        this.paths = data;
-    }
 
     public void setpath(String path) {
         PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);
         paths.add(pictureData);
     }
 
-    public void  calcInsuranceAmount(AgrarianField field){
-           insuranceMoney =  this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * field.getType().getInsuranceMoneyPerSquaremeter();
+    private double calcInsuranceAmount() {
+        return  this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
     }
 
     public double getInsuranceMoney() {
         return insuranceMoney;
+    }
+
+    public AgrarianField getParentField() {
+        return parentField;
     }
 
 

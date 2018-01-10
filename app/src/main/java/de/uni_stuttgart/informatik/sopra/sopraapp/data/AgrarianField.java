@@ -71,6 +71,7 @@ public class AgrarianField extends Field implements Serializable{
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
+        bundle.putLong(KEY_TIMESTAMP, this.getTimestamp());
         bundle.putString(KEY_NAME, this.getName());
         bundle.putInt(KEY_COLOR, this.getType().toColor());
         bundle.putString(KEY_COUNTY, this.getCounty());

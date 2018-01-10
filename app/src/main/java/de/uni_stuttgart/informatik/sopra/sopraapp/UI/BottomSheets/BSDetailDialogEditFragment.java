@@ -185,7 +185,8 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
             List<AgrarianFieldType> statusCheck;
             statusCheck = Arrays.asList(AgrarianFieldType.values());
 
-            fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), R.layout.spinner_item, AgrarianFieldType.values()));
+            fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
+            //TODO not working right now..
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((AgrarianField)f).getOwner());
@@ -198,7 +199,8 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
             List<DamageFieldType> statusCheck;
             statusCheck = Arrays.asList(DamageFieldType.values());
-            fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), R.layout.spinner_item, DamageFieldType.values()));
+            fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
+            //TODO not working right now..
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((DamageField)f).getEvaluator());

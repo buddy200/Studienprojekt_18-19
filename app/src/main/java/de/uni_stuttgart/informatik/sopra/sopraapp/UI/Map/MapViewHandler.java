@@ -68,7 +68,7 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     @Override
     public void start() {
-        init();
+
     }
 
     /**
@@ -230,7 +230,9 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public void reload(){
-        reloadWithData(mDataManager.getFields());
+        if(map != null){
+            reloadWithData(mDataManager.getFields());
+        }
     }
 
     public void reloadWithData(ArrayList<Field> fields) {
@@ -246,6 +248,7 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public MapView getMap() {
+        init();
         return map;
     }
 

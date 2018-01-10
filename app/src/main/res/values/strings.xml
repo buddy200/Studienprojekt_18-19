@@ -66,4 +66,17 @@
     <string name="word_no">no</string>
     <string name="add_activity_ActionButtonText">Add a Corner Point at your current position</string>
     <string name="add_activity_NoMorePoints">No more points to delete.</string>
+
+    <!-- login dialog -->
+    <string name="username">Name</string>
+    <string name="password">Password</string>
+    <string name="farmer_label">Farmer</string>
+    <string name="admin_label">Admin</string>
+    <string name="login_label">Login</string>
+
+
+    <!-- shared preferences -->
+    <!-- THIS WILL NOT BE SHOWN TO THE USER -->
+    <string name="pref_previously_started">prefStart</string>
+    <string name="pref_username">usr</string>
 </resources>

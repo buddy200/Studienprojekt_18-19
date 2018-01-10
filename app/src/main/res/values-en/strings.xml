@@ -50,4 +50,9 @@
     <string name="add_activity_ActionButtonText">Add a Corner Point at your current position</string>
     <string name="add_activity_NoMorePoints">No more points to delete.</string>
     <string name="add_activity_outsideOffField">The point is not in the field. Point has been removed.</string>
+    <string name="username">Name</string>
+    <string name="password">Password</string>
+    <string name="farmer_label">Farmer</string>
+    <string name="admin_label">Admin</string>
+    <string name="login_label">Login</string>
 </resources>

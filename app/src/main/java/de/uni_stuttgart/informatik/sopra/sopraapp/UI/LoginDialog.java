@@ -59,11 +59,11 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_dialog_btn_login:
-                Log.e(TAG, "pressed login button");
                 if(!username.getText().toString().equals("") && userPrivileges.getCheckedRadioButtonId() != -1){
-                    Log.e(TAG, "username there");
                     saveLogin(username.getText().toString(), password.getText().toString());
+                    Toast.makeText(getContext(), "Logged in as " + username.getText().toString(), Toast.LENGTH_SHORT);
                     this.dismiss();
+
                 }else{
                     Animation shake = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
 
@@ -87,7 +87,7 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         edit.putString(getContext().getString(R.string.pref_username), username);
         //password not saved yet.. would be unsave
 
-        edit.commit();
+        edit.apply();
     }
 
 

@@ -13,8 +13,6 @@
         <item name="colorSecondaryText">@color/secondaryText</item>
         <item name="colorDivider">@color/dividerColor</item>
         <item name="colorTextIcons">@color/colorWhite</item> -->
-
-
     </style>
 
     <style name="AppTheme.NoActionBar">

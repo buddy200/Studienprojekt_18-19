@@ -124,6 +124,7 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
                     permissionGranted = true;
 
                     v.setVisibility(View.INVISIBLE);
+                    mPresenter.init();
                     cl.addView(mPresenter.getMap());
                 } else {
 

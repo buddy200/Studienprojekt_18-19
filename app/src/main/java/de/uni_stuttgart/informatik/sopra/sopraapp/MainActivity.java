@@ -58,7 +58,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     private MapFragment mapFragment;
     private MapViewHandler mapHandler;
 
-    AppDataManager dataManager;
+    private AppDataManager dataManager;
+
+    private SharedPreferences prefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +83,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         mapFragment.setPresenter(mapHandler);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
-
-        //check if user already used the app - if not show login dialog
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_username), false);
-        if(!previouslyStarted) {
-            new LoginDialog(this).show();
-        }
     }
 
 
@@ -99,6 +97,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     public void onStart(){
         super.onStart();
         dataManager.readData();
+
+        //check if user already used the app - if not show login dialog
+        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
+        if(!previouslyStarted) {
+            new LoginDialog(this).show();
+            this.invalidateOptionsMenu();
+        }
     }
 
     @Override
@@ -196,13 +201,20 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         return mContext;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        setUpSearchMenuItem(menu);
+        MenuItem username = menu.findItem(R.id.action_username);
+        username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
+
+        return true;
+    }
+
     private View expandSearch;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
-
-        setUpSearchMenuItem(menu);
 
         return true;
     }

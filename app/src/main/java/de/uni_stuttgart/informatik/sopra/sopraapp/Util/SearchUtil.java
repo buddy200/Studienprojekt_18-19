@@ -68,4 +68,50 @@ public class SearchUtil {
 
     public static void searchForType(ArrayList<Field> fields, String query, String type) {
     }
+
+    /**
+     * search implementation
+     * @param
+     */
+    /*
+    public void onSearchButtonClicked(String input) {
+        Log.e(TAG, "Search for: " + input);
+
+        // copy dataFromFields in search data listGeoPoints
+        // we need a deep copy - because fields contain other fields
+        ArrayList<Field> searchData = new ArrayList<>(dataManager.getFields());
+        ArrayList<Field> resultData = new ArrayList<>();
+
+        /**
+         * not optimal and dirty way of searching
+         * but it's fast to implement and probably enough for our use case
+         * - ah and this is case sensitive right now... TODO
+         */
+    /*
+        Iterator<Field> iter = searchData.iterator();
+        while(iter.hasNext()){
+            Field f = iter.next();
+
+            if(SearchUtil.matchesFieldSearch(f, input)){
+                resultData.add(f);
+            }
+
+            if(f instanceof AgrarianField){
+                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
+                    if(SearchUtil.matchesFieldSearch(dmg,input)){
+                        resultData.add(dmg);
+                    }
+                }
+            }
+
+        }
+
+        if(resultData.size() != 0){
+            ItemListDialogFragment.newInstance(resultData).show(getSupportFragmentManager(), "SearchList" );
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
+        }
+
+    }*/
+
 }

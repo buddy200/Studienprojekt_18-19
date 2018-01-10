@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -183,8 +184,8 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
             List<AgrarianFieldType> statusCheck;
             statusCheck = Arrays.asList(AgrarianFieldType.values());
-            fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
-            //TODO not working right now..
+
+            fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), R.layout.spinner_item, AgrarianFieldType.values()));
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((AgrarianField)f).getOwner());
@@ -197,8 +198,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
             List<DamageFieldType> statusCheck;
             statusCheck = Arrays.asList(DamageFieldType.values());
-            fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
-            //TODO not working right now..
+            fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), R.layout.spinner_item, DamageFieldType.values()));
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((DamageField)f).getEvaluator());
@@ -217,22 +217,20 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
      * @return
      */
     public Field changedField(){
-        Field mFieldToChange;
+        Field mFieldToChange = mPresenter.getVisibleField();
 
-        if(mPresenter.getVisibleField() instanceof AgrarianField){
-            mFieldToChange = new AgrarianField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+        if(mFieldToChange instanceof AgrarianField){
+
             ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
             ((AgrarianField) mFieldToChange).setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());
 
+/*
             for(DamageField dmg : ((AgrarianField) mPresenter.getVisibleField()).getContainedDamageFields()){
                 ((AgrarianField) mFieldToChange).addContainedDamageField(dmg);
-            }
+            }*/
 
-        }else if(mPresenter.getVisibleField() instanceof DamageField){
-            mFieldToChange = new DamageField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+        }else if(mFieldToChange instanceof DamageField){
             ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
-            ((DamageField) mFieldToChange).setpaths(((DamageField) mPresenter.getVisibleField()).getpaths());
-
             ((DamageField) mFieldToChange).setDate(dateText.getText().toString());
 
         }else{

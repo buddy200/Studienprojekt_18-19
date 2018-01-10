@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
@@ -190,6 +191,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
                     this.dismiss();
                     break;
                 case R.id.add_damageField_button:
+                    GlobalConstants.setLastLocationOnMap(mPresenter.getVisibleField().getCentroid());
                     mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
                     break;
                 case R.id.button_nav:

@@ -303,7 +303,20 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     }
 
     private void calcLastIntersection(Field field){
+        Vector<Double> line = new Vector<>();
+        Vector<Double> startVector = new Vector<>();
+        if (listGeoPoints.get(0) != null) {
+            startVector.add(listGeoPoints.get(0).getLatitude());
+            startVector.add(listGeoPoints.get(0).getLongitude());
+            currentVector = startVector;
+            line.add(((lastVector.get(1) - currentVector.get(1)) / (lastVector.get(0) - currentVector.get(0))));
+            line.add(currentVector.get(1) - line.get(0) * currentVector.get(0));
+            linesFromAgrarianField.add(line);
+            ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);
 
+        } else {
+            lastVector = currentVector;
+        }
     }
 
     public void calcIntersection(Location location) {
@@ -356,20 +369,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             } else {
                 fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
                 if (fieldToAdd instanceof AgrarianField) {
-                    Vector<Double> line = new Vector<>();
-                    Vector<Double> startVector = new Vector<>();
-                    if (listGeoPoints.get(0) != null) {
-                        startVector.add(listGeoPoints.get(0).getLatitude());
-                        startVector.add(listGeoPoints.get(0).getLongitude());
-                        currentVector = startVector;
-                        line.add(((lastVector.get(1) - currentVector.get(1)) / (lastVector.get(0) - currentVector.get(0))));
-                        line.add(currentVector.get(1) - line.get(0) * currentVector.get(0));
-                        linesFromAgrarianField.add(line);
-                        ((AgrarianField) fieldToAdd).setLinesFormField(linesFromAgrarianField);
-
-                    } else {
-                        lastVector = currentVector;
-                    }
+                    calcLastIntersection(fieldToAdd);
                 }
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());

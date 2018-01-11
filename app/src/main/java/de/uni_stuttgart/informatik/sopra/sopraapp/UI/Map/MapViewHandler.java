@@ -250,18 +250,25 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public void reloadWithData(ArrayList<Field> fields) {
+        MapEventsOverlay backup = null;
+
         fieldPolyMap.clear();
         for(Overlay p : map.getOverlayManager().overlays()){
             if(p instanceof Polyline){
                 map.getOverlayManager().overlays().remove(p);
             }else if(p instanceof FieldPolygon){
                 map.getOverlayManager().overlays().remove(p);
+            }else if(p instanceof MapEventsOverlay){
+                map.getOverlayManager().overlays().remove(p);
+                backup = (MapEventsOverlay) p;
             }
         }
 
         Log.e("field length", String.valueOf(fields.size()));
         addFields(fields);
-
+        if(backup != null){
+            map.getOverlayManager().add(backup);
+        }
         map.invalidate();
     }
 

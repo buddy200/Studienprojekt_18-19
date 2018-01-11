@@ -53,10 +53,6 @@ public class FieldPolygon extends Polygon {
         textPaint = new Paint();
         textPaint.setTextAlign(Paint.Align.CENTER);
 
-        Bitmap patternBMP = BitmapFactory.decodeResource(MainActivity.getmContext().getResources(), R.mipmap.field);
-        bitmapShader = new BitmapShader(patternBMP, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        mFillPaint.setShader(bitmapShader);
-
     }
 
 

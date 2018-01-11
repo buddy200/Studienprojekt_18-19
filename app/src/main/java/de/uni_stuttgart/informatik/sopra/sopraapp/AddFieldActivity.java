@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.io.File;
@@ -141,11 +142,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (parentField != null) {
             //we add a dmg field!
             isDmgField = true;
-            Log.e(TAG, "paaaaarnet " + parentField.getName());
             mMapViewHandler.addField(parentField);
             getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
         }
-
 
         myLocationListener = new MYLocationListener();
         myLocationListener.initializeLocationManager(this, mMapViewHandler);
@@ -159,6 +158,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
+
+        OnMapClick();
+
         dataManager.readData();
         if(parentField != null) {
             for (Field field : dataManager.getFields()) {
@@ -167,7 +169,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 }
             }
         }
-        OnMapClick();
     }
 
     @Override
@@ -236,6 +237,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint point) {
+                Log.e(TAG, "single Tab confirmed!");
                 Location location = new Location("Loc");
                 location.setLatitude(point.getLatitude());
                 location.setLongitude(point.getLongitude());
@@ -253,9 +255,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
         };
 
-
-        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
-        mMapViewHandler.getMap().getOverlays().add(OverlayEvents);
+        MapEventsOverlay overlayEvents = new MapEventsOverlay(mReceive);
+        mMapViewHandler.getMap().getOverlayManager().add(overlayEvents);
     }
 
 
@@ -380,6 +381,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
             } else {
                 fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
+                Log.e("LIST SIZE", String.valueOf(listCornerPoints.size()));
                 if (fieldToAdd instanceof AgrarianField) {
                     calcLastIntersection(fieldToAdd);
                 }
@@ -451,7 +453,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      * try to get the current user location
      */
     public void onMapFragmentComplete() {
-
+        OnMapClick();
     }
 
     @Override

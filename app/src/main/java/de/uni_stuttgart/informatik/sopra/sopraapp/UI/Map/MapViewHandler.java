@@ -10,7 +10,9 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
 
@@ -56,6 +58,8 @@ public class MapViewHandler implements MapContract.MapHandler {
     private MapFragment mMapFragment;
 
 
+    private GeoPoint backupLocation;
+
     /**
      * constructor
      * @param context
@@ -68,13 +72,16 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     @Override
     public void start() {
-
+        init();
     }
 
     /**
      * initialize the map
      */
+    int counter = 0;
     public void init(){
+        Log.e(TAG, "init map " + counter);
+        counter++;
         map = new MapView(context);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
@@ -137,7 +144,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         }
 
         polygon.setPoints(polyPoints);
-        //polygon.setFillColor(field.getColor());
+        polygon.setFillColor(field.getColor());
         polygon.setTitle(field.getName());
 
         fieldPolyMap.put(field, polygon);
@@ -226,6 +233,8 @@ public class MapViewHandler implements MapContract.MapHandler {
         if(map != null){
             mapController.setZoom(20);
             mapController.animateTo(new GeoPoint(lat, lon));
+        }else {
+            backupLocation = new GeoPoint(lat, lon);
         }
     }
 
@@ -242,10 +251,14 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     public void reloadWithData(ArrayList<Field> fields) {
         fieldPolyMap.clear();
-        map.getOverlayManager().overlays().clear();
-        if(currentLocMarker != null){
-            map.getOverlayManager().add(currentLocMarker);
+        for(Overlay p : map.getOverlayManager().overlays()){
+            if(p instanceof Polyline){
+                map.getOverlayManager().overlays().remove(p);
+            }else if(p instanceof FieldPolygon){
+                map.getOverlayManager().overlays().remove(p);
+            }
         }
+
         Log.e("field length", String.valueOf(fields.size()));
         addFields(fields);
 
@@ -253,7 +266,6 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public MapView getMap() {
-        init();
         return map;
     }
 

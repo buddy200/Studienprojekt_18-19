@@ -49,7 +49,7 @@ public abstract class Field implements Serializable{
 
     //values for field and damage case
     private String name;
-    private FieldType type;
+    FieldType type;
     private String county;
     private int color;
     private double size;

@@ -13,6 +13,7 @@ import java.util.List;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 /**
  * Created by larsb on 22.11.2017.
@@ -37,7 +38,7 @@ public class DamageField extends Field implements Serializable {
     private double insuranceMoney;
     private ArrayList<PictureData> paths;
 
-    private DamageFieldType type = DamageFieldType.Aliens;
+    private DamageFieldType defaultType = DamageFieldType.Aliens;
 
 
     private AgrarianField parentField;
@@ -52,14 +53,15 @@ public class DamageField extends Field implements Serializable {
     public DamageField(Context context, List<CornerPoint> cPoints, AgrarianField parentField) {
         super(context, cPoints);
         this.setName(context.getResources().getString(R.string.field_default_name));
-        this.setType(type);
+        super.setType(defaultType);
         this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(damageFieldToColor());
         this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
         this.paths = new ArrayList<>();
         this.parentField = parentField;
-        this.insuranceMoney = calcInsuranceAmount();
+        calcInsuranceAmount();
+
 
     }
 
@@ -143,8 +145,8 @@ public class DamageField extends Field implements Serializable {
         paths.add(pictureData);
     }
 
-    private double calcInsuranceAmount() {
-        return  this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
+    public void calcInsuranceAmount() {
+        insuranceMoney =   this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
     }
 
     public double getInsuranceMoney() {
@@ -155,6 +157,10 @@ public class DamageField extends Field implements Serializable {
         return parentField;
     }
 
+    public void setType(DamageFieldType type) {
+        super.setType(type);
+        this.calcInsuranceAmount();
+    }
 
 }
 

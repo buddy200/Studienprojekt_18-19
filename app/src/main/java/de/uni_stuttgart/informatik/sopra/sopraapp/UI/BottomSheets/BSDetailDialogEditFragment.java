@@ -1,11 +1,9 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +27,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 /**
  * sopra_priv
@@ -183,7 +179,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
             dateText.setVisibility(View.INVISIBLE);
             pickDate.setVisibility(View.INVISIBLE);
-     //       fieldestimatedCosts.setVisibility(View.INVISIBLE);
+            fieldestimatedCosts.setVisibility(View.INVISIBLE);
 
             List<AgrarianFieldType> statusCheck;
             statusCheck = Arrays.asList(AgrarianFieldType.values());
@@ -228,10 +224,6 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
             ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
             ((AgrarianField) mFieldToChange).setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());
 
-/*
-            for(DamageField dmg : ((AgrarianField) mPresenter.getVisibleField()).getContainedDamageFields()){
-                ((AgrarianField) mFieldToChange).addContainedDamageField(dmg);
-            }*/
 
         }else if(mFieldToChange instanceof DamageField){
             ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
@@ -243,7 +235,13 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
 
         mFieldToChange.setName(fieldName.getText().toString());
-        mFieldToChange.setType((FieldType) fieldSpinner.getSelectedItem());
+        if(mFieldToChange instanceof DamageField) {
+            ((DamageField) mFieldToChange).setType((DamageFieldType) fieldSpinner.getSelectedItem());
+        }
+        else if(mFieldToChange instanceof AgrarianField){
+            ((AgrarianField) mFieldToChange).setType((AgrarianFieldType) fieldSpinner.getSelectedItem());
+        }
+
 
         if(!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {
             mFieldToChange.setCounty(fieldRegion.getText().toString());

@@ -45,8 +45,8 @@
     <string name="add_activity_pointAt">"Punkt bei "</string>
     <string name="add_Activity_YouNeed">"Noch "</string>
     <string name="add_activity_needMore">" Punkte mehr"</string>
-    <string name="word_yes">ja</string>
-    <string name="word_no">nein</string>
+    <string name="word_yes">Ja</string>
+    <string name="word_no">Nein</string>
     <string name="add_activity_ActionButtonText">Füge Eckpunkt an aktueller Position hinzu</string>
     <string name="add_activity_NoMorePoints">Keine Punkte mehr zum löschen</string>
     <string name="add_activity_outsideOffField">Der Punkt ist nicht im Feld. Punkt wurde entfernt</string>
@@ -55,4 +55,7 @@
     <string name="farmer_label">Bauer</string>
     <string name="admin_label">Verwalter</string>
     <string name="login_label">Anmelden</string>
+    <string name="logout_label">Abmelden</string>
+    <string name="logout_message">Wirklich abmelden und die App schließen?</string>
+
 </resources>

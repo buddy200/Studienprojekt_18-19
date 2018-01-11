@@ -79,4 +79,6 @@
     <!-- THIS WILL NOT BE SHOWN TO THE USER -->
     <string name="pref_previously_started">prefStart</string>
     <string name="pref_username">usr</string>
+    <string name="logout_label">Logout</string>
+    <string name="logout_message">Are you sure you want to logout and close the app?</string>
 </resources>

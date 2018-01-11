@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -170,28 +172,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         bs.show(this.getSupportFragmentManager(), "DetailField");
     }
 
-
-    /**
-     * create a list of fields to display in the activity
-     * containing AgrarienFields and their Damage Fields
-     * @param list
-     * @return
-     */
-    /*
-    private ArrayList<Field> createList(ArrayList<Field> list){
-        ArrayList<Field> newList = new ArrayList<>();
-        for(Field f : list){
-            newList.add(f);
-            if(f instanceof AgrarianField){
-                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
-                    newList.add(dmg);
-                }
-            }
-        }
-
-        return newList;
-    } */
-
     /**
      * get the context, this is necessary for FieldState enums
      * without context it's not possible to get Enum names from strings.xml
@@ -204,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public boolean onPrepareOptionsMenu(Menu menu){
         setUpSearchMenuItem(menu);
-        MenuItem username = menu.findItem(R.id.action_username);
+        MenuItem username = menu.findItem(R.id.action_toolbar_username);
         username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
 
         return true;
@@ -294,10 +274,42 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                     Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.action_toolbar_logout:
+                //DATABASE IS NOT CHANGED AFTER LOGOUT
+                generateLogoutDialog().show();
+                break;
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog.Builder generateLogoutDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //kills the app and removes it from the recents list
+                        finishAndRemoveTask();
+                        //delete all shared preferences - DATABASE IS NOT CHANGED
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.clear();
+                        edit.apply();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.logout_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
+                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
+
+        return builder;
     }
 
     @Override

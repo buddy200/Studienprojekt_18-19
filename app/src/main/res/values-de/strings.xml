@@ -59,5 +59,12 @@
     <string name="logout_message">Wirklich abmelden und die App schließen?</string>
     <string name="toastmsg_anotherDamageField">Fügen sie ein weiteren Schadensfall hinzu oder gehen sie zurück</string>
     <string name="toastmsg_anotherAgrarainField">Fügen sie ein weiteres Feld hinzu oder gehen sie zurück</string>
-    <string name="detailItem_estimatedpayment">geschätzte Zahlung: </string>
+    <string name="detailItem_estimatedpayment">Geschätzte Zahlung: </string>
+    <string name="dialogItem_Location">Ort: </string>
+    <string name="dialogItem_Type">Type:  </string>
+    <string name="dialogItem_Size">Größe:  </string>
+    <string name="dialogItem_Owner">Besitzer:  </string>
+    <string name="dialogItem_Date">Datum:  </string>
+    <string name="detailItem_evaluator">Gutachter:  </string>
+    <string name="dialogItem_Name">Name:  </string>
 </resources>

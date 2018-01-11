@@ -25,7 +25,7 @@
 
     <string name="add_dmg_field_button">Add damage</string>
 
-    <string name="detailItem_estimatedpayment">"estimated payment: "</string>
+
 
     <string name="button_edit_name">Edit</string>
     <string name="button_finish_name">Finish</string>
@@ -88,5 +88,16 @@
     <!-- THIS WILL NOT BE SHOWN TO THE USER -->
     <string name="pref_previously_started">prefStart</string>
     <string name="pref_username">usr</string>
+
+
+    <!-- Detail Dialog -->
+    <string name="dialogItem_Name">Name:  </string>
+    <string name="dialogItem_Location">Location:  </string>
+    <string name="dialogItem_Type">Type:  </string>
+    <string name="dialogItem_Size">Size:  </string>
+    <string name="dialogItem_Owner">Owner:  </string>
+    <string name="dialogItem_Date">Date:  </string>
+    <string name="detailItem_estimatedpayment">"estimated payment:  "</string>
+    <string name="detailItem_evaluator">Evaluator:  </string>
 
 </resources>

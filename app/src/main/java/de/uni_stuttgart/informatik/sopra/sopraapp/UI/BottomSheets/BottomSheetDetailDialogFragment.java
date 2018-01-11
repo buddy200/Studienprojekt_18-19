@@ -31,7 +31,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * sopra_priv
  * Created by Felix B on 20.11.17.
  * Mail: felix.burk@gmail.com
- *
+ * <p>
  * A custom BottomSheetDialogFragment to display information of Fields
  */
 
@@ -93,6 +93,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
 
     /**
      * method to configure the behaviour of the bottom sheet
+     *
      * @param view
      */
     void configureBottomSheetBehaviour(View view) {
@@ -138,22 +139,21 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     }
 
 
-
     @Override
     public void fillData(Field mField) {
         this.mField = mField;
-        name.setText(mField.getName());
-        county.setText(mField.getCounty());
+        name.setText(getResources().getString(R.string.dialogItem_Name) + " " + mField.getName());
+        county.setText(getResources().getString(R.string.dialogItem_Location) + " " + mField.getCounty());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
 
-        state.setText(mField.getType().toString());
+        state.setText(getResources().getString(R.string.dialogItem_Type) + " " + mField.getType().toString());
         state.setTextColor(mField.getColor());
 
-        size.setText(mField.getConvertedSize());
+        size.setText(getResources().getString(R.string.dialogItem_Size) + " " + mField.getConvertedSize());
 
         //is field agrarian?
         if (mField instanceof AgrarianField) {
-            ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());
+            ownerOrEvaluator.setText(getResources().getString(R.string.detailItem_evaluator) + " " + ((AgrarianField) mField).getOwner());
             date.setText("");
             estimatedCosts.setVisibility(View.INVISIBLE);
         }
@@ -161,15 +161,14 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         if (mField instanceof DamageField) {
             addDmg.setVisibility(View.INVISIBLE);
             county.setVisibility(View.INVISIBLE);
-            date.setText(((DamageField)mField).getParsedDate());
-            ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
-            estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + String.valueOf(((DamageField) mField).getInsuranceMoney()));
+            date.setText(getResources().getString(R.string.dialogItem_Date) + " " + ((DamageField) mField).getParsedDate());
+            ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + " " + ((DamageField) mField).getEvaluator());
+            estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(((DamageField) mField).getInsuranceMoney()));
 
-            if(((DamageField) mField).getpaths() != null) {
+            if (((DamageField) mField).getpaths() != null) {
                 GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), ((DamageField) mField).getpaths());
                 recyclerView.setAdapter(galleryAdapter);
-            }
-            else{
+            } else {
             }
         }
 
@@ -181,9 +180,9 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     }
 
 
-
     /**
      * handle button clicks
+     *
      * @param v
      */
     @Override

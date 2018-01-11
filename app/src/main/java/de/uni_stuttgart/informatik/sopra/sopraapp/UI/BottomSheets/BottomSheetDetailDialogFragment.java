@@ -109,6 +109,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
     private ImageButton edit;
     private ImageButton navButton;
     private RecyclerView recyclerView;
+    private TextView estimatedCosts;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -128,6 +129,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         county = (TextView) view.findViewById(R.id.field_detail_region);
         ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         date = (TextView) view.findViewById(R.id.field_detail_date);
+        estimatedCosts = (TextView) view.findViewById(R.id.field_cost);
         addDmg = (ImageButton) view.findViewById(R.id.add_damageField_button);
         addDmg.setOnClickListener(this);
         navButton = (ImageButton) view.findViewById(R.id.button_nav);
@@ -153,6 +155,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
         if (mField instanceof AgrarianField) {
             ownerOrEvaluator.setText(((AgrarianField)mField).getOwner());
             date.setText("");
+            estimatedCosts.setVisibility(View.INVISIBLE);
         }
         //is field damage?
         if (mField instanceof DamageField) {
@@ -160,6 +163,7 @@ public class BottomSheetDetailDialogFragment extends BottomSheetDialogFragment i
             county.setVisibility(View.INVISIBLE);
             date.setText(((DamageField)mField).getParsedDate());
             ownerOrEvaluator.setText(((DamageField)mField).getEvaluator());
+            estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + String.valueOf(((DamageField) mField).getInsuranceMoney()));
 
             if(((DamageField) mField).getpaths() != null) {
                 GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), ((DamageField) mField).getpaths());

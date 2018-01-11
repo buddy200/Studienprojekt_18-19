@@ -246,9 +246,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 location.setLongitude(point.getLongitude());
                 addPoint(location);
 
-                Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
-                        location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
                 return false;
             }
 
@@ -278,7 +275,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         mMapViewHandler.invalidateMap();
 
 
-        fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
+
 
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;
@@ -290,6 +287,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         intersectionCalculator.calculateLine(!isDmgField);
         if(isDmgField && !intersectionCalculator.calcIntersection(parentField)){
             onRedoButtonClick();
+        }
+        else{
+            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
+            Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
+                    location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
         }
 
     }
@@ -368,10 +371,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             Location location = myLocationListener.getLocation();
             if (location != null) {
                 addPoint(location);
-
-                Snackbar.make(view, getResources().getString(R.string.add_activity_pointAt) +
-                        location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
             } else {
                 Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }

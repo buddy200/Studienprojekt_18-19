@@ -16,7 +16,10 @@ import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 
 /**
  * sopra_priv
@@ -45,6 +48,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     public static ItemListDialogFragment newInstance(ArrayList<Field> fields) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();
+
 
         fieldList = new ArrayList<>(fields);
         ArrayList<Bundle> fieldBundles = new ArrayList<>();
@@ -138,15 +142,20 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
      */
     private class ItemAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-        private final Bundle  mFieldBundle;
-        private final ArrayList<Bundle> bundleListFields;
+        private AppDataManager dataManager;
+
+    /*    private final Bundle  mFieldBundle;
+        private final ArrayList<Bundle> bundleListFields;*/
 
         ItemAdapter(Bundle fieldBundles) {
+            dataManager = new AppDataManager(getContext());
+            /*
             mFieldBundle = fieldBundles;
             bundleListFields = new ArrayList<>();
             for(int i=0; i<fieldBundles.getParcelableArrayList(ARG_ITEM_LIST).size(); i++){
                 bundleListFields.add((Bundle) fieldBundles.getParcelableArrayList(ARG_ITEM_LIST).get(i));
             }
+            */
         }
 
         @Override
@@ -161,20 +170,26 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
          */
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(bundleListFields.get(position).getString("name"));
-            if(bundleListFields.get(position).getSerializable("type") != null){
-                holder.state.setText(bundleListFields.get(position).getSerializable("type").toString());
-                holder.state.setTextColor(bundleListFields.get(position).getInt("color"));
+            holder.text.setText(dataManager.getFields().get(position).getName());
+            if(dataManager.getFields().get(position).getType() != null){
+                holder.state.setText(dataManager.getFields().get(position).getType().toString());
+                holder.state.setTextColor(dataManager.getFields().get(position).getColor());
             }else {
                 holder.state.setText(" ");
-                holder.state.setTextColor(bundleListFields.get(position).getInt("color"));
+                holder.state.setTextColor(dataManager.getFields().get(position).getColor());
             }
-            holder.county.setText(bundleListFields.get(position).getString("county"));
+            if(dataManager.getFields().get(position) instanceof AgrarianField) {
+                holder.county.setText(dataManager.getFields().get(position).getCounty());
+            }
+            else{
+                if(dataManager.getFields().get(position) instanceof DamageField)
+                holder.county.setText(((DamageField) dataManager.getFields().get(position)).getParentField().getName());
+            }
         }
 
         @Override
         public int getItemCount() {
-            return bundleListFields.size();
+            return dataManager.getFields().size();
         }
 
     }

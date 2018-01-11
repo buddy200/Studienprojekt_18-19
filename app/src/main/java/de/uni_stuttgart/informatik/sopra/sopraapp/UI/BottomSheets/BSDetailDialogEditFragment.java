@@ -49,6 +49,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
     private TextView headingText;
     private TextView dateText;
+    private TextView fieldestimatedCosts;
     private EditText fieldName;
     private EditText fieldRegion;
     private Spinner fieldSpinner;
@@ -92,6 +93,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
         fieldSpinner = view.findViewById(R.id.field_detail_state_spinner);
         fieldSize = view.findViewById(R.id.field_detail_size);
         fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);
+        fieldestimatedCosts = view.findViewById(R.id.field_cost);
 
         pickDate = view.findViewById(R.id.button_pick_date);
 
@@ -181,12 +183,12 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
             dateText.setVisibility(View.INVISIBLE);
             pickDate.setVisibility(View.INVISIBLE);
+     //       fieldestimatedCosts.setVisibility(View.INVISIBLE);
 
             List<AgrarianFieldType> statusCheck;
             statusCheck = Arrays.asList(AgrarianFieldType.values());
 
             fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
-            //TODO not working right now..
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((AgrarianField)f).getOwner());
@@ -195,12 +197,12 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
             headingText.setText("DamageFeld");
             fieldRegion.setVisibility(View.INVISIBLE);
 
+            fieldestimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + String.valueOf(((DamageField) f).getInsuranceMoney()));
             dateText.setText(((DamageField) f).getParsedDate());
 
             List<DamageFieldType> statusCheck;
             statusCheck = Arrays.asList(DamageFieldType.values());
             fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
-            //TODO not working right now..
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((DamageField)f).getEvaluator());

@@ -13,8 +13,10 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayManager;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,6 +118,7 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     }
 
+
     /**
      * convert Objects of Type Field to Polygons on the map
      * and put both in a hashMap
@@ -161,16 +164,17 @@ public class MapViewHandler implements MapContract.MapHandler {
         for(Field field : fields){
            //add contained damage fields if field is type agrarian
            if(field instanceof AgrarianField){
-               map.getOverlayManager().add(fieldToPolygon(field));
+               map.getOverlayManager().add(0,fieldToPolygon(field));
            }
         }
 
         for(Field field : fields){
             //add contained damage fields if field is type agrarian
             if(field instanceof DamageField){
-                map.getOverlayManager().add(fieldToPolygon(field));
+                map.getOverlayManager().add(0,fieldToPolygon(field));
             }
         }
+        map.invalidate();
     }
 
     /**
@@ -214,7 +218,6 @@ public class MapViewHandler implements MapContract.MapHandler {
 
         currentLocMarker.setIcon(dr);
         map.getOverlayManager().add(currentLocMarker);
-
     }
 
     /**
@@ -250,6 +253,8 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public void reloadWithData(ArrayList<Field> fields) {
+        MapEventsOverlay backup = null;
+
         fieldPolyMap.clear();
         for(Overlay p : map.getOverlayManager().overlays()){
             if(p instanceof Polyline){
@@ -259,10 +264,7 @@ public class MapViewHandler implements MapContract.MapHandler {
             }
         }
 
-        Log.e("field length", String.valueOf(fields.size()));
         addFields(fields);
-
-        map.invalidate();
     }
 
     public MapView getMap() {

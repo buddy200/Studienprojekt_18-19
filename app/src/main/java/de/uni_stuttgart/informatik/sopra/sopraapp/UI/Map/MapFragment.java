@@ -126,10 +126,8 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
 
                     permissionGranted = true;
                     mPresenter.start();
-                    mPresenter.invalidateMap();
 
-                    v.setVisibility(View.INVISIBLE);
-                    cl.addView(mPresenter.getMap());
+                    this.onStart();
                 } else {
 
                     //no permission - no map
@@ -139,6 +137,7 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
                 //GPS Permission check
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    this.onStart();
                 } else {
                     Toast.makeText(getActivity(), "Keine Standort Berechtigung", Toast.LENGTH_SHORT).show();
 

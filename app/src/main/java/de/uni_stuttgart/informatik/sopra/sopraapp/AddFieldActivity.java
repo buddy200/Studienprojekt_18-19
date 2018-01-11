@@ -22,7 +22,6 @@ import android.widget.Toast;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.MapEventsOverlay;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.io.File;
@@ -34,6 +33,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialog
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.sopraapp.Util.IntersectionCalculator;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
@@ -78,9 +78,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     private Polyline p;
 
-    private Vector<Double> lastVector;
-    private Vector<Double> currentVector;
     private ArrayList<Vector<Double>> linesFromAgrarianField;
+    private IntersectionCalculator intersectionCalculator;
 
 
     @Override
@@ -96,6 +95,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         cornerPoints = new ArrayList<>();
         linesFromAgrarianField = new ArrayList<>();
+        intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);
         p = new Polyline();
 
         //back button on toolbar implementation
@@ -200,11 +200,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         return true;
     }
 
-    /*
+    /**
      * removes the last added Point from the new field, and redraw the Polyline
      */
     private void onRedoButtonClick() {
-        if (listGeoPoints.size() > 0 || listCornerPoints.size() > 0) {
+        if (listGeoPoints.size() > 0 && listCornerPoints.size() > 0) {
             listGeoPoints.remove(listGeoPoints.size() - 1);
             listCornerPoints.remove(listCornerPoints.size() - 1);
             p.setPoints(listGeoPoints);
@@ -218,6 +218,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         } else {
             Toast.makeText(this, getResources().getString(R.string.add_activity_NoMorePoints), Toast.LENGTH_SHORT).show();
         }
+        if(!isDmgField && linesFromAgrarianField.size() > 0){
+            linesFromAgrarianField.remove(linesFromAgrarianField.size()-1);
+        }
     }
 
     private void onToggleLocButtonClick() {
@@ -230,7 +233,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         }
     }
 
-    /*
+    /**
      * adds a point to the field with a click on the map
      */
     public void OnMapClick() {
@@ -284,7 +287,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             menuItemDone.setTitle(getResources().getString(R.string.done_Button));
 
         }
-        calcIntersection(location);
+        intersectionCalculator.calculateLine(!isDmgField);
+        if(isDmgField && !intersectionCalculator.calcIntersection(parentField)){
+            onRedoButtonClick();
+        }
 
     }
 
@@ -310,59 +316,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         return builder;
     }
 
-    private void calcLastIntersection(Field field){
-        Vector<Double> line = new Vector<>();
-        Vector<Double> startVector = new Vector<>();
-        if (listGeoPoints.get(0) != null) {
-            startVector.add(listGeoPoints.get(0).getLatitude());
-            startVector.add(listGeoPoints.get(0).getLongitude());
-            currentVector = startVector;
-            line.add(((lastVector.get(1) - currentVector.get(1)) / (lastVector.get(0) - currentVector.get(0))));
-            line.add(currentVector.get(1) - line.get(0) * currentVector.get(0));
-            linesFromAgrarianField.add(line);
-            ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);
-
-        } else {
-            lastVector = currentVector;
-        }
-    }
-
-    public void calcIntersection(Location location) {
-        currentVector = new Vector<>();
-        currentVector.add(location.getLatitude());
-        currentVector.add(location.getLongitude());
-        Vector<Double> line = new Vector<>();
-
-
-        if (lastVector != null) {
-            line.add(((lastVector.get(1) - currentVector.get(1)) / (lastVector.get(0) - currentVector.get(0))));
-            line.add(currentVector.get(1) - line.get(0) * currentVector.get(0));
-
-        } else {
-            lastVector = currentVector;
-        }
-        if (parentField == null && line != null && line.size() != 0) {
-            linesFromAgrarianField.add(line);
-        } else {
-            if (parentField instanceof AgrarianField) {
-                if (line.size() != 0) {
-                    for (Vector<Double> vec : ((AgrarianField) parentField).getLinesFormField()) {
-                        Vector<Double> intersection = new Vector<>();
-                        intersection.add((line.get(1) - vec.get(1)) / (vec.get(0) - line.get(0)));
-                        intersection.add(line.get(0) * intersection.get(0) + line.get(1));
-
-                        if (((lastVector.get(0) <= intersection.get(0) && intersection.get(0) <= currentVector.get(0)) || (currentVector.get(0) <= intersection.get(0) && intersection.get(0) <= lastVector.get(0))) && ((lastVector.get(1) <= intersection.get(1) && intersection.get(1) <= currentVector.get(1)) || (currentVector.get(1) <= intersection.get(1) && intersection.get(1) <= lastVector.get(1)))) {
-                            Toast.makeText(this, getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
-                            onRedoButtonClick();
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        lastVector = currentVector;
-    }
-
     /**
      * Handle clicks for the done button on top
      * depending on the current state of our field to add
@@ -383,7 +336,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
                 Log.e("LIST SIZE", String.valueOf(listCornerPoints.size()));
                 if (fieldToAdd instanceof AgrarianField) {
-                    calcLastIntersection(fieldToAdd);
+                    intersectionCalculator.calcLastLine(fieldToAdd);
                 }
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());

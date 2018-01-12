@@ -74,24 +74,16 @@ public class DBConnection {
 
     private void createGeoPointTable(AgrarianField field) {
         String table_name = GeoPointTable_Suffix + "_Agr_" + field.getID();
-        db.execSQL("CREATE TABLE " + table_name + " (" +
-        DBHelper.ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-        LAT_COLUM + " REAL NOT NULL," +
-        LONG_COLUM + " REAL NOT NULL");
-
-        for(CornerPoint cp : field.getCornerPoints()) {
-            WGS84Coordinate wgs = cp.getWGS();
-            ContentValues values = new ContentValues();
-            values.put(LAT_COLUM, wgs.getLatitude());
-            values.put(LONG_COLUM, wgs.getLongitude());
-            db.insert(table_name, null, values);
-        }
-
+        createGeoPointTable(field, table_name);
     }
 
 
     private void createGeoPointTable(DamageField field) {
         String table_name = GeoPointTable_Suffix + "_Dmg_" + field.getID();
+        createGeoPointTable(field, table_name);
+    }
+
+    private void createGeoPointTable(Field field, String table_name) {
         db.execSQL("CREATE TABLE " + table_name + " (" +
         DBHelper.ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
         LAT_COLUM + " REAL NOT NULL," +
@@ -111,22 +103,7 @@ public class DBConnection {
 
         Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null,null,null,null,null,null);
         while(cursor.moveToNext()) {
-            long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
-            List<CornerPoint> cps = new ArrayList<>();
-            String table_name = GeoPointTable_Suffix + "_Agr_" + id;
-            Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
-            while(cpCursor.moveToNext()) {
-                double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
-                double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
-                cps.add(new CornerPoint(lat,lon));
-            }
-
-            AgrarianField field = new AgrarianField(context,cps);
-            field.setID(id);
-            field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
-            field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));
-            field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
-            field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));
+            AgrarianField field = toAgrarianField(cursor);
 
             fields.add(field);
         }
@@ -134,32 +111,57 @@ public class DBConnection {
         return fields;
     }
 
+    private AgrarianField toAgrarianField(Cursor cursor) {
+        long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
+        List<CornerPoint> cps = new ArrayList<>();
+        String table_name = GeoPointTable_Suffix + "_Agr_" + id;
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
+        while(cpCursor.moveToNext()) {
+            double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
+            double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
+            cps.add(new CornerPoint(lat,lon));
+        }
+
+        AgrarianField field = new AgrarianField(context,cps);
+        field.setID(id);
+        field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
+        field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));
+        field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
+        field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));
+        return field;
+    }
+
     public List<DamageField> getAllDamgageFields() {
         List<DamageField> fields = new ArrayList<>();
 
         Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null,null,null,null,null,null);
         while(cursor.moveToNext()) {
-            long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
-            List<CornerPoint> cps = new ArrayList<>();
-            String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
-            Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
-            while(cpCursor.moveToNext()) {
-                double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
-                double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
-                cps.add(new CornerPoint(lat,lon));
-            }
-
-            DamageField field = new DamageField(context,cps);
-            field.setID(id);
-            field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
-            field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));
-            field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
-            field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
-            field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
+            DamageField field = toDamageField(cursor);
 
             fields.add(field);
         }
 
         return fields;
+    }
+
+    private DamageField toDamageField(Cursor cursor) {
+        long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
+        List<CornerPoint> cps = new ArrayList<>();
+        String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
+        while(cpCursor.moveToNext()) {
+            double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
+            double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
+            cps.add(new CornerPoint(lat,lon));
+        }
+
+        DamageField field = new DamageField(context,cps);
+        field.setID(id);
+        field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
+        field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));
+        field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
+        field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
+        field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
+        return field;
     }
 }

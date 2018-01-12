@@ -13,6 +13,8 @@ import org.osmdroid.util.GeoPoint;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -41,13 +43,14 @@ public abstract class Field implements Serializable{
     static final String KEY_SIZE = "size";
     static final String KEY_TYPE = "type";
     static final String KEY_CONVERTEDSIZE = "convertedSize";
+    static final String KEY_TIMESTAMP = "timestamp";
 
     protected transient Context context;
 
     //values for field and damage case
     private long ID;
     private String name;
-    private FieldType type;
+    FieldType type;
     private String county;
     private int color;
     private double size;
@@ -56,6 +59,11 @@ public abstract class Field implements Serializable{
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
 
+
+
+
+    //distinct timestamp to identify the field objects
+    private long timestamp;
     /**
      * the rotation of the polygon
      * true if counterclockwise
@@ -70,6 +78,8 @@ public abstract class Field implements Serializable{
      * @param cPoints
      */
     public Field(Context context, List<CornerPoint> cPoints) {
+        timestamp = Calendar.getInstance().getTime().getTime();
+
         this.context = context;
 
         //set default attributes
@@ -298,6 +308,10 @@ public abstract class Field implements Serializable{
         return conSize;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
 
     public FieldType getType() {return type;}
 
@@ -308,6 +322,11 @@ public abstract class Field implements Serializable{
     public void setType(FieldType type) {
         this.type = type;
         this.setColor(type.toColor());
+    }
+
+
+    public boolean isFieldequal(Field otherField){
+        return otherField.getTimestamp() == this.getTimestamp();
     }
 
     /**

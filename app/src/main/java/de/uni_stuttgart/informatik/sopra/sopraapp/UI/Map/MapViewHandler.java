@@ -10,9 +10,13 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayManager;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +60,8 @@ public class MapViewHandler implements MapContract.MapHandler {
     private MapFragment mMapFragment;
 
 
+    private GeoPoint backupLocation;
+
     /**
      * constructor
      * @param context
@@ -74,7 +80,10 @@ public class MapViewHandler implements MapContract.MapHandler {
     /**
      * initialize the map
      */
+    int counter = 0;
     public void init(){
+        Log.e(TAG, "init map " + counter);
+        counter++;
         map = new MapView(context);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
@@ -108,6 +117,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         }
 
     }
+
 
     /**
      * convert Objects of Type Field to Polygons on the map
@@ -154,16 +164,17 @@ public class MapViewHandler implements MapContract.MapHandler {
         for(Field field : fields){
            //add contained damage fields if field is type agrarian
            if(field instanceof AgrarianField){
-               map.getOverlayManager().add(fieldToPolygon(field));
+               map.getOverlayManager().add(0,fieldToPolygon(field));
            }
         }
 
         for(Field field : fields){
             //add contained damage fields if field is type agrarian
             if(field instanceof DamageField){
-                map.getOverlayManager().add(fieldToPolygon(field));
+                map.getOverlayManager().add(0,fieldToPolygon(field));
             }
         }
+        map.invalidate();
     }
 
     /**
@@ -189,6 +200,9 @@ public class MapViewHandler implements MapContract.MapHandler {
      * @param lon
      */
     public void setCurrLocMarker(double lat, double lon){
+        if(map == null){
+            return;
+        }
         map.getOverlayManager().remove(currentLocMarker);
         currentLocMarker = new Marker(map);
         currentLocMarker.setPosition(new GeoPoint(lat, lon));
@@ -204,7 +218,6 @@ public class MapViewHandler implements MapContract.MapHandler {
 
         currentLocMarker.setIcon(dr);
         map.getOverlayManager().add(currentLocMarker);
-
     }
 
     /**
@@ -220,8 +233,12 @@ public class MapViewHandler implements MapContract.MapHandler {
      * @param lon
      */
     public void animateAndZoomTo(double lat, double lon) {
-        mapController.setZoom(20);
-        mapController.animateTo(new GeoPoint(lat, lon));
+        if(map != null){
+            mapController.setZoom(20);
+            mapController.animateTo(new GeoPoint(lat, lon));
+        }else {
+            backupLocation = new GeoPoint(lat, lon);
+        }
     }
 
     @Override
@@ -230,19 +247,24 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public void reload(){
-        reloadWithData(mDataManager.getFields());
+        if(map != null){
+            reloadWithData(mDataManager.getFields());
+        }
     }
 
     public void reloadWithData(ArrayList<Field> fields) {
-        fieldPolyMap.clear();
-        map.getOverlayManager().overlays().clear();
-        if(currentLocMarker != null){
-            map.getOverlayManager().add(currentLocMarker);
-        }
-        Log.e("field length", String.valueOf(fields.size()));
-        addFields(fields);
+        MapEventsOverlay backup = null;
 
-        map.invalidate();
+        fieldPolyMap.clear();
+        for(Overlay p : map.getOverlayManager().overlays()){
+            if(p instanceof Polyline){
+                map.getOverlayManager().overlays().remove(p);
+            }else if(p instanceof FieldPolygon){
+                map.getOverlayManager().overlays().remove(p);
+            }
+        }
+
+        addFields(fields);
     }
 
     public MapView getMap() {

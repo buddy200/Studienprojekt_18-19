@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +27,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 
 /**
  * sopra_priv
@@ -48,6 +45,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
     private TextView headingText;
     private TextView dateText;
+    private TextView fieldestimatedCosts;
     private EditText fieldName;
     private EditText fieldRegion;
     private Spinner fieldSpinner;
@@ -91,6 +89,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
         fieldSpinner = view.findViewById(R.id.field_detail_state_spinner);
         fieldSize = view.findViewById(R.id.field_detail_size);
         fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);
+        fieldestimatedCosts = view.findViewById(R.id.field_cost);
 
         pickDate = view.findViewById(R.id.button_pick_date);
 
@@ -180,11 +179,12 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
             dateText.setVisibility(View.INVISIBLE);
             pickDate.setVisibility(View.INVISIBLE);
+            fieldestimatedCosts.setVisibility(View.INVISIBLE);
 
             List<AgrarianFieldType> statusCheck;
             statusCheck = Arrays.asList(AgrarianFieldType.values());
+
             fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
-            //TODO not working right now..
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((AgrarianField)f).getOwner());
@@ -193,12 +193,12 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
             headingText.setText("DamageFeld");
             fieldRegion.setVisibility(View.INVISIBLE);
 
+            fieldestimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + String.valueOf(((DamageField) f).getInsuranceMoney()));
             dateText.setText(((DamageField) f).getParsedDate());
 
             List<DamageFieldType> statusCheck;
             statusCheck = Arrays.asList(DamageFieldType.values());
             fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
-            //TODO not working right now..
             fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
 
             fieldPolicyHolder.setText(((DamageField)f).getEvaluator());
@@ -217,22 +217,16 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
      * @return
      */
     public Field changedField(){
-        Field mFieldToChange;
+        Field mFieldToChange = mPresenter.getVisibleField();
 
-        if(mPresenter.getVisibleField() instanceof AgrarianField){
-            mFieldToChange = new AgrarianField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+        if(mFieldToChange instanceof AgrarianField){
+
             ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
             ((AgrarianField) mFieldToChange).setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());
 
-            for(DamageField dmg : ((AgrarianField) mPresenter.getVisibleField()).getContainedDamageFields()){
-                ((AgrarianField) mFieldToChange).addContainedDamageField(dmg);
-            }
 
-        }else if(mPresenter.getVisibleField() instanceof DamageField){
-            mFieldToChange = new DamageField(getActivity(), mPresenter.getVisibleField().getCornerPoints());
+        }else if(mFieldToChange instanceof DamageField){
             ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
-            ((DamageField) mFieldToChange).setpaths(((DamageField) mPresenter.getVisibleField()).getpaths());
-
             ((DamageField) mFieldToChange).setDate(dateText.getText().toString());
 
         }else{
@@ -241,7 +235,13 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
 
         mFieldToChange.setName(fieldName.getText().toString());
-        mFieldToChange.setType((FieldType) fieldSpinner.getSelectedItem());
+        if(mFieldToChange instanceof DamageField) {
+            ((DamageField) mFieldToChange).setType((DamageFieldType) fieldSpinner.getSelectedItem());
+        }
+        else if(mFieldToChange instanceof AgrarianField){
+            ((AgrarianField) mFieldToChange).setType((AgrarianFieldType) fieldSpinner.getSelectedItem());
+        }
+
 
         if(!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {
             mFieldToChange.setCounty(fieldRegion.getText().toString());

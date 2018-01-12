@@ -52,8 +52,6 @@ public class AppDataManager {
     }
 
     /**
-     * this is broken! completly ..
-     * ich werd das mal so lassen weil hier eh alles umgebaut wird
      * @param dmg
      * @param parent
      */
@@ -73,14 +71,7 @@ public class AppDataManager {
      */
     public void removeField(Field f){
         if(f instanceof DamageField){
-            for(Field field : dataFromFields){
-                if(field instanceof AgrarianField) {
-                    if (((AgrarianField) field).getContainedDamageFields().contains(f)) {
-                        ((AgrarianField) field).getContainedDamageFields().remove(f);
-                        Log.e("removed field damage", f.getName());
-                    }
-                }
-            }
+            ((DamageField) f).getParentField().getContainedDamageFields().remove(f);
         }else if(f instanceof AgrarianField){
             dataFromFields.removeAll(((AgrarianField)f).getContainedDamageFields());
         }
@@ -90,7 +81,7 @@ public class AppDataManager {
         dataChange();
     }
 
-    private void dataChange(){
+    public void dataChange(){
         if(listener != null){
             listener.onDataChange();
             saveData();

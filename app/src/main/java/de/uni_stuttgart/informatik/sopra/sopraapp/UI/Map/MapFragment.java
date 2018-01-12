@@ -29,7 +29,7 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
 
     private ConstraintLayout cl;
 
-    private boolean permissionGranted = true;
+    private boolean permissionGranted;
 
     private FragmentInteractionListener mListener;
 
@@ -44,6 +44,8 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
 
             permissionGranted = false;
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }else {
+            permissionGranted = true;
         }
 
     }
@@ -80,8 +82,9 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mPresenter.start();
-
+        if(permissionGranted){
+            mPresenter.start();
+        }
     }
 
     @Override
@@ -122,9 +125,9 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     permissionGranted = true;
+                    mPresenter.start();
 
-                    v.setVisibility(View.INVISIBLE);
-                    cl.addView(mPresenter.getMap());
+                    this.onStart();
                 } else {
 
                     //no permission - no map
@@ -134,8 +137,10 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
                 //GPS Permission check
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    this.onStart();
                 } else {
                     Toast.makeText(getActivity(), "Keine Standort Berechtigung", Toast.LENGTH_SHORT).show();
+
                 }
                 break;
             default:

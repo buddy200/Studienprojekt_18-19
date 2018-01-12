@@ -29,11 +29,11 @@ public class BSEditHandler implements BSEditContract.Presenter {
     private AgrarianField parentField;
 
     /**
-     * @param field may be null for a new field
+     * @param field        may be null for a new field
      * @param dataManager
      * @param editFragment
      */
-    public BSEditHandler(Field field, @NonNull AppDataManager dataManager, @NonNull BSEditContract.BottomSheet editFragment){
+    public BSEditHandler(Field field, @NonNull AppDataManager dataManager, @NonNull BSEditContract.BottomSheet editFragment) {
         mDataManager = dataManager;
         mEditFragment = editFragment;
         mField = field;
@@ -42,7 +42,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
         mEditFragment.setPresenter(this);
     }
 
-    public BSEditHandler(Field field, AgrarianField parent, @NonNull AppDataManager dataManager, @NonNull BSEditContract.BottomSheet editFragment){
+    public BSEditHandler(Field field, AgrarianField parent, @NonNull AppDataManager dataManager, @NonNull BSEditContract.BottomSheet editFragment) {
         mDataManager = dataManager;
         mEditFragment = editFragment;
         mField = field;
@@ -53,7 +53,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
 
     @Override
     public void start() {
-        if(mField != null){
+        if (mField != null) {
             populateBS(mField);
         }
     }
@@ -65,7 +65,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
 
     @Override
     public void deleteCurrentField() {
-        if(mField != null) {
+        if (mField != null) {
             mDataManager.removeField(mField);
             Log.e(TAG, "IMPORTTANT removing.. " + mField.getName());
         }
@@ -73,12 +73,15 @@ public class BSEditHandler implements BSEditContract.Presenter {
 
     @Override
     public void changeField(Field f) {
-        this.deleteCurrentField();
-        if(parentField == null){
-            mDataManager.addAgrarianField(f);
-        }else {
-            mDataManager.addDamageField((DamageField) f, parentField);
+        if (!mDataManager.getFields().contains(f)) {
+            if (parentField == null)
+                mDataManager.addAgrarianField(f);
+
+            else {
+                mDataManager.addDamageField((DamageField) f, parentField);
+            }
         }
+        mDataManager.dataChange();
         mField = f;
     }
 

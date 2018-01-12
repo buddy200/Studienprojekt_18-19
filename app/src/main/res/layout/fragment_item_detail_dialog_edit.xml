@@ -45,14 +45,14 @@
 
 
         <EditText
+            android:id="@+id/field_detail_region_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/list_item_spacing_half"
             android:paddingLeft="@dimen/list_item_spacing"
             android:paddingRight="@dimen/list_item_spacing"
             android:paddingTop="@dimen/list_item_spacing_half"
-            android:id="@+id/field_detail_region_edit"
-            android:text="-region-"/>
+            android:text="-region-" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -107,7 +107,7 @@
 
         </LinearLayout>
 
-
+    <Verti
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,6 +117,16 @@
             android:paddingTop="@dimen/list_item_spacing_half"
             android:id="@+id/field_detail_size"
             android:text="-size-"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:id="@+id/field_cost"
+            android:text="-cost-"/>
 
         <EditText
             android:layout_width="match_parent"

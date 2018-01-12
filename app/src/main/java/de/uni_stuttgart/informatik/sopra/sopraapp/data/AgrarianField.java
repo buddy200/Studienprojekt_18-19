@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.Vector;
 
 /**
@@ -29,7 +30,7 @@ public class AgrarianField extends Field implements Serializable{
     private static final long serialVersionUID = 9L;
 
     //default type
-    private AgrarianFieldType type = AgrarianFieldType.Corn;
+    private AgrarianFieldType defaultType = AgrarianFieldType.Corn;
     private String owner;
 
     private ArrayList<DamageField> containedDamageFields;
@@ -57,9 +58,10 @@ public class AgrarianField extends Field implements Serializable{
             this.setCounty("no county");
         }
 
-        this.setType(AgrarianFieldType.Corn);
-        this.setColor(type.toColor());
+        super.setType(AgrarianFieldType.Corn);
+        this.setColor(defaultType.toColor());
         this.setContainedDamageFields(new ArrayList<DamageField>());
+        containedDamageFields = new ArrayList<>();
 
     }
 
@@ -71,8 +73,9 @@ public class AgrarianField extends Field implements Serializable{
     @Override
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
+        bundle.putLong(KEY_TIMESTAMP, this.getTimestamp());
         bundle.putString(KEY_NAME, this.getName());
-        bundle.putInt(KEY_COLOR, this.getType().toColor());
+    //    bundle.putInt(KEY_COLOR, this.getType().toColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
         bundle.putString(KEY_CONVERTEDSIZE, this.getConvertedSize());
         if(this.getSize() != null){
@@ -109,6 +112,14 @@ public class AgrarianField extends Field implements Serializable{
 
     public void setLinesFormField(ArrayList<java.util.Vector<Double>> linesFormField) {
         this.linesFormField = linesFormField;
+    }
+    public void setType(AgrarianFieldType type) {
+        super.setType(type);
+        if(containedDamageFields != null) {
+            for (DamageField field : containedDamageFields) {
+                field.calcInsuranceAmount();
+            }
+        }
     }
 }
 

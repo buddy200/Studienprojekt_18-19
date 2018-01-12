@@ -1,12 +1,16 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,17 +26,16 @@ import org.osmdroid.util.GeoPoint;
 
 
 import java.io.File;
-import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -57,7 +60,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     private MapFragment mapFragment;
     private MapViewHandler mapHandler;
 
-    AppDataManager dataManager;
+    private AppDataManager dataManager;
+
+    private SharedPreferences prefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         mapFragment.setPresenter(mapHandler);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
     }
 
     @Override
@@ -86,10 +94,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         super.onResume();
     }
 
+
     @Override
     public void onStart(){
         super.onStart();
         dataManager.readData();
+
+        //check if user already used the app - if not show login dialog
+        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
+        if(!previouslyStarted) {
+            new LoginDialog(this).show();
+            this.invalidateOptionsMenu();
+        }
     }
 
     @Override
@@ -157,26 +173,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     /**
-     * create a list of fields to display in the activity
-     * containing AgrarienFields and their Damage Fields
-     * @param list
-     * @return
-     */
-    private ArrayList<Field> createList(ArrayList<Field> list){
-        ArrayList<Field> newList = new ArrayList<>();
-        for(Field f : list){
-            newList.add(f);
-            if(f instanceof AgrarianField){
-                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
-                    newList.add(dmg);
-                }
-            }
-        }
-
-        return newList;
-    }
-
-    /**
      * get the context, this is necessary for FieldState enums
      * without context it's not possible to get Enum names from strings.xml
      * @return
@@ -185,19 +181,36 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         return mContext;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        setUpSearchMenuItem(menu);
+        MenuItem username = menu.findItem(R.id.action_toolbar_username);
+        username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
+
+        return true;
+    }
+
     private View expandSearch;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
 
+        return true;
+    }
+
+    /**
+     * sets all listeners for the SearchView implementation in the action bar
+     * @param menu
+     */
+    private void setUpSearchMenuItem(Menu menu) {
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
         expandSearch = findViewById(R.id.search_bar);
-        final Spinner test = findViewById(R.id.spinner_search);
+        final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
                 android.R.layout.simple_spinner_item, SearchUtil.getSearchFor());
-        test.setAdapter(adapter);
-        test.setSelection(0);
+        searchTypeSpinner.setAdapter(adapter);
+        searchTypeSpinner.setSelection(0);
 
         adapter.notifyDataSetChanged();
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -220,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                SearchUtil.searchForType(dataManager.getFields(), query, test.getSelectedItem().toString());
+                SearchUtil.searchForType(dataManager.getFields(), query, searchTypeSpinner.getSelectedItem().toString());
                 return true;
             }
 
@@ -230,8 +243,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 return false;
             }
         });
-
-        return true;
     }
 
     @Override
@@ -248,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 startActivityForResult(i, 2404);
                 break;
             case R.id.action_toolbar_list:
-                ItemListDialogFragment.newInstance(createList(dataManager.getFields())).show(getSupportFragmentManager(), "FieldList");
+                ItemListDialogFragment.newInstance(dataManager.getFields()).show(getSupportFragmentManager(), "FieldList");
                 break;
             case R.id.action_toolbar_location:
                 MYLocationListener myLocationListener = new MYLocationListener();
@@ -263,13 +274,42 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                     Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.action_toolbar_search:
-                //handleSearch();
+            case R.id.action_toolbar_logout:
+                //DATABASE IS NOT CHANGED AFTER LOGOUT
+                generateLogoutDialog().show();
                 break;
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog.Builder generateLogoutDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //kills the app and removes it from the recents list
+                        finishAndRemoveTask();
+                        //delete all shared preferences - DATABASE IS NOT CHANGED
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.clear();
+                        edit.apply();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.logout_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
+                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
+
+        return builder;
     }
 
     @Override
@@ -278,53 +318,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             mapHandler.reload();
         }
     }
-
-    /**
-     * search implementation
-     * @param
-     */
-    /*
-    public void onSearchButtonClicked(String input) {
-        Log.e(TAG, "Search for: " + input);
-
-        // copy dataFromFields in search data listGeoPoints
-        // we need a deep copy - because fields contain other fields
-        ArrayList<Field> searchData = new ArrayList<>(dataManager.getFields());
-        ArrayList<Field> resultData = new ArrayList<>();
-
-        /**
-         * not optimal and dirty way of searching
-         * but it's fast to implement and probably enough for our use case
-         * - ah and this is case sensitive right now... TODO
-         */
-    /*
-        Iterator<Field> iter = searchData.iterator();
-        while(iter.hasNext()){
-            Field f = iter.next();
-
-            if(SearchUtil.matchesFieldSearch(f, input)){
-                resultData.add(f);
-            }
-
-            if(f instanceof AgrarianField){
-                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
-                    if(SearchUtil.matchesFieldSearch(dmg,input)){
-                        resultData.add(dmg);
-                    }
-                }
-            }
-
-        }
-
-        if(resultData.size() != 0){
-            ItemListDialogFragment.newInstance(resultData).show(getSupportFragmentManager(), "SearchList" );
-        }else{
-            Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
-        }
-
-    }*/
-
-
 
 
     @Override

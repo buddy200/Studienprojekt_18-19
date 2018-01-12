@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitStart"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:paddingLeft="8dp"
+            android:text="@string/app_name"
+            android:gravity="center|left"
+            android:textAlignment="gravity"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/login_dialog_editText_username"
+        android:inputType="textEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="@string/username" />
+
+    <EditText
+        android:id="@+id/login_dialog_editText_password"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif"
+        android:hint="@string/password"/>
+
+
+    <RadioGroup
+        android:id="@+id/login_dialog_usr_privileges"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/setAdmin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/admin_label" />
+
+        <RadioButton
+            android:id="@+id/setFarmer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/setAdmin"
+            android:text="@string/farmer_label" />
+
+    </RadioGroup>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/login_dialog_btn_login"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:clickable="true"
+            android:text="@string/login_label"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</LinearLayout>

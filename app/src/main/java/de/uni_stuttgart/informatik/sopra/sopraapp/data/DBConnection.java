@@ -88,7 +88,7 @@ public class DBConnection {
         db.execSQL("CREATE TABLE " + table_name + " (" +
         DBHelper.ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
         LAT_COLUM + " REAL NOT NULL," +
-        LONG_COLUM + " REAL NOT NULL");
+        LONG_COLUM + " REAL NOT NULL)");
 
         for(CornerPoint cp : field.getCornerPoints()) {
             WGS84Coordinate wgs = cp.getWGS();

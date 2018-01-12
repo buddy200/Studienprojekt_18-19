@@ -24,15 +24,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATE_COLUM = "date";
     public static final String PARENT_COLUM = "parent_field_id";
 
+    public static final String ImageTable_NAME = "ImageTable";
+    public static final String PATH_COLUM = "path";
 
-    public static final String CREATE_AgrarianFieldTable = "CREATE TABLE " + AgrarianFieldTable_NAME + " (" +
+
+    private static final String CREATE_AgrarianFieldTable = "CREATE TABLE " + AgrarianFieldTable_NAME + " (" +
             ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SIZE_COLUM + " REAL NOT NULL," +
             NAME_COLUM + " TEXT NOT NULL," +
             COLOR_COLUM + " INTEGER NOT NULL," +
             COUNTY_COLUM + " TEXT NOT NULL," +
             OWNER_COLUM + " TEXT NOT NULL)";
-    public static final String CREATE_DamageFieldTable = "CREATE TABLE " + DamageFieldTable_NAME + " (" +
+
+    private static final String CREATE_DamageFieldTable = "CREATE TABLE " + DamageFieldTable_NAME + " (" +
             ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SIZE_COLUM + " REAL NOT NULL," +
             NAME_COLUM + " TEXT NOT NULL," +
@@ -41,6 +45,11 @@ public class DBHelper extends SQLiteOpenHelper {
             EVALUATOR_COLUM + " TEXT NOT NULL," +
             DATE_COLUM + " TEXT," +
             PARENT_COLUM + "INTEGER NOT NULL)";
+
+    private static final String CREATE_ImageTable = "CREATE TABLE " + ImageTable_NAME + " (" +
+            NAME_COLUM + " TEXT," +
+            PATH_COLUM + " TEXT NOT NULL," +
+            PARENT_COLUM + " INTEGER NOT NULL)";
 
 
     public DBHelper(Context context) {

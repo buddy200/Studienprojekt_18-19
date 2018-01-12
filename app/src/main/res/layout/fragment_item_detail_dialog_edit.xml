@@ -106,8 +106,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
         </LinearLayout>
-
-    <Verti
+        
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

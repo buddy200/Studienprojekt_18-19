@@ -64,6 +64,7 @@ public class DBConnection {
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());
+            values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());
 
             long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);
             field.setID(rowID);
@@ -111,6 +112,16 @@ public class DBConnection {
         return fields;
     }
 
+    public AgrarianField getAgrarianFieldByID(long id) {
+        String[] selection_args = new String[1];
+        selection_args[0] = Long.toString(id);
+        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, "ID = ?", selection_args, null, null,null);
+        if(cursor.moveToNext()){
+            return toAgrarianField(cursor);
+        }
+        return null;
+    }
+
     private AgrarianField toAgrarianField(Cursor cursor) {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
@@ -154,8 +165,10 @@ public class DBConnection {
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
             cps.add(new CornerPoint(lat,lon));
         }
+        long parent_ID = cursor.getLong(cursor.getColumnIndex(DBHelper.PARENT_COLUM));
+        AgrarianField parent = getAgrarianFieldByID(parent_ID);
 
-        DamageField field = new DamageField(context,cps);
+        DamageField field = new DamageField(context,cps, parent);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
         field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));

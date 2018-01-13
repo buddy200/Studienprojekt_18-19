@@ -93,11 +93,12 @@
     <!-- Detail Dialog -->
     <string name="dialogItem_Name">Name:  </string>
     <string name="dialogItem_Location">Location:  </string>
-    <string name="dialogItem_Type">Type:  </string>
+    <string name="dialogItem_Type">Type:</string>
     <string name="dialogItem_Size">Size:  </string>
     <string name="dialogItem_Owner">Owner:  </string>
     <string name="dialogItem_Date">Date:  </string>
     <string name="detailItem_estimatedpayment">"estimated payment:  "</string>
     <string name="detailItem_evaluator">Evaluator:  </string>
+    <string name="no_date">no date</string>
 
 </resources>

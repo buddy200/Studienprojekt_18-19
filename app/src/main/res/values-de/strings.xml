@@ -67,4 +67,5 @@
     <string name="dialogItem_Date">Datum:  </string>
     <string name="detailItem_evaluator">Gutachter:  </string>
     <string name="dialogItem_Name">Name:  </string>
+    <string name="no_Date">Kein Datum</string>
 </resources>

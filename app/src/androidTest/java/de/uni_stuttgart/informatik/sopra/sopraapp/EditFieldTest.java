@@ -63,9 +63,9 @@ public class EditFieldTest {
             SearchTest.testSearch(nameAgrar);
         }
 
-        onView(withId(R.layout.fragment_item_detail_dialog)).toString().contains(nameAgrar);
-        onView(withId(R.layout.fragment_item_detail_dialog)).toString().contains(regionAgrar);
-        onView(withId(R.layout.fragment_item_detail_dialog)).toString().contains(ownerAgrar);
+        onView(withId(R.layout.fragment_item_detail_dialog_damagefield)).toString().contains(nameAgrar);
+        onView(withId(R.layout.fragment_item_detail_dialog_damagefield)).toString().contains(regionAgrar);
+        onView(withId(R.layout.fragment_item_detail_dialog_damagefield)).toString().contains(ownerAgrar);
 
     }
 }

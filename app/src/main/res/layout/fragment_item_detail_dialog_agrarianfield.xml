@@ -48,27 +48,16 @@
 
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:id="@+id/field_detail_state"
-                android:text="-state-"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:id="@+id/field_detail_date"
-                android:text="-date-"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:id="@+id/field_detail_state"
+            android:text="-state-"/>
 
 
         <TextView
@@ -81,17 +70,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/field_detail_size"
             android:text="-size-"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_cost"
-            android:text="-cost-"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -151,13 +129,6 @@
                 android:src="@drawable/ic_navigation_black_24px"
                 android:text="@string/navigate_Button" />
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/imagegallery"
-                android:layout_width="match_parent"
-                android:layout_below="@+id/add_damageField_button"
-                android:layout_height="wrap_content"
-                />
 
         </RelativeLayout>
 

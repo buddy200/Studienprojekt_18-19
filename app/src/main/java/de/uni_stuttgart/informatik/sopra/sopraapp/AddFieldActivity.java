@@ -408,6 +408,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                         break;
                 }
                 break;
+            case "BSDetailDialogEditFragmentAgrarianField":
+                Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherAgrarainField), Toast.LENGTH_SHORT).show();
+                break;
+            case "BSDetailDialogEditFragmentDamageField":
+                Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherDamageField), Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 

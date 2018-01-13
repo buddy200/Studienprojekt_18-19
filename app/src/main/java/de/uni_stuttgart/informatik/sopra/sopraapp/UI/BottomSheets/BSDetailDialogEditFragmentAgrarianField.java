@@ -1,5 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
@@ -35,7 +37,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldT
 public class
 BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
 
-    private static final String TAG = "BSDetailDialogEditFrmgt";
+    private static final String TAG = "BSDetailDialogEditFragmentAgrarianField";
 
     private BSEditContract.Presenter mPresenter;
 
@@ -47,6 +49,7 @@ BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implem
     private EditText fieldPolicyHolder;
     private ImageButton finishButton;
     private ImageButton deleteButton;
+    private FragmentInteractionListener mListener;
 
     /**
      * this factory method is used to generate an instance
@@ -58,6 +61,16 @@ BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implem
         final BSDetailDialogEditFragmentAgrarianField fragment = new BSDetailDialogEditFragmentAgrarianField();
 
         return fragment;
+    }
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentInteractionListener");
+        }
     }
 
     @Override
@@ -108,6 +121,7 @@ BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implem
         if (this.mPresenter != null) {
             switch (v.getId()) {
                 case R.id.edit_finish_button:
+                    mListener.onFragmentMessage(TAG, "done", null);
                     mPresenter.changeField(changedField());
                     this.dismiss();
                     break;
@@ -164,17 +178,6 @@ BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implem
             //    mFieldToChange.setAutomaticCounty();
         }
         return mFieldToChange;
-    }
-
-    /*
-     * create a PhotoManager object and save the fielpath from the picture in the damageField
-     */
-    public void takePhoto() {
-        PhotoManager photoManager = new PhotoManager(getActivity());
-        if (mPresenter.getVisibleField() instanceof DamageField) {
-            String s = photoManager.dispatchTakePictureIntent();
-            ((DamageField) mPresenter.getVisibleField()).setpath(s);
-        }
     }
 
 }

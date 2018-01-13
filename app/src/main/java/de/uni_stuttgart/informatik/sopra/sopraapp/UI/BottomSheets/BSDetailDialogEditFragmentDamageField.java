@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
@@ -39,7 +42,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldTyp
 public class
 BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
 
-    private static final String TAG = "BSDetailDialogEditFrmgt";
+    private static final String TAG = "BSDetailDialogEditFragmentDamageField";
 
     private BSEditContract.Presenter mPresenter;
 
@@ -55,6 +58,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
     private ImageButton deleteButton;
     private ImageButton addPhotoButton;
     private RecyclerView recyclerView;
+    private FragmentInteractionListener mListener;
 
     /**
      * this factory method is used to generate an instance
@@ -118,6 +122,17 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         mPresenter.start();
     }
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentInteractionListener");
+        }
+    }
+
     /**
      * handle clicks on buttons
      *
@@ -129,6 +144,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
             switch (v.getId()) {
                 case R.id.edit_finish_button:
                     mPresenter.changeField(changedField());
+                    mListener.onFragmentMessage(TAG, "done", null);
                     this.dismiss();
                     break;
                 case R.id.delete_button:

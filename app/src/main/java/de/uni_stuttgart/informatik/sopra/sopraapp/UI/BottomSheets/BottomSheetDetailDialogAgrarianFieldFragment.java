@@ -151,6 +151,7 @@ public class BottomSheetDetailDialogAgrarianFieldFragment extends BottomSheetDia
                 case R.id.add_damageField_button:
                     GlobalConstants.setLastLocationOnMap(mPresenter.getVisibleField().getCentroid());
                     mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
+
                     dismiss();
                     break;
                 case R.id.button_nav:

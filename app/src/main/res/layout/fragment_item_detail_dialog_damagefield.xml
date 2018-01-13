@@ -54,7 +54,7 @@
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:id="@+id/field_detail_date"
                 android:text="-date-"/>
 
@@ -80,6 +80,17 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/field_cost"
             android:text="-cost-"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:id="@+id/progress_state"
+            android:text="-progress state-"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -187,6 +187,42 @@
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/spinnerPanelprogressState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_progressState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogitem_progress_state" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:measureAllChildren="false"
+                android:layout_toEndOf="@+id/text_progressState">
+
+                <Spinner
+                    android:id="@+id/progress_state_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:paddingBottom="@dimen/list_item_spacing_half"
+                    android:paddingLeft="@dimen/list_item_spacing"
+                    android:paddingRight="@dimen/list_item_spacing"
+                    android:paddingTop="@dimen/list_item_spacing_half"
+                    android:text="-state-"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/costPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

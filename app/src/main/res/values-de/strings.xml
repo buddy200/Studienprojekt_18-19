@@ -68,4 +68,8 @@
     <string name="detailItem_evaluator">Gutachter:  </string>
     <string name="dialogItem_Name">Name:  </string>
     <string name="no_Date">Kein Datum</string>
+    <string name="dialogitem_progress_state">Bearbeitungsstatus:</string>
+    <string name="progress_status_sent">verschickt</string>
+    <string name="progress_status_inprogress">In Bearbeitung</string>
+    <string name="progress_status_finish">Abgeschlossen</string>
 </resources>

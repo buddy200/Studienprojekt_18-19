@@ -98,6 +98,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
     private ImageButton navButton;
     private RecyclerView recyclerView;
     private TextView estimatedCosts;
+    private TextView progressState;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
         edit = (ImageButton) view.findViewById(R.id.edit_finish_button);
         edit.setOnClickListener(this);
 
+        progressState = (TextView) view.findViewById(R.id.progress_state);
         size = (TextView) view.findViewById(R.id.field_detail_size);
         state = (TextView) view.findViewById(R.id.field_detail_state);
         size = (TextView) view.findViewById(R.id.field_detail_size);
@@ -130,6 +132,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
         state.setTextColor(this.mField.getColor());
         size.setText(getResources().getString(R.string.dialogItem_Size) + " " + this.mField.getConvertedSize());
         date.setText(getResources().getString(R.string.dialogItem_Date) + " " + (this.mField.getParsedDate()));
+        progressState.setText(getResources().getString(R.string.dialogitem_progress_state) + " " + this.mField.getProgressStatus().toString());
         ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + " " + (this.mField.getEvaluator()));
         estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(this.mField.getInsuranceMoney()));
 

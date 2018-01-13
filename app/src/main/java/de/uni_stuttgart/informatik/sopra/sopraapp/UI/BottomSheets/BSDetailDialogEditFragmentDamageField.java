@@ -30,6 +30,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
 
 /**
  * sopra_priv
@@ -51,6 +52,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
     private TextView fieldestimatedCosts;
     private EditText fieldName;
     private Spinner fieldSpinner;
+    private Spinner progressSpinner;
     private TextView fieldSize;
     private EditText fieldPolicyHolder;
     private Button pickDate;
@@ -90,6 +92,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         dateText = view.findViewById(R.id.text_date);
         fieldName = view.findViewById(R.id.field_detail_name_edit);
         fieldSpinner = view.findViewById(R.id.field_detail_state_spinner);
+        progressSpinner = view.findViewById(R.id.progress_state_spinner);
         fieldSize = view.findViewById(R.id.field_detail_size);
         fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);
         fieldestimatedCosts = view.findViewById(R.id.field_cost);
@@ -196,6 +199,8 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         statusCheck = Arrays.asList(DamageFieldType.values());
         fieldSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
         fieldSpinner.setSelection(statusCheck.indexOf(field.getType()));
+        progressSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ProgressStatus.values()));
+        progressSpinner.setSelection(statusCheck.indexOf(field.getProgressStatus()));
         fieldPolicyHolder.setText(field.getEvaluator());
         fieldName.setText(field.getName());
         fieldSize.setText(field.getConvertedSize());
@@ -217,6 +222,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         mFieldToChange.setDate(dateText.getText().toString());
         mFieldToChange.setName(fieldName.getText().toString());
         mFieldToChange.setType((DamageFieldType) fieldSpinner.getSelectedItem());
+        mFieldToChange.setProgressStatus((ProgressStatus) progressSpinner.getSelectedItem());
         return mFieldToChange;
     }
 

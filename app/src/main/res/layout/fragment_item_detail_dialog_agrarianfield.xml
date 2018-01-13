@@ -55,7 +55,7 @@
             android:paddingLeft="@dimen/list_item_spacing"
             android:paddingRight="@dimen/list_item_spacing"
             android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/field_detail_state"
             android:text="-state-"/>
 

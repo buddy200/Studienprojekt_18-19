@@ -137,7 +137,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
         estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(this.mField.getInsuranceMoney()));
 
         if ((this.mField).getpaths() != null) {
-            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getpaths());
+            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getpaths(), this);
             recyclerView.setAdapter(galleryAdapter);
         }
     }

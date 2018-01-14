@@ -1,8 +1,11 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +27,13 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
     private ArrayList<PictureData> galleryList;
     private Context context;
+    private BottomSheetDialogFragment bottomSheet;
     private final BitmapFactory.Options options;
     private static final int IMAGE_SCALE = 6;
 
-    public GalleryAdapter(Context context, ArrayList<PictureData> galleryList) {
+
+    public GalleryAdapter(Context context, ArrayList<PictureData> galleryList, BottomSheetDialogFragment bottomSheet) {
+        this.bottomSheet = bottomSheet;
         this.galleryList = galleryList;
         this.context = context;
         options = new BitmapFactory.Options();
@@ -56,6 +62,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         }
         imgFile = null;
     }
+    
+    
 
     @Override
     public int getItemCount() {
@@ -65,11 +73,44 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
         private ImageView img;
+
+        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateDeleteDialog().show();
+            }
+        };
+
         public ViewHolder(View view) {
             super(view);
+            if(bottomSheet instanceof BSDetailDialogEditFragmentDamageField) {
+                view.setOnClickListener(mOnClickListener);
+            }
 
             title = (TextView)view.findViewById(R.id.title);
             img = (ImageView) view.findViewById(R.id.img);
+        }
+        private AlertDialog.Builder generateDeleteDialog() {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            ((BSDetailDialogEditFragmentDamageField) bottomSheet).removePicture(getAdapterPosition());
+                            dialog.dismiss();
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            dialog.dismiss();
+                            break;
+                    }
+                }
+            };
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(context.getResources().getString(R.string.dialogmessage_want_delete)).setPositiveButton(context.getResources().getString(R.string.word_yes), dialogClickListener)
+                    .setNegativeButton(context.getResources().getString(R.string.word_no), dialogClickListener);
+
+            return builder;
         }
     }
 }

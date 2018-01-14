@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,6 +62,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
     private ImageButton addPhotoButton;
     private RecyclerView recyclerView;
     private FragmentInteractionListener mListener;
+    private GalleryAdapter galleryAdapter;
 
     /**
      * this factory method is used to generate an instance
@@ -101,6 +103,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
         recyclerView.setLayoutManager(layoutManager);
         finishButton = view.findViewById(R.id.edit_finish_button);
         deleteButton = view.findViewById(R.id.delete_button);
@@ -205,7 +208,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         fieldName.setText(field.getName());
         fieldSize.setText(field.getConvertedSize());
         if ((field).getpaths() != null) {
-            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), field.getpaths());
+            galleryAdapter = new GalleryAdapter(getContext(), field.getpaths(), this);
             recyclerView.setAdapter(galleryAdapter);
         }
 
@@ -235,6 +238,17 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
             String s = photoManager.dispatchTakePictureIntent();
             ((DamageField) mPresenter.getVisibleField()).setpath(s);
         }
+    }
+
+    public void removePicture(int position){
+        //delete the foto from the internal storage
+        File temp = new File(((DamageField) mPresenter.getVisibleField()).getpaths().get(position).getImage_path());
+        temp.delete();
+        //remove the image data from the damage field and refresh the recycler view
+        ((DamageField) mPresenter.getVisibleField()).getpaths().remove(position);
+        recyclerView.removeViewAt(position);
+        galleryAdapter.notifyItemRemoved(position);
+        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getpaths().size());
     }
 
 }

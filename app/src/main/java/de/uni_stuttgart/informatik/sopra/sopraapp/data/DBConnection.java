@@ -236,7 +236,7 @@ public class DBConnection {
     public List<PictureData> getPicturesOfField(long field_id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(field_id);
-        Cursor cursor = db.query(DBHelper.ImageTable_NAME,new String[] {DBHelper.NAME_COLUM,DBHelper.PATH_COLUM},(DBHelper.ID_COLUM + "= ?"), selection_args,null,null,null);
+        Cursor cursor = db.query(DBHelper.ImageTable_NAME,new String[] {DBHelper.NAME_COLUM,DBHelper.PATH_COLUM},(DBHelper.PARENT_COLUM + "= ?"), selection_args,null,null,null);
         List<PictureData> pictureData = new ArrayList<>();
         while(cursor.moveToNext()) {
             String title = cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM));

@@ -365,11 +365,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                    }
                }}
            }
-           dataManager.removeField(field);
            File f = new File(temp);
            f.delete();
            ((DamageField) field).getpaths().remove(((DamageField) field).getpaths().size() - 1);
-           dataManager.addAgrarianField(field);
            dataManager.saveData();
        }
     }

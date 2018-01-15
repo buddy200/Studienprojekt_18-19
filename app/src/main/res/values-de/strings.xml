@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Field Manager</string>
-    <string name="action_settings">Einstellungen</string>
     <string name="done">Fertig</string>
     <string name="toastmsg_nolocation">Keine Standortdaten verfügebar. Standorterfassung aktiviert?</string>
     <string name="toastmsg_not_enough_points">Nicht genügend Punkte, mindestends 3 Punkte werden benötigt</string>
@@ -9,19 +8,12 @@
     <string name="toastmsg_toggle_Loc_Off">Automatischer Zoom aus</string>
     <string name="toastmsg_toggle_Loc_On">Automatischer Zoom an</string>
     <string name="field_default_name">Kein Feldname</string>
-    <string name="damage_case_defaut_name">Kein Name</string>
     <string name="owner_default_name">Kein Besitzer</string>
     <string name="evaluator_default_name">Kein Gutachter</string>
     <string name="county_default_name">Kein Ort</string>
-    <string name="damagefield_name_default">Kein Name</string>
     <string name="title_activity_add_field">Feld hinzufügen</string>
-    <string name="title_activity_add_fieldAgrar">Agrarfeld hinzufügen</string>
     <string name="title_activity_add_fieldDmg">Schadensfall hinzufügen</string>
-    <string name="add_dmg_field_button">Schaden hinzufügen</string>
-    <string name="button_edit_name">editieren</string>
-    <string name="button_finish_name">Fertig</string>
     <string name="date_label">Tag</string>
-    <string name="time_label">Zeit</string>
     <string name="hemp">Hanf</string>
     <string name="wheat">Weizen</string>
     <string name="rye">Roggen</string>
@@ -39,8 +31,6 @@
     <string name="redo_Button">Lösche letzten Punkt</string>
     <string name="toastmsg_nothing_found">Keine Felder gefunden</string>
     <string name="go_back_message">Sind Sie sicher, dass Sie zurückgehen möchten? Felder, die auf dem Bildschirm nicht sichtbar sind, werden verworfen</string>
-    <string name="button_add_next_Foto_text">Nächstes Foto</string>
-    <string name="Button_foto_finish_text">beenden</string>
     <string name="add_activity_added">" hinzugefügt"</string>
     <string name="add_activity_pointAt">"Punkt bei "</string>
     <string name="add_Activity_YouNeed">"Noch "</string>
@@ -67,10 +57,10 @@
     <string name="dialogItem_Date">Datum:  </string>
     <string name="detailItem_evaluator">Gutachter:  </string>
     <string name="dialogItem_Name">Name:  </string>
-    <string name="no_Date">Kein Datum</string>
     <string name="dialogitem_progress_state">Bearbeitungsstatus:</string>
     <string name="progress_status_sent">verschickt</string>
     <string name="progress_status_inprogress">In Bearbeitung</string>
     <string name="progress_status_finish">Abgeschlossen</string>
     <string name="dialogmessage_want_delete">Wollen sie dieses Foto wirklich löschen?</string>
+    <string name="photo_default_name">Keine Fotobeschreibung</string>
 </resources>

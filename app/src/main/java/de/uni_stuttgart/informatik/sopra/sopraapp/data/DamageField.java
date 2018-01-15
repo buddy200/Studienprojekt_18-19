@@ -144,6 +144,14 @@ public class DamageField extends Field implements Serializable {
         paths.add(pictureData);
     }
 
+    public void setpath(PictureData pictureData) {
+        paths.add(pictureData);
+    }
+
+    public void setPhotoName(String name, PictureData pictureData){
+        pictureData.setImage_title(name);
+    }
+
     public void calcInsuranceAmount() {
         insuranceMoney =   this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
     }

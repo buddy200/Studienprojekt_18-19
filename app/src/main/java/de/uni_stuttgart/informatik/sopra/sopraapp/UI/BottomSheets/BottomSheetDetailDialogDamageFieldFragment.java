@@ -118,7 +118,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
         ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         date = (TextView) view.findViewById(R.id.field_detail_date);
         estimatedCosts = (TextView) view.findViewById(R.id.field_cost);
-        navButton = (ImageButton) view.findViewById(R.id.button_nav);
+        navButton = (ImageButton) view.findViewById(R.id.button_add_photo_gallery);
         navButton.setOnClickListener(this);
 
     }
@@ -159,7 +159,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
                     mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
-                case R.id.button_nav:
+                case R.id.button_add_photo_gallery:
                     //call a googlemaps intent with the position of the centroid point from the field object
                     String geoString = "geo:" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude()) + "?q=" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude());
                     Uri gmmIntentUri = Uri.parse(geoString);

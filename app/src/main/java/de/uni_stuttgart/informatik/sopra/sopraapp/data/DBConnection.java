@@ -69,6 +69,13 @@ public class DBConnection {
             long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);
             field.setID(rowID);
 
+            for(PictureData pd : field.getpaths()) {
+                ContentValues pd_value = new ContentValues();
+                values.put(DBHelper.PARENT_COLUM, field.getID());
+                values.put(DBHelper.NAME_COLUM, pd.getImage_title());
+                values.put(DBHelper.PATH_COLUM, pd.getImage_path());
+            }
+
             createGeoPointTable(field);
         }
     }
@@ -113,9 +120,10 @@ public class DBConnection {
     }
 
     public AgrarianField getAgrarianFieldByID(long id) {
-        String[] selection_args = new String[1];
-        selection_args[0] = Long.toString(id);
-        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, "ID = ?", selection_args, null, null,null);
+        String[] selection_args = new String[2];
+        selection_args[0] = DBHelper.ID_COLUM;
+        selection_args[1] = Long.toString(id);
+        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, "? = ?", selection_args, null, null,null);
         if(cursor.moveToNext()){
             return toAgrarianField(cursor);
         }
@@ -176,5 +184,29 @@ public class DBConnection {
         field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
         field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
         return field;
+    }
+
+
+    public void addPictureToField(long field_id, PictureData pd) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.PARENT_COLUM, field_id);
+        values.put(DBHelper.NAME_COLUM, pd.getImage_title());
+        values.put(DBHelper.PATH_COLUM, pd.getImage_path());
+        db.insert(DBHelper.ImageTable_NAME,null,values);
+    }
+
+    public List<PictureData> getPicturesOfField(long field_id) {
+        String[] selection_args = new String[2];
+        selection_args[0] = DBHelper.ID_COLUM;
+        selection_args[1] = Long.toString(field_id);
+        Cursor cursor = db.query(DBHelper.ImageTable_NAME,new String[] {DBHelper.NAME_COLUM,DBHelper.PATH_COLUM},"?  = ?", selection_args,null,null,null);
+        List<PictureData> pictureData = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            String title = cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM));
+            String path = cursor.getString(cursor.getColumnIndex(DBHelper.PATH_COLUM));
+            PictureData pd = new PictureData(title, path);
+            pictureData.add(pd);
+        }
+        return pictureData;
     }
 }

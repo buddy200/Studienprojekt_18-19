@@ -87,9 +87,9 @@ public class AddFieldTest {
         onView(withId(R.layout.fragment_item_list_dialog));
         onView(withText(name)).perform(click());
 
-        onView(withId(R.layout.fragment_item_detail_dialog)).toString().contains(name);
-        onView(withId(R.layout.fragment_item_detail_dialog)).toString().contains(region);
-        onView(withId(R.layout.fragment_item_detail_dialog)).toString().contains(owner);
+        onView(withId(R.layout.fragment_item_detail_dialog_damagefield)).toString().contains(name);
+        onView(withId(R.layout.fragment_item_detail_dialog_damagefield)).toString().contains(region);
+        onView(withId(R.layout.fragment_item_detail_dialog_damagefield)).toString().contains(owner);
 
 
     }

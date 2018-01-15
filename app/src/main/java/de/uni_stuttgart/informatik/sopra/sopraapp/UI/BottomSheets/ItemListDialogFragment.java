@@ -32,12 +32,13 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
     private static final String TAG = "ItemListDialogFragment";
 
-    private static final String ARG_ITEM_LIST_BUNDLE = "list_bundle";
-    private static final String ARG_ITEM_LIST = "list";
+//    private static final String ARG_ITEM_LIST_BUNDLE = "list_bundle";
+//    private static final String ARG_ITEM_LIST = "list";
 
     private FragmentInteractionListener mListener;
+    private AppDataManager dataManager;
 
-    private static ArrayList<Field> fieldList;
+ //   private static ArrayList<Field> fieldList;
 
     /**
      * this factory method is used to generate an instance
@@ -47,7 +48,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
      */
     public static ItemListDialogFragment newInstance(ArrayList<Field> fields) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
-        final Bundle args = new Bundle();
+      /*  final Bundle args = new Bundle();
 
 
         fieldList = new ArrayList<>(fields);
@@ -58,7 +59,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         Bundle listBundle = new Bundle();
         listBundle.putParcelableArrayList(ARG_ITEM_LIST, fieldBundles);
         args.putBundle(ARG_ITEM_LIST_BUNDLE, listBundle);
-        fragment.setArguments(args);
+        fragment.setArguments(args);*/
         return fragment;
     }
 
@@ -68,6 +69,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
                              @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_item_list_dialog, container, false);
         configureBottomSheetBehavior(view);
+        dataManager = new AppDataManager(getContext());
         return view;
     }
 
@@ -83,7 +85,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new ItemAdapter(getArguments().getBundle(ARG_ITEM_LIST_BUNDLE)));
+        recyclerView.setAdapter(new ItemAdapter());
     }
 
     @Override
@@ -128,7 +130,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onFragmentMessage(TAG, "itemClick", fieldList.get(getAdapterPosition()));
+                            mListener.onFragmentMessage(TAG, "itemClick", dataManager.getFields().get(getAdapterPosition()));
                         dismiss();
                     }
                 }
@@ -142,13 +144,13 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
      */
     private class ItemAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-        private AppDataManager dataManager;
+       // private AppDataManager dataManager;
 
     /*    private final Bundle  mFieldBundle;
         private final ArrayList<Bundle> bundleListFields;*/
 
-        ItemAdapter(Bundle fieldBundles) {
-            dataManager = new AppDataManager(getContext());
+        private ItemAdapter() {
+        //    dataManager = new AppDataManager(getContext());
             /*
             mFieldBundle = fieldBundles;
             bundleListFields = new ArrayList<>();

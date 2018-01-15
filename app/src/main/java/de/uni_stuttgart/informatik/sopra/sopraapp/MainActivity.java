@@ -27,15 +27,19 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentAgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentDamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetAddPhoto;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogAgrarianFieldFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogDamageFieldFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -141,9 +145,16 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action){
                     case "startEdit":
                         //TODO
-                        BSDetailDialogEditFragment bsDetail = BSDetailDialogEditFragment.newInstance();
-                        new BSEditHandler((Field) data, dataManager, bsDetail);
-                        bsDetail.show(getSupportFragmentManager(),"test" );
+                        if((Field) data instanceof AgrarianField) {
+                            BSDetailDialogEditFragmentAgrarianField bsDetail = BSDetailDialogEditFragmentAgrarianField.newInstance();
+                            new BSEditHandler((Field) data, dataManager, bsDetail);
+                            bsDetail.show(getSupportFragmentManager(), "test");
+                        }
+                        else{
+                            BSDetailDialogEditFragmentDamageField bsDetail = BSDetailDialogEditFragmentDamageField.newInstance();
+                            new BSEditHandler((Field) data, dataManager, bsDetail);
+                            bsDetail.show(getSupportFragmentManager(), "test");
+                        }
                         break;
                     case "addDmgField":
                         Intent i = new Intent(this, AddFieldActivity.class);
@@ -153,6 +164,14 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
                 }
                 break;
+            case "BSDetailDialogEditFragmentDamageField":
+                switch ( action){
+                    case "addPhoto":
+                        BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();
+                        new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);
+                        bottomSheetAddPhoto.show(getSupportFragmentManager(), "test");
+                }
+
         }
 
     }
@@ -167,9 +186,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         double offset = 0.0007;
         mapHandler.animateAndZoomTo((field).getCentroid().getLatitude()-offset,
                 (field).getCentroid().getLongitude());
-        BottomSheetDetailDialogFragment bs = BottomSheetDetailDialogFragment.newInstance();
-        new BSEditHandler(field, dataManager, bs);
-        bs.show(this.getSupportFragmentManager(), "DetailField");
+
+        if(field instanceof DamageField){
+            BottomSheetDetailDialogDamageFieldFragment bs = BottomSheetDetailDialogDamageFieldFragment.newInstance();
+            new BSEditHandler(field, dataManager, bs);
+            bs.show(this.getSupportFragmentManager(), "DetailField");
+        }
+        else if(field instanceof AgrarianField){
+            BottomSheetDetailDialogAgrarianFieldFragment bs = BottomSheetDetailDialogAgrarianFieldFragment.newInstance();
+            new BSEditHandler(field, dataManager, bs);
+            bs.show(this.getSupportFragmentManager(), "DetailField");
+        }
+
     }
 
     /**
@@ -333,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                    if(((DamageField) field).getpaths() != null &&((DamageField) field).getpaths().size() > 0){
                    String path = (((DamageField) field).getpaths().get(((DamageField) field).getpaths().size() - 1)).getImage_path();
                    if (temp.compareTo(path) > 0) {
-                       dataManager.removeField(field);
                        temp = path;
                    }
                }}
@@ -341,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
            File f = new File(temp);
            f.delete();
            ((DamageField) field).getpaths().remove(((DamageField) field).getpaths().size() - 1);
-           dataManager.addAgrarianField(field);
            dataManager.saveData();
        }
     }

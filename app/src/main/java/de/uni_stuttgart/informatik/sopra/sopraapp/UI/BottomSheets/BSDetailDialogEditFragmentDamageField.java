@@ -1,9 +1,12 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,35 +14,37 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
 
 /**
  * sopra_priv
  * Created by Felix B on 07.12.17.
  * Mail: felix.burk@gmail.com
- *
- * A custom BottomSheetDetailDialogFragment to edit Fields
+ * <p>
+ * A custom BottomSheetDetailDialogDamageFieldFragment to edit Fields
  */
 
 public class
-BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener{
+BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
 
-    private static final String TAG = "BSDetailDialogEditFrmgt";
+    private static final String TAG = "BSDetailDialogEditFragmentDamageField";
 
     private BSEditContract.Presenter mPresenter;
 
@@ -47,14 +52,17 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
     private TextView dateText;
     private TextView fieldestimatedCosts;
     private EditText fieldName;
-    private EditText fieldRegion;
     private Spinner fieldSpinner;
+    private Spinner progressSpinner;
     private TextView fieldSize;
     private EditText fieldPolicyHolder;
     private Button pickDate;
     private ImageButton finishButton;
     private ImageButton deleteButton;
     private ImageButton addPhotoButton;
+    private RecyclerView recyclerView;
+    private FragmentInteractionListener mListener;
+    private GalleryAdapter galleryAdapter;
 
     /**
      * this factory method is used to generate an instance
@@ -62,8 +70,8 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
      *
      * @return A new instance of fragment BottomSheetDialogFragment.
      */
-    public static BSDetailDialogEditFragment newInstance() {
-        final BSDetailDialogEditFragment fragment = new BSDetailDialogEditFragment();
+    public static BSDetailDialogEditFragmentDamageField newInstance() {
+        final BSDetailDialogEditFragmentDamageField fragment = new BSDetailDialogEditFragmentDamageField();
 
         return fragment;
     }
@@ -79,20 +87,24 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_edit, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_damagefield_edit, container, false);
         configureBottomSheetBehaviour(view);
 
         headingText = view.findViewById(R.id.heading);
         dateText = view.findViewById(R.id.text_date);
         fieldName = view.findViewById(R.id.field_detail_name_edit);
-        fieldRegion = view.findViewById(R.id.field_detail_region_edit);
         fieldSpinner = view.findViewById(R.id.field_detail_state_spinner);
+        progressSpinner = view.findViewById(R.id.progress_state_spinner);
         fieldSize = view.findViewById(R.id.field_detail_size);
         fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);
         fieldestimatedCosts = view.findViewById(R.id.field_cost);
 
         pickDate = view.findViewById(R.id.button_pick_date);
+        recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
+        recyclerView.setLayoutManager(layoutManager);
         finishButton = view.findViewById(R.id.edit_finish_button);
         deleteButton = view.findViewById(R.id.delete_button);
         addPhotoButton = view.findViewById(R.id.add_Photo_Button);
@@ -110,15 +122,26 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
         //Not implemented yet - TODO
     }
 
-
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         mPresenter.start();
     }
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentInteractionListener");
+        }
+    }
+
     /**
      * handle clicks on buttons
+     *
      * @param v
      */
     @Override
@@ -127,6 +150,7 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
             switch (v.getId()) {
                 case R.id.edit_finish_button:
                     mPresenter.changeField(changedField());
+                    mListener.onFragmentMessage(TAG, "done", null);
                     this.dismiss();
                     break;
                 case R.id.delete_button:
@@ -134,8 +158,9 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
                     this.dismiss();
                     break;
                 case R.id.add_Photo_Button:
+                    mListener.onFragmentMessage(TAG,"addPhoto", mPresenter.getVisibleField());
                     mPresenter.changeField(changedField());
-                    takePhoto();
+                //    takePhoto();
                     mPresenter.changeField(mPresenter.getVisibleField());
                     this.dismiss();
                     break;
@@ -147,13 +172,12 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
                                     + selectedYear);
                         }
                     };
-                    DatePickerDialog datePicker = new DatePickerDialog(getContext(), listener,2017,1,8);
+                    DatePickerDialog datePicker = new DatePickerDialog(getContext(), listener, 2017, 1, 8);
                     datePicker.show();
                     break;
             }
         }
     }
-
 
     @Override
     public void setPresenter(BasePresenter p) {
@@ -168,99 +192,64 @@ BSDetailDialogEditFragment extends BottomSheetDialogFragment implements BSEditCo
 
     @Override
     public void fillData(Field f) {
-        if(this.getActivity() instanceof AddFieldActivity){
+        DamageField field = (DamageField) f;
+        if (this.getActivity() instanceof AddFieldActivity) {
             deleteButton.setVisibility(View.INVISIBLE);
         }
-
-        if(f instanceof AgrarianField){
-            addPhotoButton.setVisibility(View.INVISIBLE);
-            headingText.setText("AgrarFeld");
-            fieldRegion.setText(f.getCounty());
-
-            dateText.setVisibility(View.INVISIBLE);
-            pickDate.setVisibility(View.INVISIBLE);
-            fieldestimatedCosts.setVisibility(View.INVISIBLE);
-
-            List<AgrarianFieldType> statusCheck;
-            statusCheck = Arrays.asList(AgrarianFieldType.values());
-
-            fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
-            fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
-
-            fieldPolicyHolder.setText(((AgrarianField)f).getOwner());
-
-        }else if(f instanceof DamageField){
-            headingText.setText("DamageFeld");
-            fieldRegion.setVisibility(View.INVISIBLE);
-
-            fieldestimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + String.valueOf(((DamageField) f).getInsuranceMoney()));
-            dateText.setText(((DamageField) f).getParsedDate());
-
-            List<DamageFieldType> statusCheck;
-            statusCheck = Arrays.asList(DamageFieldType.values());
-            fieldSpinner.setAdapter(new ArrayAdapter<DamageFieldType>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
-            fieldSpinner.setSelection(statusCheck.indexOf(f.getType()));
-
-            fieldPolicyHolder.setText(((DamageField)f).getEvaluator());
-        }else{
-            headingText.setText("Feld");
+        headingText.setText("DamageFeld");
+        fieldestimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + String.valueOf(((DamageField) field).getInsuranceMoney()));
+        dateText.setText(field.getParsedDate());
+        List<DamageFieldType> statusCheck;
+        statusCheck = Arrays.asList(DamageFieldType.values());
+        fieldSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
+        fieldSpinner.setSelection(statusCheck.indexOf(field.getType()));
+        progressSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ProgressStatus.values()));
+        progressSpinner.setSelection(statusCheck.indexOf(field.getProgressStatus()));
+        fieldPolicyHolder.setText(field.getEvaluator());
+        fieldName.setText(field.getName());
+        fieldSize.setText(field.getConvertedSize());
+        if ((field).getpaths() != null) {
+            galleryAdapter = new GalleryAdapter(getContext(), field.getpaths(), this);
+            recyclerView.setAdapter(galleryAdapter);
         }
-
-
-        fieldName.setText(f.getName());
-        fieldSize.setText(f.getConvertedSize());
 
     }
 
     /**
      * add the changed data to a new Field
+     *
      * @return
      */
-    public Field changedField(){
-        Field mFieldToChange = mPresenter.getVisibleField();
-
-        if(mFieldToChange instanceof AgrarianField){
-
-            ((AgrarianField) mFieldToChange).setOwner(fieldPolicyHolder.getText().toString());
-            ((AgrarianField) mFieldToChange).setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());
-
-
-        }else if(mFieldToChange instanceof DamageField){
-            ((DamageField) mFieldToChange).setEvaluator(fieldPolicyHolder.getText().toString());
-            ((DamageField) mFieldToChange).setDate(dateText.getText().toString());
-
-        }else{
-            return null;
-        }
-
-
+    public Field changedField() {
+        DamageField mFieldToChange = (DamageField) mPresenter.getVisibleField();
+        mFieldToChange.setEvaluator(fieldPolicyHolder.getText().toString());
+        mFieldToChange.setDate(dateText.getText().toString());
         mFieldToChange.setName(fieldName.getText().toString());
-        if(mFieldToChange instanceof DamageField) {
-            ((DamageField) mFieldToChange).setType((DamageFieldType) fieldSpinner.getSelectedItem());
-        }
-        else if(mFieldToChange instanceof AgrarianField){
-            ((AgrarianField) mFieldToChange).setType((AgrarianFieldType) fieldSpinner.getSelectedItem());
-        }
-
-
-        if(!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {
-            mFieldToChange.setCounty(fieldRegion.getText().toString());
-        }else{
-        //    mFieldToChange.setAutomaticCounty();
-        }
-
+        mFieldToChange.setType((DamageFieldType) fieldSpinner.getSelectedItem());
+        mFieldToChange.setProgressStatus((ProgressStatus) progressSpinner.getSelectedItem());
         return mFieldToChange;
     }
 
     /*
      * create a PhotoManager object and save the fielpath from the picture in the damageField
      */
-    public void takePhoto (){
+    public void takePhoto() {
         PhotoManager photoManager = new PhotoManager(getActivity());
-        if(mPresenter.getVisibleField() instanceof DamageField){
+        if (mPresenter.getVisibleField() instanceof DamageField) {
             String s = photoManager.dispatchTakePictureIntent();
             ((DamageField) mPresenter.getVisibleField()).setpath(s);
         }
+    }
+
+    public void removePicture(int position){
+        //delete the foto from the internal storage
+        File temp = new File(((DamageField) mPresenter.getVisibleField()).getpaths().get(position).getImage_path());
+        temp.delete();
+        //remove the image data from the damage field and refresh the recycler view
+        ((DamageField) mPresenter.getVisibleField()).getpaths().remove(position);
+        recyclerView.removeViewAt(position);
+        galleryAdapter.notifyItemRemoved(position);
+        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getpaths().size());
     }
 
 }

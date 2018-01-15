@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentAgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentDamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
@@ -59,7 +60,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     Field fieldToAddFinal;
 
-    BSDetailDialogEditFragment bottomSheetDialog;
+    BSDetailDialogEditFragmentAgrarianField bottomSheetDialogAF;
+    BSDetailDialogEditFragmentDamageField bottomSheetDialogDMF;
 
     ArrayList<GeoPoint> listGeoPoints = new ArrayList<>();
     ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
@@ -326,7 +328,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     private void onDoneButtonClick() {
         if (enoughPoints) {
             //myLocationListener.setFollow(false);
-            bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
+
             Field fieldToAdd;
             if (isDmgField) {
                 fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, (AgrarianField) parentField);
@@ -343,10 +345,19 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 }
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
-            bottomSheetDialog = (BSDetailDialogEditFragment) BSDetailDialogEditFragment.newInstance();
-            BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialog);
-            bottomSheetDialog.setPresenter(handler);
-            bottomSheetDialog.show(getSupportFragmentManager(), "EditView");
+            if(isDmgField){
+                bottomSheetDialogDMF = BSDetailDialogEditFragmentDamageField.newInstance();
+                BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogDMF);
+                bottomSheetDialogDMF.setPresenter(handler);
+                bottomSheetDialogDMF.show(getSupportFragmentManager(), "EditView");
+            }
+            else {
+                bottomSheetDialogAF = BSDetailDialogEditFragmentAgrarianField.newInstance();
+                BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogAF);
+                bottomSheetDialogAF.setPresenter(handler);
+                bottomSheetDialogAF.show(getSupportFragmentManager(), "EditView");
+            }
+
 
             enoughPoints = false;
             listGeoPoints.clear();
@@ -396,6 +407,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                         onMapFragmentComplete();
                         break;
                 }
+                break;
+            case "BSDetailDialogEditFragmentAgrarianField":
+                Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherAgrarainField), Toast.LENGTH_SHORT).show();
+                break;
+            case "BSDetailDialogEditFragmentDamageField":
+                Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherDamageField), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

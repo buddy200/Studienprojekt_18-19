@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
+
 /**
  * Created by Christian on 11.01.2018.
  */
@@ -22,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String OWNER_COLUM = "owner";
     public static final String EVALUATOR_COLUM = "evaluator";
     public static final String DATE_COLUM = "date";
+    public static final String PROGRESS_COLUM = "progress_status";
     public static final String PARENT_COLUM = "parent_field_id";
 
     public static final String ImageTable_NAME = "ImageTable";
@@ -44,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
             COUNTY_COLUM + " TEXT NOT NULL," +
             EVALUATOR_COLUM + " TEXT NOT NULL," +
             DATE_COLUM + " TEXT," +
+            PROGRESS_COLUM + " TEXT," +
             PARENT_COLUM + "INTEGER NOT NULL)";
 
     private static final String CREATE_ImageTable = "CREATE TABLE " + ImageTable_NAME + " (" +

@@ -335,6 +335,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 if(parentField instanceof AgrarianField){
                     ((AgrarianField) parentField).addContainedDamageField((DamageField)fieldToAdd);
                      //   dataManager.dataChange();
+                    dataManager.changeAgrarianField((AgrarianField) parentField);
                 }
 
             } else {
@@ -347,12 +348,14 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
             if(isDmgField){
                 bottomSheetDialogDMF = BSDetailDialogEditFragmentDamageField.newInstance();
+                dataManager.addDamageField((DamageField) fieldToAdd);
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogDMF);
                 bottomSheetDialogDMF.setPresenter(handler);
                 bottomSheetDialogDMF.show(getSupportFragmentManager(), "EditView");
             }
             else {
                 bottomSheetDialogAF = BSDetailDialogEditFragmentAgrarianField.newInstance();
+                dataManager.addAgrarianField((AgrarianField) fieldToAdd);
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogAF);
                 bottomSheetDialogAF.setPresenter(handler);
                 bottomSheetDialogAF.show(getSupportFragmentManager(), "EditView");
@@ -452,7 +455,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
             File f = new File(temp);
             ((DamageField) field).getPaths().remove(((DamageField) field).getPaths().size() - 1);
-            dataManager.dataChange();
+            dataManager.changeDamageField((DamageField) field);
         }
     }
     @Override

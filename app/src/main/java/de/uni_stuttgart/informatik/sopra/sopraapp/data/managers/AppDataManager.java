@@ -39,7 +39,7 @@ public class AppDataManager {
         dbConnection = new DBConnection(context);
         dataFromFields = new ArrayList<>();
         //writerReader = new ExportImportFromFile(context);
-        readData();
+        dataChange();
 
     }
 
@@ -47,7 +47,7 @@ public class AppDataManager {
         dataFromFields.clear();
         dataFromFields.addAll(dbConnection.getAllAgrarianFields());
         dataFromFields.addAll(dbConnection.getAllDamgageFields());
-        dataChange();
+      //  dataChange();
     }
 
     public void saveData() {
@@ -103,8 +103,9 @@ public class AppDataManager {
 
     public void dataChange() {
         if (listener != null) {
-            listener.onDataChange();
             saveData();
+            readData();
+            listener.onDataChange();
         }
     }
 

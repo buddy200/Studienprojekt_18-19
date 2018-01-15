@@ -73,7 +73,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
 
     @Override
     public void changeField(Field f) {
-        boolean fieldExists = false;
+        /*boolean fieldExists = false;
         Field toDelete = null;
         for(Field field : mDataManager.getFields()){
             if(field.getTimestamp() == f.getTimestamp()){
@@ -88,7 +88,13 @@ public class BSEditHandler implements BSEditContract.Presenter {
             }
            else {
                 mDataManager.addDamageField((DamageField) f);
-            }
+            }*/
+        if(f instanceof AgrarianField) {
+            mDataManager.changeAgrarianField((AgrarianField) f);
+        }
+        else{
+            mDataManager.changeDamageField((DamageField) f);
+        }
         mDataManager.dataChange();
         mField = f;
     }

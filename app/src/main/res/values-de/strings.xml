@@ -63,4 +63,7 @@
     <string name="progress_status_finish">Abgeschlossen</string>
     <string name="dialogmessage_want_delete">Wollen sie dieses Foto wirklich löschen?</string>
     <string name="photo_default_name">Keine Fotobeschreibung</string>
+    <string name="main_toolbar_search">Suche</string>
+    <string name="main_toolbar_list">Liste</string>
+    <string name="main_toolbar_my_location">Meine Position</string>
 </resources>

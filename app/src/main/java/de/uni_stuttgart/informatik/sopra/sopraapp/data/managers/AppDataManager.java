@@ -39,6 +39,9 @@ public class AppDataManager {
 
     public void readData(){
         dataFromFields = writerReader.readFields();
+        if(dataFromFields == null){
+            dataFromFields = new ArrayList<Field>();
+        }
         dataChange();
     }
 

@@ -11,12 +11,12 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always|collapseActionView"
         android:orderInCategory="50"
-        android:title="Search" />
+        android:title="@string/main_toolbar_search" />
 
     <item
         android:id="@+id/action_toolbar_add"
         android:orderInCategory="400"
-        android:title="Add Field"
+        android:title="@string/title_activity_add_field"
         android:icon="@drawable/ic_add"
         app:showAsAction="always"/>
 
@@ -24,13 +24,13 @@
         android:id="@+id/action_toolbar_list"
         android:icon="@drawable/ic_list"
         android:orderInCategory="1300"
-        android:title="List"
+        android:title="@string/main_toolbar_list"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_toolbar_location"
         android:icon="@drawable/ic_my_location"
-        android:title="My Location"
+        android:title="@string/main_toolbar_my_location"
         android:orderInCategory="1400"
         app:showAsAction="never" />
 

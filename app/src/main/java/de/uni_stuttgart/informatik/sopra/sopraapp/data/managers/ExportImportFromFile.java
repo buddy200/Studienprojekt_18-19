@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.managers;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.InputType;
 import android.util.Log;
 
@@ -86,6 +87,7 @@ public class ExportImportFromFile {
 
             if(file == null || !file.exists()) {
                 Log.e(TAG ,"file not found");
+
                 fiis = context.getResources().openRawResource(
                         context.getResources().getIdentifier("appdata",
                                 "raw", context.getPackageName()));
@@ -108,6 +110,11 @@ public class ExportImportFromFile {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (Resources.NotFoundException e){
+            Log.e(TAG, "RAW RESOURCE NOT FOUND");
+            e.printStackTrace();
+            return null;
+
         } finally {
             if (fis != null) {
                 try {

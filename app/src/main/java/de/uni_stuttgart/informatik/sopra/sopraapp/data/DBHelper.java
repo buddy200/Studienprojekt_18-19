@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String ID_COLUM = "_ID";
     public static final String SIZE_COLUM = "size";
     public static final String NAME_COLUM = "name";
-    public static final String COLOR_COLUM = "color";
+    public static final String TYPE_COLUM = "field_type";
     public static final String COUNTY_COLUM = "county";
     public static final String OWNER_COLUM = "owner";
     public static final String EVALUATOR_COLUM = "evaluator";
@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
             ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SIZE_COLUM + " REAL NOT NULL," +
             NAME_COLUM + " TEXT NOT NULL," +
-            COLOR_COLUM + " INTEGER NOT NULL," +
+            TYPE_COLUM + " TEXT," +
             COUNTY_COLUM + " TEXT NOT NULL," +
             OWNER_COLUM + " TEXT NOT NULL)";
 
@@ -40,7 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
             ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SIZE_COLUM + " REAL NOT NULL," +
             NAME_COLUM + " TEXT NOT NULL," +
-            COLOR_COLUM + " INTEGER NOT NULL," +
+            TYPE_COLUM + " TEXT," +
             COUNTY_COLUM + " TEXT NOT NULL," +
             EVALUATOR_COLUM + " TEXT NOT NULL," +
             DATE_COLUM + " TEXT," +

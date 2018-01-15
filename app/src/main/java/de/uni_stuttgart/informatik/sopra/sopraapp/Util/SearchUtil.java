@@ -18,7 +18,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 public class SearchUtil {
 
     static String searchFor[] =  {
-            "Name", "Owner", "State", "Date"
+            "All", "Name", "Owner", "State", "Date"
     };
 
     /**

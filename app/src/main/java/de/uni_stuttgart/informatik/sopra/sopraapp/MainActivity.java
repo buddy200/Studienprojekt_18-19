@@ -107,11 +107,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         //check if user already used the app - if not show login dialog
         boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
         if(!previouslyStarted) {
-            new LoginDialog(this).show();
-            this.invalidateOptionsMenu();
+            LoginDialog test = new LoginDialog(this);
+            test.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    invalidateOptionsMenu();
+                }
+            });
+            test.show();
         }else {
             boolean adm = prefs.getBoolean(this.getString(R.string.pref_admin_bool), false);
             GlobalConstants.isAdmin = adm;
+            this.invalidateOptionsMenu();
         }
 
         Log.e(TAG, "is admin?" + String.valueOf(GlobalConstants.isAdmin));
@@ -226,11 +233,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
         MenuItem username = menu.findItem(R.id.action_toolbar_username);
         username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
-        invalidateOptionsMenu();
+        //invalidateOptionsMenu();
         return true;
     }
 
-    private View expandSearch;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -243,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
      * sets all listeners for the SearchView implementation in the action bar
      * @param menu
      */
+    private View expandSearch;
     private void setUpSearchMenuItem(Menu menu) {
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
         expandSearch = findViewById(R.id.search_bar);

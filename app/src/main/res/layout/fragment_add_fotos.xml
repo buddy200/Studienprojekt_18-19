@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:behavior_peekHeight="auto"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:id="@+id/field_detail_cl">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/background_light"
+        android:id="@+id/bottomSheetFoto"
+        android:layout_gravity="top"
+        android:orientation="vertical">
+
+
+
+
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/topPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/edit_finish_button"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:paddingBottom="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_save_black_24px"
+                android:layout_alignParentRight="true" />
+
+            <ImageButton
+                android:id="@+id/button_add_photo_gallery"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:paddingBottom="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/edit_finish_button"
+                android:background="@null"
+                android:src="@drawable/ic_insert_photo_black_24px"
+                android:text="@string/navigate_Button" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/imagegallery"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/edit_finish_button"
+                android:layout_height="wrap_content"
+                />
+
+            <ImageButton
+                android:id="@+id/button_add_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/imagegallery"
+                android:layout_toStartOf="@+id/button_add_photo_gallery"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+
+            <EditText
+                android:id="@+id/edit_photo_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/imagegallery"
+                android:layout_alignParentStart="true"
+                android:ems="10"
+                android:hint="@string/photo_default_name"
+                android:inputType="textPersonName" />
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

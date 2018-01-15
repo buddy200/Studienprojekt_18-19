@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Field Manager</string>
-    <string name="action_settings">Settings</string>
 
     <string name="done">Done</string>
 
@@ -13,26 +12,16 @@
     <string name="toastmsg_anotherAgrarainField">Add another field or go back.</string>
 
     <string name="field_default_name">no field name</string>
-    <string name="damage_case_defaut_name">no name</string>
     <string name="owner_default_name">no owner</string>
     <string name="evaluator_default_name">no evaluator</string>
     <string name="county_default_name">no county</string>
-    <string name="damagefield_name_default">no name</string>
 
     <string name="title_activity_add_field">Add a Field</string>
-    <string name="title_activity_add_fieldAgrar">Add agrarian field</string>
     <string name="title_activity_add_fieldDmg">Add damage case</string>
 
-    <string name="add_dmg_field_button">Add damage</string>
-
-
-
-    <string name="button_edit_name">Edit</string>
-    <string name="button_finish_name">Finish</string>
 
     <!-- date -->
     <string name="date_label">Day</string>
-    <string name="time_label">Time</string>
 
 
     <!-- agrarian field types -->
@@ -60,8 +49,6 @@
     <string name="redo_Button">Redo last point</string>
     <string name="toastmsg_nothing_found">No fields found</string>
     <string name="go_back_message">Are you sure you want to go back? fields not visible on screen will be dismissed</string>
-    <string name="button_add_next_Foto_text">add another foto</string>
-    <string name="Button_foto_finish_text">finish</string>
     <string name="add_activity_added">" added"</string>
     <string name="add_activity_pointAt">"point at "</string>
     <string name="add_Activity_YouNeed">"You need "</string>
@@ -105,5 +92,6 @@
     <string name="progress_status_inprogress">In progress</string>
     <string name="progress_status_finish">Completed</string>
     <string name="dialogmessage_want_delete">Do you really want to delete this photo?</string>
+    <string name="photo_default_name">no photo discription</string>
 
 </resources>

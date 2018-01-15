@@ -30,6 +30,7 @@ import java.io.File;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentAgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentDamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetAddPhoto;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogAgrarianFieldFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogDamageFieldFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
@@ -163,6 +164,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
                 }
                 break;
+            case "BSDetailDialogEditFragmentDamageField":
+                switch ( action){
+                    case "addPhoto":
+                        BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();
+                        new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);
+                        bottomSheetAddPhoto.show(getSupportFragmentManager(), "test");
+                }
 
         }
 
@@ -353,11 +361,11 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                    if(((DamageField) field).getpaths() != null &&((DamageField) field).getpaths().size() > 0){
                    String path = (((DamageField) field).getpaths().get(((DamageField) field).getpaths().size() - 1)).getImage_path();
                    if (temp.compareTo(path) > 0) {
-                       dataManager.removeField(field);
                        temp = path;
                    }
                }}
            }
+           dataManager.removeField(field);
            File f = new File(temp);
            f.delete();
            ((DamageField) field).getpaths().remove(((DamageField) field).getpaths().size() - 1);

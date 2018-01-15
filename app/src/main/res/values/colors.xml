@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorWhite">#FFFF</color>
     <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryLight">#C8E6C9</color>
     <color name="colorPrimaryDark">#388E3C</color>
     <color name="colorAccent">#FFC107</color>
 
-    <color name="primaryText">#212121</color>
-    <color name="secondaryText">#757575</color>
-   <!-- <color name="dividerColor">#BDBDBD</color> -->
+    <!-- <color name="dividerColor">#BDBDBD</color> -->
     <color name="icons">#FFFFFF</color>
 
 
@@ -21,13 +17,10 @@
     <color name="ryeTypeAgrarian">#aa00ac5c</color>
     <color name="potatoesTypeAgrarian">#aa532a01</color>
     <color name="cornTypeAgrarian">#aaffea00</color>
-    <color name="defaultTypeAgrarian">#aa000000</color>
 
     <!-- Damage Types-->
     <color name="hailTypeDmg">#aa81bed4</color>
     <color name="snowTypeDmg">#aaa6a6a6</color>
     <color name="alienTypeDmg">#aad304da</color>
-    <color name="defaultTypeDmg">#000000</color>
 
-    <color name="transparent">#00000000</color>
 </resources>

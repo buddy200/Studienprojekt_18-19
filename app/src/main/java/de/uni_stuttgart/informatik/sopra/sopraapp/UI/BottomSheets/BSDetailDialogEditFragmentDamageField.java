@@ -158,8 +158,9 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
                     this.dismiss();
                     break;
                 case R.id.add_Photo_Button:
+                    mListener.onFragmentMessage(TAG,"addPhoto", mPresenter.getVisibleField());
                     mPresenter.changeField(changedField());
-                    takePhoto();
+                //    takePhoto();
                     mPresenter.changeField(mPresenter.getVisibleField());
                     this.dismiss();
                     break;

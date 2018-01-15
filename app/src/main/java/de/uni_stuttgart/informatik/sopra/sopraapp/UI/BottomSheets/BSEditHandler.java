@@ -77,22 +77,18 @@ public class BSEditHandler implements BSEditContract.Presenter {
         Field toDelete = null;
         for(Field field : mDataManager.getFields()){
             if(field.getTimestamp() == f.getTimestamp()){
-                fieldExists = true;
                 toDelete = field;
 
             }
 
         }
         mDataManager.getFields().remove(toDelete);
-
-    //    if (!fieldExists) {
             if (f instanceof AgrarianField) {
                 mDataManager.addAgrarianField(f);
             }
            else {
                 mDataManager.addDamageField((DamageField) f);
             }
-       // }
         mDataManager.dataChange();
         mField = f;
     }

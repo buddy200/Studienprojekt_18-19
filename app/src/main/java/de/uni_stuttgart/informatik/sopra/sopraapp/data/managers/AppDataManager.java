@@ -78,7 +78,7 @@ public class AppDataManager {
      */
     public void removeField(Field f) {
         for (Field field : getFields()) {
-            if (f.getTimestamp() == field.getTimestamp()) {
+            if (f.isFieldequal(field)) {
                 f = field;
             }
         }

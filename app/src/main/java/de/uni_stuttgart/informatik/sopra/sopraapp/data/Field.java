@@ -343,7 +343,7 @@ public abstract class Field implements Serializable {
 
 
     public boolean isFieldequal(Field otherField) {
-        return otherField.getTimestamp() == this.getTimestamp();
+        return otherField.getID() == this.getID();
     }
 
     /**

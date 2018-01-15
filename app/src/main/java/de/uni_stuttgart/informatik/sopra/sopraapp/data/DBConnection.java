@@ -267,6 +267,7 @@ public class DBConnection {
             selection_args[0] = DBHelper.ID_COLUM;
             selection_args[1] = Long.toString(id);
 
+
             int rows = db.delete(DBHelper.AgrarianFieldTable_NAME, "? = ?", selection_args);
             if (rows > 0 ) {
                 String table_name = GeoPointTable_Suffix + "_Agr_" + id;
@@ -282,6 +283,7 @@ public class DBConnection {
             String[] selection_args = new String[2];
             selection_args[0] = DBHelper.ID_COLUM;
             selection_args[1] = Long.toString(id);
+
 
             int rows = db.delete(DBHelper.DamageFieldTable_NAME, "? = ?", selection_args);
             if (rows > 0) {

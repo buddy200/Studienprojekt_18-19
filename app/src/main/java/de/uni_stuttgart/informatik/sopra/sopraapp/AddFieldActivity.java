@@ -455,5 +455,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             dataManager.dataChange();
         }
     }
-
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        dataManager.dbClose();
+    }
 }

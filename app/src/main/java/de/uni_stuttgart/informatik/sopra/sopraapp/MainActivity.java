@@ -119,6 +119,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         mapHandler.destroy();
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        dataManager.dbClose();
+    }
+
     /**
      * receive messages from fragments
      * @param Tag of the fragment

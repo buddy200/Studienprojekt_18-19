@@ -222,6 +222,27 @@ public class MapViewHandler implements MapContract.MapHandler {
         map.getOverlayManager().add(currentLocMarker);
     }
 
+    public void dropMarker(double lat, double lon){
+        if(map == null) return;
+
+        Marker m = new Marker(map);
+        m.setPosition(new GeoPoint(lat, lon));
+
+        m.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                //do nothing
+                return false;
+            }
+        });
+
+        Drawable dr = context.getResources().getDrawable(R.drawable.ic_pin_map);
+
+        m.setIcon(dr);
+        m.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_BOTTOM);
+        map.getOverlayManager().add(m);
+    }
+
     /**
      * redraw the map
      */

@@ -275,6 +275,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         listGeoPoints.add(g);
         listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
         polyline.setPoints(listGeoPoints);
+        mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());
         mMapViewHandler.addPolyline(polyline);
         mMapViewHandler.invalidateMap();
 

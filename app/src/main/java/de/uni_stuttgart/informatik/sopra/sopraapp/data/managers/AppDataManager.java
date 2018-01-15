@@ -29,11 +29,11 @@ public class AppDataManager {
     private DataChangeListener listener;
 
 
-    public AppDataManager(Context context){
+    public AppDataManager(Context context) {
         this.context = context;
-        try{
+        try {
             listener = (DataChangeListener) context;
-        }catch(ClassCastException e){
+        } catch (ClassCastException e) {
             Log.e("AppDataManager", "parent must implement DataChangeListener");
         }
         dbConnection = new DBConnection(context);
@@ -43,19 +43,19 @@ public class AppDataManager {
 
     }
 
-    public void readData(){
+    public void readData() {
         dataFromFields.clear();
         dataFromFields.addAll(dbConnection.getAllAgrarianFields());
         dataFromFields.addAll(dbConnection.getAllDamgageFields());
         dataChange();
     }
 
-    public void saveData(){
-    //    writerReader.WriteFields(dataFromFields);
+    public void saveData() {
+        //    writerReader.WriteFields(dataFromFields);
 
     }
 
-    public void addAgrarianField(Field f){
+    public void addAgrarianField(Field f) {
         dataFromFields.add(f);
         dbConnection.addField((AgrarianField) f);
         dataChange();
@@ -64,7 +64,7 @@ public class AppDataManager {
     /**
      * @param dmg
      */
-    public void addDamageField(DamageField dmg){
+    public void addDamageField(DamageField dmg) {
         dataFromFields.add(dmg);
         dbConnection.addField(dmg);
         dataChange();
@@ -73,25 +73,26 @@ public class AppDataManager {
     /**
      * this is broken! mostly ..
      * ich werd das mal so lassen weil hier eh alles umgebaut wird
+     *
      * @param f
      */
-    public void removeField(Field f){
-        for(Field field : getFields()){
-            if(f.getTimestamp() == field.getTimestamp()){
+    public void removeField(Field f) {
+        for (Field field : getFields()) {
+            if (f.getTimestamp() == field.getTimestamp()) {
                 f = field;
             }
         }
-        if(f instanceof DamageField){
+        if (f instanceof DamageField) {
             ((DamageField) f).getParentField().getContainedDamageFields().remove(f);
             dbConnection.updateAgrarianField(((DamageField) f).getParentField());
             dbConnection.deleteDamageField((DamageField) f);
-        }else if(f instanceof AgrarianField){
+        } else if (f instanceof AgrarianField) {
 
-            dataFromFields.removeAll(((AgrarianField)f).getContainedDamageFields());
-            for (DamageField dmf : ((AgrarianField) f).getContainedDamageFields()){
+            dataFromFields.removeAll(((AgrarianField) f).getContainedDamageFields());
+            for (DamageField dmf : ((AgrarianField) f).getContainedDamageFields()) {
                 dbConnection.deleteDamageField(dmf);
             }
-            dbConnection.deleteAgrarianField((AgrarianField)f);
+            dbConnection.deleteAgrarianField((AgrarianField) f);
         }
         dataFromFields.remove(f);
 
@@ -100,23 +101,31 @@ public class AppDataManager {
         dataChange();
     }
 
-    public void dataChange(){
-        if(listener != null){
+    public void dataChange() {
+        if (listener != null) {
             listener.onDataChange();
             saveData();
         }
     }
 
-    public ArrayList<Field> getFields(){
+    public void changeAgrarianField(AgrarianField field) {
+        dbConnection.updateAgrarianField(field);
+    }
+
+    public void changeDamageField(DamageField field){
+        dbConnection.updateDamageField(field);
+    }
+
+    public ArrayList<Field> getFields() {
         return dataFromFields;
     }
 
 
-    public interface DataChangeListener{
+    public interface DataChangeListener {
         void onDataChange();
     }
 
-    public void dbClose(){
+    public void dbClose() {
         dbConnection.close();
     }
 }

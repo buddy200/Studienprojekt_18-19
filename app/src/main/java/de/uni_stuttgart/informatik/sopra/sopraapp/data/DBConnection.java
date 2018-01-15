@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.rtp.AudioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +68,7 @@ public class DBConnection {
             long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);
             field.setID(rowID);
 
-            for(PictureData pd : field.getpaths()) {
+            for(PictureData pd : field.getPaths()) {
                 ContentValues pd_value = new ContentValues();
                 values.put(DBHelper.PARENT_COLUM, field.getID());
                 values.put(DBHelper.NAME_COLUM, pd.getImage_title());
@@ -183,6 +182,10 @@ public class DBConnection {
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
         field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
+        List<PictureData> pictureData = getPicturesOfField(id);
+        for(PictureData pd : pictureData) {
+            field.setPath(pd);
+        }
         return field;
     }
 

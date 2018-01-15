@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -208,8 +207,8 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         fieldPolicyHolder.setText(field.getEvaluator());
         fieldName.setText(field.getName());
         fieldSize.setText(field.getConvertedSize());
-        if ((field).getpaths() != null) {
-            galleryAdapter = new GalleryAdapter(getContext(), field.getpaths(), this);
+        if ((field).getPaths() != null) {
+            galleryAdapter = new GalleryAdapter(getContext(), field.getPaths(), this);
             recyclerView.setAdapter(galleryAdapter);
         }
 
@@ -237,19 +236,19 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
         PhotoManager photoManager = new PhotoManager(getActivity());
         if (mPresenter.getVisibleField() instanceof DamageField) {
             String s = photoManager.dispatchTakePictureIntent();
-            ((DamageField) mPresenter.getVisibleField()).setpath(s);
+            ((DamageField) mPresenter.getVisibleField()).setPath(s);
         }
     }
 
     public void removePicture(int position){
         //delete the foto from the internal storage
-        File temp = new File(((DamageField) mPresenter.getVisibleField()).getpaths().get(position).getImage_path());
+        File temp = new File(((DamageField) mPresenter.getVisibleField()).getPaths().get(position).getImage_path());
         temp.delete();
         //remove the image data from the damage field and refresh the recycler view
-        ((DamageField) mPresenter.getVisibleField()).getpaths().remove(position);
+        ((DamageField) mPresenter.getVisibleField()).getPaths().remove(position);
         recyclerView.removeViewAt(position);
         galleryAdapter.notifyItemRemoved(position);
-        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getpaths().size());
+        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getPaths().size());
     }
 
 }

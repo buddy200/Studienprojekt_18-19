@@ -442,8 +442,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 field = dataManager.getFields().get(i);
 
                 if (field instanceof DamageField) {
-                    if (((DamageField) field).getpaths() != null && ((DamageField) field).getpaths().size() > 0) {
-                        String path = (((DamageField) field).getpaths().get(((DamageField) field).getpaths().size() - 1)).getImage_path();
+                    if (((DamageField) field).getPaths() != null && ((DamageField) field).getPaths().size() > 0) {
+                        String path = (((DamageField) field).getPaths().get(((DamageField) field).getPaths().size() - 1)).getImage_path();
                         if (temp.compareTo(path) > 0) {
                             temp = path;
                         }
@@ -451,7 +451,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 }
             }
             File f = new File(temp);
-            ((DamageField) field).getpaths().remove(((DamageField) field).getpaths().size() - 1);
+            ((DamageField) field).getPaths().remove(((DamageField) field).getPaths().size() - 1);
             dataManager.dataChange();
         }
     }

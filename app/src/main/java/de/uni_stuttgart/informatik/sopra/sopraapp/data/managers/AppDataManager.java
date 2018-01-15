@@ -40,12 +40,10 @@ public class AppDataManager {
         dataFromFields = new ArrayList<>();
         //writerReader = new ExportImportFromFile(context);
         readData();
-        dbConnection.close();
 
     }
 
     public void readData(){
-        dbConnection = new DBConnection(context);
         dataFromFields.addAll(dbConnection.getAllAgrarianFields());
         dataFromFields.addAll(dbConnection.getAllDamgageFields());
         dataChange();
@@ -58,10 +56,8 @@ public class AppDataManager {
 
     public void addAgrarianField(Field f){
        // dataFromFields.add(f);
-        dbConnection = new DBConnection(context);
         dbConnection.addField((AgrarianField) f);
         dataChange();
-        dbConnection.close();
     }
 
     /**
@@ -69,10 +65,8 @@ public class AppDataManager {
      */
     public void addDamageField(DamageField dmg){
         //dataFromFields.add(dmg);
-        dbConnection = new DBConnection(context);
         dbConnection.addField(dmg);
         dataChange();
-        dbConnection.close();
     }
 
     /**
@@ -81,7 +75,6 @@ public class AppDataManager {
      * @param f
      */
     public void removeField(Field f){
-
         for(Field field : getFields()){
             if(f.getTimestamp() == field.getTimestamp()){
                 f = field;
@@ -89,10 +82,18 @@ public class AppDataManager {
         }
         if(f instanceof DamageField){
             ((DamageField) f).getParentField().getContainedDamageFields().remove(f);
+            dbConnection.updateAgrarianField(((DamageField) f).getParentField());
+            dbConnection.deleteDamageField((DamageField) f);
         }else if(f instanceof AgrarianField){
+
             dataFromFields.removeAll(((AgrarianField)f).getContainedDamageFields());
+            for (DamageField dmf : ((AgrarianField) f).getContainedDamageFields()){
+                dbConnection.deleteDamageField(dmf);
+            }
+            dbConnection.deleteAgrarianField((AgrarianField)f);
         }
-        dataFromFields.remove(f);
+       // dataFromFields.remove(f);
+
         Log.e("removed field", f.getName());
 
         dataChange();
@@ -112,5 +113,9 @@ public class AppDataManager {
 
     public interface DataChangeListener{
         void onDataChange();
+    }
+
+    public void dbClose(){
+        dbConnection.close();
     }
 }

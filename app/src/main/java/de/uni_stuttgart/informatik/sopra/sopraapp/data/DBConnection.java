@@ -263,7 +263,7 @@ public class DBConnection {
 
             db.delete(DBHelper.AgrarianFieldTable_NAME, "? = ?", selection_args);
             String table_name = GeoPointTable_Suffix + "_Agr_" + id;
-            db.execSQL("DROP TABLE IF EXISTS " + table_name);
+     //       db.execSQL("DROP TABLE IF EXISTS " + table_name);
         }
     }
 
@@ -276,7 +276,7 @@ public class DBConnection {
 
             db.delete(DBHelper.DamageFieldTable_NAME, "? = ?", selection_args);
             String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
-            db.execSQL("DROP TABLE IF EXISTS " + table_name);
+      //      db.execSQL("DROP TABLE IF EXISTS " + table_name);
 
             selection_args[0] = DBHelper.PARENT_COLUM;
             db.delete(DBHelper.ImageTable_NAME, "? = ?", selection_args);

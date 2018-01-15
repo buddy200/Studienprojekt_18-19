@@ -47,7 +47,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
  * sopra_priv
  * Created by Felix B on 10.11.17.
  * Mail: felix.burk@gmail.com
- * <p>
+ *
  * this activity lets users add fields depending
  * on their position
  */
@@ -78,7 +78,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     private boolean enoughPoints = false;
 
-    private Polyline p;
+    private Polyline polyline;
 
     private ArrayList<Vector<Double>> linesFromAgrarianField;
     private IntersectionCalculator intersectionCalculator;
@@ -98,7 +98,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         cornerPoints = new ArrayList<>();
         linesFromAgrarianField = new ArrayList<>();
         intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);
-        p = new Polyline();
+        polyline = new Polyline();
+        polyline.setColor(R.color.colorAccent);
+        polyline.setWidth(2.0f);
 
         //back button on toolbar implementation
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -209,8 +211,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (listGeoPoints.size() > 0 && listCornerPoints.size() > 0) {
             listGeoPoints.remove(listGeoPoints.size() - 1);
             listCornerPoints.remove(listCornerPoints.size() - 1);
-            p.setPoints(listGeoPoints);
-            mMapViewHandler.addPolyline(p);
+            polyline.setPoints(listGeoPoints);
+            mMapViewHandler.addPolyline(polyline);
             mMapViewHandler.invalidateMap();
             fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
             if(listCornerPoints.size()< 3){
@@ -272,12 +274,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         GeoPoint g = new GeoPoint(location);
         listGeoPoints.add(g);
         listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
-        p.setPoints(listGeoPoints);
-        mMapViewHandler.addPolyline(p);
+        polyline.setPoints(listGeoPoints);
+        mMapViewHandler.addPolyline(polyline);
         mMapViewHandler.invalidateMap();
-
-
-
 
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;

@@ -324,11 +324,91 @@ public class DBConnection {
     }
 
 
-    public List<Field> search(String text) {
+    public List<Field> searchAll(String text) {
         List<Field> fields = new ArrayList<>();
-        // OWNER, NAME, DATE , STATE
+        String[] selection_args = new String[2];
+        selection_args[0] = text;
+        selection_args[1] = text;
+
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + "= ? OR " + DBHelper.NAME_COLUM + "= ?", selection_args, null, null, null);
+        while (agrCursor.moveToNext()) {
+            fields.add(toAgrarianField(agrCursor));
+        }
+
+        selection_args = new String[4];
+        selection_args[0] = text;
+        selection_args[1] = text;
+        selection_args[2] = text;
+        selection_args[3] = text;
+
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + "= ? OR " + DBHelper.NAME_COLUM + "= ? OR "+ DBHelper.DATE_COLUM + "= ? OR " + DBHelper.PROGRESS_COLUM + "= ?", selection_args, null,null, null);
+        while (dmgCursor.moveToNext()) {
+            fields.add(toDamageField(dmgCursor));
+        }
 
         return  fields;
     }
 
+    public List<Field> searchOwner(String text) {
+        List<Field> fields = new ArrayList<>();
+        String[] selection_args = new String[1];
+        selection_args[0] = text;
+
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + "= ?", selection_args, null, null, null);
+        while (agrCursor.moveToNext()) {
+            fields.add(toAgrarianField(agrCursor));
+        }
+
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + "= ?", selection_args, null,null, null);
+        while (dmgCursor.moveToNext()) {
+            fields.add(toDamageField(dmgCursor));
+        }
+
+        return  fields;
+    }
+
+    public List<Field> searchDate(String text) {
+        List<Field> fields = new ArrayList<>();
+        String[] selection_args = new String[1];
+        selection_args[0] = text;
+
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + "= ?", selection_args, null,null, null);
+        while (dmgCursor.moveToNext()) {
+            fields.add(toDamageField(dmgCursor));
+        }
+
+        return  fields;
+    }
+
+    public List<Field> searchName(String text) {
+        List<Field> fields = new ArrayList<>();
+        String[] selection_args = new String[1];
+        selection_args[0] = text;
+
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.NAME_COLUM + "= ?", selection_args, null, null, null);
+        while (agrCursor.moveToNext()) {
+            fields.add(toAgrarianField(agrCursor));
+        }
+
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + "= ?", selection_args, null,null, null);
+        while (dmgCursor.moveToNext()) {
+            fields.add(toDamageField(dmgCursor));
+        }
+
+        return  fields;
+    }
+
+    public List<Field> searchState(String text) {
+        List<Field> fields = new ArrayList<>();
+        String[] selection_args = new String[1];
+        selection_args[0] = text;
+
+
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + "= ?", selection_args, null,null, null);
+        while (dmgCursor.moveToNext()) {
+            fields.add(toDamageField(dmgCursor));
+        }
+
+        return  fields;
+    }
 }

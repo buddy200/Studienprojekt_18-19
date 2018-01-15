@@ -15,9 +15,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 
@@ -29,14 +30,14 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
  * A custom BottomSheetDialogFragment to display information of Fields
  */
 
-public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {
+public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {
 
     private static final String TAG = "BottomSheetDetail";
 
     protected FragmentInteractionListener mListener;
     private BSEditContract.Presenter mPresenter;
 
-    private DamageField mField;
+    private AgrarianField mField;
 
     /**
      * this factory method is used to generate an instance
@@ -44,8 +45,8 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
      *
      * @return A new instance of fragment BottomSheetDialogFragment.
      */
-    public static BottomSheetDetailDialogDamageFieldFragment newInstance() {
-        final BottomSheetDetailDialogDamageFieldFragment fragment = new BottomSheetDetailDialogDamageFieldFragment();
+    public static BSDetailDialogAgrField newInstance() {
+        final BSDetailDialogAgrField fragment = new BSDetailDialogAgrField();
         return fragment;
     }
 
@@ -76,7 +77,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_damagefield, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_agrarianfield, container, false);
         configureBottomSheetBehaviour(view);
         return view;
     }
@@ -87,63 +88,51 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
      * @param view
      */
     void configureBottomSheetBehaviour(View view) {
+
     }
 
     private TextView name;
     private TextView state;
     private TextView size;
-    private TextView ownerOrEvaluator;
-    private TextView date;
+    private TextView county;
+    private TextView owner;
+    private ImageButton addDmg;
     private ImageButton edit;
     private ImageButton navButton;
-    private RecyclerView recyclerView;
-    private TextView estimatedCosts;
-    private TextView progressState;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);
-        recyclerView.setHasFixedSize(true);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
         name = (TextView) view.findViewById(R.id.field_detail_name);
         edit = (ImageButton) view.findViewById(R.id.edit_finish_button);
         edit.setOnClickListener(this);
 
-        progressState = (TextView) view.findViewById(R.id.progress_state);
         size = (TextView) view.findViewById(R.id.field_detail_size);
         state = (TextView) view.findViewById(R.id.field_detail_state);
         size = (TextView) view.findViewById(R.id.field_detail_size);
-        ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
-        date = (TextView) view.findViewById(R.id.field_detail_date);
-        estimatedCosts = (TextView) view.findViewById(R.id.field_cost);
+        county = (TextView) view.findViewById(R.id.field_detail_region);
+        owner = (TextView) view.findViewById(R.id.field_detail_policyholder);
+        addDmg = (ImageButton) view.findViewById(R.id.add_damageField_button);
+        addDmg.setOnClickListener(this);
         navButton = (ImageButton) view.findViewById(R.id.button_add_photo_gallery);
         navButton.setOnClickListener(this);
-
     }
 
     @Override
     public void fillData(Field mField) {
-        this.mField = (DamageField) mField;
-        name.setText(getResources().getString(R.string.dialogItem_Name) + " " + this.mField.getName());
+        this.mField = (AgrarianField) mField;
+        name.setText(getResources().getString(R.string.dialogItem_Name) + " " + this.mField.getName() + "");
+        county.setText(getResources().getString(R.string.dialogItem_Location) + " " + this.mField.getCounty());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
         state.setText(getResources().getString(R.string.dialogItem_Type) + " " + this.mField.getType().toString());
-        state.setTextColor(this.mField.getColor());
+        state.setTextColor(mField.getColor());
         size.setText(getResources().getString(R.string.dialogItem_Size) + " " + this.mField.getConvertedSize());
-        date.setText(getResources().getString(R.string.dialogItem_Date) + " " + (this.mField.getParsedDate()));
-        progressState.setText(getResources().getString(R.string.dialogitem_progress_state) + " " + this.mField.getProgressStatus().toString());
-        ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + " " + (this.mField.getEvaluator()));
-        estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(this.mField.getInsuranceMoney()));
-
-        if ((this.mField).getpaths() != null) {
-            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getpaths(), this);
-            recyclerView.setAdapter(galleryAdapter);
-        }
+        owner.setText(getResources().getString(R.string.detailItem_evaluator) + " " + this.mField.getOwner());
     }
 
     @Override
     public void setLoadingIndicator(boolean active) {
+
     }
 
     /**
@@ -159,6 +148,12 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
                     mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
+                case R.id.add_damageField_button:
+                    GlobalConstants.setLastLocationOnMap(mPresenter.getVisibleField().getCentroid());
+                    mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
+
+                    dismiss();
+                    break;
                 case R.id.button_add_photo_gallery:
                     //call a googlemaps intent with the position of the centroid point from the field object
                     String geoString = "geo:" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude()) + "?q=" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude());
@@ -168,6 +163,7 @@ public class BottomSheetDetailDialogDamageFieldFragment extends BottomSheetDialo
                     if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                         startActivity(mapIntent);
                     }
+
                     break;
             }
         }

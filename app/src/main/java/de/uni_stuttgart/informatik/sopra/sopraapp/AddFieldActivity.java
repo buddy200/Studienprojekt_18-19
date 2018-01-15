@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentAgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentDamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditAgrField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditDmgField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
@@ -60,8 +60,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     Field fieldToAddFinal;
 
-    BSDetailDialogEditFragmentAgrarianField bottomSheetDialogAF;
-    BSDetailDialogEditFragmentDamageField bottomSheetDialogDMF;
+    BSDetailDialogEditAgrField bottomSheetDialogAF;
+    BSDetailDialogEditDmgField bottomSheetDialogDMF;
 
     ArrayList<GeoPoint> listGeoPoints = new ArrayList<>();
     ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
@@ -346,13 +346,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
             if(isDmgField){
-                bottomSheetDialogDMF = BSDetailDialogEditFragmentDamageField.newInstance();
+                bottomSheetDialogDMF = BSDetailDialogEditDmgField.newInstance();
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogDMF);
                 bottomSheetDialogDMF.setPresenter(handler);
                 bottomSheetDialogDMF.show(getSupportFragmentManager(), "EditView");
             }
             else {
-                bottomSheetDialogAF = BSDetailDialogEditFragmentAgrarianField.newInstance();
+                bottomSheetDialogAF = BSDetailDialogEditAgrField.newInstance();
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogAF);
                 bottomSheetDialogAF.setPresenter(handler);
                 bottomSheetDialogAF.show(getSupportFragmentManager(), "EditView");

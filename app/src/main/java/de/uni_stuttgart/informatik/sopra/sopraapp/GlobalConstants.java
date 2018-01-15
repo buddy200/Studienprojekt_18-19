@@ -44,6 +44,8 @@ public class GlobalConstants {
     //default zoom value for the mapFragment
     public static final int DEFAULT_ZOOM = 20;
 
+    public static boolean isAdmin = false;
+
     /**
      * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh
      * creates a rectangle containing n polygons with m points, close to lastLocationOnMap  - FB

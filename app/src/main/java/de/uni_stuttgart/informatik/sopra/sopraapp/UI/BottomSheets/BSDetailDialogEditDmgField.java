@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,11 +37,11 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus
  * Created by Felix B on 07.12.17.
  * Mail: felix.burk@gmail.com
  * <p>
- * A custom BottomSheetDetailDialogDamageFieldFragment to edit Fields
+ * A custom BSDetailDialogDmgField to edit Fields
  */
 
 public class
-BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
+BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
 
     private static final String TAG = "BSDetailDialogEditFragmentDamageField";
 
@@ -70,8 +69,8 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
      *
      * @return A new instance of fragment BottomSheetDialogFragment.
      */
-    public static BSDetailDialogEditFragmentDamageField newInstance() {
-        final BSDetailDialogEditFragmentDamageField fragment = new BSDetailDialogEditFragmentDamageField();
+    public static BSDetailDialogEditDmgField newInstance() {
+        final BSDetailDialogEditDmgField fragment = new BSDetailDialogEditDmgField();
 
         return fragment;
     }

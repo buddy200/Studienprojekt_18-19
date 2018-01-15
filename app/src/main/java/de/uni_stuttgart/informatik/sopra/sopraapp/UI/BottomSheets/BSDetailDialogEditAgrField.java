@@ -20,9 +20,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity;
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 
@@ -31,11 +29,11 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldT
  * Created by Felix B on 07.12.17.
  * Mail: felix.burk@gmail.com
  * <p>
- * A custom BottomSheetDetailDialogDamageFieldFragment to edit Fields
+ * A custom BSDetailDialogDmgField to edit Fields
  */
 
 public class
-BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
+BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
 
     private static final String TAG = "BSDetailDialogEditFragmentAgrarianField";
 
@@ -57,8 +55,8 @@ BSDetailDialogEditFragmentAgrarianField extends BottomSheetDialogFragment implem
      *
      * @return A new instance of fragment BottomSheetDialogFragment.
      */
-    public static BSDetailDialogEditFragmentAgrarianField newInstance() {
-        final BSDetailDialogEditFragmentAgrarianField fragment = new BSDetailDialogEditFragmentAgrarianField();
+    public static BSDetailDialogEditAgrField newInstance() {
+        final BSDetailDialogEditAgrField fragment = new BSDetailDialogEditAgrField();
 
         return fragment;
     }

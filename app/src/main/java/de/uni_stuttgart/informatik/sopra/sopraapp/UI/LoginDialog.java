@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
 /**
@@ -60,7 +61,7 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         switch (v.getId()) {
             case R.id.login_dialog_btn_login:
                 if(!username.getText().toString().equals("") && userPrivileges.getCheckedRadioButtonId() != -1){
-                    saveLogin(username.getText().toString(), password.getText().toString());
+                    saveLogin(username.getText().toString(), password.getText().toString(), userPrivileges.getCheckedRadioButtonId());
                     Toast.makeText(getContext(), "Logged in as " + username.getText().toString(), Toast.LENGTH_SHORT);
                     this.dismiss();
 
@@ -80,11 +81,19 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
     /**
      * save login to shared preferences
      */
-    public void saveLogin(String username, String password){
+    public void saveLogin(String username, String password, int radioButtonId){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(getContext().getString(R.string.pref_previously_started), Boolean.TRUE);
         edit.putString(getContext().getString(R.string.pref_username), username);
+        if(radioButtonId == 0){
+            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);
+            GlobalConstants.isAdmin = true;
+        }else {
+            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);
+            GlobalConstants.isAdmin = false;
+        }
+
         //password not saved yet.. would be unsave
 
         edit.apply();

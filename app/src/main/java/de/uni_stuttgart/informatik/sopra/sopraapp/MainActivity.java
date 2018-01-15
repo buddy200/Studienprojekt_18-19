@@ -27,12 +27,12 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentAgrarianField;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentDamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogDmgField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditAgrField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditDmgField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetAddPhoto;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogAgrarianFieldFragment;
-import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetDetailDialogDamageFieldFragment;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogAgrField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         if(!previouslyStarted) {
             new LoginDialog(this).show();
             this.invalidateOptionsMenu();
+        }else {
+            boolean adm = prefs.getBoolean(this.getString(R.string.pref_admin_bool), false);
+            GlobalConstants.isAdmin = adm;
         }
     }
 
@@ -146,12 +149,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                     case "startEdit":
                         //TODO
                         if((Field) data instanceof AgrarianField) {
-                            BSDetailDialogEditFragmentAgrarianField bsDetail = BSDetailDialogEditFragmentAgrarianField.newInstance();
+                            BSDetailDialogEditAgrField bsDetail = BSDetailDialogEditAgrField.newInstance();
                             new BSEditHandler((Field) data, dataManager, bsDetail);
                             bsDetail.show(getSupportFragmentManager(), "test");
                         }
                         else{
-                            BSDetailDialogEditFragmentDamageField bsDetail = BSDetailDialogEditFragmentDamageField.newInstance();
+                            BSDetailDialogEditDmgField bsDetail = BSDetailDialogEditDmgField.newInstance();
                             new BSEditHandler((Field) data, dataManager, bsDetail);
                             bsDetail.show(getSupportFragmentManager(), "test");
                         }
@@ -188,12 +191,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 (field).getCentroid().getLongitude());
 
         if(field instanceof DamageField){
-            BottomSheetDetailDialogDamageFieldFragment bs = BottomSheetDetailDialogDamageFieldFragment.newInstance();
+            BSDetailDialogDmgField bs = BSDetailDialogDmgField.newInstance();
             new BSEditHandler(field, dataManager, bs);
             bs.show(this.getSupportFragmentManager(), "DetailField");
         }
         else if(field instanceof AgrarianField){
-            BottomSheetDetailDialogAgrarianFieldFragment bs = BottomSheetDetailDialogAgrarianFieldFragment.newInstance();
+            BSDetailDialogAgrField bs = BSDetailDialogAgrField.newInstance();
             new BSEditHandler(field, dataManager, bs);
             bs.show(this.getSupportFragmentManager(), "DetailField");
         }

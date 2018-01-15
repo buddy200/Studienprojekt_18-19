@@ -82,6 +82,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
             }
 
         }
+
         mDataManager.getFields().remove(toDelete);
             if (f instanceof AgrarianField) {
                 mDataManager.addAgrarianField(f);

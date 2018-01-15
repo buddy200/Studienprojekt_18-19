@@ -83,7 +83,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
-            if(bottomSheet instanceof BSDetailDialogEditFragmentDamageField || bottomSheet instanceof BottomSheetAddPhoto) {
+            if(bottomSheet instanceof BSDetailDialogEditDmgField || bottomSheet instanceof BottomSheetAddPhoto) {
                 view.setOnClickListener(mOnClickListener);
             }
 
@@ -96,8 +96,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
-                            if(bottomSheet instanceof BSDetailDialogEditFragmentDamageField) {
-                                ((BSDetailDialogEditFragmentDamageField) bottomSheet).removePicture(getAdapterPosition());
+                            if(bottomSheet instanceof BSDetailDialogEditDmgField) {
+                                ((BSDetailDialogEditDmgField) bottomSheet).removePicture(getAdapterPosition());
                             }
                             else if (bottomSheet instanceof BottomSheetAddPhoto){
                                 ((BottomSheetAddPhoto) bottomSheet).removePicture(getAdapterPosition());

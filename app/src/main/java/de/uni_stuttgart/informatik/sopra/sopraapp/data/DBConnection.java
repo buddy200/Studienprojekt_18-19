@@ -133,7 +133,7 @@ public class DBConnection {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Agr_" + id;
-        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
         while(cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
@@ -166,7 +166,7 @@ public class DBConnection {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
-        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
         while(cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
@@ -212,4 +212,75 @@ public class DBConnection {
         }
         return pictureData;
     }
+
+    public void updateAgrarianField(AgrarianField field) {
+        if (field != null) {
+            ContentValues values = new ContentValues();
+
+            double size = field.getSize() == null ? 0 : field.getSize();
+            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.NAME_COLUM, field.getName());
+            values.put(DBHelper.COLOR_COLUM, field.getColor());
+            values.put(DBHelper.COUNTY_COLUM, field.getCounty());
+            values.put(DBHelper.OWNER_COLUM, field.getOwner());
+
+            String[] selection_args = new String[2];
+            selection_args[0] = DBHelper.ID_COLUM;
+            selection_args[1] = Long.toString(field.getID());
+
+            db.update(DBHelper.AgrarianFieldTable_NAME, values, "? = ?", selection_args);
+        }
+    }
+
+
+    public void updateDamageField(DamageField field) {
+        if (field != null) {
+            ContentValues values = new ContentValues();
+
+            double size = field.getSize() == null ? 0 : field.getSize();
+            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.NAME_COLUM, field.getName());
+            values.put(DBHelper.COLOR_COLUM, field.getColor());
+            values.put(DBHelper.COUNTY_COLUM, field.getCounty());
+            values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
+            values.put(DBHelper.DATE_COLUM, field.getParsedDate());
+            values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());
+
+            String[] selection_args = new String[2];
+            selection_args[0] = DBHelper.ID_COLUM;
+            selection_args[1] = Long.toString(field.getID());
+
+            db.update(DBHelper.DamageFieldTable_NAME, values, "? = ?", selection_args);
+        }
+    }
+
+    public void deleteAgrarianField(AgrarianField field) {
+        if (field !=  null) {
+            long id = field.getID();
+            String[] selection_args = new String[2];
+            selection_args[0] = DBHelper.ID_COLUM;
+            selection_args[1] = Long.toString(id);
+
+            db.delete(DBHelper.AgrarianFieldTable_NAME, "? = ?", selection_args);
+            String table_name = GeoPointTable_Suffix + "_Agr_" + id;
+            db.execSQL("DROP TABLE IF EXISTS " + table_name);
+        }
+    }
+
+    public void deleteDamageField(DamageField field) {
+        if (field !=  null) {
+            long id = field.getID();
+            String[] selection_args = new String[2];
+            selection_args[0] = DBHelper.ID_COLUM;
+            selection_args[1] = Long.toString(id);
+
+            db.delete(DBHelper.DamageFieldTable_NAME, "? = ?", selection_args);
+            String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
+            db.execSQL("DROP TABLE IF EXISTS " + table_name);
+
+            selection_args[0] = DBHelper.PARENT_COLUM;
+            db.delete(DBHelper.ImageTable_NAME, "? = ?", selection_args);
+        }
+    }
+
 }

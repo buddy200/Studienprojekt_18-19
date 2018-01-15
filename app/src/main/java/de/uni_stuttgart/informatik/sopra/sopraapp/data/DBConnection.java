@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
 
 /**
@@ -41,7 +43,7 @@ public class DBConnection {
             double size = field.getSize() == null ? 0 : field.getSize();
             values.put(DBHelper.SIZE_COLUM, size);
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.COLOR_COLUM, field.getColor());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.OWNER_COLUM, field.getOwner());
 
@@ -59,7 +61,7 @@ public class DBConnection {
             double size = field.getSize() == null ? 0 : field.getSize();
             values.put(DBHelper.SIZE_COLUM, size);
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.COLOR_COLUM, field.getColor());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());
@@ -143,7 +145,7 @@ public class DBConnection {
         AgrarianField field = new AgrarianField(context,cps);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
-        field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));
+        field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));
         return field;
@@ -178,7 +180,7 @@ public class DBConnection {
         DamageField field = new DamageField(context,cps, parent);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
-        field.setColor(cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR_COLUM)));
+        field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
         field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
@@ -220,7 +222,7 @@ public class DBConnection {
             double size = field.getSize() == null ? 0 : field.getSize();
             values.put(DBHelper.SIZE_COLUM, size);
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.COLOR_COLUM, field.getColor());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.OWNER_COLUM, field.getOwner());
 
@@ -240,7 +242,7 @@ public class DBConnection {
             double size = field.getSize() == null ? 0 : field.getSize();
             values.put(DBHelper.SIZE_COLUM, size);
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.COLOR_COLUM, field.getColor());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());

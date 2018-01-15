@@ -47,4 +47,13 @@ public enum AgrarianFieldType implements FieldType, Serializable{
     public int toColor(){
         return friendlyColor;
     }
+
+    public static AgrarianFieldType fromString(String text) {
+        for (AgrarianFieldType type : AgrarianFieldType.values()) {
+            if (type.toString().equalsIgnoreCase(text)) {
+                return type;
+            }
+        }
+        return null;
+    }
 };

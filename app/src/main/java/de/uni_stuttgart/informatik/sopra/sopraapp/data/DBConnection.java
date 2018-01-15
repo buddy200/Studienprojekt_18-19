@@ -133,7 +133,7 @@ public class DBConnection {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Agr_" + id;
-        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
         while(cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
@@ -166,7 +166,7 @@ public class DBConnection {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
-        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + "ASC");
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
         while(cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));

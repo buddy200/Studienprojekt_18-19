@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DBConnection;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
@@ -21,42 +22,57 @@ public class AppDataManager {
 
     private ArrayList<Field> dataFromFields;
     private ExportImportFromFile writerReader;
+    private Context context;
+
+    private DBConnection dbConnection;
 
     private DataChangeListener listener;
 
 
     public AppDataManager(Context context){
+        this.context = context;
         try{
             listener = (DataChangeListener) context;
         }catch(ClassCastException e){
             Log.e("AppDataManager", "parent must implement DataChangeListener");
         }
-
-        writerReader = new ExportImportFromFile(context);
+        dbConnection = new DBConnection(context);
+        dataFromFields = new ArrayList<>();
+        //writerReader = new ExportImportFromFile(context);
         readData();
+        dbConnection.close();
 
     }
 
     public void readData(){
-        dataFromFields = writerReader.readFields();
+        dbConnection = new DBConnection(context);
+        dataFromFields.addAll(dbConnection.getAllAgrarianFields());
+        dataFromFields.addAll(dbConnection.getAllDamgageFields());
         dataChange();
     }
 
     public void saveData(){
-        writerReader.WriteFields(dataFromFields);
+    //    writerReader.WriteFields(dataFromFields);
+
     }
 
     public void addAgrarianField(Field f){
-        dataFromFields.add(f);
+       // dataFromFields.add(f);
+        dbConnection = new DBConnection(context);
+        dbConnection.addField((AgrarianField) f);
         dataChange();
+        dbConnection.close();
     }
 
     /**
      * @param dmg
      */
     public void addDamageField(DamageField dmg){
-        dataFromFields.add(dmg);
+        //dataFromFields.add(dmg);
+        dbConnection = new DBConnection(context);
+        dbConnection.addField(dmg);
         dataChange();
+        dbConnection.close();
     }
 
     /**

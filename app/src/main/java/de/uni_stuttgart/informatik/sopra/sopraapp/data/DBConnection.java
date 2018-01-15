@@ -263,11 +263,13 @@ public class DBConnection {
             selection_args[0] = DBHelper.ID_COLUM;
             selection_args[1] = Long.toString(id);
 
-            db.delete(DBHelper.AgrarianFieldTable_NAME, "? = ?", selection_args);
-            String table_name = GeoPointTable_Suffix + "_Agr_" + id;
 
-            //db.execSQL("DROP TABLE IF EXISTS " + table_name);
-            db.delete(table_name,null,null);
+            int rows = db.delete(DBHelper.AgrarianFieldTable_NAME, "? = ?", selection_args);
+            if (rows > 0 ) {
+                String table_name = GeoPointTable_Suffix + "_Agr_" + id;
+                //db.execSQL("DROP TABLE IF EXISTS " + table_name);
+                db.delete(table_name, null, null);
+            }
         }
     }
 
@@ -278,15 +280,25 @@ public class DBConnection {
             selection_args[0] = DBHelper.ID_COLUM;
             selection_args[1] = Long.toString(id);
 
-            db.delete(DBHelper.DamageFieldTable_NAME, "? = ?", selection_args);
-            String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
 
-            //db.execSQL("DROP TABLE IF EXISTS " + table_name);
-            db.delete(table_name,null,null);
+            int rows = db.delete(DBHelper.DamageFieldTable_NAME, "? = ?", selection_args);
+            if (rows > 0) {
+                String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
+                //db.execSQL("DROP TABLE IF EXISTS " + table_name);
+                db.delete(table_name, null, null);
 
-            selection_args[0] = DBHelper.PARENT_COLUM;
-            db.delete(DBHelper.ImageTable_NAME, "? = ?", selection_args);
+                selection_args[0] = DBHelper.PARENT_COLUM;
+                db.delete(DBHelper.ImageTable_NAME, "? = ?", selection_args);
+            }
         }
+    }
+
+
+    public List<Field> search(String text) {
+        List<Field> fields = new ArrayList<>();
+
+
+        return  fields;
     }
 
 }

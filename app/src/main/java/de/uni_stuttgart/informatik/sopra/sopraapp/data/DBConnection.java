@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
@@ -22,6 +23,9 @@ public class DBConnection {
     private static final String GeoPointTable_Suffix = "GeoPointsOfField";
     private static final String LAT_COLUM = "latitude";
     private static final String LONG_COLUM = "longitude";
+    private static final String VectorTable_Suffix = "Vectors_";
+    private static final String X_COLUM = "x";
+    private static final String Y_COLUM = "y";
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
@@ -51,7 +55,23 @@ public class DBConnection {
             long rowID = db.insert(DBHelper.AgrarianFieldTable_NAME, null, values);
             field.setID(rowID);
 
+            createVectorTable(field);
             createGeoPointTable(field);
+        }
+    }
+
+    private void createVectorTable(AgrarianField field) {
+        String table_name = VectorTable_Suffix + field.getID();
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
+        X_COLUM + " REAL NOT NULL," +
+        Y_COLUM + " REAL NOT NULL)");
+
+        for (java.util.Vector<Double> v : field.getLinesFormField()) {
+            ContentValues values = new ContentValues();
+            values.put(X_COLUM, v.get(0));
+            values.put(Y_COLUM, v.get(1));
+
+            db.insert(table_name, null, values);
         }
     }
 
@@ -135,6 +155,7 @@ public class DBConnection {
     private AgrarianField toAgrarianField(Cursor cursor) {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
+        ArrayList<java.util.Vector<Double>> vectorList = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Agr_" + id;
         Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
         while(cpCursor.moveToNext()) {
@@ -143,12 +164,22 @@ public class DBConnection {
             cps.add(new CornerPoint(lat,lon));
         }
 
+        String vectorTable = VectorTable_Suffix + id;
+        Cursor vCursor = db.query(vectorTable, null, null,null,null,null,null);
+        while(vCursor.moveToNext()) {
+            java.util.Vector<Double> v = new Vector<>();
+            v.add(0, vCursor.getDouble(vCursor.getColumnIndex(X_COLUM)));
+            v.add(1, vCursor.getDouble(vCursor.getColumnIndex(Y_COLUM)));
+            vectorList.add(v);
+        }
+
         AgrarianField field = new AgrarianField(context,cps);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
         field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));
+        field.setLinesFormField(vectorList);
         return field;
     }
 
@@ -266,8 +297,10 @@ public class DBConnection {
             int rows = db.delete(DBHelper.AgrarianFieldTable_NAME, (DBHelper.ID_COLUM + "= ?"), selection_args);
             if (rows > 0 ) {
                 String table_name = GeoPointTable_Suffix + "_Agr_" + id;
+                String vectorTable = VectorTable_Suffix + id;
                 db.execSQL("DROP TABLE IF EXISTS " + table_name);
                 //db.delete(table_name, null, null);
+                db.execSQL("DROP TABLE IF EXISTS " + vectorTable);
             }
         }
     }

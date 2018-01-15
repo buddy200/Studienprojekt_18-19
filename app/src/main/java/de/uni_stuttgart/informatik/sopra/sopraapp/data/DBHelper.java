@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
             ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SIZE_COLUM + " REAL NOT NULL," +
             NAME_COLUM + " TEXT NOT NULL," +
-            PARENT_COLUM + " INTEGER NOT NULL," +
+            PARENT_COLUM + " INTEGER," +
             TYPE_COLUM + " TEXT," +
             COUNTY_COLUM + " TEXT NOT NULL," +
             EVALUATOR_COLUM + " TEXT NOT NULL," +

@@ -43,12 +43,12 @@ public class DBHelper extends SQLiteOpenHelper {
             ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SIZE_COLUM + " REAL NOT NULL," +
             NAME_COLUM + " TEXT NOT NULL," +
+            PARENT_COLUM + " INTEGER NOT NULL," +
             TYPE_COLUM + " TEXT," +
             COUNTY_COLUM + " TEXT NOT NULL," +
             EVALUATOR_COLUM + " TEXT NOT NULL," +
             DATE_COLUM + " TEXT," +
-            PROGRESS_COLUM + " TEXT," +
-            PARENT_COLUM + "INTEGER NOT NULL)";
+            PROGRESS_COLUM + " TEXT)";
 
     private static final String CREATE_ImageTable = "CREATE TABLE " + ImageTable_NAME + " (" +
             NAME_COLUM + " TEXT," +

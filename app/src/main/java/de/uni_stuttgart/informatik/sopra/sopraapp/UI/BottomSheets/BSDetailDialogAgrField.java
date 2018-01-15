@@ -104,18 +104,23 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         name = (TextView) view.findViewById(R.id.field_detail_name);
-        edit = (ImageButton) view.findViewById(R.id.edit_finish_button);
+        edit = (ImageButton) view.findViewById(R.id.finish_edit_button_agr);
         edit.setOnClickListener(this);
+        addDmg = (ImageButton) view.findViewById(R.id.add_damageField_button);
+        addDmg.setOnClickListener(this);
+        navButton = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);
+        navButton.setOnClickListener(this);
 
         size = (TextView) view.findViewById(R.id.field_detail_size);
         state = (TextView) view.findViewById(R.id.field_detail_state);
         size = (TextView) view.findViewById(R.id.field_detail_size);
         county = (TextView) view.findViewById(R.id.field_detail_region);
         owner = (TextView) view.findViewById(R.id.field_detail_policyholder);
-        addDmg = (ImageButton) view.findViewById(R.id.add_damageField_button);
-        addDmg.setOnClickListener(this);
-        navButton = (ImageButton) view.findViewById(R.id.button_add_photo_gallery);
-        navButton.setOnClickListener(this);
+
+        if(!GlobalConstants.isAdmin){
+            addDmg.setVisibility(View.GONE);
+            edit.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -144,7 +149,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
     public void onClick(View v) {
         if (mListener != null) {
             switch (v.getId()) {
-                case R.id.edit_finish_button:
+                case R.id.finish_edit_button_agr:
                     mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
@@ -154,7 +159,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
 
                     dismiss();
                     break;
-                case R.id.button_add_photo_gallery:
+                case R.id.button_navigate_google_maps:
                     //call a googlemaps intent with the position of the centroid point from the field object
                     String geoString = "geo:" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude()) + "?q=" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude());
                     Uri gmmIntentUri = Uri.parse(geoString);

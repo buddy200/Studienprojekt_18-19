@@ -292,7 +292,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/edit_finish_button"
+                android:id="@+id/finish_edit_button_agr"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
@@ -312,7 +312,7 @@
                 android:paddingBottom="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/edit_finish_button"
+                android:layout_toStartOf="@id/finish_edit_button_agr"
                 android:src="@drawable/ic_delete_forever_black_24px"
                 android:background="@null"
                 android:text="@string/edit_field_delete_button"/>
@@ -336,7 +336,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/imagegallery"
             android:layout_width="match_parent"
-            android:layout_below="@+id/edit_finish_button"
+            android:layout_below="@+id/finish_edit_button_agr"
             android:layout_height="wrap_content"
             />
 

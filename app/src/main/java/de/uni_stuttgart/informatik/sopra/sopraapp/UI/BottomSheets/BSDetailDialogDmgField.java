@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -108,8 +109,10 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         name = (TextView) view.findViewById(R.id.field_detail_name);
-        edit = (ImageButton) view.findViewById(R.id.edit_finish_button);
+        edit = (ImageButton) view.findViewById(R.id.finish_edit_button_agr);
         edit.setOnClickListener(this);
+        navButton = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);
+        navButton.setOnClickListener(this);
 
         progressState = (TextView) view.findViewById(R.id.progress_state);
         size = (TextView) view.findViewById(R.id.field_detail_size);
@@ -118,8 +121,10 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         ownerOrEvaluator = (TextView) view.findViewById(R.id.field_detail_policyholder);
         date = (TextView) view.findViewById(R.id.field_detail_date);
         estimatedCosts = (TextView) view.findViewById(R.id.field_cost);
-        navButton = (ImageButton) view.findViewById(R.id.button_add_photo_gallery);
-        navButton.setOnClickListener(this);
+
+        if(!GlobalConstants.isAdmin){
+            edit.setVisibility(View.GONE);
+        }
 
     }
 
@@ -155,11 +160,11 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
     public void onClick(View v) {
         if (mListener != null) {
             switch (v.getId()) {
-                case R.id.edit_finish_button:
+                case R.id.finish_edit_button_agr:
                     mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
-                case R.id.button_add_photo_gallery:
+                case R.id.button_navigate_google_maps:
                     //call a googlemaps intent with the position of the centroid point from the field object
                     String geoString = "geo:" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude()) + "?q=" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude());
                     Uri gmmIntentUri = Uri.parse(geoString);

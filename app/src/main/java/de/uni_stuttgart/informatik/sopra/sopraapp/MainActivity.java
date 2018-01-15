@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             boolean adm = prefs.getBoolean(this.getString(R.string.pref_admin_bool), false);
             GlobalConstants.isAdmin = adm;
         }
+
+        Log.e(TAG, "is admin?" + String.valueOf(GlobalConstants.isAdmin));
     }
 
     @Override
@@ -215,9 +217,16 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public boolean onPrepareOptionsMenu(Menu menu){
         setUpSearchMenuItem(menu);
+
+        MenuItem addFieldMenuItem = menu.findItem(R.id.action_toolbar_add);
+        if(!GlobalConstants.isAdmin){
+            addFieldMenuItem.setVisible(false);
+        }else{
+            addFieldMenuItem.setVisible(true);
+        }
         MenuItem username = menu.findItem(R.id.action_toolbar_username);
         username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
-
+        invalidateOptionsMenu();
         return true;
     }
 

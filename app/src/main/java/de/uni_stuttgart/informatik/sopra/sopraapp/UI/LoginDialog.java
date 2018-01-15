@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
     private Button loginBtn;
     private RadioGroup userPrivileges;
 
+    private static final int RB_ADMIN_ID = 1000;//first radio button id
+    private static final int RB_FARMER_ID = 1001;//second radio button id
+
     public LoginDialog(@NonNull Context context) {
         super(context, R.style.Login_Dialog);
 
@@ -52,6 +56,11 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         password = findViewById(R.id.login_dialog_editText_password);
         loginBtn = findViewById(R.id.login_dialog_btn_login);
         userPrivileges = findViewById(R.id.login_dialog_usr_privileges);
+
+        RadioButton admRadio = findViewById(R.id.setAdmin);
+        RadioButton farmerRadio = findViewById(R.id.setFarmer);
+        admRadio.setId(RB_ADMIN_ID);
+        farmerRadio.setId(RB_FARMER_ID);
 
         loginBtn.setOnClickListener(this);
     }
@@ -86,12 +95,16 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(getContext().getString(R.string.pref_previously_started), Boolean.TRUE);
         edit.putString(getContext().getString(R.string.pref_username), username);
-        if(radioButtonId == 0){
+
+        Log.e(TAG, "checked radio button: " + radioButtonId);
+        if(radioButtonId == RB_ADMIN_ID){
             edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);
             GlobalConstants.isAdmin = true;
+            Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
         }else {
             edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);
             GlobalConstants.isAdmin = false;
+            Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
         }
 
         //password not saved yet.. would be unsave

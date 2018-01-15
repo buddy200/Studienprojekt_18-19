@@ -1,8 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -13,16 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import java.io.File;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
-import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
@@ -107,8 +102,8 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         recyclerView.setLayoutManager(layoutManager);
         photoName = (EditText) view.findViewById(R.id.edit_photo_name);
         addPhotoFromCamera = (ImageButton) view.findViewById(R.id.button_add_photo);
-        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.button_add_photo_gallery);
-        finish = (ImageButton) view.findViewById(R.id.edit_finish_button);
+        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);
+        finish = (ImageButton) view.findViewById(R.id.finish_edit_button_agr);
         addPhotoFromGallery.setOnClickListener(this);
         addPhotoFromCamera.setOnClickListener(this);
         finish.setOnClickListener(this);
@@ -139,7 +134,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
     public void onClick(View v) {
         if (mListener != null) {
             switch (v.getId()) {
-                case R.id.edit_finish_button:
+                case R.id.finish_edit_button_agr:
                     mPresenter.changeField(mPresenter.getVisibleField());
                     dismiss();
                     break;
@@ -148,7 +143,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
                     mPresenter.changeField(mPresenter.getVisibleField());
                     galleryAdapter.notifyDataSetChanged();
                     break;
-                case R.id.button_add_photo_gallery:
+                case R.id.button_navigate_google_maps:
 
 
                     break;

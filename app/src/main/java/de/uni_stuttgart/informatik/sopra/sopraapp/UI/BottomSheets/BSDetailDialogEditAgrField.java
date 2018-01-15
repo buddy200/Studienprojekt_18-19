@@ -91,7 +91,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
         fieldSize = view.findViewById(R.id.field_detail_size);
         fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);
 
-        finishButton = view.findViewById(R.id.edit_finish_button);
+        finishButton = view.findViewById(R.id.finish_edit_button_agr);
         deleteButton = view.findViewById(R.id.delete_button);
         finishButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
@@ -118,7 +118,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
     public void onClick(View v) {
         if (this.mPresenter != null) {
             switch (v.getId()) {
-                case R.id.edit_finish_button:
+                case R.id.finish_edit_button_agr:
                     mListener.onFragmentMessage(TAG, "done", null);
                     mPresenter.changeField(changedField());
                     this.dismiss();

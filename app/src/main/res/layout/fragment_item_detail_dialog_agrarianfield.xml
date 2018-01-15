@@ -99,12 +99,12 @@
                 android:paddingBottom="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/button_add_photo_gallery"
+                android:layout_toStartOf="@+id/finish_edit_button_agr"
                 android:background="@null"
                 android:src="@drawable/ic_damage" />
 
             <ImageButton
-                android:id="@+id/edit_finish_button"
+                android:id="@+id/finish_edit_button_agr"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
@@ -112,11 +112,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:src="@drawable/ic_mode_edit_black_24px"
-                android:layout_alignParentRight="true" />
+                android:layout_toStartOf="@id/button_navigate_google_maps"
+                android:src="@drawable/ic_mode_edit_black_24px" />
 
             <ImageButton
-                android:id="@+id/button_add_photo_gallery"
+                android:id="@+id/button_navigate_google_maps"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/edit_finish_button"
+                android:layout_alignParentRight="true"
                 android:background="@null"
                 android:src="@drawable/ic_navigation_black_24px"
                 android:text="@string/navigate_Button" />

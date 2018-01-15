@@ -73,7 +73,7 @@ public class AddFieldTest {
         onView(withId(R.id.field_detail_policyholder_edit))
                 .perform(replaceText("Sample Owner"), closeSoftKeyboard());
 
-        onView(withId(R.id.edit_finish_button)).perform(click());
+        onView(withId(R.id.finish_edit_button_agr)).perform(click());
 
         onView(withId(R.id.action_menu_done)).perform(click());
 

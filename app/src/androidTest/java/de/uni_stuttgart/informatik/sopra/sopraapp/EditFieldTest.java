@@ -42,7 +42,7 @@ public class EditFieldTest {
         onView(withId(R.layout.fragment_item_list_dialog));
         onView(withText("Agrar Feld 2")).perform(click());
 
-        onView(withId(R.id.edit_finish_button)).perform(click());
+        onView(withId(R.id.finish_edit_button_agr)).perform(click());
 
         onView(withId(R.id.field_detail_name_edit))
                 .perform(replaceText(nameAgrar), closeSoftKeyboard());
@@ -53,7 +53,7 @@ public class EditFieldTest {
         onView(withId(R.id.field_detail_policyholder_edit))
                 .perform(replaceText(regionAgrar), closeSoftKeyboard());
 
-        onView(withId(R.id.edit_finish_button)).perform(click());
+        onView(withId(R.id.finish_edit_button_agr)).perform(click());
 
         try{
             SearchTest.testSearch(nameAgrar);

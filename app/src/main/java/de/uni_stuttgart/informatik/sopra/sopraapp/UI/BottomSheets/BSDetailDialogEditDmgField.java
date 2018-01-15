@@ -104,7 +104,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
-        finishButton = view.findViewById(R.id.edit_finish_button);
+        finishButton = view.findViewById(R.id.finish_edit_button_agr);
         deleteButton = view.findViewById(R.id.delete_button);
         addPhotoButton = view.findViewById(R.id.add_Photo_Button);
 
@@ -147,7 +147,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
     public void onClick(View v) {
         if (this.mPresenter != null) {
             switch (v.getId()) {
-                case R.id.edit_finish_button:
+                case R.id.finish_edit_button_agr:
                     mPresenter.changeField(changedField());
                     mListener.onFragmentMessage(TAG, "done", null);
                     this.dismiss();

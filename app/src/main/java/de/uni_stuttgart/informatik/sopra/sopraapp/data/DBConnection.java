@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
 
 /**
@@ -65,6 +66,7 @@ public class DBConnection {
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());
+            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());
             values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());
 
             long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);
@@ -184,6 +186,7 @@ public class DBConnection {
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
         field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
+        field.setProgressStatus(ProgressStatus.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.PROGRESS_COLUM))));
         List<PictureData> pictureData = getPicturesOfField(id);
         for(PictureData pd : pictureData) {
             field.setPath(pd);
@@ -246,6 +249,7 @@ public class DBConnection {
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());
+            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());
             values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());
 
             String[] selection_args = new String[2];
@@ -296,7 +300,7 @@ public class DBConnection {
 
     public List<Field> search(String text) {
         List<Field> fields = new ArrayList<>();
-
+        // OWNER, NAME, DATE , STATE
 
         return  fields;
     }

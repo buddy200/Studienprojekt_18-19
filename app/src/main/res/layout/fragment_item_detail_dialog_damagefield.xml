@@ -35,20 +35,8 @@
             android:id="@+id/field_detail_name"
             android:text="-name-"/>
 
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_region"
-            android:text="-region-"/>
-
-
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/list_item_spacing_half"
@@ -66,7 +54,7 @@
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:id="@+id/field_detail_date"
                 android:text="-date-"/>
 
@@ -101,6 +89,17 @@
             android:paddingRight="@dimen/list_item_spacing"
             android:paddingTop="@dimen/list_item_spacing_half"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:id="@+id/progress_state"
+            android:text="-progress state-"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            android:paddingLeft="@dimen/list_item_spacing"
+            android:paddingRight="@dimen/list_item_spacing"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/field_detail_policyholder"
             android:text="-name policyholer-"/>
 
@@ -112,18 +111,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
-            <ImageButton
-                android:id="@+id/add_damageField_button"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:paddingBottom="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/button_nav"
-                android:background="@null"
-                android:src="@drawable/ic_damage" />
 
             <ImageButton
                 android:id="@+id/edit_finish_button"
@@ -155,7 +142,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/imagegallery"
                 android:layout_width="match_parent"
-                android:layout_below="@+id/add_damageField_button"
+                android:layout_below="@+id/edit_finish_button"
                 android:layout_height="wrap_content"
                 />
 

@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import java.io.Serializable;
@@ -11,9 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.FieldType;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
 
 /**
  * Created by larsb on 22.11.2017.
@@ -31,8 +29,10 @@ public class DamageField extends Field implements Serializable {
 
     private static final long serialVersionUID = 8L;
 
-    private String parsedDate;
-    private String evaluator;
+    private String parsedDate = "";
+    private String evaluator = "";
+
+    private ProgressStatus progressStatus;
 
 
     private double insuranceMoney;
@@ -52,17 +52,16 @@ public class DamageField extends Field implements Serializable {
      */
     public DamageField(Context context, List<CornerPoint> cPoints, AgrarianField parentField) {
         super(context, cPoints);
-        this.setName(context.getResources().getString(R.string.field_default_name));
+      //  this.setName(context.getResources().getString(R.string.field_default_name));
         super.setType(defaultType);
-        this.setCounty(context.getResources().getString(R.string.county_default_name));
+      //  this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(damageFieldToColor());
-        this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
+      //  this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
         this.paths = new ArrayList<>();
         this.parentField = parentField;
         calcInsuranceAmount();
-
-
+        progressStatus = ProgressStatus.sent;
     }
 
     /**
@@ -161,6 +160,15 @@ public class DamageField extends Field implements Serializable {
         super.setType(type);
         this.calcInsuranceAmount();
     }
+
+    public ProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
+    public void setProgressStatus(ProgressStatus progressStatus) {
+        this.progressStatus = progressStatus;
+    }
+
 
 }
 

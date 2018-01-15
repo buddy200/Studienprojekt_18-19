@@ -53,13 +53,8 @@ public class AppDataManager {
 
     /**
      * @param dmg
-     * @param parent
      */
-    public void addDamageField(DamageField dmg, AgrarianField parent){
-        Log.e(TAG, "added damage field: " + dmg.getName() + " to parent; " + parent.getName());
-        removeField(parent);
-        parent.addContainedDamageField(dmg);
-        addAgrarianField(parent);
+    public void addDamageField(DamageField dmg){
         dataFromFields.add(dmg);
         dataChange();
     }
@@ -70,6 +65,12 @@ public class AppDataManager {
      * @param f
      */
     public void removeField(Field f){
+
+        for(Field field : getFields()){
+            if(f.getTimestamp() == field.getTimestamp()){
+                f = field;
+            }
+        }
         if(f instanceof DamageField){
             ((DamageField) f).getParentField().getContainedDamageFields().remove(f);
         }else if(f instanceof AgrarianField){

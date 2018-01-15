@@ -93,11 +93,17 @@
     <!-- Detail Dialog -->
     <string name="dialogItem_Name">Name:  </string>
     <string name="dialogItem_Location">Location:  </string>
-    <string name="dialogItem_Type">Type:  </string>
+    <string name="dialogItem_Type">Type:</string>
     <string name="dialogItem_Size">Size:  </string>
     <string name="dialogItem_Owner">Owner:  </string>
     <string name="dialogItem_Date">Date:  </string>
-    <string name="detailItem_estimatedpayment">"estimated payment:  "</string>
+    <string name="detailItem_estimatedpayment">"Estimated payment:  "</string>
     <string name="detailItem_evaluator">Evaluator:  </string>
+    <string name="no_date">no date</string>
+    <string name="dialogitem_progress_state">Progress state:</string>
+    <string name="progress_status_sent">sent</string>
+    <string name="progress_status_inprogress">In progress</string>
+    <string name="progress_status_finish">Completed</string>
+    <string name="dialogmessage_want_delete">Do you really want to delete this photo?</string>
 
 </resources>

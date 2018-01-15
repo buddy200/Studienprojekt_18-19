@@ -31,7 +31,7 @@ public class AgrarianField extends Field implements Serializable{
 
     //default type
     private AgrarianFieldType defaultType = AgrarianFieldType.Corn;
-    private String owner;
+    private String owner = "";
 
     private ArrayList<DamageField> containedDamageFields;
 
@@ -48,7 +48,7 @@ public class AgrarianField extends Field implements Serializable{
         super(context, cPoints);
 
         //set default values
-        if(context != null){
+      /*  if(context != null){
             owner = context.getResources().getString(R.string.owner_default_name);
             this.setName(context.getResources().getString(R.string.field_default_name));
             this.setCounty(context.getResources().getString(R.string.county_default_name));
@@ -56,7 +56,7 @@ public class AgrarianField extends Field implements Serializable{
             owner = "no owner";
             this.setName("no name");
             this.setCounty("no county");
-        }
+        }*/
 
         super.setType(AgrarianFieldType.Corn);
         this.setColor(defaultType.toColor());

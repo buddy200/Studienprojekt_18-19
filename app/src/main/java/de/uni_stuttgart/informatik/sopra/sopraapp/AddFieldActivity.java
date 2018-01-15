@@ -166,7 +166,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         dataManager.readData();
         if(parentField != null) {
             for (Field field : dataManager.getFields()) {
-                if (field.getTimestamp() == parentField.getTimestamp()) {
+                if (field.isFieldequal(parentField)) {
                     parentField = field;
                 }
             }

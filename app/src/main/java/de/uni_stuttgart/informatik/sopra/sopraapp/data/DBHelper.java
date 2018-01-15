@@ -59,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_AgrarianFieldTable);
         db.execSQL(CREATE_DamageFieldTable);
+        db.execSQL(CREATE_ImageTable);
     }
 
     @Override

@@ -233,6 +233,14 @@ public class DBConnection {
         db.insert(DBHelper.ImageTable_NAME,null,values);
     }
 
+    public void deletePicture(PictureData pd) {
+        String[] selction_args = new String[2];
+        selction_args[0] = pd.getImage_title();
+        selction_args[1] = pd.getImage_path();
+
+        db.delete(DBHelper.ImageTable_NAME, DBHelper.NAME_COLUM + "= ? AND " + DBHelper.PATH_COLUM + "= ?", selction_args);
+    }
+
     public List<PictureData> getPicturesOfField(long field_id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(field_id);

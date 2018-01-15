@@ -44,6 +44,7 @@ public class AppDataManager {
     }
 
     public void readData(){
+        dataFromFields.clear();
         dataFromFields.addAll(dbConnection.getAllAgrarianFields());
         dataFromFields.addAll(dbConnection.getAllDamgageFields());
         dataChange();
@@ -55,7 +56,7 @@ public class AppDataManager {
     }
 
     public void addAgrarianField(Field f){
-       // dataFromFields.add(f);
+        dataFromFields.add(f);
         dbConnection.addField((AgrarianField) f);
         dataChange();
     }
@@ -64,7 +65,7 @@ public class AppDataManager {
      * @param dmg
      */
     public void addDamageField(DamageField dmg){
-        //dataFromFields.add(dmg);
+        dataFromFields.add(dmg);
         dbConnection.addField(dmg);
         dataChange();
     }
@@ -92,7 +93,7 @@ public class AppDataManager {
             }
             dbConnection.deleteAgrarianField((AgrarianField)f);
         }
-       // dataFromFields.remove(f);
+        dataFromFields.remove(f);
 
         Log.e("removed field", f.getName());
 

@@ -134,17 +134,17 @@ public class DamageField extends Field implements Serializable {
     }
 
 
-    public ArrayList<PictureData> getpaths() {
+    public ArrayList<PictureData> getPaths() {
         return paths;
     }
 
 
-    public void setpath(String path) {
+    public void setPath(String path) {
         PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);
         paths.add(pictureData);
     }
 
-    public void setpath(PictureData pictureData) {
+    public void setPath(PictureData pictureData) {
         paths.add(pictureData);
     }
 

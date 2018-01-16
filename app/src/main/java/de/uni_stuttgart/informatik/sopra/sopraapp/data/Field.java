@@ -48,6 +48,7 @@ public abstract class Field implements Serializable {
     protected transient Context context;
 
     //values for field and damage case
+    private long ID;
     private String name = "";
     FieldType type;
     private String county = "";
@@ -342,7 +343,7 @@ public abstract class Field implements Serializable {
 
 
     public boolean isFieldequal(Field otherField) {
-        return otherField.getTimestamp() == this.getTimestamp();
+        return otherField.getID() == this.getID();
     }
 
     /**
@@ -357,6 +358,14 @@ public abstract class Field implements Serializable {
                 this.getCornerPoints().get(0).getWGS().getLatitude(),
                 this.getCornerPoints().get(0).getWGS().getLongitude()
         });
+    }
+
+    public long getID() {
+        return ID;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
     }
 
 

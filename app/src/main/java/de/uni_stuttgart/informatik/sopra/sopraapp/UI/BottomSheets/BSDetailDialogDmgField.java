@@ -141,8 +141,8 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + " " + (this.mField.getEvaluator()));
         estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(this.mField.getInsuranceMoney()));
 
-        if ((this.mField).getpaths() != null) {
-            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getpaths(), this);
+        if ((this.mField).getPaths() != null) {
+            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);
             recyclerView.setAdapter(galleryAdapter);
         }
     }

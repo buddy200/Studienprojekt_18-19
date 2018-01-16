@@ -19,4 +19,13 @@ public enum ProgressStatus {
         return name;
     }
 
+    public static ProgressStatus fromString(String text) {
+        for (ProgressStatus status : ProgressStatus.values()) {
+            if (status.toString().equalsIgnoreCase(text)) {
+                return status;
+            }
+        }
+        return null;
+    }
+
 }

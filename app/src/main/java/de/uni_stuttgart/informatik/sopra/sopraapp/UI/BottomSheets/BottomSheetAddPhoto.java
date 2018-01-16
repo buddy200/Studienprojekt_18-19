@@ -114,8 +114,8 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
     public void fillData(Field mField) {
         this.mField = (DamageField) mField;
 
-        if ((this.mField).getpaths() != null) {
-            galleryAdapter = new GalleryAdapter(getContext(), this.mField.getpaths(), this);
+        if ((this.mField).getPaths() != null) {
+            galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);
             recyclerView.setAdapter(galleryAdapter);
         }
     }
@@ -164,18 +164,20 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         if (mPresenter.getVisibleField() instanceof DamageField) {
             String s = photoManager.dispatchTakePictureIntent();
             PictureData pictureData = new PictureData(photoName.getText().toString(), s);
-            ((DamageField) mPresenter.getVisibleField()).setpath(pictureData);
+            mPresenter.addPhotoToDatabase(pictureData);
+
         }
     }
 
     public void removePicture(int position){
         //delete the foto from the internal storage
-        File temp = new File(((DamageField) mPresenter.getVisibleField()).getpaths().get(position).getImage_path());
+        File temp = new File(((DamageField) mPresenter.getVisibleField()).getPaths().get(position).getImage_path());
         temp.delete();
         //remove the image data from the damage field and refresh the recycler view
-        ((DamageField) mPresenter.getVisibleField()).getpaths().remove(position);
+        ((DamageField) mPresenter.getVisibleField()).getPaths().remove(position);
+        mPresenter.changeField(mPresenter.getVisibleField());
         recyclerView.removeViewAt(position);
         galleryAdapter.notifyItemRemoved(position);
-        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getpaths().size());
+        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getPaths().size());
     }
 }

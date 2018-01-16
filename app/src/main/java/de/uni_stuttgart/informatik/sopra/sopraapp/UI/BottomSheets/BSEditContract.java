@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BaseView;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 
 /**
@@ -33,6 +34,10 @@ interface BSEditContract {
         void changeField(Field f);
 
         Field getVisibleField();
+
+        void addPhotoToDatabase(PictureData pd);
+
+        void deltePhotFromDatabase(PictureData pd);
 
     }
 }

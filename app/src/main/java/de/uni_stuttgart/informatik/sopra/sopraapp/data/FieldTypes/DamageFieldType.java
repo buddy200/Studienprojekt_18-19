@@ -44,4 +44,13 @@ public enum DamageFieldType implements FieldType, Serializable{
     public int toColor() {
         return friendlyColor;
     }
+
+    public static DamageFieldType fromString(String text) {
+        for (DamageFieldType type : DamageFieldType.values()) {
+            if (type.toString().equalsIgnoreCase(text)) {
+                return type;
+            }
+        }
+        return null;
+    }
 };

@@ -32,6 +32,7 @@ import java.util.Vector;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentAgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditFragmentDamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetAddPhoto;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.IntersectionCalculator;
@@ -67,7 +68,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
 
     boolean isDmgField = false;
-    Field parentField;
+    AgrarianField parentField;
 
     private MapViewHandler mMapViewHandler;
     private AppDataManager dataManager;
@@ -139,12 +140,16 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onStart() {
         super.onStart();
-
-        parentField = (Field) getIntent().getSerializableExtra("parentField");
+        long i = getIntent().getLongExtra("parentField", -1);
+        if (i != -1) {
+            parentField = dataManager.getAgrarianFieldMap().get(i);
+        } else {
+            parentField = null;
+        }
         if (parentField != null) {
             //we add a dmg field!
             isDmgField = true;
-            mMapViewHandler.addField(parentField);
+            //  mMapViewHandler.addField(parentField);
             getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);
         }
 
@@ -164,13 +169,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         OnMapClick();
 
         dataManager.readData();
-        if(parentField != null) {
+     /*   if(parentField != null) {
             for (Field field : dataManager.getFields()) {
                 if (field.isFieldequal(parentField)) {
                     parentField = field;
                 }
             }
-        }
+        }*/
     }
 
     @Override
@@ -213,15 +218,15 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             mMapViewHandler.addPolyline(p);
             mMapViewHandler.invalidateMap();
             fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
-            if(listCornerPoints.size()< 3){
+            if (listCornerPoints.size() < 3) {
                 fabLabel.setVisibility(View.VISIBLE);
                 fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
             }
         } else {
             Toast.makeText(this, getResources().getString(R.string.add_activity_NoMorePoints), Toast.LENGTH_SHORT).show();
         }
-        if(!isDmgField && linesFromAgrarianField.size() > 0){
-            linesFromAgrarianField.remove(linesFromAgrarianField.size()-1);
+        if (!isDmgField && linesFromAgrarianField.size() > 0) {
+            linesFromAgrarianField.remove(linesFromAgrarianField.size() - 1);
         }
     }
 
@@ -277,8 +282,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         mMapViewHandler.invalidateMap();
 
 
-
-
         if (listCornerPoints.size() > 2) {
             enoughPoints = true;
             fabLabel.setVisibility(View.INVISIBLE);
@@ -287,10 +290,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         }
         intersectionCalculator.calculateLine(!isDmgField);
-        if(isDmgField && !intersectionCalculator.calcIntersection(parentField)){
+        if (isDmgField && !intersectionCalculator.calcIntersection(parentField)) {
             onRedoButtonClick();
-        }
-        else{
+        } else {
             fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
             Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
                     location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
@@ -331,10 +333,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
             Field fieldToAdd;
             if (isDmgField) {
-                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, (AgrarianField) parentField);
-                if(parentField instanceof AgrarianField){
-                    ((AgrarianField) parentField).addContainedDamageField((DamageField)fieldToAdd);
-                     //   dataManager.dataChange();
+                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, parentField);
+                if (parentField instanceof AgrarianField) {
+                    ((AgrarianField) parentField).addContainedDamageField((DamageField) fieldToAdd);
+                    //   dataManager.dataChange();
                     dataManager.changeAgrarianField((AgrarianField) parentField);
                 }
 
@@ -346,14 +348,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 }
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
-            if(isDmgField){
+            if (isDmgField) {
                 bottomSheetDialogDMF = BSDetailDialogEditFragmentDamageField.newInstance();
                 dataManager.addDamageField((DamageField) fieldToAdd);
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogDMF);
                 bottomSheetDialogDMF.setPresenter(handler);
                 bottomSheetDialogDMF.show(getSupportFragmentManager(), "EditView");
-            }
-            else {
+            } else {
                 bottomSheetDialogAF = BSDetailDialogEditFragmentAgrarianField.newInstance();
                 dataManager.addAgrarianField((AgrarianField) fieldToAdd);
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogAF);
@@ -416,6 +417,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 break;
             case "BSDetailDialogEditFragmentDamageField":
                 Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherDamageField), Toast.LENGTH_SHORT).show();
+                switch (action) {
+                    case "addPhoto":
+                        BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();
+                        new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);
+                        bottomSheetAddPhoto.show(getSupportFragmentManager(), "test");
+                        break;
+                }
                 break;
         }
     }
@@ -438,28 +446,27 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String temp = "0";
-        Field field = null;
+        DamageField field2 = null;
         if (resultCode != RESULT_OK && requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
 
-            for (int i = 0; i < dataManager.getFields().size(); i++) {
-                field = dataManager.getFields().get(i);
+            for (DamageField field : dataManager.getDamageFieldMap().values()) {
 
-                if (field instanceof DamageField) {
-                    if (((DamageField) field).getPaths() != null && ((DamageField) field).getPaths().size() > 0) {
-                        String path = (((DamageField) field).getPaths().get(((DamageField) field).getPaths().size() - 1)).getImage_path();
-                        if (temp.compareTo(path) > 0) {
-                            temp = path;
-                        }
+                if (field.getPaths() != null && field.getPaths().size() > 0) {
+                    String path = (field.getPaths().get(field.getPaths().size() - 1)).getImage_path();
+                    if (temp.compareTo(path) > 0) {
+                        temp = path;
+                        field2 = field;
                     }
                 }
             }
             File f = new File(temp);
-            ((DamageField) field).getPaths().remove(((DamageField) field).getPaths().size() - 1);
-            dataManager.changeDamageField((DamageField) field);
+            field2.getPaths().remove(field2.getPaths().size() - 1);
+            dataManager.changeDamageField(field2);
         }
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         dataManager.dbClose();
     }

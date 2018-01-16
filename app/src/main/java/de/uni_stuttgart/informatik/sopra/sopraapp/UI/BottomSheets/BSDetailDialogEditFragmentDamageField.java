@@ -31,6 +31,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 
 /**
  * sopra_priv
@@ -128,7 +129,7 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
     }
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof FragmentInteractionListener) {
             mListener = (FragmentInteractionListener) context;
@@ -157,9 +158,9 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
                     this.dismiss();
                     break;
                 case R.id.add_Photo_Button:
-                    mListener.onFragmentMessage(TAG,"addPhoto", mPresenter.getVisibleField());
+                    mListener.onFragmentMessage(TAG, "addPhoto", mPresenter.getVisibleField());
                     mPresenter.changeField(changedField());
-                //    takePhoto();
+                    //    takePhoto();
                     mPresenter.changeField(mPresenter.getVisibleField());
                     this.dismiss();
                     break;
@@ -232,23 +233,27 @@ BSDetailDialogEditFragmentDamageField extends BottomSheetDialogFragment implemen
     /*
      * create a PhotoManager object and save the fielpath from the picture in the damageField
      */
-    public void takePhoto() {
+  /* public void takePhoto() {
         PhotoManager photoManager = new PhotoManager(getActivity());
         if (mPresenter.getVisibleField() instanceof DamageField) {
             String s = photoManager.dispatchTakePictureIntent();
             ((DamageField) mPresenter.getVisibleField()).setPath(s);
         }
-    }
+    }*/
 
-    public void removePicture(int position){
+    public void removePicture(int position) {
+        DamageField damageField = (DamageField) mPresenter.getVisibleField();
         //delete the foto from the internal storage
-        File temp = new File(((DamageField) mPresenter.getVisibleField()).getPaths().get(position).getImage_path());
+        File temp = new File(damageField.getPaths().get(position).getImage_path());
         temp.delete();
         //remove the image data from the damage field and refresh the recycler view
-        ((DamageField) mPresenter.getVisibleField()).getPaths().remove(position);
+        PictureData pd = damageField.getPaths().get(position);
+        damageField.getPaths().remove(position);
+        mPresenter.changeField(damageField);
+        mPresenter.deltePhotFromDatabase(pd);
         recyclerView.removeViewAt(position);
         galleryAdapter.notifyItemRemoved(position);
-        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getPaths().size());
+        galleryAdapter.notifyItemRangeChanged(position, damageField.getPaths().size());
     }
 
 }

@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onResume(){
         super.onResume();
+        mapHandler.reload();
     }
 
 
@@ -112,10 +113,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
     }
 
+
     @Override
     public void onStop(){
         super.onStop();
-        dataManager.saveData();
         mapHandler.destroy();
     }
 
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                         break;
                     case "addDmgField":
                         Intent i = new Intent(this, AddFieldActivity.class);
-                        i.putExtra("parentField", (Field) data);
+                        i.putExtra("parentField", ((Field) data).getID());
                         startActivityForResult(i, 2403);
                         break;
 
@@ -176,7 +177,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                         BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();
                         new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);
                         bottomSheetAddPhoto.show(getSupportFragmentManager(), "test");
+                        break;
                 }
+                break;
 
         }
 
@@ -357,24 +360,22 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String temp = "0";
-        Field field = null;
-       if (resultCode != RESULT_OK &&  requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
+        DamageField field2 = null;
+        if (resultCode != RESULT_OK && requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
 
-           for (int i = 0; i < dataManager.getFields().size(); i++) {
-               field = dataManager.getFields().get(i);
+            for (DamageField field : dataManager.getDamageFieldMap().values()) {
 
-               if (field instanceof DamageField)  {
-                   if(((DamageField) field).getPaths() != null &&((DamageField) field).getPaths().size() > 0){
-                   String path = (((DamageField) field).getPaths().get(((DamageField) field).getPaths().size() - 1)).getImage_path();
-                   if (temp.compareTo(path) > 0) {
-                       temp = path;
-                   }
-               }}
-           }
-           File f = new File(temp);
-           f.delete();
-           ((DamageField) field).getPaths().remove(((DamageField) field).getPaths().size() - 1);
-           dataManager.saveData();
-       }
+                if ( field.getPaths() != null &&  field.getPaths().size() > 0) {
+                    String path = ( field.getPaths().get(field.getPaths().size() - 1)).getImage_path();
+                    if (temp.compareTo(path) > 0) {
+                        temp = path;
+                        field2 = field;
+                    }
+                }
+            }
+            File f = new File(temp);
+            field2.getPaths().remove(field2.getPaths().size() - 1);
+            dataManager.changeDamageField(field2);
+        }
     }
 }

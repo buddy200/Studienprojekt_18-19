@@ -4,11 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DBConnection;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 
 /**
  * sopra_priv
@@ -20,7 +23,15 @@ public class AppDataManager {
     private static final String TAG = "AppDataManager";
 
 
-    private ArrayList<Field> dataFromFields;
+
+
+    //   private ArrayList<Field> dataFromFields;
+    private HashMap<Long, AgrarianField> agrarianFieldMap;
+
+
+
+    private HashMap<Long, DamageField> damageFieldMap;
+
     private ExportImportFromFile writerReader;
     private Context context;
 
@@ -37,27 +48,40 @@ public class AppDataManager {
             Log.e("AppDataManager", "parent must implement DataChangeListener");
         }
         dbConnection = new DBConnection(context);
-        dataFromFields = new ArrayList<>();
+
+
+        agrarianFieldMap = new HashMap<>();
+        damageFieldMap = new HashMap<>();
+        readData();
         //writerReader = new ExportImportFromFile(context);
         dataChange();
 
     }
 
     public void readData() {
-        dataFromFields.clear();
-        dataFromFields.addAll(dbConnection.getAllAgrarianFields());
-        dataFromFields.addAll(dbConnection.getAllDamgageFields());
+        agrarianFieldMap.clear();
+        damageFieldMap.clear();
+
+        for (AgrarianField field : dbConnection.getAllAgrarianFields()){
+            agrarianFieldMap.put(field.getID(), field);
+        }
+        for (DamageField field : dbConnection.getAllDamgageFields()){
+            damageFieldMap.put(field.getID(), field);
+        }
+
+        for(DamageField field : damageFieldMap.values()){
+          agrarianFieldMap.get(field.getParentField().getID()).addContainedDamageField(field);
+        }
+
+
+
       //  dataChange();
     }
 
-    public void saveData() {
-        //    writerReader.WriteFields(dataFromFields);
 
-    }
-
-    public void addAgrarianField(Field f) {
-        dataFromFields.add(f);
-        dbConnection.addField((AgrarianField) f);
+    public void addAgrarianField(AgrarianField f) {
+        dbConnection.addField(f);
+        readData();
         dataChange();
     }
 
@@ -65,8 +89,8 @@ public class AppDataManager {
      * @param dmg
      */
     public void addDamageField(DamageField dmg) {
-        dataFromFields.add(dmg);
         dbConnection.addField(dmg);
+        readData();
         dataChange();
     }
 
@@ -77,47 +101,56 @@ public class AppDataManager {
      * @param f
      */
     public void removeField(Field f) {
-        for (Field field : getFields()) {
+   /*     for (Field field : getFields()) {
             if (f.isFieldequal(field)) {
                 f = field;
             }
-        }
+        }*/
         if (f instanceof DamageField) {
             ((DamageField) f).getParentField().getContainedDamageFields().remove(f);
             dbConnection.updateAgrarianField(((DamageField) f).getParentField());
             dbConnection.deleteDamageField((DamageField) f);
+            damageFieldMap.remove(f.getID());
+            agrarianFieldMap.put(((DamageField) f).getParentField().getID(), ((DamageField) f).getParentField() );
         } else if (f instanceof AgrarianField) {
-
-            dataFromFields.removeAll(((AgrarianField) f).getContainedDamageFields());
             for (DamageField dmf : ((AgrarianField) f).getContainedDamageFields()) {
                 dbConnection.deleteDamageField(dmf);
+                damageFieldMap.remove(dmf.getID());
             }
+            for(DamageField field : ((AgrarianField) f).getContainedDamageFields()) {
+                damageFieldMap.remove(field.getID());
+                dbConnection.deleteDamageField(field);
+            }
+            agrarianFieldMap.remove(f.getID());
             dbConnection.deleteAgrarianField((AgrarianField) f);
         }
-        dataFromFields.remove(f);
 
-        Log.e("removed field", f.getName());
-
+       // Log.e("removed field", f.getName());
         dataChange();
     }
 
     public void dataChange() {
         if (listener != null) {
-            saveData();
-            readData();
             listener.onDataChange();
         }
     }
 
     public void changeAgrarianField(AgrarianField field) {
         dbConnection.updateAgrarianField(field);
+        agrarianFieldMap.put(field.getID(), field);
+        dataChange();
     }
 
     public void changeDamageField(DamageField field){
         dbConnection.updateDamageField(field);
+        damageFieldMap.put(field.getID(), field);
+        dataChange();
     }
 
     public ArrayList<Field> getFields() {
+        ArrayList<Field> dataFromFields = new ArrayList<>();
+        dataFromFields.addAll(agrarianFieldMap.values());
+        dataFromFields.addAll(damageFieldMap.values());
         return dataFromFields;
     }
 
@@ -128,5 +161,19 @@ public class AppDataManager {
 
     public void dbClose() {
         dbConnection.close();
+    }
+
+    public void addPicture(DamageField field, PictureData pd){
+        dbConnection.addPictureToField(field.getID(), pd);
+    }
+
+    public void deletePicture(DamageField field, PictureData pd){
+        dbConnection.deletePicture(pd);
+    }
+    public HashMap<Long, AgrarianField> getAgrarianFieldMap() {
+        return agrarianFieldMap;
+    }
+    public HashMap<Long, DamageField> getDamageFieldMap() {
+        return damageFieldMap;
     }
 }

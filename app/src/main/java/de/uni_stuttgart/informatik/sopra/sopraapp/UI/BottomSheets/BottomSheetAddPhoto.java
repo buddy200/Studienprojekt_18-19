@@ -164,7 +164,8 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         if (mPresenter.getVisibleField() instanceof DamageField) {
             String s = photoManager.dispatchTakePictureIntent();
             PictureData pictureData = new PictureData(photoName.getText().toString(), s);
-            ((DamageField) mPresenter.getVisibleField()).setPath(pictureData);
+            mPresenter.addPhotoToDatabase(pictureData);
+
         }
     }
 
@@ -174,6 +175,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         temp.delete();
         //remove the image data from the damage field and refresh the recycler view
         ((DamageField) mPresenter.getVisibleField()).getPaths().remove(position);
+        mPresenter.changeField(mPresenter.getVisibleField());
         recyclerView.removeViewAt(position);
         galleryAdapter.notifyItemRemoved(position);
         galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getPaths().size());

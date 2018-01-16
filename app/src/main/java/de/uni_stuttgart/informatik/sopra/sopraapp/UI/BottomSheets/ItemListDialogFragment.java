@@ -37,6 +37,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
     private FragmentInteractionListener mListener;
     private AppDataManager dataManager;
+    private ArrayList<Field> fieldData;
 
  //   private static ArrayList<Field> fieldList;
 
@@ -70,6 +71,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         View view =  inflater.inflate(R.layout.fragment_item_list_dialog, container, false);
         configureBottomSheetBehavior(view);
         dataManager = new AppDataManager(getContext());
+        fieldData = dataManager.getFields();
         return view;
     }
 
@@ -130,7 +132,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                            mListener.onFragmentMessage(TAG, "itemClick", dataManager.getFields().get(getAdapterPosition()));
+                            mListener.onFragmentMessage(TAG, "itemClick", fieldData.get(getAdapterPosition()));
                         dismiss();
                     }
                 }
@@ -172,26 +174,26 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
          */
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(dataManager.getFields().get(position).getName());
-            if(dataManager.getFields().get(position).getType() != null){
-                holder.state.setText(dataManager.getFields().get(position).getType().toString());
-                holder.state.setTextColor(dataManager.getFields().get(position).getColor());
+            holder.text.setText(fieldData.get(position).getName());
+            if(fieldData.get(position).getType() != null){
+                holder.state.setText(fieldData.get(position).getType().toString());
+                holder.state.setTextColor(fieldData.get(position).getColor());
             }else {
                 holder.state.setText(" ");
-                holder.state.setTextColor(dataManager.getFields().get(position).getColor());
+                holder.state.setTextColor(fieldData.get(position).getColor());
             }
-            if(dataManager.getFields().get(position) instanceof AgrarianField) {
-                holder.county.setText(dataManager.getFields().get(position).getCounty());
+            if(fieldData.get(position) instanceof AgrarianField) {
+                holder.county.setText(fieldData.get(position).getCounty());
             }
             else{
-                if(dataManager.getFields().get(position) instanceof DamageField)
-                holder.county.setText(((DamageField) dataManager.getFields().get(position)).getParentField().getName());
+                if(fieldData.get(position) instanceof DamageField)
+                holder.county.setText(((DamageField) fieldData.get(position)).getParentField().getName());
             }
         }
 
         @Override
         public int getItemCount() {
-            return dataManager.getFields().size();
+            return fieldData.size();
         }
 
     }

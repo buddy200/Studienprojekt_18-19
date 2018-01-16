@@ -6,6 +6,7 @@ import android.util.Log;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
@@ -95,11 +96,26 @@ public class BSEditHandler implements BSEditContract.Presenter {
         else{
             mDataManager.changeDamageField((DamageField) f);
         }
-        mDataManager.dataChange();
+       // mDataManager.dataChange();
         mField = f;
     }
 
     public Field getVisibleField() {
         return mField;
     }
+
+
+    @Override
+    public void addPhotoToDatabase(PictureData pd){
+        mDataManager.addPicture((DamageField) mField, pd);
+        ((DamageField) mField).setPath(pd);
+        changeField(mField);
+    }
+
+    @Override
+    public void deltePhotFromDatabase(PictureData pd) {
+        mDataManager.deletePicture((DamageField) mField, pd);
+        changeField(mField);
+    }
 }
+

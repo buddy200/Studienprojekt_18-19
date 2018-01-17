@@ -5,7 +5,9 @@ import org.junit.Test;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.UTMCoordinate;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by larsb on 16.11.2017.

@@ -1,8 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class MathUtilityTest {
 

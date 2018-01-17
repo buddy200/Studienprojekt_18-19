@@ -38,13 +38,25 @@ public class GlobalConstants {
     }
 
     // Init Uni Stuttgart - compsci building else last location on map
-    public static GeoPoint lastLocationOnMap = new GeoPoint( 48.745424, 9.106488 );
+    private static GeoPoint lastLocationOnMap = new GeoPoint( 48.745424, 9.106488 );
 
 
     //default zoom value for the mapFragment
     public static final int DEFAULT_ZOOM = 20;
 
     public static boolean isAdmin = false;
+
+
+    public static DamageField getCurrentPhotoField() {
+        return currentPhotoField;
+    }
+
+    public static void setCurrentPhotoField(DamageField currentPhotoField) {
+        GlobalConstants.currentPhotoField = currentPhotoField;
+    }
+
+    private static DamageField currentPhotoField = null;
+
 
     /**
      * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh

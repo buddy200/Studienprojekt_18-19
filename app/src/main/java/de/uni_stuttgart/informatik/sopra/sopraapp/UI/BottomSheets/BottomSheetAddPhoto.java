@@ -12,9 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.io.File;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BasePresenter;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
@@ -86,6 +85,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
     void configureBottomSheetBehaviour(View view) {
 
     }
+
     private RecyclerView recyclerView;
     private EditText photoName;
     private ImageButton addPhotoFromGallery;
@@ -107,6 +107,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         addPhotoFromGallery.setOnClickListener(this);
         addPhotoFromCamera.setOnClickListener(this);
         finish.setOnClickListener(this);
+        GlobalConstants.setCurrentPhotoField((DamageField) mPresenter.getVisibleField());
 
     }
 
@@ -141,11 +142,8 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
                 case R.id.button_add_photo:
                     takePhoto();
                     mPresenter.changeField(mPresenter.getVisibleField());
-                    galleryAdapter.notifyDataSetChanged();
                     break;
                 case R.id.button_navigate_google_maps:
-
-
                     break;
             }
         }
@@ -165,19 +163,22 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
             String s = photoManager.dispatchTakePictureIntent();
             PictureData pictureData = new PictureData(photoName.getText().toString(), s);
             mPresenter.addPhotoToDatabase(pictureData);
-
+            galleryAdapter.notifyDataSetChanged();
         }
     }
 
-    public void removePicture(int position){
-        //delete the foto from the internal storage
-        File temp = new File(((DamageField) mPresenter.getVisibleField()).getPaths().get(position).getImage_path());
-        temp.delete();
+    /**
+     * remove picture from the clicked position and refresh the gallery
+     * @param position
+     */
+    public void removePicture(int position) {
+        DamageField damageField = (DamageField) mPresenter.getVisibleField();
         //remove the image data from the damage field and refresh the recycler view
-        ((DamageField) mPresenter.getVisibleField()).getPaths().remove(position);
+        PictureData pd = damageField.getPaths().get(position);
+        mPresenter.deltePhotFromDatabase(pd);
+        //remove the image data from the damage field and refresh the recycler view
+        ((DamageField) mPresenter.getVisibleField()).deletePhoto(position);
         mPresenter.changeField(mPresenter.getVisibleField());
-        recyclerView.removeViewAt(position);
         galleryAdapter.notifyItemRemoved(position);
-        galleryAdapter.notifyItemRangeChanged(position, ((DamageField) mPresenter.getVisibleField()).getPaths().size());
     }
 }

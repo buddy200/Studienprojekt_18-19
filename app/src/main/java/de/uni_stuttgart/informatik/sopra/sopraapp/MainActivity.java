@@ -25,8 +25,6 @@ import android.widget.Toast;
 import org.osmdroid.util.GeoPoint;
 
 
-import java.io.File;
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogDmgField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditAgrField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSDetailDialogEditDmgField;
@@ -378,23 +376,11 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String temp = "0";
-        DamageField field2 = null;
         if (resultCode != RESULT_OK && requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
-
-            for (DamageField field : dataManager.getDamageFieldMap().values()) {
-
-                if ( field.getPaths() != null &&  field.getPaths().size() > 0) {
-                    String path = ( field.getPaths().get(field.getPaths().size() - 1)).getImage_path();
-                    if (temp.compareTo(path) > 0) {
-                        temp = path;
-                        field2 = field;
-                    }
-                }
-            }
-            File f = new File(temp);
-            field2.getPaths().remove(field2.getPaths().size() - 1);
-            dataManager.changeDamageField(field2);
+            DamageField fieldPhotoToDelete = GlobalConstants.getCurrentPhotoField();
+            dataManager.deletePicture(fieldPhotoToDelete, fieldPhotoToDelete.getPaths().get(fieldPhotoToDelete.getPaths().size()-1));
+            fieldPhotoToDelete.deletePhoto(fieldPhotoToDelete.getPaths().size() - 1);
+            dataManager.changeDamageField(fieldPhotoToDelete);
         }
     }
 }

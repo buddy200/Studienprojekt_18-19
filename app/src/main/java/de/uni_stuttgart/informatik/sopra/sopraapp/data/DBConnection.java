@@ -37,10 +37,17 @@ public class DBConnection {
         db = dbHelper.getWritableDatabase();
     }
 
+    /**
+     * close the database connection
+     */
     public void close() {
         dbHelper.close();
     }
 
+    /**
+     * add an field to the database
+     * @param field the field to add
+     */
     public void addField(AgrarianField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
@@ -73,6 +80,10 @@ public class DBConnection {
         }
     }
 
+    /**
+     * add an field to the database
+     * @param field the field to add
+     */
     public void addField(DamageField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
@@ -125,6 +136,11 @@ public class DBConnection {
         }
     }
 
+    /**
+     * returns all AgrarianFields in the database
+     *
+     * @return all AgrarianFields
+     */
     public List<AgrarianField> getAllAgrarianFields() {
         List<AgrarianField> fields = new ArrayList<>();
 
@@ -138,6 +154,12 @@ public class DBConnection {
         return fields;
     }
 
+    /**
+     * returns the specified AgrarianField
+     *
+     * @param id the identifying id
+     * @return the Field identified by the id
+     */
     public AgrarianField getAgrarianFieldByID(long id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(id);
@@ -179,6 +201,11 @@ public class DBConnection {
         return field;
     }
 
+    /**
+     * returns all DamageFields in the database
+     *
+     * @return all DamageFields
+     */
     public List<DamageField> getAllDamgageFields() {
         List<DamageField> fields = new ArrayList<>();
 
@@ -190,6 +217,22 @@ public class DBConnection {
         }
 
         return fields;
+    }
+
+    /**
+     * returns the specified DamageField
+     *
+     * @param id the identifying id
+     * @return the Field identified by the id
+     */
+    public  DamageField getDamageFieldById(long id) {
+        String[] selection_args = new String[1];
+        selection_args[0] = Long.toString(id);
+        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME,null, (DBHelper.ID_COLUM + "= ?"), selection_args, null, null,null);
+        if(cursor.moveToNext()){
+            return toDamageField(cursor);
+        }
+        return null;
     }
 
     private DamageField toDamageField(Cursor cursor) {
@@ -220,7 +263,12 @@ public class DBConnection {
         return field;
     }
 
-
+    /**
+     * adds a picture to a field in the database
+     *
+     * @param field_id the id of the field
+     * @param pd the data of the added picture
+     */
     public void addPictureToField(long field_id, PictureData pd) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.PARENT_COLUM, field_id);
@@ -229,6 +277,10 @@ public class DBConnection {
         db.insert(DBHelper.ImageTable_NAME,null,values);
     }
 
+    /**
+     * deletes a picture from the database
+     * @param pd the data of the picture to delete
+     */
     public void deletePicture(PictureData pd) {
         String[] selction_args = new String[2];
         selction_args[0] = pd.getImage_title();
@@ -237,6 +289,12 @@ public class DBConnection {
         db.delete(DBHelper.ImageTable_NAME, DBHelper.NAME_COLUM + "= ? AND " + DBHelper.PATH_COLUM + "= ?", selction_args);
     }
 
+    /**
+     * returns all pictures of a field
+     *
+     * @param field_id the id of the field
+     * @return all pictures of the field
+     */
     public List<PictureData> getPicturesOfField(long field_id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(field_id);
@@ -251,6 +309,10 @@ public class DBConnection {
         return pictureData;
     }
 
+    /**
+     * updates an AgrarianField in the database
+     * @param field the updated field
+     */
     public void updateAgrarianField(AgrarianField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
@@ -268,6 +330,10 @@ public class DBConnection {
     }
 
 
+    /**
+     * updates a DamageField in the database
+     * @param field the updated field
+     */
     public void updateDamageField(DamageField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
@@ -287,6 +353,10 @@ public class DBConnection {
         }
     }
 
+    /**
+     * deletes an AgrarianField in the database
+     * @param field the field to delete
+     */
     public void deleteAgrarianField(AgrarianField field) {
         if (field !=  null) {
             long id = field.getID();
@@ -299,12 +369,15 @@ public class DBConnection {
                 String table_name = GeoPointTable_Suffix + "_Agr_" + id;
                 String vectorTable = VectorTable_Suffix + id;
                 db.execSQL("DROP TABLE IF EXISTS " + table_name);
-                //db.delete(table_name, null, null);
                 db.execSQL("DROP TABLE IF EXISTS " + vectorTable);
             }
         }
     }
 
+    /**
+     * deletes a DamageField in the database
+     * @param field the field to delete
+     */
     public void deleteDamageField(DamageField field) {
         if (field !=  null) {
             long id = field.getID();
@@ -316,14 +389,16 @@ public class DBConnection {
             if (rows > 0) {
                 String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
                 db.execSQL("DROP TABLE IF EXISTS " + table_name);
-                //db.delete(table_name, null, null);
-
                 db.delete(DBHelper.ImageTable_NAME, (DBHelper.PARENT_COLUM + "= ?"), selection_args);
             }
         }
     }
 
-
+    /**
+     * searches all searchable colums in the database for the given string
+     * @param text the string to search for
+     * @return all fields that contain the search string
+     */
     public List<Field> searchAll(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[2];
@@ -349,6 +424,11 @@ public class DBConnection {
         return  fields;
     }
 
+    /**
+     * searches all owners in the database for the given string
+     * @param text the string to search for
+     * @return all fields that contain the search string as owner
+     */
     public List<Field> searchOwner(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
@@ -359,7 +439,7 @@ public class DBConnection {
             fields.add(toAgrarianField(agrCursor));
         }
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }
@@ -367,6 +447,11 @@ public class DBConnection {
         return  fields;
     }
 
+    /**
+     * searches all dates in the database for the given string
+     * @param text the string to search for
+     * @return all fields that contain the search string as date
+     */
     public List<Field> searchDate(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
@@ -380,6 +465,11 @@ public class DBConnection {
         return  fields;
     }
 
+    /**
+     * searches all names in the database for the given string
+     * @param text the string to search for
+     * @return all fields that contain the search string as name
+     */
     public List<Field> searchName(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
@@ -398,6 +488,11 @@ public class DBConnection {
         return  fields;
     }
 
+    /**
+     * searches all states in the database for the given string
+     * @param text the string to search for
+     * @return all fields that contain the search string as state
+     */
     public List<Field> searchState(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];

@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+package de.uni_stuttgart.informatik.sopra.sopraapp.data.managers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

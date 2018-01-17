@@ -47,6 +47,7 @@ public class GlobalConstants {
     public static boolean isAdmin = false;
 
 
+
     public static DamageField getCurrentPhotoField() {
         return currentPhotoField;
     }

@@ -1,7 +1,9 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -296,6 +298,17 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     public void requestPermissions(String[] strings, int i) {
         mMapFragment.requestPermissions(strings, i);
+    }
+
+    /**
+     * Save the Map Center point to shared preference
+     */
+    public void saveMapCenter(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putFloat("Longitude", (float) this.getMap().getMapCenter().getLongitude());
+        edit.putFloat("Latitude", (float) this.getMap().getMapCenter().getLatitude());
+        edit.apply();
     }
 
     public void destroy(){

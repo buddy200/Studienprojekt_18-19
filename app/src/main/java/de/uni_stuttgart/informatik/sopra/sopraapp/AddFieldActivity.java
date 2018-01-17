@@ -2,9 +2,11 @@ package de.uni_stuttgart.informatik.sopra.sopraapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -47,7 +49,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
  * sopra_priv
  * Created by Felix B on 10.11.17.
  * Mail: felix.burk@gmail.com
- *
+ * <p>
  * this activity lets users add fields depending
  * on their position
  */
@@ -166,22 +168,14 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
-
         OnMapClick();
-
         dataManager.readData();
-     /*   if(parentField != null) {
-            for (Field field : dataManager.getFields()) {
-                if (field.isFieldequal(parentField)) {
-                    parentField = field;
-                }
-            }
-        }*/
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        mMapViewHandler.saveMapCenter();
         mMapViewHandler.destroy();
     }
 
@@ -253,7 +247,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 location.setLatitude(point.getLatitude());
                 location.setLongitude(point.getLongitude());
                 addPoint(location);
-
                 return false;
             }
 
@@ -299,7 +292,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                     location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
         }
-
     }
 
     private AlertDialog.Builder generateSaveDialog() {
@@ -310,7 +302,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                     case DialogInterface.BUTTON_POSITIVE:
                         onBackPressed();
                         break;
-
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
                         break;
@@ -330,16 +321,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      */
     private void onDoneButtonClick() {
         if (enoughPoints) {
-            //myLocationListener.setFollow(false);
-
             Field fieldToAdd;
             if (isDmgField) {
                 fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, parentField);
-                if (parentField instanceof AgrarianField) {
-                    ((AgrarianField) parentField).addContainedDamageField((DamageField) fieldToAdd);
-                    //   dataManager.dataChange();
-                    dataManager.changeAgrarianField((AgrarianField) parentField);
-                }
+                parentField.addContainedDamageField((DamageField) fieldToAdd);
+                dataManager.changeAgrarianField(parentField);
+
 
             } else {
                 fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
@@ -350,14 +337,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());
 
-            if(isDmgField){
+            if (isDmgField) {
                 bottomSheetDialogDMF = BSDetailDialogEditDmgField.newInstance();
                 dataManager.addDamageField((DamageField) fieldToAdd);
                 BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogDMF);
                 bottomSheetDialogDMF.setPresenter(handler);
                 bottomSheetDialogDMF.show(getSupportFragmentManager(), "EditView");
-            }
-            else {
+            } else {
                 bottomSheetDialogAF = BSDetailDialogEditAgrField.newInstance();
                 dataManager.addAgrarianField((AgrarianField) fieldToAdd);
 
@@ -451,7 +437,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK && requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
             DamageField fieldPhotoToDelete = GlobalConstants.getCurrentPhotoField();
-            dataManager.deletePicture(fieldPhotoToDelete, fieldPhotoToDelete.getPaths().get(fieldPhotoToDelete.getPaths().size()-1));
+            dataManager.deletePicture(fieldPhotoToDelete, fieldPhotoToDelete.getPaths().get(fieldPhotoToDelete.getPaths().size() - 1));
             fieldPhotoToDelete.deletePhoto(fieldPhotoToDelete.getPaths().size() - 1);
             dataManager.changeDamageField(fieldPhotoToDelete);
         }

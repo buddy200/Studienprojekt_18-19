@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.sopraapp.data;
+package de.uni_stuttgart.informatik.sopra.sopraapp.data.managers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,9 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.DamageFieldType;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
 
 /**

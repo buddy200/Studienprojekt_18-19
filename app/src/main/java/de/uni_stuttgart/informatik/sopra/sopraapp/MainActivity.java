@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     private SharedPreferences prefs;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +82,14 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         dataManager = new AppDataManager(this);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(prefs.getFloat("Longitude", 0) != 0){
+            GeoPoint geoPoint = new GeoPoint((double) prefs.getFloat("Latitude", 0) ,(double)prefs.getFloat("Longitude", 0));
+            GlobalConstants.setLastLocationOnMap(geoPoint);
+        }
         mapHandler = new MapViewHandler(this, dataManager, mapFragment);
-
         mapFragment.setPresenter(mapHandler);
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
     }
 
@@ -101,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onStart(){
         super.onStart();
-        dataManager.readData();
 
+        dataManager.readData();
         //check if user already used the app - if not show login dialog
-        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
+        boolean previouslyStarted = prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false);
         if(!previouslyStarted) {
             LoginDialog test = new LoginDialog(this);
             test.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -119,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             GlobalConstants.isAdmin = adm;
             this.invalidateOptionsMenu();
         }
-
         Log.e(TAG, "is admin?" + String.valueOf(GlobalConstants.isAdmin));
     }
 
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onStop(){
         super.onStop();
+        mapHandler.saveMapCenter();
         mapHandler.destroy();
     }
 
@@ -345,12 +347,14 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //kills the app and removes it from the recents list
-                        finishAndRemoveTask();
+                    //    finishAndRemoveTask();
+
                         //delete all shared preferences - DATABASE IS NOT CHANGED
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());
                         SharedPreferences.Editor edit = prefs.edit();
                         edit.clear();
                         edit.apply();
+                        onStart();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:

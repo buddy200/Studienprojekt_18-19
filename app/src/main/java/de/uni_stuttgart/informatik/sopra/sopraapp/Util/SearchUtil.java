@@ -1,10 +1,15 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.Util;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
+import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 
 /**
  * sopra_priv
@@ -17,7 +22,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
 public class SearchUtil {
 
-    static String searchFor[] =  {
+    private static final String searchFor[] =  {
             "All", "Name", "Owner", "State", "Date"
     };
 
@@ -66,7 +71,22 @@ public class SearchUtil {
     }
 
 
-    public static void searchForType(ArrayList<Field> fields, String query, String type) {
+    public static void searchForType(AppDataManager manager, String query, String type) {
+        List<Field> results = new ArrayList<>();
+        if (type.equals(searchFor[0])) {
+            results = manager.searchAll(query);
+        } else if (type.equals(searchFor[1])) {
+            results = manager.searchName(query);
+        } else if (type.equals(searchFor[2])) {
+            results = manager.searchOwner(query);
+        } else if (type.equals(searchFor[3])) {
+            results = manager.searchState(query);
+        } else if (type.equals(searchFor[4])) {
+            results = manager.searchDate(query);
+        }
+
+        
+
     }
 
     /**

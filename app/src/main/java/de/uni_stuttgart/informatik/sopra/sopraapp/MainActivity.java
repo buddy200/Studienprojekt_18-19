@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                SearchUtil.searchForType(dataManager.getFields(), query, searchTypeSpinner.getSelectedItem().toString());
+                SearchUtil.searchForType(dataManager, query, searchTypeSpinner.getSelectedItem().toString());
                 return true;
             }
 

@@ -266,12 +266,12 @@ public abstract class Field implements Serializable {
 
 
     /**
-     * returns Double to be able to null check this
+     * returns the size of this field in m^2
      *
-     * @return the size of the field or @code{null} if the field isn't finished
+     * @return the size of the field or 0 if the field isn't finished
      */
-    public Double getSize() {
-        return finished ? size : null;
+    public double getSize() {
+        return finished ? size : 0;
     }
 
     public void setCornerPoints(List<CornerPoint> cornerPoints) {

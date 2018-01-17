@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
@@ -193,4 +194,24 @@ public class AppDataManager {
     public HashMap<Long, DamageField> getDamageFieldMap() {
         return damageFieldMap;
     }
+
+    public List<Field> searchAll(String text) {
+        return dbConnection.searchAll(text);
+    }
+    public List<Field> searchOwner(String text) {
+        return dbConnection.searchOwner(text);
+    }
+
+    public List<Field> searchDate(String text) {
+        return dbConnection.searchDate(text);
+    }
+
+    public List<Field> searchName(String text) {
+        return dbConnection.searchName(text);
+    }
+
+    public List<Field> searchState(String text) {
+        return dbConnection.searchState(text);
+    }
+
 }

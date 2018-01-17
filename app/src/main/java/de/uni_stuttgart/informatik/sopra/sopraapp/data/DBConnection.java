@@ -44,9 +44,7 @@ public class DBConnection {
     public void addField(AgrarianField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -78,9 +76,7 @@ public class DBConnection {
     public void addField(DamageField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -258,9 +254,7 @@ public class DBConnection {
     public void updateAgrarianField(AgrarianField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -277,9 +271,7 @@ public class DBConnection {
     public void updateDamageField(DamageField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -338,7 +330,7 @@ public class DBConnection {
         selection_args[0] = text;
         selection_args[1] = text;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + "= ? OR " + DBHelper.NAME_COLUM + "= ?", selection_args, null, null, null);
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
         while (agrCursor.moveToNext()) {
             fields.add(toAgrarianField(agrCursor));
         }
@@ -349,7 +341,7 @@ public class DBConnection {
         selection_args[2] = text;
         selection_args[3] = text;
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + "= ? OR " + DBHelper.NAME_COLUM + "= ? OR "+ DBHelper.DATE_COLUM + "= ? OR " + DBHelper.PROGRESS_COLUM + "= ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ? OR "+ DBHelper.DATE_COLUM + " LIKE ? OR " + DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }
@@ -362,12 +354,12 @@ public class DBConnection {
         String[] selection_args = new String[1];
         selection_args[0] = text;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + "= ?", selection_args, null, null, null);
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null, null, null);
         while (agrCursor.moveToNext()) {
             fields.add(toAgrarianField(agrCursor));
         }
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + "= ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }
@@ -380,7 +372,7 @@ public class DBConnection {
         String[] selection_args = new String[1];
         selection_args[0] = text;
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + "= ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }
@@ -393,12 +385,12 @@ public class DBConnection {
         String[] selection_args = new String[1];
         selection_args[0] = text;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.NAME_COLUM + "= ?", selection_args, null, null, null);
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
         while (agrCursor.moveToNext()) {
             fields.add(toAgrarianField(agrCursor));
         }
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + "= ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }
@@ -412,7 +404,7 @@ public class DBConnection {
         selection_args[0] = text;
 
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + "= ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }

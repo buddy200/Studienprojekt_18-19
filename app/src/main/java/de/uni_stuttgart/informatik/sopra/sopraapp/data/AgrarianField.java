@@ -78,9 +78,8 @@ public class AgrarianField extends Field implements Serializable{
     //    bundle.putInt(KEY_COLOR, this.getType().toColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
         bundle.putString(KEY_CONVERTEDSIZE, this.getConvertedSize());
-        if(this.getSize() != null){
-            bundle.putDouble(KEY_SIZE, this.getSize());
-        }
+        bundle.putDouble(KEY_SIZE, this.getSize());
+
         bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());
 
         //agrarianField specific attributes

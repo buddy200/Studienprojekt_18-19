@@ -2,7 +2,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by larsb on 16.11.2017.

@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 import android.content.Context;
 import android.os.Bundle;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,11 +53,11 @@ public class DamageField extends Field implements Serializable {
      */
     public DamageField(Context context, List<CornerPoint> cPoints, AgrarianField parentField) {
         super(context, cPoints);
-      //  this.setName(context.getResources().getString(R.string.field_default_name));
+        //  this.setName(context.getResources().getString(R.string.field_default_name));
         super.setType(defaultType);
-      //  this.setCounty(context.getResources().getString(R.string.county_default_name));
+        //  this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(damageFieldToColor());
-      //  this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
+        //  this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
         this.paths = new ArrayList<>();
         this.parentField = parentField;
@@ -84,7 +85,7 @@ public class DamageField extends Field implements Serializable {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_TIMESTAMP, this.getTimestamp());
-        bundle.putDouble(KEY_INSURANCEMONEY,  this.getInsuranceMoney());
+        bundle.putDouble(KEY_INSURANCEMONEY, this.getInsuranceMoney());
         bundle.putString(KEY_NAME, this.getName());
         bundle.putInt(KEY_COLOR, this.getColor());
         bundle.putString(KEY_COUNTY, this.getCounty());
@@ -146,12 +147,12 @@ public class DamageField extends Field implements Serializable {
         paths.add(pictureData);
     }
 
-    public void setPhotoName(String name, PictureData pictureData){
+    public void setPhotoName(String name, PictureData pictureData) {
         pictureData.setImage_title(name);
     }
 
     public void calcInsuranceAmount() {
-        insuranceMoney =   this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
+        insuranceMoney = this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
     }
 
     public double getInsuranceMoney() {
@@ -169,6 +170,28 @@ public class DamageField extends Field implements Serializable {
 
     public ProgressStatus getProgressStatus() {
         return progressStatus;
+    }
+
+
+    /**
+     * delete the given photo from the damage field and from the internal storage
+     * @param pos give the position of the photo in the paths ArrayList
+     */
+    public void deletePhoto(int pos) {
+        File photo = new File(getPaths().get(pos).getImage_path());
+        photo.delete();
+        paths.remove(pos);
+    }
+
+    /**
+     * this method delete all photos from the damageField and from the internal storage
+     */
+    public void deleteAllPhotos() {
+        for (PictureData pictureData : paths) {
+            File photo = new File(pictureData.getImage_path());
+            photo.delete();
+        }
+        paths.clear();
     }
 
     public void setProgressStatus(ProgressStatus progressStatus) {

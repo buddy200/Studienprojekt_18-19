@@ -44,9 +44,7 @@ public class DBConnection {
     public void addField(AgrarianField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -78,9 +76,7 @@ public class DBConnection {
     public void addField(DamageField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -258,9 +254,7 @@ public class DBConnection {
     public void updateAgrarianField(AgrarianField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
@@ -277,9 +271,7 @@ public class DBConnection {
     public void updateDamageField(DamageField field) {
         if (field != null) {
             ContentValues values = new ContentValues();
-
-            double size = field.getSize() == null ? 0 : field.getSize();
-            values.put(DBHelper.SIZE_COLUM, size);
+            values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
             values.put(DBHelper.TYPE_COLUM, field.getType().toString());
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());

@@ -2,7 +2,9 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -202,7 +204,13 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
         fieldSpinner.setSelection(statusCheck.indexOf(field.getType()));
         progressSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ProgressStatus.values()));
         progressSpinner.setSelection(statusCheck.indexOf(field.getProgressStatus()));
-        fieldPolicyHolder.setText(field.getEvaluator());
+        if(field.getEvaluator().equals("")) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            fieldPolicyHolder.setText(prefs.getString(getContext().getString(R.string.pref_username), ""));
+        }
+        else{
+            fieldPolicyHolder.setText(field.getEvaluator());
+        }
         fieldName.setText(field.getName());
         fieldSize.setText(field.getConvertedSize());
         if ((field).getPaths() != null) {

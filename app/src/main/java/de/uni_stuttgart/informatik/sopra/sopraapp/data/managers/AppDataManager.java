@@ -1,6 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.managers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DBConnection;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -21,14 +24,19 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 public class AppDataManager {
     private static final String TAG = "AppDataManager";
 
+    SharedPreferences prefs;
+
     private HashMap<Long, AgrarianField> agrarianFieldMap;
     private HashMap<Long, DamageField> damageFieldMap;
+
+    private Context context;
 
     private DBConnection dbConnection;
 
     private DataChangeListener listener;
 
     public AppDataManager(Context context) {
+        this.context = context;
         try {
             listener = (DataChangeListener) context;
         } catch (ClassCastException e) {
@@ -37,6 +45,7 @@ public class AppDataManager {
         dbConnection = new DBConnection(context);
         agrarianFieldMap = new HashMap<>();
         damageFieldMap = new HashMap<>();
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
         readData();
         dataChange();
     }
@@ -47,15 +56,25 @@ public class AppDataManager {
     public void readData() {
         agrarianFieldMap.clear();
         damageFieldMap.clear();
-        for (AgrarianField field : dbConnection.getAllAgrarianFields()) {
-            agrarianFieldMap.put(field.getID(), field);
-        }
-        for (DamageField field : dbConnection.getAllDamgageFields()) {
-            damageFieldMap.put(field.getID(), field);
-        }
-        for (DamageField field : damageFieldMap.values()) {
-            agrarianFieldMap.get(field.getParentField().getID()).addContainedDamageField(field);
-        }
+     //   if (prefs.getBoolean(context.getString(R.string.pref_admin_bool), true)) {
+            for (AgrarianField field : dbConnection.getAllAgrarianFields()) {
+                agrarianFieldMap.put(field.getID(), field);
+            }
+            for (DamageField field : dbConnection.getAllDamgageFields()) {
+                damageFieldMap.put(field.getID(), field);
+            }
+            for (DamageField field : damageFieldMap.values()) {
+                agrarianFieldMap.get(field.getParentField().getID()).addContainedDamageField(field);
+            }
+    /*    }
+        else{
+            String name = prefs.getString(context.getString(R.string.pref_username), "");
+           for (Field field : searchOwner(name)) {
+               if (field instanceof AgrarianField) {
+                   agrarianFieldMap.put(field.getID(), (AgrarianField) field);
+               }
+           }
+        }*/
     }
 
     /**
@@ -198,6 +217,7 @@ public class AppDataManager {
     public List<Field> searchAll(String text) {
         return dbConnection.searchAll(text);
     }
+
     public List<Field> searchOwner(String text) {
         return dbConnection.searchOwner(text);
     }

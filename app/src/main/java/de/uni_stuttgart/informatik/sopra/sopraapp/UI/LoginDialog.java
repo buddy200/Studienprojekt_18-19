@@ -100,11 +100,11 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         if(radioButtonId == RB_ADMIN_ID){
             edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);
             GlobalConstants.isAdmin = true;
-            Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
+          //  Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
         }else {
             edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);
             GlobalConstants.isAdmin = false;
-            Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
+         //   Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
         }
 
         //password not saved yet.. would be unsave

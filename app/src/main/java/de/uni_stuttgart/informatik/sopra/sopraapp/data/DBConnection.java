@@ -354,12 +354,12 @@ public class DBConnection {
         String[] selection_args = new String[1];
         selection_args[0] = text;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null, null, null);
+        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + " LIKE " + selection_args[0], null, null, null, null);
         while (agrCursor.moveToNext()) {
             fields.add(toAgrarianField(agrCursor));
         }
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null,null, null);
+        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE " + selection_args[0], null, null,null, null);
         while (dmgCursor.moveToNext()) {
             fields.add(toDamageField(dmgCursor));
         }

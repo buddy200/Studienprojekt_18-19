@@ -214,4 +214,8 @@ public class AppDataManager {
         return dbConnection.searchState(text);
     }
 
+    public List<Field> searchEvaluator(String text) {
+        return dbConnection.searchEvaluator(text);
+    }
+
 }

@@ -438,6 +438,18 @@ public class DBConnection {
         while (agrCursor.moveToNext()) {
             fields.add(toAgrarianField(agrCursor));
         }
+        return  fields;
+    }
+
+    /**
+     * searches all evaluatores in the database for the given string
+     * @param text the string to search for
+     * @return all fields that contain the search string as evaluator
+     */
+    public List<Field> searchEvaluator (String text) {
+        List<Field> fields = new ArrayList<>();
+        String[] selection_args = new String[1];
+        selection_args[0] = text;
 
         Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ?", selection_args, null,null, null);
         while (dmgCursor.moveToNext()) {

@@ -98,4 +98,7 @@
     <string name="main_toolbar_my_location">My Location</string>
     <string name="pref_admin_bool">adm</string>
 
+
+    <string name="search_all">All</string>
+
 </resources>

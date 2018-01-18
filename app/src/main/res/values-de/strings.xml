@@ -66,4 +66,5 @@
     <string name="main_toolbar_search">Suche</string>
     <string name="main_toolbar_list">Liste</string>
     <string name="main_toolbar_my_location">Meine Position</string>
+    <string name="search_all">Nach allem</string>
 </resources>

@@ -258,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     private View expandSearch;
     private void setUpSearchMenuItem(Menu menu) {
         final String searchFor[] =  {
+                MainActivity.getmContext().getResources().getString(R.string.search_all),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),

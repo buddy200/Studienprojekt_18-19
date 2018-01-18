@@ -36,7 +36,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -266,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         expandSearch = findViewById(R.id.search_bar);
         final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
-                android.R.layout.simple_spinner_item, SearchUtil.getSearchFor());
+                android.R.layout.simple_spinner_item, searchFor);
         searchTypeSpinner.setAdapter(adapter);
         searchTypeSpinner.setSelection(0);
 
@@ -302,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
                     ItemListDialogFragment.newInstance( dataManager.searchDate(query)).show(getSupportFragmentManager(), "FieldList");
                 }
+                searchItem.collapseActionView();
                 return true;
             }
 

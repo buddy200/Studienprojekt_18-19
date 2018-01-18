@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
@@ -37,7 +38,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
     private FragmentInteractionListener mListener;
     private AppDataManager dataManager;
-    private ArrayList<Field> fieldData;
+    private static List<Field> fieldData;
 
  //   private static ArrayList<Field> fieldList;
 
@@ -47,20 +48,9 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
      *
      * @return A new instance of fragment ItemListDialogFragment.
      */
-    public static ItemListDialogFragment newInstance(ArrayList<Field> fields) {
+    public static ItemListDialogFragment newInstance(List<Field> fields) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
-      /*  final Bundle args = new Bundle();
-
-
-        fieldList = new ArrayList<>(fields);
-        ArrayList<Bundle> fieldBundles = new ArrayList<>();
-        for (int i = 0; i < fields.size(); ++i) {
-            fieldBundles.add(fields.get(i).getBundle());
-        }
-        Bundle listBundle = new Bundle();
-        listBundle.putParcelableArrayList(ARG_ITEM_LIST, fieldBundles);
-        args.putBundle(ARG_ITEM_LIST_BUNDLE, listBundle);
-        fragment.setArguments(args);*/
+        fieldData = fields;
         return fragment;
     }
 
@@ -70,8 +60,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
                              @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_item_list_dialog, container, false);
         configureBottomSheetBehavior(view);
-        dataManager = new AppDataManager(getContext());
-        fieldData = dataManager.getFields();
+
         return view;
     }
 

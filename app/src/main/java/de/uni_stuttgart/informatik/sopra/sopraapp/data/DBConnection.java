@@ -3,7 +3,9 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.geoData.WGS84Coordinate;
  */
 
 public class DBConnection {
+
+    private static final String TAG = "DBConnection";
 
     private static final String GeoPointTable_Suffix = "GeoPointsOfField";
     private static final String LAT_COLUM = "latitude";
@@ -402,23 +406,30 @@ public class DBConnection {
     public List<Field> searchAll(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[2];
-        selection_args[0] = text;
-        selection_args[1] = text;
+        selection_args[0] = "%" + text + "%" ;
+        selection_args[1] = "%" + text + "%" ;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
-        while (agrCursor.moveToNext()) {
-            fields.add(toAgrarianField(agrCursor));
-        }
+        try {
+            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE  ? OR " + DBHelper.NAME_COLUM + " LIKE   ? ", selection_args, null, null, null);
+            while (agrCursor.moveToNext()) {
+                fields.add(toAgrarianField(agrCursor));
+            }
+            agrCursor.close();
 
-        selection_args = new String[4];
-        selection_args[0] = text;
-        selection_args[1] = text;
-        selection_args[2] = text;
-        selection_args[3] = text;
+            selection_args = new String[4];
+            selection_args[0] = "%" + text + "%";
+            selection_args[1] = "%" + text + "%";
+            selection_args[2] = "%" + text + "%";
+            selection_args[3] = "%" + text + "%";
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ? OR "+ DBHelper.DATE_COLUM + " LIKE ? OR " + DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null,null, null);
-        while (dmgCursor.moveToNext()) {
-            fields.add(toDamageField(dmgCursor));
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ? OR " + DBHelper.DATE_COLUM + " LIKE ? OR " + DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (dmgCursor.moveToNext()) {
+                fields.add(toDamageField(dmgCursor));
+            }
+            dmgCursor.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            fields = null;
         }
 
         return  fields;
@@ -432,11 +443,17 @@ public class DBConnection {
     public List<Field> searchOwner(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = text;
+        selection_args[0] = "%" + text + "%" ;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null, null, null);
-        while (agrCursor.moveToNext()) {
-            fields.add(toAgrarianField(agrCursor));
+        try {
+            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (agrCursor.moveToNext()) {
+                fields.add(toAgrarianField(agrCursor));
+            }
+            agrCursor.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            fields = null;
         }
         return  fields;
     }
@@ -449,13 +466,18 @@ public class DBConnection {
     public List<Field> searchEvaluator (String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = text;
+        selection_args[0] = "%" + text + "%" ;
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ?", selection_args, null,null, null);
-        while (dmgCursor.moveToNext()) {
-            fields.add(toDamageField(dmgCursor));
+        try {
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (dmgCursor.moveToNext()) {
+                fields.add(toDamageField(dmgCursor));
+            }
+            dmgCursor.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            fields = null;
         }
-
         return  fields;
     }
 
@@ -467,13 +489,18 @@ public class DBConnection {
     public List<Field> searchDate(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = text;
+        selection_args[0] = "%" + text + "%" ;
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + " LIKE ?", selection_args, null,null, null);
-        while (dmgCursor.moveToNext()) {
-            fields.add(toDamageField(dmgCursor));
+        try {
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (dmgCursor.moveToNext()) {
+                fields.add(toDamageField(dmgCursor));
+            }
+            dmgCursor.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+            fields = null;
         }
-
         return  fields;
     }
 
@@ -485,16 +512,23 @@ public class DBConnection {
     public List<Field> searchName(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = text;
+        selection_args[0] = "%" + text + "%" ;
 
-        Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
-        while (agrCursor.moveToNext()) {
-            fields.add(toAgrarianField(agrCursor));
-        }
+        try {
+            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (agrCursor.moveToNext()) {
+                fields.add(toAgrarianField(agrCursor));
+            }
+            agrCursor.close();
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null,null, null);
-        while (dmgCursor.moveToNext()) {
-            fields.add(toDamageField(dmgCursor));
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (dmgCursor.moveToNext()) {
+                fields.add(toDamageField(dmgCursor));
+            }
+            dmgCursor.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            fields = null;
         }
 
         return  fields;
@@ -508,12 +542,23 @@ public class DBConnection {
     public List<Field> searchState(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = text;
+        selection_args[0] = "%" + text + "%" ;
 
+        try {
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (dmgCursor.moveToNext()) {
+                fields.add(toDamageField(dmgCursor));
+            }
+            dmgCursor.close();
 
-        Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null,null, null);
-        while (dmgCursor.moveToNext()) {
-            fields.add(toDamageField(dmgCursor));
+            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.TYPE_COLUM + " LIKE ?", selection_args, null, null, null);
+            while (agrCursor.moveToNext()) {
+                fields.add(toAgrarianField(agrCursor));
+            }
+            agrCursor.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            fields = null;
         }
 
         return  fields;

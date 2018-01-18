@@ -6,6 +6,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.MainActivity;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
@@ -85,7 +86,6 @@ public class SearchUtil {
             results = manager.searchDate(query);
         }
 
-        
 
     }
 

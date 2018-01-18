@@ -54,6 +54,10 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener<Object>, AppDataManager.DataChangeListener {
 
+    private static final String searchFor[] =  {
+            "All", "Name", "Owner", "State", "Date"
+    };
+
     private static final String TAG = "MainActivity";
 
     //i know this is bad, but there is no other way to get the context inside our AgrarianFieldType enum.. -D
@@ -261,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
         expandSearch = findViewById(R.id.search_bar);
         final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
                 android.R.layout.simple_spinner_item, SearchUtil.getSearchFor());
         searchTypeSpinner.setAdapter(adapter);
         searchTypeSpinner.setSelection(0);
@@ -287,7 +291,17 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                SearchUtil.searchForType(dataManager, query, searchTypeSpinner.getSelectedItem().toString());
+                if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchAll(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchName(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchOwner(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchState(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchDate(query)).show(getSupportFragmentManager(), "FieldList");
+                }
                 return true;
             }
 

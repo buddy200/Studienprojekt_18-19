@@ -36,7 +36,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.SearchUtil;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -264,11 +263,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
      */
     private View expandSearch;
     private void setUpSearchMenuItem(Menu menu) {
+        final String searchFor[] =  {
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date)
+        };
+
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
         expandSearch = findViewById(R.id.search_bar);
         final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
-                android.R.layout.simple_spinner_item, SearchUtil.getSearchFor());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+                android.R.layout.simple_spinner_item, searchFor);
         searchTypeSpinner.setAdapter(adapter);
         searchTypeSpinner.setSelection(0);
 
@@ -293,7 +299,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                SearchUtil.searchForType(dataManager, query, searchTypeSpinner.getSelectedItem().toString());
+                if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchAll(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchName(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchOwner(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchState(query)).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
+                    ItemListDialogFragment.newInstance( dataManager.searchDate(query)).show(getSupportFragmentManager(), "FieldList");
+                }
+                searchItem.collapseActionView();
                 return true;
             }
 

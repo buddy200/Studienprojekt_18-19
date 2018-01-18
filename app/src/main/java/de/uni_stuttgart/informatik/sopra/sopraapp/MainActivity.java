@@ -46,7 +46,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
  * sopra_priv
  * Created by Felix B on 03.11.17.
  * Mail: felix.burk@gmail.com
- *
+ * <p>
  * the main activity for our app, everything starts here
  * the class is listening for every Interaction of its fragments
  */
@@ -83,32 +83,30 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if(prefs.getFloat("Longitude", 0) != 0){
-            GeoPoint geoPoint = new GeoPoint((double) prefs.getFloat("Latitude", 0) ,(double)prefs.getFloat("Longitude", 0));
+        if (prefs.getFloat("Longitude", 0) != 0) {
+            GeoPoint geoPoint = new GeoPoint((double) prefs.getFloat("Latitude", 0), (double) prefs.getFloat("Longitude", 0));
             GlobalConstants.setLastLocationOnMap(geoPoint);
         }
         mapHandler = new MapViewHandler(this, dataManager, mapFragment);
         mapFragment.setPresenter(mapHandler);
-     /*   for(AgrarianField field : GlobalConstants.polygonTest(1, 10, this)) {
-            dataManager.addAgrarianField(field);
-        }*/
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mapHandler.reload();
     }
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
-        dataManager.readData();
+        loadFieldData();
+
         //check if user already used the app - if not show login dialog
         boolean previouslyStarted = prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false);
-        if(!previouslyStarted) {
+        if (!previouslyStarted) {
             LoginDialog loginDialog = new LoginDialog(this);
             loginDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
@@ -118,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             });
             loginDialog.show();
 
-        }else {
+        } else {
             boolean adm = prefs.getBoolean(this.getString(R.string.pref_admin_bool), false);
             GlobalConstants.isAdmin = adm;
             this.invalidateOptionsMenu();
@@ -127,52 +125,51 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         mapHandler.reload();
     }
 
-
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         mapHandler.saveMapCenter();
         mapHandler.destroy();
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         dataManager.dbClose();
     }
 
     /**
      * receive messages from fragments
-     * @param Tag of the fragment
+     *
+     * @param Tag    of the fragment
      * @param action the fragment performs
-     * @param data data the fragment sends
+     * @param data   data the fragment sends
      */
     @Override
     public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
-        Log.d(TAG , "MSG TAG: " + Tag + " ACTION: " + action);
-        switch (Tag){
+        Log.d(TAG, "MSG TAG: " + Tag + " ACTION: " + action);
+        switch (Tag) {
             case "MapViewHandler":
-                switch (action){
+                switch (action) {
                     case "singleTabOnPoly":
                         animateMapToFieldWithBS((Field) data);
                 }
             case "ItemListDialogFragment":
-                switch (action){
+                switch (action) {
                     case "itemClick":
                         animateMapToFieldWithBS((Field) data);
                         break;
                 }
                 break;
             case "BottomSheetDetail":
-                switch (action){
+                switch (action) {
                     case "startEdit":
                         //TODO
-                        if((Field) data instanceof AgrarianField) {
+                        if ((Field) data instanceof AgrarianField) {
                             BSDetailDialogEditAgrField bsDetail = BSDetailDialogEditAgrField.newInstance();
                             new BSEditHandler((Field) data, dataManager, bsDetail);
                             bsDetail.show(getSupportFragmentManager(), "test");
-                        }
-                        else{
+                        } else {
                             BSDetailDialogEditDmgField bsDetail = BSDetailDialogEditDmgField.newInstance();
                             new BSEditHandler((Field) data, dataManager, bsDetail);
                             bsDetail.show(getSupportFragmentManager(), "test");
@@ -187,11 +184,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 }
                 break;
             case "BSDetailDialogEditFragmentDamageField":
-                switch ( action){
+                switch (action) {
                     case "addPhoto":
                         BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();
                         new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);
                         bottomSheetAddPhoto.show(getSupportFragmentManager(), "test");
+                        break;
+                }
+                break;
+            case "LoginDialog":
+                switch (action) {
+                    case "complete":
+                        onStart();
                         break;
                 }
                 break;
@@ -203,20 +207,20 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     /**
      * animates the center of the map to the centroid of a field
      * we need some offset because of the visible bottom sheet
+     *
      * @param field
      */
-    private void animateMapToFieldWithBS(Field field){
+    private void animateMapToFieldWithBS(Field field) {
         //offset get center on top of BottomSheet
         double offset = 0.0007;
-        mapHandler.animateAndZoomTo((field).getCentroid().getLatitude()-offset,
+        mapHandler.animateAndZoomTo((field).getCentroid().getLatitude() - offset,
                 (field).getCentroid().getLongitude());
 
-        if(field instanceof DamageField){
+        if (field instanceof DamageField) {
             BSDetailDialogDmgField bs = BSDetailDialogDmgField.newInstance();
             new BSEditHandler(field, dataManager, bs);
             bs.show(this.getSupportFragmentManager(), "DetailField");
-        }
-        else if(field instanceof AgrarianField){
+        } else if (field instanceof AgrarianField) {
             BSDetailDialogAgrField bs = BSDetailDialogAgrField.newInstance();
             new BSEditHandler(field, dataManager, bs);
             bs.show(this.getSupportFragmentManager(), "DetailField");
@@ -227,20 +231,21 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     /**
      * get the context, this is necessary for FieldState enums
      * without context it's not possible to get Enum names from strings.xml
+     *
      * @return
      */
-    public static Context getmContext(){
+    public static Context getmContext() {
         return mContext;
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         setUpSearchMenuItem(menu);
 
         MenuItem addFieldMenuItem = menu.findItem(R.id.action_toolbar_add);
-        if(!GlobalConstants.isAdmin){
+        if (!GlobalConstants.isAdmin) {
             addFieldMenuItem.setVisible(false);
-        }else{
+        } else {
             addFieldMenuItem.setVisible(true);
         }
         MenuItem username = menu.findItem(R.id.action_toolbar_username);
@@ -259,11 +264,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     /**
      * sets all listeners for the SearchView implementation in the action bar
+     *
      * @param menu
      */
     private View expandSearch;
+
     private void setUpSearchMenuItem(Menu menu) {
-        final String searchFor[] =  {
+        final String searchFor[] = {
                 MainActivity.getmContext().getResources().getString(R.string.search_all),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
@@ -301,15 +308,15 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {
-                    ItemListDialogFragment.newInstance( dataManager.searchAll(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.searchAll(query)).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {
-                    ItemListDialogFragment.newInstance( dataManager.searchName(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.searchName(query)).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {
-                    ItemListDialogFragment.newInstance( dataManager.searchOwner(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.searchOwner(query)).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {
-                    ItemListDialogFragment.newInstance( dataManager.searchState(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.searchState(query)).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
-                    ItemListDialogFragment.newInstance( dataManager.searchDate(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.searchDate(query)).show(getSupportFragmentManager(), "FieldList");
                 }
                 searchItem.collapseActionView();
                 return true;
@@ -330,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.action_toolbar_add:
                 GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));
                 Intent i = new Intent(this, AddFieldActivity.class);
@@ -347,8 +354,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                     mapHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
                     mapHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
                     GlobalConstants.setLastLocationOnMap(new GeoPoint(location));
-                }
-                else{
+                } else {
                     Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -369,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //kills the app and removes it from the recents list
-                    //    finishAndRemoveTask();
+                        //    finishAndRemoveTask();
 
                         //delete all shared preferences - DATABASE IS NOT CHANGED
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());
@@ -396,11 +402,24 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onDataChange() {
-        if(mapHandler != null){
+        if (mapHandler != null) {
             mapHandler.reload();
         }
     }
 
+    private void loadFieldData() {
+        String name = prefs.getString("usr", "");
+        if (!(prefs.getBoolean("adm", false))) {
+            if ((!name.equals(""))) {
+                dataManager.loadUserFields(name);
+            } else {
+                dataManager.clearAllMaps();
+            }
+        } else {
+            dataManager.readData();
+        }
+        mapHandler.reload();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

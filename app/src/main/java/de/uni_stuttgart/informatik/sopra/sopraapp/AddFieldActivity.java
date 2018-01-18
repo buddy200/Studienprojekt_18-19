@@ -85,6 +85,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     private ArrayList<Vector<Double>> linesFromAgrarianField;
     private IntersectionCalculator intersectionCalculator;
 
+    private SharedPreferences prefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +138,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         dataManager = new AppDataManager(this);
         mMapViewHandler = new MapViewHandler(this, dataManager, mapFragment);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         mapFragment.setPresenter(mMapViewHandler);
 
     }
@@ -143,6 +147,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onStart() {
         super.onStart();
+
+        loadFieldData();
         long i = getIntent().getLongExtra("parentField", -1);
         if (i != -1) {
             parentField = dataManager.getAgrarianFieldMap().get(i);
@@ -442,5 +448,18 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     public void onDestroy() {
         super.onDestroy();
         dataManager.dbClose();
+    }
+    private void loadFieldData() {
+        String name = prefs.getString("usr", "");
+        if (!(prefs.getBoolean("adm", false))) {
+            if ((!name.equals(""))) {
+                dataManager.loadUserFields(name);
+            } else {
+                dataManager.clearAllMaps();
+            }
+        } else {
+            dataManager.readData();
+        }
+        mMapViewHandler.reload();
     }
 }

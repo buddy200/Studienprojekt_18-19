@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.sopraapp.R;
 
@@ -33,6 +34,8 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
     private EditText password;
     private Button loginBtn;
     private RadioGroup userPrivileges;
+    private FragmentInteractionListener mListener;
+    private Context context;
 
     private static final int RB_ADMIN_ID = 1000;//first radio button id
     private static final int RB_FARMER_ID = 1001;//second radio button id
@@ -40,6 +43,7 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
     public LoginDialog(@NonNull Context context) {
         super(context, R.style.Login_Dialog);
 
+        this.context = context;
         //prevent user from cancelling
         this.setCanceledOnTouchOutside(false);
         this.setCancelable(false);
@@ -63,6 +67,13 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         farmerRadio.setId(RB_FARMER_ID);
 
         loginBtn.setOnClickListener(this);
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentInteractionListener");
+        }
+
     }
 
     @Override
@@ -100,16 +111,15 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
         if(radioButtonId == RB_ADMIN_ID){
             edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);
             GlobalConstants.isAdmin = true;
-          //  Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
         }else {
             edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);
             GlobalConstants.isAdmin = false;
-         //   Log.e(TAG, "whdioahdo: " + GlobalConstants.isAdmin);
         }
 
         //password not saved yet.. would be unsave
 
         edit.apply();
+        mListener.onFragmentMessage(TAG, "complete", null );
     }
 
 

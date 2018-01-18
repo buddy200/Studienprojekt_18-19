@@ -22,16 +22,11 @@ public class AppDataManager {
     private static final String TAG = "AppDataManager";
 
     SharedPreferences prefs;
-
     private HashMap<Long, AgrarianField> agrarianFieldMap;
     private HashMap<Long, DamageField> damageFieldMap;
-
     private Context context;
-
     private DBConnection dbConnection;
-
     private DataChangeListener listener;
-
     public AppDataManager(Context context) {
         this.context = context;
         try {
@@ -43,7 +38,7 @@ public class AppDataManager {
         agrarianFieldMap = new HashMap<>();
         damageFieldMap = new HashMap<>();
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        readData();
+        //  readData();
         dataChange();
     }
 
@@ -52,25 +47,15 @@ public class AppDataManager {
      */
     public void readData() {
         clearAllMaps();
-     //   if (prefs.getBoolean(context.getString(R.string.pref_admin_bool), true)) {
-            for (AgrarianField field : dbConnection.getAllAgrarianFields()) {
-                agrarianFieldMap.put(field.getID(), field);
-            }
-            for (DamageField field : dbConnection.getAllDamgageFields()) {
-                damageFieldMap.put(field.getID(), field);
-            }
-            for (DamageField field : damageFieldMap.values()) {
-                agrarianFieldMap.get(field.getParentField().getID()).addContainedDamageField(field);
-            }
-    /*    }
-        else{
-            String name = prefs.getString(context.getString(R.string.pref_username), "");
-           for (Field field : searchOwner(name)) {
-               if (field instanceof AgrarianField) {
-                   agrarianFieldMap.put(field.getID(), (AgrarianField) field);
-               }
-           }
-        }*/
+        for (AgrarianField field : dbConnection.getAllAgrarianFields()) {
+            agrarianFieldMap.put(field.getID(), field);
+        }
+        for (DamageField field : dbConnection.getAllDamgageFields()) {
+            damageFieldMap.put(field.getID(), field);
+        }
+        for (DamageField field : damageFieldMap.values()) {
+            agrarianFieldMap.get(field.getParentField().getID()).addContainedDamageField(field);
+        }
     }
 
     /**
@@ -190,7 +175,7 @@ public class AppDataManager {
         return new ArrayList<>(agrarianFieldMap.values());
     }
 
-    public ArrayList<DamageField> getAllDamageFields(){
+    public ArrayList<DamageField> getAllDamageFields() {
         return new ArrayList<>(damageFieldMap.values());
     }
 
@@ -198,7 +183,7 @@ public class AppDataManager {
         void onDataChange();
     }
 
-    public void clearAllMaps(){
+    public void clearAllMaps() {
         agrarianFieldMap.clear();
         damageFieldMap.clear();
     }
@@ -209,6 +194,26 @@ public class AppDataManager {
 
     public void addPicture(DamageField field, PictureData pd) {
         dbConnection.addPictureToField(field.getID(), pd);
+    }
+
+    /**
+     * loads only the fields with the given name
+     *
+     * @param name
+     */
+    public void loadUserFields(String name) {
+        clearAllMaps();
+        for (Field field : this.searchOwner(name.toLowerCase())) {
+            if (field instanceof AgrarianField) {
+                agrarianFieldMap.put(field.getID(), (AgrarianField) field);
+            }
+        }
+        for (DamageField damageField : dbConnection.getAllDamgageFields()) {
+            if (agrarianFieldMap.containsKey(damageField.getParentField().getID())) {
+                damageFieldMap.put(damageField.getID(), damageField);
+            }
+        }
+
     }
 
     public void deletePicture(DamageField field, PictureData pd) {

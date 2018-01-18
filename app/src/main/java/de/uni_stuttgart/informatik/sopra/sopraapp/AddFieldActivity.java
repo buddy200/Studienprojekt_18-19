@@ -435,12 +435,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK && requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
-            DamageField fieldPhotoToDelete = GlobalConstants.getCurrentPhotoField();
-            dataManager.deletePicture(fieldPhotoToDelete, fieldPhotoToDelete.getPaths().get(fieldPhotoToDelete.getPaths().size() - 1));
-            fieldPhotoToDelete.deletePhoto(fieldPhotoToDelete.getPaths().size() - 1);
-            dataManager.changeDamageField(fieldPhotoToDelete);
-        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

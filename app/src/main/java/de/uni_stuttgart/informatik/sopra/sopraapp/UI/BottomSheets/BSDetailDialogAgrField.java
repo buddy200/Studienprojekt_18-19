@@ -108,7 +108,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
         edit.setOnClickListener(this);
         addDmg = (ImageButton) view.findViewById(R.id.add_damageField_button);
         addDmg.setOnClickListener(this);
-        navButton = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);
+        navButton = (ImageButton) view.findViewById(R.id.button_add_photo_from_gallery);
         navButton.setOnClickListener(this);
 
         size = (TextView) view.findViewById(R.id.field_detail_size);
@@ -159,7 +159,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
 
                     dismiss();
                     break;
-                case R.id.button_navigate_google_maps:
+                case R.id.button_add_photo_from_gallery:
                     //call a googlemaps intent with the position of the centroid point from the field object
                     String geoString = "geo:" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude()) + "?q=" + String.valueOf(mField.getCentroid().getLatitude()) + "," + String.valueOf(mField.getCentroid().getLongitude());
                     Uri gmmIntentUri = Uri.parse(geoString);

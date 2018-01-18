@@ -43,7 +43,7 @@
                 android:layout_alignParentRight="true" />
 
             <ImageButton
-                android:id="@+id/button_navigate_google_maps"
+                android:id="@+id/button_add_photo_from_gallery"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/imagegallery"
-                android:layout_toStartOf="@+id/button_navigate_google_maps"
+                android:layout_toStartOf="@+id/button_add_photo_from_gallery"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
 
             <EditText

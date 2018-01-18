@@ -1,16 +1,25 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import java.io.File;
+import java.io.IOException;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.FragmentInteractionListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.GlobalConstants;
@@ -21,6 +30,8 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by larsb on 14.01.2018.
  */
@@ -28,6 +39,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.PictureData;
 public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {
 
     private static final String TAG = "BottomSheetAddPhoto";
+    private static final int RESULT_LOAD_IMAGE = 13;
 
     protected FragmentInteractionListener mListener;
     private BSEditContract.Presenter mPresenter;
@@ -102,12 +114,12 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         recyclerView.setLayoutManager(layoutManager);
         photoName = (EditText) view.findViewById(R.id.edit_photo_name);
         addPhotoFromCamera = (ImageButton) view.findViewById(R.id.button_add_photo);
-        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);
+        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.button_add_photo_from_gallery);
         finish = (ImageButton) view.findViewById(R.id.finish_edit_button_agr);
         addPhotoFromGallery.setOnClickListener(this);
         addPhotoFromCamera.setOnClickListener(this);
         finish.setOnClickListener(this);
-        GlobalConstants.setCurrentPhotoField((DamageField) mPresenter.getVisibleField());
+//        GlobalConstants.setCurrentPhotoField((DamageField) mPresenter.getVisibleField());
 
     }
 
@@ -143,7 +155,9 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
                     takePhoto();
                     mPresenter.changeField(mPresenter.getVisibleField());
                     break;
-                case R.id.button_navigate_google_maps:
+                case R.id.button_add_photo_from_gallery:
+                    Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
                     break;
             }
         }
@@ -158,7 +172,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
  * create a PhotoManager object and save the fielpath from the picture in the damageField
  */
     public void takePhoto() {
-        PhotoManager photoManager = new PhotoManager(getActivity());
+        PhotoManager photoManager = new PhotoManager(getActivity(), this);
         if (mPresenter.getVisibleField() instanceof DamageField) {
             String s = photoManager.dispatchTakePictureIntent();
             PictureData pictureData = new PictureData(photoName.getText().toString(), s);
@@ -169,6 +183,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
 
     /**
      * remove picture from the clicked position and refresh the gallery
+     *
      * @param position
      */
     public void removePicture(int position) {
@@ -180,5 +195,34 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         ((DamageField) mPresenter.getVisibleField()).deletePhoto(position);
         mPresenter.changeField(mPresenter.getVisibleField());
         galleryAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode != RESULT_OK && requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
+            DamageField fieldPhotoToDelete = (DamageField) mPresenter.getVisibleField();
+            mPresenter.deltePhotFromDatabase(fieldPhotoToDelete.getPaths().get(fieldPhotoToDelete.getPaths().size() - 1));
+            fieldPhotoToDelete.deletePhoto(fieldPhotoToDelete.getPaths().size() - 1);
+            mPresenter.changeField(fieldPhotoToDelete);
+        }
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            String[] projection = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(projection[0]);
+            String picturePath = cursor.getString(columnIndex); // returns null
+            if(picturePath == null){
+                return;
+            }
+            cursor.close();
+            PictureData pictureData = new PictureData(photoName.getText().toString(), picturePath);
+            mPresenter.addPhotoToDatabase(pictureData);
+            galleryAdapter.notifyDataSetChanged();
+        }
     }
 }

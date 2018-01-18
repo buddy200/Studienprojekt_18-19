@@ -53,10 +53,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener<Object>, AppDataManager.DataChangeListener {
 
-    private static final String searchFor[] =  {
-            "All", "Name", "Owner", "State", "Date"
-    };
-
     private static final String TAG = "MainActivity";
 
     //i know this is bad, but there is no other way to get the context inside our AgrarianFieldType enum.. -D
@@ -261,6 +257,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
      */
     private View expandSearch;
     private void setUpSearchMenuItem(Menu menu) {
+        final String searchFor[] =  {
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date)
+        };
+
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
         expandSearch = findViewById(R.id.search_bar);
         final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);

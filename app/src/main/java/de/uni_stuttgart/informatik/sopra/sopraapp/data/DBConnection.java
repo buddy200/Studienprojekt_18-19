@@ -405,12 +405,15 @@ public class DBConnection {
      */
     public List<Field> searchAll(String text) {
         List<Field> fields = new ArrayList<>();
-        String[] selection_args = new String[2];
+        String[] selection_args = new String[3];
         selection_args[0] = "%" + text + "%" ;
         selection_args[1] = "%" + text + "%" ;
+        selection_args[2] = "%" + text + "%" ;
 
         try {
-            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.OWNER_COLUM + " LIKE  ? OR " + DBHelper.NAME_COLUM + " LIKE   ? ", selection_args, null, null, null);
+            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null,
+                    DBHelper.OWNER_COLUM + " LIKE  ? OR " + DBHelper.NAME_COLUM + " LIKE ? OR " + DBHelper.TYPE_COLUM + " LIKE ?",
+                    selection_args, null, null, null);
             while (agrCursor.moveToNext()) {
                 fields.add(toAgrarianField(agrCursor));
             }

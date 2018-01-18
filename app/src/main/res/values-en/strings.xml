@@ -4,7 +4,7 @@
     <string name="wheat">wheat</string>
     <string name="snow">snow</string>
     <string name="done">Done</string>
-    <string name="toastmsg_nolocation">No location data available. location Tracking enabled?</string>
+    <string name="toastmsg_nolocation">No location data available. Location tracking enabled?</string>
     <string name="toastmsg_nothing_found">No fields found</string>
     <string name="toastmsg_not_enough_points">Not enough points, you need at least 3</string>
     <string name="toastmsg_points_already_added">All points have already been added</string>
@@ -30,7 +30,7 @@
     <string name="done_Button">enough points</string>
     <string name="toggleLoc_Button">Automatic Zoom On/Off</string>
     <string name="redo_Button">Redo last point</string>
-    <string name="go_back_message">Are you sure you want to go back? fields not visible on screen will be dismissed</string>
+    <string name="go_back_message">Are you sure you want to go back? Fields not visible on screen will be dismissed</string>
     <string name="add_activity_added">" added"</string>
     <string name="add_activity_pointAt">"point at "</string>
     <string name="add_Activity_YouNeed">"You need "</string>
@@ -49,7 +49,7 @@
     <string name="logout_message">Are you sure you want to logout and close the app?</string>
     <string name="toastmsg_anotherDamageField">Add another damage case on this field or go back.</string>
     <string name="toastmsg_anotherAgrarainField">Add another field or go back.</string>
-    <string name="detailItem_estimatedpayment">"Estimated payment"</string>
+    <string name="detailItem_estimatedpayment">"Estimated payment "</string>
     <string name="dialogItem_Location">Location</string>
     <string name="dialogItem_Type">Type</string>
     <string name="dialogItem_Size">Size</string>
@@ -59,11 +59,11 @@
     <string name="dialogItem_Name">Name</string>
     <string name="no_date">no date</string>
     <string name="dialogitem_progress_state">Progress state</string>
-    <string name="progress_status_sent">sent</string>
+    <string name="progress_status_sent">Sent</string>
     <string name="progress_status_inprogress">In progress</string>
     <string name="progress_status_finish">Completed</string>
     <string name="dialogmessage_want_delete">Do you really want to delete this photo?</string>
-    <string name="photo_default_name">no photo discription</string>
+    <string name="photo_default_name">no photo description</string>
     <string name="main_toolbar_search">Search</string>
     <string name="main_toolbar_list">List</string>
     <string name="main_toolbar_my_location">My Location</string>

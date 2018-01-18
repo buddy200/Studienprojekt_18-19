@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Field Manager</string>
     <string name="done">Fertig</string>
-    <string name="toastmsg_nolocation">Keine Standortdaten verfügebar. Standorterfassung aktiviert?</string>
+    <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
     <string name="toastmsg_not_enough_points">Nicht genügend Punkte, mindestends 3 Punkte werden benötigt</string>
     <string name="toastmsg_points_already_added">Alle Punkte wurden bereits hinzugefügt</string>
     <string name="toastmsg_toggle_Loc_Off">Automatischer Zoom aus</string>
@@ -31,10 +31,10 @@
     <string name="redo_Button">Lösche letzten Punkt</string>
     <string name="toastmsg_nothing_found">Keine Felder gefunden</string>
     <string name="go_back_message">Sind Sie sicher, dass Sie zurückgehen möchten? Felder, die auf dem Bildschirm nicht sichtbar sind, werden verworfen</string>
-    <string name="add_activity_added">" hinzugefügt"</string>
+    <string name="add_activity_added">hinzugefügt</string>
     <string name="add_activity_pointAt">"Punkt bei "</string>
     <string name="add_Activity_YouNeed">"Noch "</string>
-    <string name="add_activity_needMore">" Punkte mehr"</string>
+    <string name="add_activity_needMore">Punkte mehr</string>
     <string name="word_yes">Ja</string>
     <string name="word_no">Nein</string>
     <string name="add_activity_ActionButtonText">Füge Eckpunkt an aktueller Position hinzu</string>
@@ -47,9 +47,9 @@
     <string name="login_label">Anmelden</string>
     <string name="logout_label">Abmelden</string>
     <string name="logout_message">Wirklich abmelden und die App schließen?</string>
-    <string name="toastmsg_anotherDamageField">Fügen sie ein weiteren Schadensfall hinzu oder gehen sie zurück</string>
-    <string name="toastmsg_anotherAgrarainField">Fügen sie ein weiteres Feld hinzu oder gehen sie zurück</string>
-    <string name="detailItem_estimatedpayment">Geschätzte Zahlung: </string>
+    <string name="toastmsg_anotherDamageField">Fügen Sie ein weiteren Schadensfall hinzu oder gehen Sie zurück</string>
+    <string name="toastmsg_anotherAgrarainField">Fügen Sie ein weiteres Feld hinzu oder gehen Sie zurück</string>
+    <string name="detailItem_estimatedpayment">"Geschätzte Zahlung: "</string>
     <string name="dialogItem_Location">Ort</string>
     <string name="dialogItem_Type">Type</string>
     <string name="dialogItem_Size">Größe</string>
@@ -58,13 +58,13 @@
     <string name="detailItem_evaluator">Gutachter</string>
     <string name="dialogItem_Name">Name</string>
     <string name="dialogitem_progress_state">Bearbeitungsstatus:</string>
-    <string name="progress_status_sent">verschickt</string>
+    <string name="progress_status_sent">Verschickt</string>
     <string name="progress_status_inprogress">In Bearbeitung</string>
     <string name="progress_status_finish">Abgeschlossen</string>
-    <string name="dialogmessage_want_delete">Wollen sie dieses Foto wirklich löschen?</string>
+    <string name="dialogmessage_want_delete">Wollen Sie dieses Foto wirklich löschen?</string>
     <string name="photo_default_name">Keine Fotobeschreibung</string>
     <string name="main_toolbar_search">Suche</string>
     <string name="main_toolbar_list">Liste</string>
     <string name="main_toolbar_my_location">Meine Position</string>
-    <string name="search_all">Nach allem</string>
+    <string name="search_all">Alles</string>
 </resources>

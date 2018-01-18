@@ -239,7 +239,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         Drawable dr = context.getResources().getDrawable(R.drawable.ic_pin_map);
 
         m.setIcon(dr);
-        m.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_BOTTOM);
+        m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM );
         map.getOverlayManager().add(m);
     }
 

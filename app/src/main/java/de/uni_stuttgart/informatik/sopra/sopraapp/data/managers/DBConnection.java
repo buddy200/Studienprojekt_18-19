@@ -424,20 +424,26 @@ public class DBConnection {
             }
             agrCursor.close();
 
-            selection_args = new String[4];
+            selection_args = new String[5];
             selection_args[0] = "%" + text + "%";
             selection_args[1] = "%" + text + "%";
             selection_args[2] = "%" + text + "%";
             selection_args[3] = "%" + text + "%";
+            selection_args[4] = "%" + text + "%";
 
-            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ? OR " + DBHelper.DATE_COLUM + " LIKE ? OR " + DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null, null, null);
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null,
+                    DBHelper.EVALUATOR_COLUM + " LIKE ? OR " + DBHelper.NAME_COLUM + " LIKE ? OR " +
+                            DBHelper.DATE_COLUM + " LIKE ? OR " + DBHelper.PROGRESS_COLUM + " LIKE ?  OR " +
+                            DBHelper.TYPE_COLUM + " LIKE ?"
+                    , selection_args, null, null, null);
+
             while (dmgCursor.moveToNext()) {
                 fields.add(toDamageField(dmgCursor));
             }
             dmgCursor.close();
+
         }catch (SQLException e){
             e.printStackTrace();
-            fields = null;
         }
 
         return  fields;

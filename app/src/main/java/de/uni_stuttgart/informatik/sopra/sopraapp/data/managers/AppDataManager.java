@@ -51,8 +51,7 @@ public class AppDataManager {
      * Reads all field data from the database and write these in two Hash maps. One for DamageFields one for AgrarianFields
      */
     public void readData() {
-        agrarianFieldMap.clear();
-        damageFieldMap.clear();
+        clearAllMaps();
      //   if (prefs.getBoolean(context.getString(R.string.pref_admin_bool), true)) {
             for (AgrarianField field : dbConnection.getAllAgrarianFields()) {
                 agrarianFieldMap.put(field.getID(), field);
@@ -180,15 +179,28 @@ public class AppDataManager {
      *
      * @return a ArrayList of fields
      */
-    public ArrayList<Field> getFields() {
+    public ArrayList<Field> getAllFields() {
         ArrayList<Field> dataFromFields = new ArrayList<>();
         dataFromFields.addAll(agrarianFieldMap.values());
         dataFromFields.addAll(damageFieldMap.values());
         return dataFromFields;
     }
 
+    public ArrayList<AgrarianField> getAllAgrarianFields() {
+        return new ArrayList<>(agrarianFieldMap.values());
+    }
+
+    public ArrayList<DamageField> getAllDamageFields(){
+        return new ArrayList<>(damageFieldMap.values());
+    }
+
     public interface DataChangeListener {
         void onDataChange();
+    }
+
+    public void clearAllMaps(){
+        agrarianFieldMap.clear();
+        damageFieldMap.clear();
     }
 
     public void dbClose() {

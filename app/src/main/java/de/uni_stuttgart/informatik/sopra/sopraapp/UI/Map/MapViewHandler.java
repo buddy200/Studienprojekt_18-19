@@ -15,10 +15,8 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayManager;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,7 +113,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         }
 
         if(mDataManager != null){
-            reloadWithData(mDataManager.getFields());
+            reloadWithData(mDataManager.getAllFields());
         }
 
     }
@@ -273,7 +271,7 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     public void reload(){
         if(map != null){
-            reloadWithData(mDataManager.getFields());
+            reloadWithData(mDataManager.getAllFields());
         }
     }
 

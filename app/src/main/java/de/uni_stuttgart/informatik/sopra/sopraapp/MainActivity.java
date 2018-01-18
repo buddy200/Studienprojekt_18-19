@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
         mapHandler = new MapViewHandler(this, dataManager, mapFragment);
         mapFragment.setPresenter(mapHandler);
-
+     /*   for(AgrarianField field : GlobalConstants.polygonTest(1, 10, this)) {
+            dataManager.addAgrarianField(field);
+        }*/
     }
 
     @Override
@@ -108,20 +110,22 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         //check if user already used the app - if not show login dialog
         boolean previouslyStarted = prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false);
         if(!previouslyStarted) {
-            LoginDialog test = new LoginDialog(this);
-            test.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            LoginDialog loginDialog = new LoginDialog(this);
+            loginDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     invalidateOptionsMenu();
                 }
             });
-            test.show();
+            loginDialog.show();
+
         }else {
             boolean adm = prefs.getBoolean(this.getString(R.string.pref_admin_bool), false);
             GlobalConstants.isAdmin = adm;
             this.invalidateOptionsMenu();
         }
         Log.e(TAG, "is admin?" + String.valueOf(GlobalConstants.isAdmin));
+        mapHandler.reload();
     }
 
 
@@ -315,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 startActivityForResult(i, 2404);
                 break;
             case R.id.action_toolbar_list:
-                ItemListDialogFragment.newInstance(dataManager.getFields()).show(getSupportFragmentManager(), "FieldList");
+                ItemListDialogFragment.newInstance(dataManager.getAllFields()).show(getSupportFragmentManager(), "FieldList");
                 break;
             case R.id.action_toolbar_location:
                 MYLocationListener myLocationListener = new MYLocationListener();
@@ -354,6 +358,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                         SharedPreferences.Editor edit = prefs.edit();
                         edit.clear();
                         edit.apply();
+                        dataManager.clearAllMaps();
+                        mapHandler.reload();
                         onStart();
                         break;
 

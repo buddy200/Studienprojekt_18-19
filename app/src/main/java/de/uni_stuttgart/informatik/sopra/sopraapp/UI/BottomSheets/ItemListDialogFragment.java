@@ -71,7 +71,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         View view =  inflater.inflate(R.layout.fragment_item_list_dialog, container, false);
         configureBottomSheetBehavior(view);
         dataManager = new AppDataManager(getContext());
-        fieldData = dataManager.getFields();
+        fieldData = dataManager.getAllFields();
         return view;
     }
 

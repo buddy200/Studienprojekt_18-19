@@ -76,7 +76,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
     public void changeField(Field f) {
         /*boolean fieldExists = false;
         Field toDelete = null;
-        for(Field field : mDataManager.getFields()){
+        for(Field field : mDataManager.getAllFields()){
             if(field.getTimestamp() == f.getTimestamp()){
                 toDelete = field;
 
@@ -84,7 +84,7 @@ public class BSEditHandler implements BSEditContract.Presenter {
 
         }
 
-        mDataManager.getFields().remove(toDelete);
+        mDataManager.getAllFields().remove(toDelete);
             if (f instanceof AgrarianField) {
                 mDataManager.addAgrarianField(f);
             }

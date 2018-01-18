@@ -99,7 +99,7 @@ public class SearchUtil {
 
         // copy dataFromFields in search data listGeoPoints
         // we need a deep copy - because fields contain other fields
-        ArrayList<Field> searchData = new ArrayList<>(dataManager.getFields());
+        ArrayList<Field> searchData = new ArrayList<>(dataManager.getAllFields());
         ArrayList<Field> resultData = new ArrayList<>();
 
         /**

@@ -9,6 +9,7 @@ import org.osmdroid.views.overlay.Polygon;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.AgrarianFieldType;
@@ -66,39 +67,41 @@ public class GlobalConstants {
      * @param numberPoints m
      * @return ArrayList of polygons
      */
-    /*
-    public static List<Polygon> polygonTest(int numberPolygons, int numberPoints){
+
+    public static List<AgrarianField> polygonTest(int numberPolygons, int numberPoints, Context context){
+
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
         double Min = -0.001;
 
-        List<Polygon> polis = new ArrayList<>();
+        List<AgrarianField> polis = new ArrayList<>();
         double initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
         double initialLon = GlobalConstants.lastLocationOnMap.getLongitude();
 
         for(int j=0; j<numberPolygons; j++) {
-            Polygon p = new Polygon();
-            p.setTitle(String.valueOf(String.valueOf(j)));
-            p.setFillColor(Color.argb(50,0,0,0));
-            List<GeoPoint> points = new ArrayList<>();
+
+     //       p.setFillColor(Color.argb(50,0,0,0));
+            List<CornerPoint> points = new ArrayList<>();
             for (int i = 0; i < numberPoints; i++) {
-                points.add(new GeoPoint(initialLat +  Min + (Math.random() * ((Max - Min) )),
+                points.add(new CornerPoint(initialLat +  Min + (Math.random() * ((Max - Min) )),
                         initialLon + Min + (Math.random() * ((Max - Min) ))));
             }
+            AgrarianField p = new AgrarianField(context, points);
+            p.setLinesFormField(new ArrayList<Vector<Double>>());
             if(j % (int) Math.sqrt(numberPolygons) == 0){
                 initialLon += 0.003;
                 initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
             }
             initialLat += 0.003;
 
-            p.setPoints(points);
+
             polis.add(p);
         }
 
         return polis;
     }
-/*
-    public static DamageField damageFieldTest(Context context){
+
+  /*  public static DamageField damageFieldTest(Context context){
 
         List<CornerPoint> points3 = new ArrayList<>();
         points3.add(new CornerPoint(48.840644, 8.841278));

@@ -45,7 +45,7 @@
 
     <!-- Add Activity UI -->
     <string name="done_Button">enough points</string>
-    <string name="toggleLoc_Button">Automatic Zoom On/Off</string>
+    <string name="toggleLoc_Button">Automatic Zoom On</string>
     <string name="redo_Button">Redo last point</string>
     <string name="toastmsg_nothing_found">No fields found</string>
     <string name="go_back_message">Are you sure you want to go back? Fields not visible on screen will be dismissed</string>
@@ -100,5 +100,6 @@
 
 
     <string name="search_all">All</string>
+    <string name="progress_no_status">No status</string>
 
 </resources>

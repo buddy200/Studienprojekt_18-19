@@ -38,7 +38,6 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.IntersectionCalculator;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -174,8 +173,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         } else {
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
-        OnMapClick();
         dataManager.readData();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        OnMapClick();
     }
 
     @Override
@@ -216,12 +220,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             listGeoPoints.remove(listGeoPoints.size() - 1);
             listCornerPoints.remove(listCornerPoints.size() - 1);
             polyline.setPoints(listGeoPoints);
+            mMapViewHandler.deleteLastFieldMarker();
             mMapViewHandler.addPolyline(polyline);
             mMapViewHandler.invalidateMap();
-            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
+            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
             if (listCornerPoints.size() < 3) {
                 fabLabel.setVisibility(View.VISIBLE);
-                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
+                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
             }
         } else {
             Toast.makeText(this, getResources().getString(R.string.add_activity_NoMorePoints), Toast.LENGTH_SHORT).show();
@@ -234,9 +239,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     private void onToggleLocButtonClick() {
         if (myLocationListener.getFollow()) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.toastmsg_toggle_Loc_Off), Toast.LENGTH_SHORT).show();
+            toolbar.getMenu().getItem(2).setTitle(R.string.toastmsg_toggle_Loc_Off);
             myLocationListener.setFollow(false);
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.toastmsg_toggle_Loc_On), Toast.LENGTH_SHORT).show();
+            toolbar.getMenu().getItem(2).setTitle(R.string.toastmsg_toggle_Loc_On);
             myLocationListener.setFollow(true);
         }
     }
@@ -278,8 +285,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         listGeoPoints.add(g);
         listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
         polyline.setPoints(listGeoPoints);
-        mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());
         mMapViewHandler.addPolyline(polyline);
+        mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());
         mMapViewHandler.invalidateMap();
 
         if (listCornerPoints.size() > 2) {
@@ -293,7 +300,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (isDmgField && !intersectionCalculator.calcIntersection(parentField)) {
             onRedoButtonClick();
         } else {
-            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + getResources().getString(R.string.add_activity_needMore));
+            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed)  + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
             Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
                     location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
@@ -429,7 +436,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      * try to get the current user location
      */
     public void onMapFragmentComplete() {
-        OnMapClick();
+
     }
 
     @Override

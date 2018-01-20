@@ -48,6 +48,7 @@ public class MapViewHandler implements MapContract.MapHandler {
     private IMapController mapController;
     private Context context;
     private Marker currentLocMarker;
+    private ArrayList<Marker> fieldMarker;
 
     //map fields to Polygon Overlays
     private Map<Field, FieldPolygon> fieldPolyMap;
@@ -70,6 +71,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         this.context = context;
         mDataManager = dataManager;
         mMapFragment = mapFragment;
+        fieldMarker = new ArrayList<>();
     }
 
     @Override
@@ -241,6 +243,12 @@ public class MapViewHandler implements MapContract.MapHandler {
         m.setIcon(dr);
         m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM );
         map.getOverlayManager().add(m);
+        fieldMarker.add(m);
+    }
+
+    public void deleteLastFieldMarker(){
+        map.getOverlayManager().remove(fieldMarker.get(fieldMarker.size() - 1));
+        fieldMarker.remove(fieldMarker.size() - 1);
     }
 
     /**
@@ -310,6 +318,7 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public void destroy(){
+        fieldMarker.clear();
         map.onDetach();
 
     }

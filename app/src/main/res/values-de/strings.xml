@@ -67,4 +67,6 @@
     <string name="main_toolbar_list">Liste</string>
     <string name="main_toolbar_my_location">Meine Position</string>
     <string name="search_all">Alles</string>
+    <string name="no_date">Kein Datum</string>
+    <string name="progress_no_status">Kein Status</string>
 </resources>

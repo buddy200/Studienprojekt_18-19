@@ -11,90 +11,156 @@ Weiter ist es deutlich einfacher den Schaden wieder zu finden, weil man genau au
 ## Features
 
 
-### Feature 1 Erstellen und Verwalten von Feldern
+### Feature 1 Erstellen von Feldern
 
-Es können Felder auf der Karte mithilfe der Standortsensoren des Handys eingezeichnet werden und weitere Daten hinzugefügt werden (z.B. Namen des Versicheurngsnehemers, Lage des Feldes) und geändert werden.
+Es können Felder auf der Karte mithilfe der Standortsensoren des Handys eingezeichnet werden. Es können aber auch Punkte mithilfe eines Klicks auf den gewünschten Punkt auf der Karte hinzugefügt werden. Ein ungwollt eingezeichneter Eckpunkt kann wieder enfernt werden. Außerdem kann das automatische folgen der Karteposition deaktiviert werden. Weitere Daten können nach dem einzeichnen der Eckpunkte hinzugefügt werden (z.B. Namen des Versicheurngsnehemers, Lage des Feldes) und geändert werden. Details zur Bedinung folgen nun als Screenshots. Es können auch direkt mehrere Felder hintereinander eingefügt werden.
 
-![Nachdem klicken auf den add Button](doc\images\BlankAddField.png)
-Nachdem klicken auf den add Button
+![Nachdem klicken auf den add Button](doc/images/BlankAddField.png)
+Nachdem klicken auf den + Button in der Main Activity. Weiter sieht man das Menu das ausgeklappt werden kann indem man auf die drei Punkte klickt. Mit diesen zwei Buttons kann der letzte Punkt rückgängig gemacht werden und der Automatische Zoom der Karte deaktiviert/aktiviert werden
 
-![Nachdem einfügen einiger Punkte](doc\images\AddedPoints.png)
-Nachdem einfügen einiger Punkte
+![Erster Punkt eingefügt](doc/images/onePoint.png)
+Der erste Punkt wurde entweder über GPS oder mit einem Mapklick eingefügt.
 
-![Nachdem kompletten umrunden des Feldes. Dateneintragung](doc\images\addFileddata.png)
-Nachdem kompletten umrunden des Feldes. Dateneintragung
+![Nachdem einfügen einiger Punkte](doc/images/AddedPoints.png)
+Nachdem einfügen aller Eckpunkte des Feldes
 
-![Fertiges Feld auf der Karte](doc\images\FieldAdded.png)
-Fertiges Feld auf der Karte
+![Nachdem kompletten umrunden des Feldes. Dateneintragung](doc/images/addFileddata.png)
+Nachdem klicken des Buttons genügend Punkte können nun hier die Daten eingetragen werden
 
-![Ein Feld oder Schadensfall bearbeiten](doc\images\BeimBearbeite.png)
-Ein Feld oder Schadensfall bearbeiten
+![Alle Daten sind eingetragen](doc/images/alleDate.png)
 
-![Nach der Bearbeitung](doc\images\NachBearbeiten.png)
-Nach der Bearbeitung
+![Fertiges Feld auf der Karte](doc/images/FieldAdded.png)
+Ansicht des Feldes in der Add Activity
 
-### Feature 2 Erstellen und Verwalten von Schadensfällen
+![Weiters Feld hinzufügen](doc/images/zweiFelder.png)
+Nun kann wie gerade beschreiben ein weiteres Feld hinzugefügt werden. Wenn alle gwünschten Felder hinzugefügt worden sind kann mit dem Pfeil in der linken Ecke zurückgegangen werden
 
-Es können zu einem Feld Schadensfälle hinzugefügt oder entfernt werden. Das Hinzufügen und editieren läuft nahezu identisch ab wie bei Feature 1. Allerdings können hier noch Daten wie zum Beispiel das Enstehungs Datum des Schadens eigetragen werden.
+![Felder in der Main Activity](doc/images/zweiFelderMain.png)
+Hier sieht man nun die beiden Felder nach dem verlassen der Add Activity. Hier können nun auch alle Felder angeklickt werden und bearbeitet werden
+
+![Detailansicht](doc/images/Detailansicht2.png)
+Nach dem Klicken auf das Feld kann es hier bearbeite werden (mit dem Stifticon), ein Schadensfall zum ausgwählten Feld hinzufügen  (mit dem Feuericon) oder mithilfe von Googlemaps zum Feld navigieren
+
+## Feature 2 Felder bearbeiten
+
+![Ein Feld oder Schadensfall bearbeiten](doc/images/BeimBearbeite.png)
+Hier kann Das Feld bearbeitet werden. Es können die meisten Daten geändert werden. Hier kann das Feld auch mithilfe des Mültonnenicons gelöscht werden.
+
+![Alle Daten abgeändert](doc/images/abegander.png)
+Hier wurden nun die Daten geänder und können mithilfe des Diskettenicons nun gespeicher werden.
+
+![Nach der Bearbeitung](doc/images/NachBearbeiten.png)
+So sieht das Feld nun nach der Änderung aus
+
+### Feature 3 Erstellen und Verwalten von Schadensfällen
+
+Es können zu einem Feld Schadensfälle hinzugefügt oder entfernt werden. Das Hinzufügen und editieren läuft nahezu identisch ab wie bei Feature 1. Allerdings können hier noch Daten wie zum Beispiel das Enstehungs Datum des Schadens eigetragen werden. Hier werden nun hauptsächlich die Sachen erläutert die nicht identisch zum Felder hinzufügen/ändern sind.
+
+![Dateneingabe zum Schadensfall](doc/images/damageDate.png)
+Das Eintragen eines Schadensfall läuft nach dem Klicken auf das Feuericon eines Feldes genau so ab wie das hinzufügen eines Feldes. Nur die Dateneingabe ist umfasst andere Attribute. Weiter können hier über das Kamerasymbol noch Fotos hinzugefügt werden.
+
+![Datum hinzufügen](doc/images/Datepicker.png)
+Datum auswählen wann der Schaden entstanden ist.
+
+![Nachdem ausfüllen des Formulars](doc/images/schdensfallDaten.png)
+So könnte das augefüllte Formular aussehen.
+
+![Nachdem einfügen des Schadens](doc/images/damageEnd.png)
+Nachdem einfügen des Schadens.
+
+![Mehrere Schadensfälle in einem Feld](doc/images/beideSchadensfalle.png)
+Auch hier können mehrere Schadensfälle direkt hintereinander eingefügt werden. Diese Schadensfälle sind unabhängig voneinander und müssen nur im gleichen Feld liegen. Hier die Ansicht von zwei Schadensfällen in einem Feld.
 
 
+### Feature 4 Bilder zu einem Schadensfall hinzufügen
 
-![Hinzufügen eines Schadens in einem Feld](doc\images\fieldgamageadd.png)
-Hinzufügen eines Schadens in einem Feld
+Wenn sich der Schadensfall im Bearbeitungsmodus befindet können auch Bilder zur besseren Dokumentation des Schadens hinzugefügt werden. Imn folgenden wird erklärt wie dies abläuft
 
-![Schadensfall vor der Fertigstellung](doc\images\DamageTrack.png)
-Schadensfall vor der Fertigstellung
+![Bilder UI](doc/images/bilderUI.png)
+Hier gibt es nun die Möglichkeit dem Bild einen Titel zu geben (der Titel kann auch leer gelassen werden). Man kann nun entweder ein Bild mit der Kamera machen oder eines aus der Galerie hinzuzufügen. Mit dem Rechtenesten Button wird das Fotomenü wieder geschlossen.
 
-![Dateneingabe zum Schadensfall](doc\images\damageDate.png)
-Dateneingabe zum Schadensfall
+![Mit Kamera](doc/images/mitKamera.png)
+Hier wird ein Bild mit der Kamera gemacht.
 
-![Nachdem einfügen des Schadens](doc\images\damageEnd.png)
-Nachdem einfügen des Schadens
+![Galerie](doc/images/galerie.png)
+Hier kann ein Bild aus der Galerie ausgwählt werden.
 
+![Nach dem einfügen](doc/images/nacheinfugen.png)
+Hier kann man die Bilder nun sehen wie sie eingefügt aussehen. Durch einfaches Klicken können Bilder auch wieder gelöscht werden (mit Sicherheitsabfrage).
 
-### Feature 3 Anzeigen aller Schadensfälle und Felder in einer Liste
+![Anzeige im Schadensfall](doc/images/bilderDialog.png)
+
+### Feature 5 Anzeigen aller Schadensfälle und Felder in einer Liste
 
 Es wird ein Liste alle Schadensfälle und Felder sobald man auf den Button "list" drückt angezeigt. In dieser werden ein paar Informationen zu den Feldern und Schadensfällen angezeigt. Durch klicken auf einen Eintrag, werden alle Informationen die Verfügbar sind angezeigt und es wird zum jeweiligen Feld oder Schadensfall gezoomt. Es ist dann auch möglich den Eintrag zu bearbeiten, löschen und einen Schadensfall hinzuzufügen (Siehe Feature 1 und 2).
 
-![Anzeige der Liste mit den wichtigsten Informationen](doc\images\list.png)
-Anzeige der Liste mit den wichtigsten Informationen
+![Liste aktiviren](doc/images/NachAnmelden.png)
+Hier kann die Liste ausgwählt werden.
 
-![Detailansicht eines Feldes/Schadensfall](doc\images\Detailansicht.png)
-Detailansicht eines Feldes/Schadensfall
+![Anzeige der Liste mit den wichtigsten Informationen](doc/images/list.png)
+Anzeige der Liste mit den wichtigsten Informationen.
 
-
-
-### Feature 4 Durchsuchen nach Versicherungsnehmer
-
-Ein durchsuchen der Felder und Schadensfälle nach Versicherungsnehmer ist im Suchfeld möglich. Wenn ein oder mehrere passende Felder gefunden worden sind, werden diese wie in Feature 3 beschrieben angezeigt.
-
-![Das Suchfeld](doc\images\Search.png)
-Suchfeld mit einer Eingabe
-
-![Die gefundenen Treffer von der Suche](doc\images\Searchlist.png)
-Die gefundenen Treffer von der Suche
+![Detailansicht eines Feldes/Schadensfall](doc/images/Detailansicht2.png)
+Detailansicht eines Feldes/Schadensfall nach dem klicken auf einen Eintrag in der Liste.
 
 
-### Feature 5 Klicken auf ein Feld/Schadenfall zeigt nähere Details an
 
-Sobald man auf ein Polygon von einem Feld oder Schadensfall klickt, wird eine Detailansicht gezeigt. Diese enthält alle Daten des Feldes/Schadensfall und kann bei Bedarf dort direkt geändert werden oder auch gelöscht werden.
+### Feature 6 Durchsuchen nach bestimmten Attributen
 
-![Ansicht eines Feldes](doc\images\FieldOverview.png)
-Ansicht eines Feldes
+Ein durchsuchen der Felder und Schadensfälle nach Unterschieldiche Kriterien ist im Suchfeld möglich. Wenn ein oder mehrere passende Felder gefunden worden sind, werden diese wie in Feature 5 beschrieben angezeigt.
 
-![Detailansicht des Feldes](doc\images\Detailansicht.png)
-Detailansicht des Feldes
+![Auswahl Suchkritereien](doc/images/sucheAuswahl.png)
+Aus diesen Kriterien kann der Nutzer die Suche beinflussen
+
+![Das Suchfeld](doc/images/Search.png)
+Suchfeld mit einer Eingabe.
+
+![Die gefundenen Treffer von der Suche](doc/images/Searchlist.png)
+Die gefundenen Treffer von der Suche.
 
 
-### Feature 6 Die App ist eingeschränkt offline nutzbar
+### Feature 7 Die App ist eingeschränkt offline nutzbar
 
-Es ist möglich auch ohne Internetverbindung möglich auf dem Gerät angelegte Felder und Schadensfälle anzusehen und zu bearbeiten und hinzuzufügen. Allerdings kann eventuell keine Karte dargestellt werden wenn diese nicht bei vorheriger Benutzung vom Gerät gespeichert worden ist.
+Ohne Internetverbindung ist es eventuell nicht möglich die Karte anzuzeigen. Weiter kann die Navigation per Googlemaps nicht durchgeführt werden. Ansonsten sind alle Funktionnen ohne Einschränkung nutzbar.
 
-### Feature 7 Aktuellen Standort erfassen
+### Feature 8 Aktuellen Standort erfassen
 
-Die App kann sobald einmal auf den "Loc" Botton geklickt worden ist den Standort erfassen und diesen dann alle zwei Sekunden aktualisieren. Um dieses Feature nutzen zu können muss die Standorterfassung des Gerätes eingeschalten sein. Außerdem kann es einige Sekunden dauern bis ein Standort gefunden worden ist. In Gebäuden oder in Gebieten mit schlechten GPS-Empfang kann die Ortung eventuell nicht erfolgen
-![Anzeige des aktuellen Standorts](doc\images\currLoc.png)
-Anzeige des aktuellen Standorts
+Die App kann sobald einmal die Standorterfassung aktiviert ist, den Standort erfassen und diesen dann alle zwei Sekunden aktualisieren. Um dieses Feature nutzen zu können muss die Standorterfassung des Gerätes eingeschalten sein. Außerdem kann es einige Sekunden dauern bis ein Standort gefunden worden ist. In Gebäuden oder in Gebieten mit schlechten GPS-Empfang kann die Ortung eventuell nicht erfolgen.
+
+![Standort aktivieren](doc/images/NachAnmelden.png)
+Hier in diesem Menu lässt sich der Standortdienst aktivieren.
+
+![Anzeige des aktuellen Standorts](doc/images/Startscreen.png)
+Anzeige des aktuellen Standorts.
+
+### Feature 9 Navigation mit Googlemaps
+In der Detailansicht von Schadensfällen und Feldrn ist es möglich über das Pfeilicon über Googlemaps zu navigieren. Es wird ein Intent mit den Kordinaten des Mittelpunkte geöffnet. Hier kann dann wie gewöhnlich zum Feld navigiert werden, solange dorthin Wege existieren.
+
+
+### Feature 10 Punkte manuell einzeichnen
+Falls man nicht vor Ort die Felder eintragen will, kann man auch mit einfachen Klicks auf der Karte während einem  Feld oder Schadenfall hinzufügen die Eckpunkte des Feldes setzen.
+
+
+### Feature 11 Nutzerverwaltung
+Im Moment beschränkt sich die Nutzerverwaltung hauptsächlich darauf das Bauer und Verwalter unterschieden werden. Der Bauer hat keinerlei Schreibrechte. Kann also keine Felder oder Schadensfälle hinzufügen oder ändern. Er sieht nur Daten die auf seinen Namen laufen. Der Verwalter hingegen hat vollen Zugriff auf die App.
+
+![Anmelde Dialog](doc/images/Anmelden1.png)
+Hier können sich die Nutzer anmelden. Im Moment reicht der Nutzernamen und die Auswahl was dieser für eine Rolle hat. Ein richtiger Login mit Passwort ist dann in Verbindung mit einem Backend sinvoller zu integrieren.
+
+![Anmelde Dialog 2 ](doc/images/Anmelden2.png)
+Eingetragene Logindaten.
+
+![Eingeloggter User sehen](doc/images/NachAnmelden.png)
+Hier lässt sich einsehen wer gerade eingeloggt ist.
+
+![Verwalteransicht](doc/images/Startscreen.png)
+Ansicht eines beliebigen Verwalters.
+
+![Ansicht Bauer Müller](doc/images/muller.png)
+Hier ist die Ansicht wenn sich der Bauer Müller eigeloggt hat.
+
+![Liste Müller](ListeMuller.png)
+Liste der Felder mit Bauer Müller als Benutzer.
 
 
 ## Installation
@@ -127,15 +193,10 @@ Die Versicherung bekommt somit eine gute Übersicht über die Felder mit Schaden
 Aber auch der Bauer weiß somit genau wo der Schaden im Feld liegt und wie schlimm dieser ist. Außerdem bekommt er durch die einfacherer Bearbeitung seine Entschädigung schneller.
 
 
-
-## Changelog
-
-Die Entwicklungsgeschichte befindet sich in [CHANGELOG.md](CHANGELOG.md).
-
 ## Verwendete Bibliotheken
 
 - osmdroid
 
 ## Lizenz
 
-**TODO Lizenz nennen**. Genaue Bedingungen der Lizenz können in [LICENSE](LICENSE) nachgelesen werden.
+Die Bedingungen der Lizenz können in [LICENSE](LICENSE) nachgelesen werden.

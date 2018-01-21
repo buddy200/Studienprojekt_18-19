@@ -27,6 +27,7 @@ public class AppDataManager {
     private Context context;
     private DBConnection dbConnection;
     private DataChangeListener listener;
+
     public AppDataManager(Context context) {
         this.context = context;
         try {
@@ -38,7 +39,6 @@ public class AppDataManager {
         agrarianFieldMap = new HashMap<>();
         damageFieldMap = new HashMap<>();
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        //  readData();
         dataChange();
     }
 

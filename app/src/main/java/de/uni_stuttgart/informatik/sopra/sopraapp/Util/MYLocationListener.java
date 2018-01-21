@@ -9,7 +9,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
 
 /**
@@ -23,16 +22,14 @@ public class MYLocationListener implements LocationListener {
     private Location location;
     private Context context;
     private MapViewHandler mMapViewHandler;
-
     public boolean follow = false;
 
-
     public MYLocationListener() {
-
     }
 
     /**
      * initilize the Location Manager with teh actual context und mapHandler and start the location finding
+     *
      * @param context
      * @param mapHandler
      */
@@ -55,17 +52,12 @@ public class MYLocationListener implements LocationListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
-
 
     @Override
     public void onLocationChanged(Location location) {
-        if(location != null){
-            if(follow){
+        if (location != null) {
+            if (follow) {
                 mMapViewHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
             }
             mMapViewHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
@@ -89,6 +81,7 @@ public class MYLocationListener implements LocationListener {
 
     /**
      * get the actual location from the GPS or Network Sensor (depending on wich is better)
+     *
      * @return
      */
     public Location getLocation() {
@@ -108,7 +101,6 @@ public class MYLocationListener implements LocationListener {
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,16 +109,14 @@ public class MYLocationListener implements LocationListener {
 
     /**
      * set follow on enabled or disabled
+     *
      * @param b
      */
-    public void setFollow(boolean b){
+    public void setFollow(boolean b) {
         follow = b;
     }
 
-    public boolean getFollow(){
+    public boolean getFollow() {
         return follow;
     }
 }
-
-
-

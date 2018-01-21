@@ -32,6 +32,7 @@ public class SearchUtil {
      * @param input search input
      * @return boolean
      */
+    /*
     public static boolean matchesFieldSearch(Field f, String input){
         Bundle b = f.getBundle();
 
@@ -71,6 +72,7 @@ public class SearchUtil {
     }
 
 
+
     public static void searchForType(AppDataManager manager, String query, String type) {
         List<Field> results = new ArrayList<>();
         if (type.equals(searchFor[0])) {
@@ -85,9 +87,9 @@ public class SearchUtil {
             results = manager.searchDate(query);
         }
 
-        
 
-    }
+
+    }*/
 
     /**
      * search implementation

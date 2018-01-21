@@ -4,17 +4,12 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -35,22 +30,12 @@ public abstract class Field implements Serializable {
     private static final String TAG = "Field";
     private static final long serialVersionUID = 11L;
 
-
-    //keys for bundles
-    static final String KEY_NAME = "name";
-    static final String KEY_COLOR = "color";
-    static final String KEY_COUNTY = "county";
-    static final String KEY_SIZE = "size";
-    static final String KEY_TYPE = "type";
-    static final String KEY_CONVERTEDSIZE = "convertedSize";
-    static final String KEY_TIMESTAMP = "timestamp";
-
     protected transient Context context;
 
     //values for field and damage case
     private long ID;
     private String name = "";
-    FieldType type;
+    private FieldType type;
     private String county = "";
     private int color;
     private double size;
@@ -59,9 +44,6 @@ public abstract class Field implements Serializable {
 
     private List<CornerPoint> cornerPoints = new ArrayList<>();
 
-
-    //distinct timestamp to identify the field objects
-    private long timestamp;
     /**
      * the rotation of the polygon
      * true if counterclockwise
@@ -77,26 +59,13 @@ public abstract class Field implements Serializable {
      * @param cPoints
      */
     public Field(Context context, List<CornerPoint> cPoints) {
-        timestamp = Calendar.getInstance().getTime().getTime();
-
         this.context = context;
-
-        //set default attributes
-       /* if(context != null){
-            this.name = context.getResources().getString(R.string.field_default_name);
-            this.county = context.getResources().getString(R.string.county_default_name);
-        }else {
-            this.name = "no name";
-            this.county = "no county";
-        }*/
         this.size = 0.0;
         this.color = R.color.fieldDefaultColor;
 
-
         if (cPoints.size() < 2) {
-            Log.e(TAG, "not enough corner points provided for field: " + name);
         } else {
-            setCornerPoints(cPoints); //TODO: does this copy work? We might need some deepCopy() stuff here
+            setCornerPoints(cPoints);
             finish();
         }
     }
@@ -147,7 +116,6 @@ public abstract class Field implements Serializable {
                     outwardPoints.add(cp);
                 }
             }
-
             for (int i = 0; i < cornerPoints.size() - 2; i++) {
                 if (outwardPoints.isEmpty()) {
                     triangleList.add(new Triangle(rmCopy.get(0), rmCopy.get(1), rmCopy.get(2)));
@@ -184,7 +152,6 @@ public abstract class Field implements Serializable {
                     }
                 }
             }
-
             for (Triangle t : triangleList) {
                 size += t.getSize();
             }
@@ -264,7 +231,6 @@ public abstract class Field implements Serializable {
         return new GeoPoint(lowX0 + ((highX1 - lowX0) / 2), lowY0 + ((highY1 - lowY0) / 2));
     }
 
-
     /**
      * returns the size of this field in m^2
      *
@@ -287,8 +253,6 @@ public abstract class Field implements Serializable {
     public GeoPoint getCentroid() {
         return calculateCentroid();
     }
-
-    public abstract Bundle getBundle();
 
     public String getName() {
         return name;
@@ -322,11 +286,6 @@ public abstract class Field implements Serializable {
         return conSize;
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-
     public FieldType getType() {
         return type;
     }
@@ -341,7 +300,6 @@ public abstract class Field implements Serializable {
         this.setColor(type.toColor());
     }
 
-
     public boolean isFieldequal(Field otherField) {
         return otherField.getID() == this.getID();
     }
@@ -352,8 +310,6 @@ public abstract class Field implements Serializable {
      * might take a bit, thats why its async -FB
      */
     public void setAutomaticCounty() {
-        //   this.setCounty("Loading..");
-
         new AsyncReverseGeoCoding().execute(new double[]{
                 this.getCornerPoints().get(0).getWGS().getLatitude(),
                 this.getCornerPoints().get(0).getWGS().getLongitude()
@@ -367,7 +323,6 @@ public abstract class Field implements Serializable {
     public void setID(long ID) {
         this.ID = ID;
     }
-
 
     /**
      * google asks its servers for reverse geo coding, this might take some time
@@ -395,9 +350,7 @@ public abstract class Field implements Serializable {
         protected void onProgressUpdate(Void... values) {
         }
 
-
         private void setCountyAddress(double lat, double lon) {
-            Log.e(TAG, "fetching location..");
             //uses the google geocoder, might be a part of the google maps api.. or not -FB
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses = null;

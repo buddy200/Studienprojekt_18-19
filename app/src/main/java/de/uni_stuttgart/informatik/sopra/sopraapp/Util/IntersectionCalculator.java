@@ -79,18 +79,27 @@ public class IntersectionCalculator {
                     intersection.add(line.get(0) * intersection.get(0) + line.get(1));
 
                     //check if the intersection point is inside the damage field
-                    if (((lastPoint.getLatitude() <= intersection.get(0).doubleValue() && intersection.get(0).doubleValue() <= currentPoint.getLatitude())
-                            || (currentPoint.getLatitude() <= intersection.get(0).doubleValue() && intersection.get(0).doubleValue() <= lastPoint.getLatitude()))
-                            && ((lastPoint.getLongitude()) <= intersection.get(1).doubleValue() && intersection.get(1).doubleValue() <= currentPoint.getLongitude())
-                            || (currentPoint.getLongitude() <= intersection.get(1).doubleValue() && intersection.get(1).doubleValue() <= lastPoint.getLongitude())) {
+                    if (boundaryCheck(intersection)) {
                         Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
             }
         }
-
         return true;
+    }
+
+    /**
+     * checks if the intersection point in the damageField
+     *
+     * @param intersection
+     * @return
+     */
+    private boolean boundaryCheck(Vector<Double> intersection) {
+        return ((lastPoint.getLatitude() <= intersection.get(0).doubleValue() && intersection.get(0).doubleValue() <= currentPoint.getLatitude())
+                || (currentPoint.getLatitude() <= intersection.get(0).doubleValue() && intersection.get(0).doubleValue() <= lastPoint.getLatitude()))
+                && ((lastPoint.getLongitude()) <= intersection.get(1).doubleValue() && intersection.get(1).doubleValue() <= currentPoint.getLongitude())
+                || (currentPoint.getLongitude() <= intersection.get(1).doubleValue() && intersection.get(1).doubleValue() <= lastPoint.getLongitude());
     }
 
     /**
@@ -109,9 +118,6 @@ public class IntersectionCalculator {
             line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
             linesFromAgrarianField.add(line);
             ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);
-
         }
     }
-
-
 }

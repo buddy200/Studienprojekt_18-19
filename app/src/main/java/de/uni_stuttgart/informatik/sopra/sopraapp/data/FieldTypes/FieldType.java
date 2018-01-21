@@ -1,6 +1,5 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes;
 
-import java.io.Serializable;
 
 /**
  * sopra_priv
@@ -13,5 +12,5 @@ import java.io.Serializable;
 public interface FieldType{
     String toString();
     int toColor();
-    double getInsuranceMoneyPerSquaremeter();
+    double getInsuranceMoneyPerSquareMeter();
 }

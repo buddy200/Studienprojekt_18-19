@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.sopraapp.data;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import java.io.File;
 import java.io.Serializable;
@@ -23,27 +22,15 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus
 public class DamageField extends Field implements Serializable {
     private static final String TAG = "DamageField";
 
-    private static final String KEY_DATE = "date";
-    private static final String KEY_EVALUATOR = "evaluator";
-    private static final String KEY_IMAGES = "images";
-    private static final String KEY_INSURANCEMONEY = "insuranceMoney";
-
     private static final long serialVersionUID = 8L;
 
     private String parsedDate = "";
     private String evaluator = "";
-
     private ProgressStatus progressStatus;
-
-
     private double insuranceMoney;
     private ArrayList<PictureData> paths;
-
     private DamageFieldType defaultType = DamageFieldType.Aliens;
-
-
     private AgrarianField parentField;
-
 
     /**
      * constructor
@@ -53,11 +40,8 @@ public class DamageField extends Field implements Serializable {
      */
     public DamageField(Context context, List<CornerPoint> cPoints, AgrarianField parentField) {
         super(context, cPoints);
-        //  this.setName(context.getResources().getString(R.string.field_default_name));
         super.setType(defaultType);
-        //  this.setCounty(context.getResources().getString(R.string.county_default_name));
         this.setColor(damageFieldToColor());
-        //  this.setEvaluator(context.getResources().getString(R.string.evaluator_default_name));
         this.setDate(new Date(0));
         this.paths = new ArrayList<>();
         this.parentField = parentField;
@@ -67,38 +51,11 @@ public class DamageField extends Field implements Serializable {
 
     /**
      * map type of damage to color
-     * TODO
      *
      * @return
      */
     private int damageFieldToColor() {
         return R.color.fieldDefaultColor;
-    }
-
-
-    /**
-     * bundle for passing data in the UI
-     *
-     * @return
-     */
-    @Override
-    public Bundle getBundle() {
-        Bundle bundle = new Bundle();
-        bundle.putLong(KEY_TIMESTAMP, this.getTimestamp());
-        bundle.putDouble(KEY_INSURANCEMONEY, this.getInsuranceMoney());
-        bundle.putString(KEY_NAME, this.getName());
-        bundle.putInt(KEY_COLOR, this.getColor());
-        bundle.putString(KEY_COUNTY, this.getCounty());
-        bundle.putString(KEY_CONVERTEDSIZE, this.getConvertedSize());
-        bundle.putDouble(KEY_SIZE, this.getSize());
-        bundle.putSerializable(KEY_TYPE, (Serializable) this.getType());
-
-        //damageField specific attributes
-        bundle.putString(KEY_EVALUATOR, this.evaluator);
-        bundle.putString(KEY_DATE, parsedDate);
-        bundle.putSerializable(KEY_IMAGES, paths);
-
-        return bundle;
     }
 
     public String getParsedDate() {
@@ -116,7 +73,6 @@ public class DamageField extends Field implements Serializable {
         String parsedDate =
                 context.getResources().getString(R.string.date_label)
                         + " " + format1.format(date);
-
         this.parsedDate = parsedDate;
     }
 
@@ -132,11 +88,9 @@ public class DamageField extends Field implements Serializable {
         this.evaluator = evaluator;
     }
 
-
     public ArrayList<PictureData> getPaths() {
         return paths;
     }
-
 
     public void setPath(String path) {
         PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);
@@ -152,7 +106,7 @@ public class DamageField extends Field implements Serializable {
     }
 
     public void calcInsuranceAmount() {
-        insuranceMoney = this.getSize() * this.type.getInsuranceMoneyPerSquaremeter() * parentField.getType().getInsuranceMoneyPerSquaremeter();
+        insuranceMoney = this.getSize() * this.getType().getInsuranceMoneyPerSquareMeter() * parentField.getType().getInsuranceMoneyPerSquareMeter();
     }
 
     public double getInsuranceMoney() {
@@ -172,9 +126,9 @@ public class DamageField extends Field implements Serializable {
         return progressStatus;
     }
 
-
     /**
      * delete the given photo from the damage field and from the internal storage
+     *
      * @param pos give the position of the photo in the paths ArrayList
      */
     public void deletePhoto(int pos) {
@@ -197,8 +151,6 @@ public class DamageField extends Field implements Serializable {
     public void setProgressStatus(ProgressStatus progressStatus) {
         this.progressStatus = progressStatus;
     }
-
-
 }
 
 

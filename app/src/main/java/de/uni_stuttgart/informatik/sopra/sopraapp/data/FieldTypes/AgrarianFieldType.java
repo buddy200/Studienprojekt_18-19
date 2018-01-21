@@ -27,7 +27,6 @@ public enum AgrarianFieldType implements FieldType, Serializable{
     private String friendlyName;
     private int friendlyColor;
     private double insuranceValuePerSquaremeter;
-//    private static final long serialVersionUID = 13L;
 
     AgrarianFieldType(String friendlyName, int friendlyColor, double insuranceValuePerSquaremeter){
         this.friendlyName = friendlyName;
@@ -40,7 +39,7 @@ public enum AgrarianFieldType implements FieldType, Serializable{
     }
 
 
-    public double getInsuranceMoneyPerSquaremeter(){
+    public double getInsuranceMoneyPerSquareMeter(){
         return insuranceValuePerSquaremeter;
     }
 

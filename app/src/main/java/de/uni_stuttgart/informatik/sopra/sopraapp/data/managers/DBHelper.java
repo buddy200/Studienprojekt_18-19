@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import de.uni_stuttgart.informatik.sopra.sopraapp.data.FieldTypes.ProgressStatus;
-
 /**
  * Created by Christian on 11.01.2018.
  */

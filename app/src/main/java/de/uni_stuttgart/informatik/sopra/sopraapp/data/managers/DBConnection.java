@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +54,7 @@ public class DBConnection {
 
     /**
      * add an field to the database
+     *
      * @param field the field to add
      */
     public void addField(AgrarianField field) {
@@ -77,8 +77,8 @@ public class DBConnection {
     private void createVectorTable(AgrarianField field) {
         String table_name = VectorTable_Suffix + field.getID();
         db.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
-        X_COLUM + " REAL NOT NULL," +
-        Y_COLUM + " REAL NOT NULL)");
+                X_COLUM + " REAL NOT NULL," +
+                Y_COLUM + " REAL NOT NULL)");
 
         for (java.util.Vector<Double> v : field.getLinesFormField()) {
             ContentValues values = new ContentValues();
@@ -91,6 +91,7 @@ public class DBConnection {
 
     /**
      * add an field to the database
+     *
      * @param field the field to add
      */
     public void addField(DamageField field) {
@@ -108,7 +109,7 @@ public class DBConnection {
             long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);
             field.setID(rowID);
 
-            for(PictureData pd : field.getPaths()) {
+            for (PictureData pd : field.getPaths()) {
                 ContentValues pd_value = new ContentValues();
                 values.put(DBHelper.PARENT_COLUM, field.getID());
                 values.put(DBHelper.NAME_COLUM, pd.getImage_title());
@@ -132,11 +133,11 @@ public class DBConnection {
 
     private void createGeoPointTable(Field field, String table_name) {
         db.execSQL("CREATE TABLE " + table_name + " (" +
-        DBHelper.ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-        LAT_COLUM + " REAL NOT NULL," +
-        LONG_COLUM + " REAL NOT NULL)");
+                DBHelper.ID_COLUM + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                LAT_COLUM + " REAL NOT NULL," +
+                LONG_COLUM + " REAL NOT NULL)");
 
-        for(CornerPoint cp : field.getCornerPoints()) {
+        for (CornerPoint cp : field.getCornerPoints()) {
             WGS84Coordinate wgs = cp.getWGS();
             ContentValues values = new ContentValues();
             values.put(LAT_COLUM, wgs.getLatitude());
@@ -153,8 +154,8 @@ public class DBConnection {
     public List<AgrarianField> getAllAgrarianFields() {
         List<AgrarianField> fields = new ArrayList<>();
 
-        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null,null,null,null,null,null);
-        while(cursor.moveToNext()) {
+        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
             AgrarianField field = toAgrarianField(cursor);
 
             fields.add(field);
@@ -172,8 +173,8 @@ public class DBConnection {
     public AgrarianField getAgrarianFieldByID(long id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(id);
-        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME,null, (DBHelper.ID_COLUM + "= ?"), selection_args, null, null,null);
-        if(cursor.moveToNext()){
+        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, (DBHelper.ID_COLUM + "= ?"), selection_args, null, null, null);
+        if (cursor.moveToNext()) {
             return toAgrarianField(cursor);
         }
         return null;
@@ -184,23 +185,23 @@ public class DBConnection {
         List<CornerPoint> cps = new ArrayList<>();
         ArrayList<java.util.Vector<Double>> vectorList = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Agr_" + id;
-        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
-        while(cpCursor.moveToNext()) {
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + " ASC");
+        while (cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
-            cps.add(new CornerPoint(lat,lon));
+            cps.add(new CornerPoint(lat, lon));
         }
 
         String vectorTable = VectorTable_Suffix + id;
-        Cursor vCursor = db.query(vectorTable, null, null,null,null,null,null);
-        while(vCursor.moveToNext()) {
+        Cursor vCursor = db.query(vectorTable, null, null, null, null, null, null);
+        while (vCursor.moveToNext()) {
             java.util.Vector<Double> v = new Vector<>();
             v.add(0, vCursor.getDouble(vCursor.getColumnIndex(X_COLUM)));
             v.add(1, vCursor.getDouble(vCursor.getColumnIndex(Y_COLUM)));
             vectorList.add(v);
         }
 
-        AgrarianField field = new AgrarianField(context,cps);
+        AgrarianField field = new AgrarianField(context, cps);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
         field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
@@ -218,8 +219,8 @@ public class DBConnection {
     public List<DamageField> getAllDamgageFields() {
         List<DamageField> fields = new ArrayList<>();
 
-        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null,null,null,null,null,null);
-        while(cursor.moveToNext()) {
+        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
             DamageField field = toDamageField(cursor);
 
             fields.add(field);
@@ -234,11 +235,11 @@ public class DBConnection {
      * @param id the identifying id
      * @return the Field identified by the id
      */
-    public  DamageField getDamageFieldById(long id) {
+    public DamageField getDamageFieldById(long id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(id);
-        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME,null, (DBHelper.ID_COLUM + "= ?"), selection_args, null, null,null);
-        if(cursor.moveToNext()){
+        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null, (DBHelper.ID_COLUM + "= ?"), selection_args, null, null, null);
+        if (cursor.moveToNext()) {
             return toDamageField(cursor);
         }
         return null;
@@ -248,16 +249,16 @@ public class DBConnection {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
-        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM},null,null,null,null, DBHelper.ID_COLUM + " ASC");
-        while(cpCursor.moveToNext()) {
+        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + " ASC");
+        while (cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
-            cps.add(new CornerPoint(lat,lon));
+            cps.add(new CornerPoint(lat, lon));
         }
         long parent_ID = cursor.getLong(cursor.getColumnIndex(DBHelper.PARENT_COLUM));
         AgrarianField parent = getAgrarianFieldByID(parent_ID);
 
-        DamageField field = new DamageField(context,cps, parent);
+        DamageField field = new DamageField(context, cps, parent);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
         field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
@@ -266,7 +267,7 @@ public class DBConnection {
         field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
         field.setProgressStatus(ProgressStatus.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.PROGRESS_COLUM))));
         List<PictureData> pictureData = getPicturesOfField(id);
-        for(PictureData pd : pictureData) {
+        for (PictureData pd : pictureData) {
             field.setPath(pd);
         }
         return field;
@@ -276,18 +277,19 @@ public class DBConnection {
      * adds a picture to a field in the database
      *
      * @param field_id the id of the field
-     * @param pd the data of the added picture
+     * @param pd       the data of the added picture
      */
     public void addPictureToField(long field_id, PictureData pd) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.PARENT_COLUM, field_id);
         values.put(DBHelper.NAME_COLUM, pd.getImage_title());
         values.put(DBHelper.PATH_COLUM, pd.getImage_path());
-        db.insert(DBHelper.ImageTable_NAME,null,values);
+        db.insert(DBHelper.ImageTable_NAME, null, values);
     }
 
     /**
      * deletes a picture from the database
+     *
      * @param pd the data of the picture to delete
      */
     public void deletePicture(PictureData pd) {
@@ -307,9 +309,9 @@ public class DBConnection {
     public List<PictureData> getPicturesOfField(long field_id) {
         String[] selection_args = new String[1];
         selection_args[0] = Long.toString(field_id);
-        Cursor cursor = db.query(DBHelper.ImageTable_NAME,new String[] {DBHelper.NAME_COLUM,DBHelper.PATH_COLUM},(DBHelper.PARENT_COLUM + "= ?"), selection_args,null,null,null);
+        Cursor cursor = db.query(DBHelper.ImageTable_NAME, new String[]{DBHelper.NAME_COLUM, DBHelper.PATH_COLUM}, (DBHelper.PARENT_COLUM + "= ?"), selection_args, null, null, null);
         List<PictureData> pictureData = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             String title = cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM));
             String path = cursor.getString(cursor.getColumnIndex(DBHelper.PATH_COLUM));
             PictureData pd = new PictureData(title, path);
@@ -320,6 +322,7 @@ public class DBConnection {
 
     /**
      * updates an AgrarianField in the database
+     *
      * @param field the updated field
      */
     public void updateAgrarianField(AgrarianField field) {
@@ -341,6 +344,7 @@ public class DBConnection {
 
     /**
      * updates a DamageField in the database
+     *
      * @param field the updated field
      */
     public void updateDamageField(DamageField field) {
@@ -364,17 +368,18 @@ public class DBConnection {
 
     /**
      * deletes an AgrarianField in the database
+     *
      * @param field the field to delete
      */
     public void deleteAgrarianField(AgrarianField field) {
-        if (field !=  null) {
+        if (field != null) {
             long id = field.getID();
             String[] selection_args = new String[1];
             selection_args[0] = Long.toString(id);
 
 
             int rows = db.delete(DBHelper.AgrarianFieldTable_NAME, (DBHelper.ID_COLUM + "= ?"), selection_args);
-            if (rows > 0 ) {
+            if (rows > 0) {
                 String table_name = GeoPointTable_Suffix + "_Agr_" + id;
                 String vectorTable = VectorTable_Suffix + id;
                 db.execSQL("DROP TABLE IF EXISTS " + table_name);
@@ -385,10 +390,11 @@ public class DBConnection {
 
     /**
      * deletes a DamageField in the database
+     *
      * @param field the field to delete
      */
     public void deleteDamageField(DamageField field) {
-        if (field !=  null) {
+        if (field != null) {
             long id = field.getID();
             String[] selection_args = new String[1];
             selection_args[0] = Long.toString(id);
@@ -405,15 +411,16 @@ public class DBConnection {
 
     /**
      * searches all searchable colums in the database for the given string
+     *
      * @param text the string to search for
      * @return all fields that contain the search string
      */
     public List<Field> searchAll(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[3];
-        selection_args[0] = "%" + text + "%" ;
-        selection_args[1] = "%" + text + "%" ;
-        selection_args[2] = "%" + text + "%" ;
+        selection_args[0] = "%" + text + "%";
+        selection_args[1] = "%" + text + "%";
+        selection_args[2] = "%" + text + "%";
 
         try {
             Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null,
@@ -442,22 +449,23 @@ public class DBConnection {
             }
             dmgCursor.close();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return  fields;
+        return fields;
     }
 
     /**
      * searches all owners in the database for the given string
+     *
      * @param text the string to search for
      * @return all fields that contain the search string as owner
      */
     public List<Field> searchOwner(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = "%" + text + "%" ;
+        selection_args[0] = "%" + text + "%";
 
 
         try {
@@ -466,22 +474,23 @@ public class DBConnection {
                 fields.add(toAgrarianField(agrCursor));
             }
             agrCursor.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             fields = null;
         }
-        return  fields;
+        return fields;
     }
 
     /**
      * searches all evaluatores in the database for the given string
+     *
      * @param text the string to search for
      * @return all fields that contain the search string as evaluator
      */
-    public List<Field> searchEvaluator (String text) {
+    public List<Field> searchEvaluator(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = "%" + text + "%" ;
+        selection_args[0] = "%" + text + "%";
 
         try {
             Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + " LIKE ?", selection_args, null, null, null);
@@ -489,22 +498,23 @@ public class DBConnection {
                 fields.add(toDamageField(dmgCursor));
             }
             dmgCursor.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             fields = null;
         }
-        return  fields;
+        return fields;
     }
 
     /**
      * searches all dates in the database for the given string
+     *
      * @param text the string to search for
      * @return all fields that contain the search string as date
      */
     public List<Field> searchDate(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = "%" + text + "%" ;
+        selection_args[0] = "%" + text + "%";
 
         try {
             Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + " LIKE ?", selection_args, null, null, null);
@@ -512,22 +522,23 @@ public class DBConnection {
                 fields.add(toDamageField(dmgCursor));
             }
             dmgCursor.close();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             fields = null;
         }
-        return  fields;
+        return fields;
     }
 
     /**
      * searches all names in the database for the given string
+     *
      * @param text the string to search for
      * @return all fields that contain the search string as name
      */
     public List<Field> searchName(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = "%" + text + "%" ;
+        selection_args[0] = "%" + text + "%";
 
         try {
             Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.NAME_COLUM + " LIKE ?", selection_args, null, null, null);
@@ -541,23 +552,24 @@ public class DBConnection {
                 fields.add(toDamageField(dmgCursor));
             }
             dmgCursor.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             fields = null;
         }
 
-        return  fields;
+        return fields;
     }
 
     /**
      * searches all states in the database for the given string
+     *
      * @param text the string to search for
      * @return all fields that contain the search string as state
      */
     public List<Field> searchState(String text) {
         List<Field> fields = new ArrayList<>();
         String[] selection_args = new String[1];
-        selection_args[0] = "%" + text + "%" ;
+        selection_args[0] = "%" + text + "%";
 
         try {
             Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null, null, null);
@@ -571,11 +583,11 @@ public class DBConnection {
                 fields.add(toAgrarianField(agrCursor));
             }
             agrCursor.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             fields = null;
         }
 
-        return  fields;
+        return fields;
     }
 }

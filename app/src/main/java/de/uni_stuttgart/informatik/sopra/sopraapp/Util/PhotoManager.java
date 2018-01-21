@@ -2,15 +2,12 @@ package de.uni_stuttgart.informatik.sopra.sopraapp.Util;
 
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -20,29 +17,22 @@ import java.util.Date;
 
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetAddPhoto;
 
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by larsb on 20.12.2017.
  */
 
 public class PhotoManager {
-
     public static final int REQUEST_TAKE_PHOTO = 1;
 
     String mCurrentPhotoPath;
-
     Activity activity;
     BottomSheetAddPhoto fragment;
 
-
-        public PhotoManager(Activity a, BottomSheetAddPhoto fragment){
+    public PhotoManager(Activity a, BottomSheetAddPhoto fragment) {
         this.activity = a;
         this.fragment = fragment;
     }
-
-
-
 
     public String dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -63,20 +53,19 @@ public class PhotoManager {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 fragment.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
                 return photoFile.getAbsolutePath();
             }
-
         }
         return null;
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-                File image = File.createTempFile(
+        File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
@@ -87,5 +76,4 @@ public class PhotoManager {
         Log.e("Path", mCurrentPhotoPath);
         return image;
     }
-
 }

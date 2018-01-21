@@ -37,7 +37,7 @@ public enum DamageFieldType implements FieldType, Serializable{
         return friendlyName;
     }
 
-    public double getInsuranceMoneyPerSquaremeter(){
+    public double getInsuranceMoneyPerSquareMeter(){
         return insuranceMoneyPerSquaremeter;
     }
 

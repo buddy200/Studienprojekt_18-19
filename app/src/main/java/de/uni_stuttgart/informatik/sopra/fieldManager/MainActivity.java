@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     private SharedPreferences prefs;
 
-    private boolean showTutorial = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Test");
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
@@ -218,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action) {
                     case "complete":
                         onStart();
-                        showTutorial = true;
                         break;
                 }
                 break;
@@ -388,7 +384,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             case R.id.action_toolbar_tutorial:
                 if(GlobalConstants.isAdmin){
                     new TutorialUtils().mainTutorial(this);
-                    showTutorial = false;
                 }
                 break;
         }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
@@ -43,6 +45,8 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialUtils;
+
 
 /**
  * sopra_priv
@@ -174,6 +178,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
         dataManager.readData();
+
+        if(!prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false)){
+            new TutorialUtils().addFieldTutorial(this);
+        }
     }
 
     @Override
@@ -207,6 +215,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 break;
             case R.id.action_menu_redo:
                 onRedoButtonClick();
+                break;
+            case R.id.action_menu_tutorial:
+                new TutorialUtils().addFieldTutorial(this);
                 break;
         }
         return true;

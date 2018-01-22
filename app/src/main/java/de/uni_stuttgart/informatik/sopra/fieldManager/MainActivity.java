@@ -23,8 +23,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
-
-
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogDmgField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditAgrField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditDmgField;
@@ -40,6 +38,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManag
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialUtils;
 
 /**
  * sopra_priv
@@ -49,6 +48,28 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
  * the main activity for our app, everything starts here
  * the class is listening for every Interaction of its fragments
  */
+
+/*
+Copyright (c) 2018 Lars Buttgereit, Felix Burk, Christian Bräuner
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener<Object>, AppDataManager.DataChangeListener {
 
@@ -64,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     private SharedPreferences prefs;
 
+    private boolean showTutorial = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Test");
 
@@ -164,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action) {
                     case "startEdit":
                         //TODO
-                        if ((Field) data instanceof AgrarianField) {
+                        if (data instanceof AgrarianField) {
                             BSDetailDialogEditAgrField bsDetail = BSDetailDialogEditAgrField.newInstance();
                             new BSEditHandler((Field) data, dataManager, bsDetail);
                             bsDetail.show(getSupportFragmentManager(), "test");
@@ -195,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action) {
                     case "complete":
                         onStart();
+                        showTutorial = true;
                         break;
                 }
                 break;
@@ -249,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
         MenuItem username = menu.findItem(R.id.action_toolbar_username);
         username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
-        //invalidateOptionsMenu();
+
         return true;
     }
 
@@ -360,6 +384,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             case R.id.action_toolbar_logout:
                 //DATABASE IS NOT CHANGED AFTER LOGOUT
                 generateLogoutDialog().show();
+                break;
+            case R.id.action_toolbar_tutorial:
+                if(GlobalConstants.isAdmin){
+                    new TutorialUtils().mainTutorial(this);
+                    showTutorial = false;
+                }
                 break;
         }
 

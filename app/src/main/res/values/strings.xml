@@ -91,7 +91,9 @@
     <string name="progress_status_sent">Sent</string>
     <string name="progress_status_inprogress">In progress</string>
     <string name="progress_status_finish">Completed</string>
-    <string name="dialogmessage_want_delete">Do you really want to delete this photo?</string>
+    <string name="dialogmessage_want_delete_photo">Do you really want to delete this photo?</string>
+    <string name="dialogmessage_want_delete_Field">Do you really want to delete this field?</string>
+    <string name="dialogmessage_want_delete_damage">Do you really want to delete this damage case</string>
     <string name="photo_default_name">no photo description</string>
     <string name="main_toolbar_search">Search</string>
     <string name="main_toolbar_list">List</string>

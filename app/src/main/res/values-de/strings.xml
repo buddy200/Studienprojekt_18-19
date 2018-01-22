@@ -49,19 +49,19 @@
     <string name="logout_message">Wirklich abmelden und die App schließen?</string>
     <string name="toastmsg_anotherDamageField">Fügen Sie ein weiteren Schadensfall hinzu oder gehen Sie zurück</string>
     <string name="toastmsg_anotherAgrarainField">Fügen Sie ein weiteres Feld hinzu oder gehen Sie zurück</string>
-    <string name="detailItem_estimatedpayment">"Geschätzte Zahlung: "</string>
+    <string name="detailItem_estimatedpayment">Geschätzte Zahlung</string>
     <string name="dialogItem_Location">Ort</string>
-    <string name="dialogItem_Type">Type</string>
+    <string name="dialogItem_Type">Typ</string>
     <string name="dialogItem_Size">Größe</string>
     <string name="dialogItem_Owner">Besitzer</string>
     <string name="dialogItem_Date">Datum</string>
     <string name="detailItem_evaluator">Gutachter</string>
     <string name="dialogItem_Name">Name</string>
-    <string name="dialogitem_progress_state">Bearbeitungsstatus:</string>
+    <string name="dialogitem_progress_state">Bearbeitungsstatus</string>
     <string name="progress_status_sent">Verschickt</string>
     <string name="progress_status_inprogress">In Bearbeitung</string>
     <string name="progress_status_finish">Abgeschlossen</string>
-    <string name="dialogmessage_want_delete">Wollen Sie dieses Foto wirklich löschen?</string>
+    <string name="dialogmessage_want_delete_photo">Wollen Sie dieses Foto wirklich löschen?</string>
     <string name="photo_default_name">Keine Fotobeschreibung</string>
     <string name="main_toolbar_search">Suche</string>
     <string name="main_toolbar_list">Liste</string>
@@ -69,4 +69,6 @@
     <string name="search_all">Alles</string>
     <string name="no_date">Kein Datum</string>
     <string name="progress_no_status">Kein Status</string>
+    <string name="dialogmessage_want_delete_Field">Wollen Sie dieses Feld wirklich löschen?</string>
+    <string name="dialogmessage_want_delete_damage">Wollen Sie diesen Schadensfall wirklich löschen?</string>
 </resources>

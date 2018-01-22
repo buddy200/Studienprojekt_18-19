@@ -572,7 +572,7 @@ public class DBConnection {
         selection_args[0] = "%" + text + "%";
 
         try {
-            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.PROGRESS_COLUM + " LIKE ?", selection_args, null, null, null);
+            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.TYPE_COLUM + " LIKE ?", selection_args, null, null, null);
             while (dmgCursor.moveToNext()) {
                 fields.add(toDamageField(dmgCursor));
             }

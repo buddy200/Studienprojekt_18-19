@@ -9,15 +9,22 @@
         android:orderInCategory="103"
         android:title="@string/toggleLoc_Button"
         app:showAsAction="never" />
-    <item android:id="@+id/action_menu_redo"
+    <item
+        android:id="@+id/action_menu_redo"
         android:orderInCategory="102"
         android:title="@string/redo_Button"
-    app:showAsAction="never"/>
-    <item android:id="@+id/action_menu_done"
-        android:title="@string/done_Button"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_menu_done"
         android:orderInCategory="101"
+        android:title="@string/done_Button"
+        app:showAsAction="ifRoom" />
 
-        app:showAsAction="ifRoom"
-        />
+    <item
+        android:id="@+id/action_menu_tutorial"
+        android:orderInCategory="2000"
+        android:title="Help"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="never" />
 
 </menu>

@@ -389,8 +389,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 break;
             case R.id.action_toolbar_tutorial:
                 if(GlobalConstants.isAdmin){
-                    //Toolbar t = (Toolbar) findViewById(R.id.toolbar_main);
-                    //MenuItem test = (MenuItem) findViewById(R.id.action_toolbar_add);
                     new TutorialUtils().mainTutorial(this);
                     showTutorial = false;
                 }

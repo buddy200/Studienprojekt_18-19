@@ -217,6 +217,9 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             case R.id.action_menu_redo:
                 onRedoButtonClick();
                 break;
+            case R.id.action_menu_tutorial:
+                new TutorialUtils().addFieldTutorial(this);
+                break;
         }
         return true;
     }

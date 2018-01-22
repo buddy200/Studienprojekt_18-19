@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
     android:configChanges="keyboardHidden|orientation|screenSize"
-    tools:context="de.uni_stuttgart.informatik.sopra.sopraapp.AddFieldActivity">
+    tools:context="de.uni_stuttgart.informatik.sopra.fieldManager.AddFieldActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/map_fragment_add"
-        class="de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment"
+        class="de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

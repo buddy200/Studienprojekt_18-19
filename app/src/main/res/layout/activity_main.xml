@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:screenOrientation="portrait"
     android:configChanges="keyboardHidden|orientation|screenSize"
-    tools:context="de.uni_stuttgart.informatik.sopra.sopraapp.MainActivity">
+    tools:context="de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity">
 
 
     <android.support.design.widget.AppBarLayout
@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/map_fragment"
-        class="de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment"
+        class="de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -61,7 +61,7 @@
     <string name="progress_status_sent">Verschickt</string>
     <string name="progress_status_inprogress">In Bearbeitung</string>
     <string name="progress_status_finish">Abgeschlossen</string>
-    <string name="dialogmessage_want_delete">Wollen Sie dieses Foto wirklich löschen?</string>
+    <string name="dialogmessage_want_delete_photo">Wollen Sie dieses Foto wirklich löschen?</string>
     <string name="photo_default_name">Keine Fotobeschreibung</string>
     <string name="main_toolbar_search">Suche</string>
     <string name="main_toolbar_list">Liste</string>
@@ -69,4 +69,6 @@
     <string name="search_all">Alles</string>
     <string name="no_date">Kein Datum</string>
     <string name="progress_no_status">Kein Status</string>
+    <string name="dialogmessage_want_delete_Field">Wollen Sie dieses Feld wirklich löschen?</string>
+    <string name="dialogmessage_want_delete_damage">Wollen Sie diesen Schadensfall wirklich löschen?</string>
 </resources>

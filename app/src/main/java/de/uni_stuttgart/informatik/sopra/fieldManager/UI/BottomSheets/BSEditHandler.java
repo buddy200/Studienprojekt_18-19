@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
@@ -36,8 +35,6 @@ public class BSEditHandler implements BSEditContract.Presenter {
         mDataManager = dataManager;
         mEditFragment = editFragment;
         mField = field;
-        Log.e(TAG, String.valueOf(mField.getName()));
-
         mEditFragment.setPresenter(this);
     }
 
@@ -57,7 +54,6 @@ public class BSEditHandler implements BSEditContract.Presenter {
     public void deleteCurrentField() {
         if (mField != null) {
             mDataManager.removeField(mField);
-            Log.e(TAG, "IMPORTTANT removing.. " + mField.getName());
         }
     }
 

@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             GlobalConstants.isAdmin = adm;
             this.invalidateOptionsMenu();
         }
-        Log.e(TAG, "is admin?" + String.valueOf(GlobalConstants.isAdmin));
+    //    GlobalConstants.polygonTest(1000, 4, this, dataManager);
         mapHandler.reload();
     }
 

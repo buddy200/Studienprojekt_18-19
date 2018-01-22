@@ -29,7 +29,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private Context context;
     private BottomSheetDialogFragment bottomSheet;
     private final BitmapFactory.Options options;
-    private static final int IMAGE_SCALE = 6;
+    private static final int IMAGE_SCALE = 10;
 
     public GalleryAdapter(Context context, ArrayList<PictureData> galleryList, BottomSheetDialogFragment bottomSheet) {
         this.bottomSheet = bottomSheet;
@@ -115,7 +115,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 }
             };
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(context.getResources().getString(R.string.dialogmessage_want_delete)).setPositiveButton(context.getResources().getString(R.string.word_yes), dialogClickListener)
+            builder.setMessage(context.getResources().getString(R.string.dialogmessage_want_delete_photo)).setPositiveButton(context.getResources().getString(R.string.word_yes), dialogClickListener)
                     .setNegativeButton(context.getResources().getString(R.string.word_no), dialogClickListener);
 
             return builder;

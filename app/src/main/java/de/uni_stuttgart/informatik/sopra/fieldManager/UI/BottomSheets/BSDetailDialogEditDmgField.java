@@ -2,11 +2,13 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -154,7 +156,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
                     this.dismiss();
                     break;
                 case R.id.delete_button:
-                    mPresenter.deleteCurrentField();
+                    generateDeleteDialog().show();
                     this.dismiss();
                     break;
                 case R.id.add_Photo_Button:
@@ -250,4 +252,31 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
         galleryAdapter.notifyItemRemoved(position);
     }
 
+    /**
+     * generate a delete Dialog
+     *
+     * @return
+     */
+    private AlertDialog.Builder generateDeleteDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mPresenter.deleteCurrentField();
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(getContext().getResources().getString(R.string.dialogmessage_want_delete_damage)).setPositiveButton(getContext().getResources().getString(R.string.word_yes), dialogClickListener)
+                .setNegativeButton(getContext().getResources().getString(R.string.word_no), dialogClickListener);
+
+        return builder;
+    }
 }

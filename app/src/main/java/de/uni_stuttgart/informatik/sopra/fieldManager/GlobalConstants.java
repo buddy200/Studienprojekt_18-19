@@ -11,6 +11,7 @@ import java.util.Vector;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
 
 /**
  * sopra_priv
@@ -62,7 +63,7 @@ public class GlobalConstants {
      * @return ArrayList of polygons
      */
 
-    public static List<AgrarianField> polygonTest(int numberPolygons, int numberPoints, Context context){
+    public static void polygonTest(int numberPolygons, int numberPoints, Context context, AppDataManager appDataManager){
 
         //just small numbers to keep the tester from searching the rectangle
         double Max = +0.001;
@@ -82,6 +83,7 @@ public class GlobalConstants {
             }
             AgrarianField p = new AgrarianField(context, points);
             p.setLinesFormField(new ArrayList<Vector<Double>>());
+            appDataManager.addAgrarianField(p);
             if(j % (int) Math.sqrt(numberPolygons) == 0){
                 initialLon += 0.003;
                 initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
@@ -91,8 +93,6 @@ public class GlobalConstants {
 
             polis.add(p);
         }
-
-        return polis;
     }
 
   /*  public static DamageField damageFieldTest(Context context){

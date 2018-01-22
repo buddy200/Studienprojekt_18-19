@@ -8,6 +8,7 @@ Folgende Additional Features wurden implmentiert:
 - [Navigation zu den Feldern via Google Map](sopra-ws1718/sopra-team-4#88)
 - [Status für Schadensfälle](sopra-ws1718/sopra-team-4#80)
 - [Fotos von Schadensfällen hinzufügen und anzeigen](sopra-ws1718/sopra-team-4#47)
+- [Tutorial in der App selbst](sopra-ws1718/sopra-team-4#96)
 
 ## Verbesserte Dokumente
 

@@ -46,4 +46,11 @@
         app:showAsAction="never"
         />
 
+    <item
+        android:id="@+id/action_toolbar_tutorial"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="never"
+        android:orderInCategory="2000"
+        android:title="Help" />
+
 </menu>

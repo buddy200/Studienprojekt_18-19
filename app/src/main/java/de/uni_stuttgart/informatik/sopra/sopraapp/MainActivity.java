@@ -35,7 +35,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.ItemListDialog
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
-import de.uni_stuttgart.informatik.sopra.sopraapp.Util.PhotoManager;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.TutorialUtils;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.DamageField;
@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     private SharedPreferences prefs;
 
+    private boolean showTutorial = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Test");
 
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action) {
                     case "startEdit":
                         //TODO
-                        if ((Field) data instanceof AgrarianField) {
+                        if (data instanceof AgrarianField) {
                             BSDetailDialogEditAgrField bsDetail = BSDetailDialogEditAgrField.newInstance();
                             new BSEditHandler((Field) data, dataManager, bsDetail);
                             bsDetail.show(getSupportFragmentManager(), "test");
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 switch (action) {
                     case "complete":
                         onStart();
+                        showTutorial = true;
                         break;
                 }
                 break;
@@ -272,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
         MenuItem username = menu.findItem(R.id.action_toolbar_username);
         username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
-        //invalidateOptionsMenu();
+
         return true;
     }
 
@@ -383,6 +386,14 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             case R.id.action_toolbar_logout:
                 //DATABASE IS NOT CHANGED AFTER LOGOUT
                 generateLogoutDialog().show();
+                break;
+            case R.id.action_toolbar_tutorial:
+                if(GlobalConstants.isAdmin){
+                    //Toolbar t = (Toolbar) findViewById(R.id.toolbar_main);
+                    //MenuItem test = (MenuItem) findViewById(R.id.action_toolbar_add);
+                    new TutorialUtils().mainTutorial(this);
+                    showTutorial = false;
+                }
                 break;
         }
 

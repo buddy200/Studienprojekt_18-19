@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,6 +22,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
+
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -36,6 +40,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.BottomSheets.BottomSheetAddPhoto;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.sopraapp.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.sopraapp.UI.TutorialUtils;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.IntersectionCalculator;
 import de.uni_stuttgart.informatik.sopra.sopraapp.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.sopraapp.data.AgrarianField;
@@ -174,6 +179,10 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
         }
         dataManager.readData();
+
+        if(!prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false)){
+            new TutorialUtils().addFieldTutorial(this);
+        }
     }
 
     @Override

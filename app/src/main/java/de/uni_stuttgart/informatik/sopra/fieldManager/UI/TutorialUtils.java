@@ -47,6 +47,32 @@ public class TutorialUtils {
 
     }
 
+    public static void mainTutorialNoAdmin(Activity activity){
+        new TapTargetSequence(activity)
+                .targets(
+                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), "Tab here to search for fields, or other stuff")
+                                .dimColor(R.color.colorPrimaryDark)
+                                .cancelable(false))
+                .listener(new TapTargetSequence.Listener() {
+
+                    @Override
+                    public void onSequenceFinish() {
+                        // Yay
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                }).start();
+
+    }
+
     public static void addFieldTutorial(Activity activity){
         Drawable d = VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_add_location_white_24px, null);
         d = DrawableCompat.wrap(d);

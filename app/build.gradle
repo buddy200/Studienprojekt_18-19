@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "de.uni_stuttgart.informatik.sopra.sopraapp"
+        applicationId "de.uni_stuttgart.informatik.sopra.fieldManager"
         minSdkVersion 22
         targetSdkVersion 25
         versionCode 1
@@ -18,7 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            debuggable true
             testCoverageEnabled true
+        }
+        quality_assurance {
+            debuggable true
         }
     }
     testOptions {
@@ -46,6 +50,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:1.0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.0'
     testCompile 'org.mockito:mockito-core:+'
     androidTestCompile 'org.mockito:mockito-android:+'
     androidTestCompile 'com.android.support:support-annotations:26.1.0'

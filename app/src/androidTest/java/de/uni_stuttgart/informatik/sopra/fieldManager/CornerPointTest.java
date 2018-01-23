@@ -1,7 +1,8 @@
-package de.uni_stuttgart.informatik.sopra.fieldManager.data;
+package de.uni_stuttgart.informatik.sopra.fieldManager;
 
 import org.junit.Test;
 
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.UTMCoordinate;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.WGS84Coordinate;
 

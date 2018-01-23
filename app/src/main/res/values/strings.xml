@@ -103,5 +103,6 @@
 
     <string name="search_all">All</string>
     <string name="progress_no_status">No status</string>
+    <string name="help_label">Help</string>
 
 </resources>

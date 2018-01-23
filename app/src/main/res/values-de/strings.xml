@@ -71,4 +71,5 @@
     <string name="progress_no_status">Kein Status</string>
     <string name="dialogmessage_want_delete_Field">Wollen Sie dieses Feld wirklich löschen?</string>
     <string name="dialogmessage_want_delete_damage">Wollen Sie diesen Schadensfall wirklich löschen?</string>
+    <string name="help_label">Hilfe</string>
 </resources>

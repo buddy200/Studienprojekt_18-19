@@ -384,6 +384,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             case R.id.action_toolbar_tutorial:
                 if(GlobalConstants.isAdmin){
                     new TutorialUtils().mainTutorial(this);
+                }else {
+                    new TutorialUtils().mainTutorialNoAdmin(this);
                 }
                 break;
         }

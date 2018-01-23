@@ -129,7 +129,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
         state.setText(getResources().getString(R.string.dialogItem_Type) + " " + this.mField.getType().toString());
         state.setTextColor(mField.getColor());
         size.setText(getResources().getString(R.string.dialogItem_Size) + " " + this.mField.getConvertedSize());
-        owner.setText(getResources().getString(R.string.detailItem_evaluator) + " " + this.mField.getOwner());
+        owner.setText(getResources().getString(R.string.dialogItem_Owner) + " " + this.mField.getOwner());
     }
 
     @Override

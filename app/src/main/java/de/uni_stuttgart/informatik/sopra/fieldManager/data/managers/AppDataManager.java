@@ -203,7 +203,7 @@ public class AppDataManager {
      */
     public void loadUserFields(String name) {
         clearAllMaps();
-        for (Field field : this.searchOwner(name.toLowerCase())) {
+        for (Field field : this.searchOwner(name)) {
             if (field instanceof AgrarianField) {
                 agrarianFieldMap.put(field.getID(), (AgrarianField) field);
             }
@@ -213,7 +213,23 @@ public class AppDataManager {
                 damageFieldMap.put(damageField.getID(), damageField);
             }
         }
+    }
 
+    public ArrayList<Field> containsField(List<Field> fieldList){
+        ArrayList<Field> resultList = new ArrayList<>();
+        for(Field field : fieldList){
+            if(field instanceof AgrarianField){
+                if(agrarianFieldMap.containsKey(field.getID())){
+                    resultList.add(field);
+                }
+            }
+            else{
+                if(damageFieldMap.containsKey(field.getID())){
+                    resultList.add(field);
+                }
+            }
+        }
+        return resultList;
     }
 
     public void deletePicture(DamageField field, PictureData pd) {

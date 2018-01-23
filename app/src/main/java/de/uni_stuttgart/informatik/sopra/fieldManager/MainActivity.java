@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
+
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogDmgField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditAgrField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditDmgField;
@@ -293,7 +294,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),
-                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date)
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date),
+                MainActivity.getmContext().getResources().getString(R.string.detailItem_evaluator)
         };
 
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
@@ -326,16 +328,19 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {
-                    ItemListDialogFragment.newInstance(dataManager.searchAll(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchAll(query))).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {
-                    ItemListDialogFragment.newInstance(dataManager.searchName(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchName(query))).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {
-                    ItemListDialogFragment.newInstance(dataManager.searchOwner(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchOwner(query))).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {
-                    ItemListDialogFragment.newInstance(dataManager.searchState(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchState(query))).show(getSupportFragmentManager(), "FieldList");
                 } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
-                    ItemListDialogFragment.newInstance(dataManager.searchDate(query)).show(getSupportFragmentManager(), "FieldList");
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchDate(query))).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[5])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchEvaluator(query))).show(getSupportFragmentManager(), "FieldList");
                 }
+
                 searchItem.collapseActionView();
                 return true;
             }
@@ -381,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 generateLogoutDialog().show();
                 break;
             case R.id.action_toolbar_tutorial:
-                if(GlobalConstants.isAdmin){
+                if (GlobalConstants.isAdmin) {
                     new TutorialUtils().mainTutorial(this);
                 }
                 break;

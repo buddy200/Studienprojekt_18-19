@@ -137,7 +137,7 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         size.setText(getResources().getString(R.string.dialogItem_Size) + " " + this.mField.getConvertedSize());
         date.setText(getResources().getString(R.string.dialogItem_Date) + " " + (this.mField.getParsedDate()));
         progressState.setText(getResources().getString(R.string.dialogitem_progress_state) + " " + this.mField.getProgressStatus().toString());
-        ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + " " + (this.mField.getEvaluator()));
+        ownerOrEvaluator.setText(getResources().getString(R.string.detailItem_evaluator) + " " + (this.mField.getEvaluator()));
         estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(this.mField.getInsuranceMoney()));
 
         if ((this.mField).getPaths() != null) {

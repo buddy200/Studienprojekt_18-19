@@ -68,6 +68,10 @@ Diese Klasse ist dafür zuständig, das Polygon von einem Feld/Schadensfall auf 
 
 Hier werden die verschiedenen Feldfrüchte definiert.
 
+## Beschreibung des Enumeration DamageType
+
+Hier werden die unterschiedlichen Typen von Schäden definiert
+
 ## Beschreibung der Klasse Vector
 
 In dieser Klasse werden Grundlegende Vector Berechnungen definiert. Zum Beispiel Normalisierung oder ob sie in die gleiche Richtung zeigen.
@@ -98,7 +102,7 @@ Einige Hilfsmethoden werden hier definiert, wie zum Beispiel die Umrechnung von 
 
 ## Beschreibung der Klasse ItemListDialogFragment
 
-Diese Klasse gibt die Daten der Felder und Schadensfälle als Liste auf dem Display aus. Daten der Felder/Schadensfälle können dort bei Bedarf geändert werden oder es können Schadensfälle hinzugefügt werden.
+Diese Klasse erzeugt ein Element der Liste von Schadensfällen und Feldern.
 
 ## Beschreibung der Klasse BottomSheetDetailDialogFragment
 
@@ -136,7 +140,21 @@ Diese Klasse regelt die Zugriffsbeschränkung die man als Bauer in der App hat. 
 
 Siehe Klasse Bauer
 
+## Beschreibung der Klasse PictureData
 
+In dieser Klasse werden der Pfad und der Titel des Bildes über setter gespeichert und können über getter aufgerufen werden.
+
+## Beschreibung der Klasse PhotoManager
+
+Die Klasse Photnmanager kann Bilddateien auf dem Gerät erstellen, denn passenden Pfad zurückgegeben und den Photo Intent starten.
+
+## Beschreibung der Klasse GaleryAdapter
+
+Diese Klasse erzeugt eine Ansicht für die erstelleten Photos eines Schadensfall. Dort wird das Bilder mit den passenden Bildern angezeigt.
+
+## Beschreibung der Klasse BottomSheetAddPhoto
+
+Diese Klasse erzeugt ein BottomSheet das eine Anzeige erzeugt mit der man Photos mit der Kamera oder mit der Galerie hinzufügen kann. Weiter soll man den Bildern ein Titel geben können. Außerdem sollen die bereits gemachten Bilder angezeigt werden.
 
 # handschriftliche GUI-Skizze mit Erläuterungen
 

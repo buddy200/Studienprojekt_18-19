@@ -90,7 +90,11 @@ public class GlobalConstants {
             }
             initialLat += 0.003;
 
-
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             polis.add(p);
         }
     }

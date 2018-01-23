@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -45,7 +44,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
-import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialUtils;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
 
 
 /**
@@ -180,7 +179,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         dataManager.readData();
 
         if(!prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false)){
-            new TutorialUtils().addFieldTutorial(this);
+            new TutorialOverlays().addFieldTutorial(this);
         }
     }
 
@@ -217,7 +216,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 onRedoButtonClick();
                 break;
             case R.id.action_menu_tutorial:
-                new TutorialUtils().addFieldTutorial(this);
+                new TutorialOverlays().addFieldTutorial(this);
                 break;
         }
         return true;

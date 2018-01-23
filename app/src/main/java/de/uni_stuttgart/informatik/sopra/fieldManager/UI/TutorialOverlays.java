@@ -8,6 +8,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 
+import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 
 /**
@@ -16,15 +17,16 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.R;
  * Mail: felix.burk@gmail.com
  */
 
-public class TutorialUtils {
+public class TutorialOverlays {
 
     public static void mainTutorial(Activity activity){
         new TapTargetSequence(activity)
                 .targets(
-                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_add), "Tab here to add a new field")
+                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_add), MainActivity.getmContext().getResources().getString(R.string.help_title_add_agr_field))
                                 .dimColor(R.color.colorPrimaryDark)
                                 .cancelable(false),
-                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), "Tab here to search for fields, or other stuff")
+                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), MainActivity.getmContext().getResources().getString(R.string.help_title_search),
+                                MainActivity.getmContext().getResources().getString(R.string.help_desc_search))
                                 .dimColor(R.color.colorPrimaryDark)
                                 .cancelable(false))
                 .listener(new TapTargetSequence.Listener() {
@@ -50,7 +52,8 @@ public class TutorialUtils {
     public static void mainTutorialNoAdmin(Activity activity){
         new TapTargetSequence(activity)
                 .targets(
-                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), "Tab here to search for fields, or other stuff")
+                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), MainActivity.getmContext().getResources().getString(R.string.help_title_search),
+                                MainActivity.getmContext().getResources().getString(R.string.help_desc_search))
                                 .dimColor(R.color.colorPrimaryDark)
                                 .cancelable(false))
                 .listener(new TapTargetSequence.Listener() {
@@ -77,15 +80,19 @@ public class TutorialUtils {
         Drawable d = VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_add_location_white_24px, null);
         d = DrawableCompat.wrap(d);
 
+        String titleFab = MainActivity.getmContext().getResources().getString(R.string.help_title_fab);
+        String descFab = MainActivity.getmContext().getResources().getString(R.string.help_desc_fab);
+
+        String titleMenuDone = MainActivity.getmContext().getResources().getString(R.string.help_title_create_field);
+        String descMenuDone = MainActivity.getmContext().getResources().getString(R.string.help_desc_create_field);
+
         new TapTargetSequence(activity)
                 .targets(
-                        TapTarget.forView(activity.findViewById(R.id.fab), "Add a corner point", "to add a new corner point to your new field press here, " +
-                                "the corner point is your current location on the map \n but if you wish to add points manually just press on the map to add a new one")
+                        TapTarget.forView(activity.findViewById(R.id.fab),  titleFab, descFab)
                                 .icon(d)
                                 .dimColor(R.color.colorPrimaryDark)
                                 .cancelable(false),
-                        TapTarget.forView(activity.findViewById(R.id.action_menu_done), "Create your field",
-                                "if you have enough points selected on the map press here to finish up your field and fill in the necessary data")
+                        TapTarget.forView(activity.findViewById(R.id.action_menu_done), titleMenuDone, descMenuDone)
                                 .targetRadius(60)
                                 .dimColor(R.color.colorPrimaryDark)
                                 .cancelable(false))

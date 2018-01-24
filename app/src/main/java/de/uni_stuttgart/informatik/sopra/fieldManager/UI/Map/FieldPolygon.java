@@ -73,7 +73,7 @@ public class FieldPolygon extends Polygon {
                 return;
             }
             textPaint.setTextSize(40);
-            textPaint.setColor(Color.RED);
+            textPaint.setColor(Color.BLACK);
             this.setStrokeColor(Color.argb(255, 0, 0, 0));
             this.setStrokeWidth(1.0f);
         }

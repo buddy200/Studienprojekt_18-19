@@ -29,7 +29,7 @@ public class DamageField extends Field implements Serializable {
     private ProgressStatus progressStatus;
     private double insuranceMoney;
     private ArrayList<PictureData> paths;
-    private DamageFieldType defaultType = DamageFieldType.Aliens;
+    private DamageFieldType defaultType = DamageFieldType.Storm;
     private AgrarianField parentField;
 
     /**

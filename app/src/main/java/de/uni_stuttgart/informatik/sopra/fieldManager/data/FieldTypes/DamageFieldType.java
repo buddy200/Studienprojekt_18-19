@@ -19,7 +19,9 @@ public enum DamageFieldType implements FieldType, Serializable{
 
     Hail(MainActivity.getmContext().getResources().getString(R.string.hail), ContextCompat.getColor(MainActivity.getmContext(), R.color.hailTypeDmg), 0.25),
     Snow(MainActivity.getmContext().getResources().getString(R.string.snow), ContextCompat.getColor(MainActivity.getmContext(), R.color.snowTypeDmg), 0.2),
-    Aliens(MainActivity.getmContext().getResources().getString(R.string.aliens), ContextCompat.getColor(MainActivity.getmContext(), R.color.alienTypeDmg), 0.3);
+    Storm(MainActivity.getmContext().getResources().getString(R.string.storm), ContextCompat.getColor(MainActivity.getmContext(), R.color.stormTypeDmg), 0.9),
+    Heat(MainActivity.getmContext().getResources().getString(R.string.heat), ContextCompat.getColor(MainActivity.getmContext(), R.color.heatTypeDmg), 0.1),
+    Insects(MainActivity.getmContext().getResources().getString(R.string.insects), ContextCompat.getColor(MainActivity.getmContext(), R.color.insectsTypeDmg), 0.8);
 
 
     private String friendlyName;

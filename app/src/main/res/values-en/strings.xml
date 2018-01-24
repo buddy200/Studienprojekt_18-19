@@ -80,4 +80,7 @@
     <string name="help_title_create_field">create your field</string>
     <string name="help_desc_create_field">if you have enough points selected on the map press here to finish up your field and fill in the necessary data</string>
     <string name="pick_date_label">pick date</string>
+    <string name="storm">storm</string>
+    <string name="heat">heat</string>
+    <string name="insects">insects</string>
 </resources>

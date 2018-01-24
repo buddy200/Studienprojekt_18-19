@@ -84,7 +84,7 @@ public class IntersectionCalculator {
                     intersection.add(line.get(0) * intersection.get(0) + line.get(1));
 
                     //check if the intersection point is inside the damage field
-                    if (boudnryCheck2(intersection) && boundaryCheck(intersection, vec) ) {
+                    if (boudnryCheck2(intersection) && boundaryCheck(intersection, vec)) {
                         Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                         return false;
                     }
@@ -104,52 +104,7 @@ public class IntersectionCalculator {
         GeoPoint lastPoint = new GeoPoint(line.get(2).doubleValue(), line.get(3).doubleValue());
         GeoPoint currentPoint = new GeoPoint(line.get(4).doubleValue(), line.get(5).doubleValue());
 
-        /*(lastPoint.getLatitude() <= intersection.get(0).doubleValue() && intersection.get(0).doubleValue() <= currentPoint.getLatitude())
-                || (currentPoint.getLatitude() <= intersection.get(0).doubleValue() && intersection.get(0).doubleValue() <= lastPoint.getLatitude()))
-                && ((lastPoint.getLongitude()) <= intersection.get(1).doubleValue() && intersection.get(1).doubleValue() <= currentPoint.getLongitude())
-                || (currentPoint.getLongitude() <= intersection.get(1).doubleValue() && intersection.get(1).doubleValue() <= lastPoint.getLongitude());*/
-
-        if
-                (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= currentPoint.getLongitude())) && isOnLine(intersection, line)) {
-                return true;
-            }
-        }
-
-        if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= lastPoint.getLongitude())) && isOnLine(intersection, line)) {
-                return true;
-            }
-        }
-        if
-                (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= currentPoint.getLongitude())) && isOnLine(intersection, line)) {
-                return true;
-            }
-        }
-        if
-                (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) &&
-                    (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
-                            && intersection.get(1).doubleValue() <= lastPoint.getLongitude())) && isOnLine(intersection, line)) {
-                return true;
-            }
-        }
-
-
-        return false;
-    }
-
-    private boolean boudnryCheck2(Vector<Double> intersection) {
-        if
-                (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
+        if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
                     && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
                     && intersection.get(1).doubleValue() <= currentPoint.getLongitude()))) {
@@ -160,20 +115,18 @@ public class IntersectionCalculator {
         if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
                     && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= lastPoint.getLongitude())) ) {
+                    && intersection.get(1).doubleValue() <= lastPoint.getLongitude()))) {
                 return true;
             }
         }
-        if
-                (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
+        if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
                     && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
                     && intersection.get(1).doubleValue() <= currentPoint.getLongitude()))) {
                 return true;
             }
         }
-        if
-                (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
+        if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
                     && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) &&
                     (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
@@ -181,16 +134,41 @@ public class IntersectionCalculator {
                 return true;
             }
         }
-
-
         return false;
     }
-    private boolean isOnLine(Vector<Double> intersection, Vector<Double> line) {
-        double temp1 = intersection.get(0) * line.get(0);
-        double temp2 = temp1 + line.get(1);
-        double temp3 = Math.abs(intersection.get(1)) - Math.abs(temp2);
-        //     double temp =
-        return (temp3 < 0.0000001);
+
+    private boolean boudnryCheck2(Vector<Double> intersection) {
+        if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
+                    && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
+                    && intersection.get(1).doubleValue() <= currentPoint.getLongitude()))) {
+                return true;
+            }
+        }
+
+        if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
+                    && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
+                    && intersection.get(1).doubleValue() <= lastPoint.getLongitude()))) {
+                return true;
+            }
+        }
+        if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
+                    && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
+                    && intersection.get(1).doubleValue() <= currentPoint.getLongitude()))) {
+                return true;
+            }
+        }
+        if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
+                    && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) &&
+                    (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
+                            && intersection.get(1).doubleValue() <= lastPoint.getLongitude()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

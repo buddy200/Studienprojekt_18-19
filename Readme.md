@@ -165,6 +165,7 @@ Liste der Felder mit Bauer Müller als Benutzer.
 
 
 ## Installation
+0. Deinstallieren sie eventuell alte Versionen von ihrem Smartphone bevor sie diese Version installieren.
 1. Gehen sie in einen Ordner an dem sie die Daten der App laden wollen
 2. Öffnen sie hier nun eine Konsole die mit Git-Befehlen arbeiten kann
 3. Repository klonen: `git clone git@sopra.informatik.uni-stuttgart.de:sopra-ws1718/sopra-team-4.git`

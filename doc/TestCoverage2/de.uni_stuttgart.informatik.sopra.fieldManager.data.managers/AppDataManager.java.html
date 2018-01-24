@@ -86,9 +86,9 @@ public class AppDataManager {
      * @param f
      */
     public void removeField(Field f) {
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (f instanceof DamageField) {</span>
-<span class="fc" id="L90">            DamageField damageField = (DamageField) f;</span>
-<span class="fc" id="L91">            removeField(damageField);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (f instanceof DamageField) {</span>
+<span class="nc" id="L90">            DamageField damageField = (DamageField) f;</span>
+<span class="nc" id="L91">            removeField(damageField);</span>
 <span class="pc bpc" id="L92" title="1 of 2 branches missed.">        } else if (f instanceof AgrarianField) {</span>
 <span class="fc" id="L93">            AgrarianField agrarianField = (AgrarianField) f;</span>
 <span class="fc" id="L94">            removeField(agrarianField);</span>
@@ -119,17 +119,17 @@ public class AppDataManager {
      * @param damageField field to delete
      */
     public void removeField(DamageField damageField) {
-<span class="fc" id="L122">        damageField.getParentField().getContainedDamageFields().remove(damageField);</span>
-<span class="fc" id="L123">        dbConnection.updateAgrarianField(damageField.getParentField());</span>
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        for (PictureData pictureData : damageField.getPaths()) {</span>
+<span class="nc" id="L122">        damageField.getParentField().getContainedDamageFields().remove(damageField);</span>
+<span class="nc" id="L123">        dbConnection.updateAgrarianField(damageField.getParentField());</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (PictureData pictureData : damageField.getPaths()) {</span>
 <span class="nc" id="L125">            dbConnection.deletePicture(pictureData);</span>
 <span class="nc" id="L126">        }</span>
-<span class="fc" id="L127">        damageField.deleteAllPhotos();</span>
-<span class="fc" id="L128">        dbConnection.deleteDamageField(damageField);</span>
-<span class="fc" id="L129">        damageFieldMap.remove(damageField.getID());</span>
-<span class="fc" id="L130">        agrarianFieldMap.put(damageField.getParentField().getID(), damageField.getParentField());</span>
-<span class="fc" id="L131">        dataChange();</span>
-<span class="fc" id="L132">    }</span>
+<span class="nc" id="L127">        damageField.deleteAllPhotos();</span>
+<span class="nc" id="L128">        dbConnection.deleteDamageField(damageField);</span>
+<span class="nc" id="L129">        damageFieldMap.remove(damageField.getID());</span>
+<span class="nc" id="L130">        agrarianFieldMap.put(damageField.getParentField().getID(), damageField.getParentField());</span>
+<span class="nc" id="L131">        dataChange();</span>
+<span class="nc" id="L132">    }</span>
 
     public void dataChange() {
 <span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (listener != null) {</span>
@@ -202,54 +202,70 @@ public class AppDataManager {
      * @param name
      */
     public void loadUserFields(String name) {
-<span class="fc" id="L205">        clearAllMaps();</span>
-<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        for (Field field : this.searchOwner(name.toLowerCase())) {</span>
+<span class="nc" id="L205">        clearAllMaps();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        for (Field field : this.searchOwner(name)) {</span>
 <span class="nc bnc" id="L207" title="All 2 branches missed.">            if (field instanceof AgrarianField) {</span>
 <span class="nc" id="L208">                agrarianFieldMap.put(field.getID(), (AgrarianField) field);</span>
             }
 <span class="nc" id="L210">        }</span>
-<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        for (DamageField damageField : dbConnection.getAllDamgageFields()) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        for (DamageField damageField : dbConnection.getAllDamgageFields()) {</span>
 <span class="nc bnc" id="L212" title="All 2 branches missed.">            if (agrarianFieldMap.containsKey(damageField.getParentField().getID())) {</span>
 <span class="nc" id="L213">                damageFieldMap.put(damageField.getID(), damageField);</span>
             }
 <span class="nc" id="L215">        }</span>
+<span class="nc" id="L216">    }</span>
 
-<span class="fc" id="L217">    }</span>
+    public ArrayList&lt;Field&gt; containsField(List&lt;Field&gt; fieldList){
+<span class="fc" id="L219">        ArrayList&lt;Field&gt; resultList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        for(Field field : fieldList){</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            if(field instanceof AgrarianField){</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">                if(agrarianFieldMap.containsKey(field.getID())){</span>
+<span class="fc" id="L223">                    resultList.add(field);</span>
+                }
+            }
+            else{
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">                if(damageFieldMap.containsKey(field.getID())){</span>
+<span class="fc" id="L228">                    resultList.add(field);</span>
+                }
+            }
+<span class="fc" id="L231">        }</span>
+<span class="fc" id="L232">        return resultList;</span>
+    }
 
     public void deletePicture(DamageField field, PictureData pd) {
-<span class="nc" id="L220">        dbConnection.deletePicture(pd);</span>
-<span class="nc" id="L221">    }</span>
+<span class="nc" id="L236">        dbConnection.deletePicture(pd);</span>
+<span class="nc" id="L237">    }</span>
 
     public HashMap&lt;Long, AgrarianField&gt; getAgrarianFieldMap() {
-<span class="fc" id="L224">        return agrarianFieldMap;</span>
+<span class="fc" id="L240">        return agrarianFieldMap;</span>
     }
 
     public HashMap&lt;Long, DamageField&gt; getDamageFieldMap() {
-<span class="nc" id="L228">        return damageFieldMap;</span>
+<span class="nc" id="L244">        return damageFieldMap;</span>
     }
 
     public List&lt;Field&gt; searchAll(String text) {
-<span class="fc" id="L232">        return dbConnection.searchAll(text);</span>
+<span class="fc" id="L248">        return dbConnection.searchAll(text);</span>
     }
 
     public List&lt;Field&gt; searchOwner(String text) {
-<span class="fc" id="L236">        return dbConnection.searchOwner(text);</span>
+<span class="fc" id="L252">        return dbConnection.searchOwner(text);</span>
     }
 
     public List&lt;Field&gt; searchDate(String text) {
-<span class="nc" id="L240">        return dbConnection.searchDate(text);</span>
+<span class="fc" id="L256">        return dbConnection.searchDate(text);</span>
     }
 
     public List&lt;Field&gt; searchName(String text) {
-<span class="nc" id="L244">        return dbConnection.searchName(text);</span>
+<span class="fc" id="L260">        return dbConnection.searchName(text);</span>
     }
 
     public List&lt;Field&gt; searchState(String text) {
-<span class="nc" id="L248">        return dbConnection.searchState(text);</span>
+<span class="fc" id="L264">        return dbConnection.searchState(text);</span>
     }
 
     public List&lt;Field&gt; searchEvaluator(String text) {
-<span class="nc" id="L252">        return dbConnection.searchEvaluator(text);</span>
+<span class="fc" id="L268">        return dbConnection.searchEvaluator(text);</span>
     }
 
 }

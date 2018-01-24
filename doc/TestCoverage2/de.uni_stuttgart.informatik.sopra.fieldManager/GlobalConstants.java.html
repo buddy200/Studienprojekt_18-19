@@ -90,10 +90,14 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManag
             }
 <span class="nc" id="L91">            initialLat += 0.003;</span>
 
-
-<span class="nc" id="L94">            polis.add(p);</span>
+            try {
+<span class="nc" id="L94">                Thread.sleep(1000);</span>
+<span class="nc" id="L95">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L96">                e.printStackTrace();</span>
+<span class="nc" id="L97">            }</span>
+<span class="nc" id="L98">            polis.add(p);</span>
         }
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L100">    }</span>
 
   /*  public static DamageField damageFieldTest(Context context){
 

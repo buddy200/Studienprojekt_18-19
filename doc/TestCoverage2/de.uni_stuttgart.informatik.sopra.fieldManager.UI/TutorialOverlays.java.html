@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TutorialOverlays.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI</a> &gt; <span class="el_source">TutorialOverlays.java</span></div><h1>TutorialOverlays.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI;
+
+import android.app.Activity;
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 22.01.18.
+ * Mail: felix.burk@gmail.com
+ */
+
+<span class="fc" id="L20">public class TutorialOverlays {</span>
+
+    public static void mainTutorial(Activity activity){
+<span class="fc" id="L23">        new TapTargetSequence(activity)</span>
+<span class="fc" id="L24">                .targets(</span>
+<span class="fc" id="L25">                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_add), MainActivity.getmContext().getResources().getString(R.string.help_title_add_agr_field))</span>
+<span class="fc" id="L26">                                .dimColor(R.color.colorPrimaryDark)</span>
+<span class="fc" id="L27">                                .cancelable(false),</span>
+<span class="fc" id="L28">                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), MainActivity.getmContext().getResources().getString(R.string.help_title_search),</span>
+<span class="fc" id="L29">                                MainActivity.getmContext().getResources().getString(R.string.help_desc_search))</span>
+<span class="fc" id="L30">                                .dimColor(R.color.colorPrimaryDark)</span>
+<span class="fc" id="L31">                                .cancelable(false))</span>
+<span class="fc" id="L32">                .listener(new TapTargetSequence.Listener() {</span>
+
+                    @Override
+                    public void onSequenceFinish() {
+                        // Yay
+<span class="fc" id="L37">                    }</span>
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+<span class="fc" id="L42">                    }</span>
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+<span class="nc" id="L47">                    }</span>
+<span class="fc" id="L48">                }).start();</span>
+
+<span class="fc" id="L50">    }</span>
+
+    public static void mainTutorialNoAdmin(Activity activity){
+<span class="nc" id="L53">        new TapTargetSequence(activity)</span>
+<span class="nc" id="L54">                .targets(</span>
+<span class="nc" id="L55">                        TapTarget.forView(activity.findViewById(R.id.action_toolbar_search), MainActivity.getmContext().getResources().getString(R.string.help_title_search),</span>
+<span class="nc" id="L56">                                MainActivity.getmContext().getResources().getString(R.string.help_desc_search))</span>
+<span class="nc" id="L57">                                .dimColor(R.color.colorPrimaryDark)</span>
+<span class="nc" id="L58">                                .cancelable(false))</span>
+<span class="nc" id="L59">                .listener(new TapTargetSequence.Listener() {</span>
+
+                    @Override
+                    public void onSequenceFinish() {
+                        // Yay
+<span class="nc" id="L64">                    }</span>
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+<span class="nc" id="L69">                    }</span>
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+<span class="nc" id="L74">                    }</span>
+<span class="nc" id="L75">                }).start();</span>
+
+<span class="nc" id="L77">    }</span>
+
+    public static void addFieldTutorial(Activity activity){
+<span class="fc" id="L80">        Drawable d = VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_add_location_white_24px, null);</span>
+<span class="fc" id="L81">        d = DrawableCompat.wrap(d);</span>
+
+<span class="fc" id="L83">        String titleFab = MainActivity.getmContext().getResources().getString(R.string.help_title_fab);</span>
+<span class="fc" id="L84">        String descFab = MainActivity.getmContext().getResources().getString(R.string.help_desc_fab);</span>
+
+<span class="fc" id="L86">        String titleMenuDone = MainActivity.getmContext().getResources().getString(R.string.help_title_create_field);</span>
+<span class="fc" id="L87">        String descMenuDone = MainActivity.getmContext().getResources().getString(R.string.help_desc_create_field);</span>
+
+<span class="fc" id="L89">        new TapTargetSequence(activity)</span>
+<span class="fc" id="L90">                .targets(</span>
+<span class="fc" id="L91">                        TapTarget.forView(activity.findViewById(R.id.fab),  titleFab, descFab)</span>
+<span class="fc" id="L92">                                .icon(d)</span>
+<span class="fc" id="L93">                                .dimColor(R.color.colorPrimaryDark)</span>
+<span class="fc" id="L94">                                .cancelable(false),</span>
+<span class="fc" id="L95">                        TapTarget.forView(activity.findViewById(R.id.action_menu_done), titleMenuDone, descMenuDone)</span>
+<span class="fc" id="L96">                                .targetRadius(60)</span>
+<span class="fc" id="L97">                                .dimColor(R.color.colorPrimaryDark)</span>
+<span class="fc" id="L98">                                .cancelable(false))</span>
+<span class="fc" id="L99">                .listener(new TapTargetSequence.Listener() {</span>
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        // Yay
+<span class="fc" id="L105">                    }</span>
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+<span class="fc" id="L110">                    }</span>
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+                        // Boo
+<span class="nc" id="L115">                    }</span>
+<span class="fc" id="L116">                }).start();</span>
+
+<span class="fc" id="L118">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

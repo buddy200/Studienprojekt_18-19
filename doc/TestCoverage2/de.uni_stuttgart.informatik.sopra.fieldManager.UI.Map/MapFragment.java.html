@@ -39,11 +39,11 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
     public void onCreate(Bundle savedInstanceState) {
 <span class="fc" id="L40">        super.onCreate(savedInstanceState);</span>
 
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)</span>
                 != PackageManager.PERMISSION_GRANTED) {
 
-<span class="nc" id="L45">            permissionGranted = false;</span>
-<span class="nc" id="L46">            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);</span>
+<span class="fc" id="L45">            permissionGranted = false;</span>
+<span class="fc" id="L46">            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);</span>
         } else {
 <span class="fc" id="L48">            permissionGranted = true;</span>
         }
@@ -64,20 +64,20 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
     public void onResume() {
 <span class="fc" id="L65">        super.onResume();</span>
 <span class="fc" id="L66">        cl.removeAllViews();</span>
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (permissionGranted) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (permissionGranted) {</span>
 <span class="fc" id="L68">            cl.addView(mPresenter.getMap());</span>
 
         } else {
-<span class="nc" id="L71">            v = new TextView(getContext());</span>
-<span class="nc" id="L72">            v.setText(&quot;Permission not granted - sorry&quot;);</span>
-<span class="nc" id="L73">            cl.addView(v);</span>
+<span class="fc" id="L71">            v = new TextView(getContext());</span>
+<span class="fc" id="L72">            v.setText(&quot;Permission not granted - sorry&quot;);</span>
+<span class="fc" id="L73">            cl.addView(v);</span>
         }
 <span class="fc" id="L75">    }</span>
 
     @Override
     public void onStart() {
 <span class="fc" id="L79">        super.onStart();</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (permissionGranted) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (permissionGranted) {</span>
 <span class="fc" id="L81">            mPresenter.start();</span>
         }
 <span class="fc" id="L83">    }</span>
@@ -113,33 +113,33 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-<span class="nc bnc" id="L116" title="All 3 branches missed.">        switch (requestCode) {</span>
+<span class="pc bpc" id="L116" title="1 of 3 branches missed.">        switch (requestCode) {</span>
             case 0:
-<span class="nc bnc" id="L118" title="All 4 branches missed.">                if (grantResults.length &gt; 0</span>
+<span class="pc bpc" id="L118" title="2 of 4 branches missed.">                if (grantResults.length &gt; 0</span>
                         &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-<span class="nc" id="L121">                    permissionGranted = true;</span>
-<span class="nc" id="L122">                    mPresenter.start();</span>
+<span class="fc" id="L121">                    permissionGranted = true;</span>
+<span class="fc" id="L122">                    mPresenter.start();</span>
 
-<span class="nc" id="L124">                    this.onStart();</span>
+<span class="fc" id="L124">                    this.onStart();</span>
                 } else {
                     //no permission - no map
                 }
                 break;
             case 1:
                 //GPS Permission check
-<span class="nc bnc" id="L131" title="All 4 branches missed.">                if (grantResults.length &gt; 0</span>
+<span class="pc bpc" id="L131" title="1 of 4 branches missed.">                if (grantResults.length &gt; 0</span>
                         &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-<span class="nc" id="L133">                    this.onStart();</span>
+<span class="fc" id="L133">                    this.onStart();</span>
                 } else {
-<span class="nc" id="L135">                    Toast.makeText(getActivity(), &quot;Keine Standort Berechtigung&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L135">                    Toast.makeText(getActivity(), &quot;Keine Standort Berechtigung&quot;, Toast.LENGTH_SHORT).show();</span>
 
                 }
-<span class="nc" id="L138">                break;</span>
+<span class="fc" id="L138">                break;</span>
             default:
 <span class="nc" id="L140">                Log.e(TAG, &quot;requested permission not handled&quot;);</span>
         }
-<span class="nc" id="L142">    }</span>
+<span class="fc" id="L142">    }</span>
 
     public void setPresenter(MapViewHandler presenter) {
 <span class="fc" id="L145">        mPresenter = presenter;</span>

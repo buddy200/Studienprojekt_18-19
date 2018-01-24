@@ -34,23 +34,27 @@ public class DBConnection {
     private static final String VectorTable_Suffix = &quot;Vectors_&quot;;
     private static final String X_COLUM = &quot;x&quot;;
     private static final String Y_COLUM = &quot;y&quot;;
+    private static final String POINT1X_COLUM = &quot;x1&quot;;
+    private static final String POINT1Y_COLUM = &quot;y1&quot;;
+    private static final String POINT2X_COLUM = &quot;x2&quot;;
+    private static final String POINT2Y_COLUM = &quot;y2&quot;;
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private Context context;
 
-<span class="fc" id="L42">    public DBConnection(Context context) {</span>
-<span class="fc" id="L43">        this.context = context;</span>
-<span class="fc" id="L44">        dbHelper = new DBHelper(context);</span>
-<span class="fc" id="L45">        db = dbHelper.getWritableDatabase();</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L46">    public DBConnection(Context context) {</span>
+<span class="fc" id="L47">        this.context = context;</span>
+<span class="fc" id="L48">        dbHelper = new DBHelper(context);</span>
+<span class="fc" id="L49">        db = dbHelper.getWritableDatabase();</span>
+<span class="fc" id="L50">    }</span>
 
     /**
      * close the database connection
      */
     public void close() {
-<span class="fc" id="L52">        dbHelper.close();</span>
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L56">        dbHelper.close();</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * add an field to the database
@@ -58,36 +62,44 @@ public class DBConnection {
      * @param field the field to add
      */
     public void addField(AgrarianField field) {
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc" id="L62">            ContentValues values = new ContentValues();</span>
-<span class="fc" id="L63">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
-<span class="fc" id="L64">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
-<span class="fc" id="L65">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
-<span class="fc" id="L66">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
-<span class="fc" id="L67">            values.put(DBHelper.OWNER_COLUM, field.getOwner());</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (field != null) {</span>
+<span class="fc" id="L66">            ContentValues values = new ContentValues();</span>
+<span class="fc" id="L67">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
+<span class="fc" id="L68">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
+<span class="fc" id="L69">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
+<span class="fc" id="L70">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
+<span class="fc" id="L71">            values.put(DBHelper.OWNER_COLUM, field.getOwner());</span>
 
-<span class="fc" id="L69">            long rowID = db.insert(DBHelper.AgrarianFieldTable_NAME, null, values);</span>
-<span class="fc" id="L70">            field.setID(rowID);</span>
+<span class="fc" id="L73">            long rowID = db.insert(DBHelper.AgrarianFieldTable_NAME, null, values);</span>
+<span class="fc" id="L74">            field.setID(rowID);</span>
 
-<span class="fc" id="L72">            createVectorTable(field);</span>
-<span class="fc" id="L73">            createGeoPointTable(field);</span>
+<span class="fc" id="L76">            createVectorTable(field);</span>
+<span class="fc" id="L77">            createGeoPointTable(field);</span>
         }
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L79">    }</span>
 
     private void createVectorTable(AgrarianField field) {
-<span class="fc" id="L78">        String table_name = VectorTable_Suffix + field.getID();</span>
-<span class="fc" id="L79">        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS &quot; + table_name + &quot; (&quot; +</span>
+<span class="fc" id="L82">        String table_name = VectorTable_Suffix + field.getID();</span>
+<span class="fc" id="L83">        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS &quot; + table_name + &quot; (&quot; +</span>
                 X_COLUM + &quot; REAL NOT NULL,&quot; +
-                Y_COLUM + &quot; REAL NOT NULL)&quot;);
+                Y_COLUM + &quot; REAL NOT NULL,&quot; +
+                POINT1X_COLUM + &quot; REAL NOT NULL,&quot; +
+                POINT1Y_COLUM + &quot; REAL NOT NULL,&quot; +
+                POINT2X_COLUM + &quot; REAL NOT NULL,&quot; +
+                POINT2Y_COLUM + &quot; REAL NOT NULL)&quot;);
 
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (java.util.Vector&lt;Double&gt; v : field.getLinesFormField()) {</span>
-<span class="fc" id="L84">            ContentValues values = new ContentValues();</span>
-<span class="fc" id="L85">            values.put(X_COLUM, v.get(0));</span>
-<span class="fc" id="L86">            values.put(Y_COLUM, v.get(1));</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (java.util.Vector&lt;Double&gt; v : field.getLinesFormField()) {</span>
+<span class="fc" id="L92">            ContentValues values = new ContentValues();</span>
+<span class="fc" id="L93">            values.put(X_COLUM, v.get(0));</span>
+<span class="fc" id="L94">            values.put(Y_COLUM, v.get(1));</span>
+<span class="fc" id="L95">            values.put(POINT1X_COLUM, v.get(2));</span>
+<span class="fc" id="L96">            values.put(POINT1Y_COLUM, v.get(3));</span>
+<span class="fc" id="L97">            values.put(POINT2X_COLUM, v.get(4));</span>
+<span class="fc" id="L98">            values.put(POINT2Y_COLUM, v.get(5));</span>
 
-<span class="fc" id="L88">            db.insert(table_name, null, values);</span>
-<span class="fc" id="L89">        }</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L100">            db.insert(table_name, null, values);</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">    }</span>
 
     /**
      * add an field to the database
@@ -95,56 +107,56 @@ public class DBConnection {
      * @param field the field to add
      */
     public void addField(DamageField field) {
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc" id="L99">            ContentValues values = new ContentValues();</span>
-<span class="fc" id="L100">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
-<span class="fc" id="L101">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
-<span class="fc" id="L102">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
-<span class="fc" id="L103">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
-<span class="fc" id="L104">            values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());</span>
-<span class="fc" id="L105">            values.put(DBHelper.DATE_COLUM, field.getParsedDate());</span>
-<span class="fc" id="L106">            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());</span>
-<span class="fc" id="L107">            values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (field != null) {</span>
+<span class="fc" id="L111">            ContentValues values = new ContentValues();</span>
+<span class="fc" id="L112">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
+<span class="fc" id="L113">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
+<span class="fc" id="L114">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
+<span class="fc" id="L115">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
+<span class="fc" id="L116">            values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());</span>
+<span class="fc" id="L117">            values.put(DBHelper.DATE_COLUM, field.getParsedDate());</span>
+<span class="fc" id="L118">            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());</span>
+<span class="fc" id="L119">            values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());</span>
 
-<span class="fc" id="L109">            long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);</span>
-<span class="fc" id="L110">            field.setID(rowID);</span>
+<span class="fc" id="L121">            long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);</span>
+<span class="fc" id="L122">            field.setID(rowID);</span>
 
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            for (PictureData pd : field.getPaths()) {</span>
-<span class="nc" id="L113">                ContentValues pd_value = new ContentValues();</span>
-<span class="nc" id="L114">                values.put(DBHelper.PARENT_COLUM, field.getID());</span>
-<span class="nc" id="L115">                values.put(DBHelper.NAME_COLUM, pd.getImage_title());</span>
-<span class="nc" id="L116">                values.put(DBHelper.PATH_COLUM, pd.getImage_path());</span>
-<span class="nc" id="L117">            }</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            for (PictureData pd : field.getPaths()) {</span>
+<span class="nc" id="L125">                ContentValues pd_value = new ContentValues();</span>
+<span class="nc" id="L126">                values.put(DBHelper.PARENT_COLUM, field.getID());</span>
+<span class="nc" id="L127">                values.put(DBHelper.NAME_COLUM, pd.getImage_title());</span>
+<span class="nc" id="L128">                values.put(DBHelper.PATH_COLUM, pd.getImage_path());</span>
+<span class="nc" id="L129">            }</span>
 
-<span class="fc" id="L119">            createGeoPointTable(field);</span>
+<span class="fc" id="L131">            createGeoPointTable(field);</span>
         }
-<span class="fc" id="L121">    }</span>
+<span class="fc" id="L133">    }</span>
 
     private void createGeoPointTable(AgrarianField field) {
-<span class="fc" id="L124">        String table_name = GeoPointTable_Suffix + &quot;_Agr_&quot; + field.getID();</span>
-<span class="fc" id="L125">        createGeoPointTable(field, table_name);</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L136">        String table_name = GeoPointTable_Suffix + &quot;_Agr_&quot; + field.getID();</span>
+<span class="fc" id="L137">        createGeoPointTable(field, table_name);</span>
+<span class="fc" id="L138">    }</span>
 
 
     private void createGeoPointTable(DamageField field) {
-<span class="fc" id="L130">        String table_name = GeoPointTable_Suffix + &quot;_Dmg_&quot; + field.getID();</span>
-<span class="fc" id="L131">        createGeoPointTable(field, table_name);</span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L142">        String table_name = GeoPointTable_Suffix + &quot;_Dmg_&quot; + field.getID();</span>
+<span class="fc" id="L143">        createGeoPointTable(field, table_name);</span>
+<span class="fc" id="L144">    }</span>
 
     private void createGeoPointTable(Field field, String table_name) {
-<span class="fc" id="L135">        db.execSQL(&quot;CREATE TABLE &quot; + table_name + &quot; (&quot; +</span>
+<span class="fc" id="L147">        db.execSQL(&quot;CREATE TABLE &quot; + table_name + &quot; (&quot; +</span>
                 DBHelper.ID_COLUM + &quot; INTEGER PRIMARY KEY AUTOINCREMENT,&quot; +
                 LAT_COLUM + &quot; REAL NOT NULL,&quot; +
                 LONG_COLUM + &quot; REAL NOT NULL)&quot;);
 
-<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (CornerPoint cp : field.getCornerPoints()) {</span>
-<span class="fc" id="L141">            WGS84Coordinate wgs = cp.getWGS();</span>
-<span class="fc" id="L142">            ContentValues values = new ContentValues();</span>
-<span class="fc" id="L143">            values.put(LAT_COLUM, wgs.getLatitude());</span>
-<span class="fc" id="L144">            values.put(LONG_COLUM, wgs.getLongitude());</span>
-<span class="fc" id="L145">            db.insert(table_name, null, values);</span>
-<span class="fc" id="L146">        }</span>
-<span class="fc" id="L147">    }</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        for (CornerPoint cp : field.getCornerPoints()) {</span>
+<span class="fc" id="L153">            WGS84Coordinate wgs = cp.getWGS();</span>
+<span class="fc" id="L154">            ContentValues values = new ContentValues();</span>
+<span class="fc" id="L155">            values.put(LAT_COLUM, wgs.getLatitude());</span>
+<span class="fc" id="L156">            values.put(LONG_COLUM, wgs.getLongitude());</span>
+<span class="fc" id="L157">            db.insert(table_name, null, values);</span>
+<span class="fc" id="L158">        }</span>
+<span class="fc" id="L159">    }</span>
 
     /**
      * returns all AgrarianFields in the database
@@ -152,16 +164,16 @@ public class DBConnection {
      * @return all AgrarianFields
      */
     public List&lt;AgrarianField&gt; getAllAgrarianFields() {
-<span class="fc" id="L155">        List&lt;AgrarianField&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L167">        List&lt;AgrarianField&gt; fields = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L157">        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, null, null, null, null, null);</span>
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        while (cursor.moveToNext()) {</span>
-<span class="fc" id="L159">            AgrarianField field = toAgrarianField(cursor);</span>
+<span class="fc" id="L169">        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, null, null, null, null, null);</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        while (cursor.moveToNext()) {</span>
+<span class="fc" id="L171">            AgrarianField field = toAgrarianField(cursor);</span>
 
-<span class="fc" id="L161">            fields.add(field);</span>
-<span class="fc" id="L162">        }</span>
+<span class="fc" id="L173">            fields.add(field);</span>
+<span class="fc" id="L174">        }</span>
 
-<span class="fc" id="L164">        return fields;</span>
+<span class="fc" id="L176">        return fields;</span>
     }
 
     /**
@@ -171,44 +183,48 @@ public class DBConnection {
      * @return the Field identified by the id
      */
     public AgrarianField getAgrarianFieldByID(long id) {
-<span class="fc" id="L174">        String[] selection_args = new String[1];</span>
-<span class="fc" id="L175">        selection_args[0] = Long.toString(id);</span>
-<span class="fc" id="L176">        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args, null, null, null);</span>
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (cursor.moveToNext()) {</span>
-<span class="fc" id="L178">            return toAgrarianField(cursor);</span>
+<span class="fc" id="L186">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L187">        selection_args[0] = Long.toString(id);</span>
+<span class="fc" id="L188">        Cursor cursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args, null, null, null);</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (cursor.moveToNext()) {</span>
+<span class="fc" id="L190">            return toAgrarianField(cursor);</span>
         }
-<span class="nc" id="L180">        return null;</span>
+<span class="nc" id="L192">        return null;</span>
     }
 
-    private AgrarianField toAgrarianField(Cursor cursor) {
-<span class="fc" id="L184">        long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));</span>
-<span class="fc" id="L185">        List&lt;CornerPoint&gt; cps = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L186">        ArrayList&lt;java.util.Vector&lt;Double&gt;&gt; vectorList = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L187">        String table_name = GeoPointTable_Suffix + &quot;_Agr_&quot; + id;</span>
-<span class="fc" id="L188">        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + &quot; ASC&quot;);</span>
-<span class="fc bfc" id="L189" title="All 2 branches covered.">        while (cpCursor.moveToNext()) {</span>
-<span class="fc" id="L190">            double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));</span>
-<span class="fc" id="L191">            double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));</span>
-<span class="fc" id="L192">            cps.add(new CornerPoint(lat, lon));</span>
-<span class="fc" id="L193">        }</span>
+    private AgrarianField toAgrarianField(Cursor cursor) throws IllegalStateException{
+<span class="fc" id="L196">        long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));</span>
+<span class="fc" id="L197">        List&lt;CornerPoint&gt; cps = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L198">        ArrayList&lt;java.util.Vector&lt;Double&gt;&gt; vectorList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L199">        String table_name = GeoPointTable_Suffix + &quot;_Agr_&quot; + id;</span>
+<span class="fc" id="L200">        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + &quot; ASC&quot;);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        while (cpCursor.moveToNext()) {</span>
+<span class="fc" id="L202">            double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));</span>
+<span class="fc" id="L203">            double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));</span>
+<span class="fc" id="L204">            cps.add(new CornerPoint(lat, lon));</span>
+<span class="fc" id="L205">        }</span>
 
-<span class="fc" id="L195">        String vectorTable = VectorTable_Suffix + id;</span>
-<span class="fc" id="L196">        Cursor vCursor = db.query(vectorTable, null, null, null, null, null, null);</span>
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        while (vCursor.moveToNext()) {</span>
-<span class="fc" id="L198">            java.util.Vector&lt;Double&gt; v = new Vector&lt;&gt;();</span>
-<span class="fc" id="L199">            v.add(0, vCursor.getDouble(vCursor.getColumnIndex(X_COLUM)));</span>
-<span class="fc" id="L200">            v.add(1, vCursor.getDouble(vCursor.getColumnIndex(Y_COLUM)));</span>
-<span class="fc" id="L201">            vectorList.add(v);</span>
-<span class="fc" id="L202">        }</span>
+<span class="fc" id="L207">        String vectorTable = VectorTable_Suffix + id;</span>
+<span class="fc" id="L208">        Cursor vCursor = db.query(vectorTable, null, null, null, null, null, null);</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        while (vCursor.moveToNext()) {</span>
+<span class="fc" id="L210">            java.util.Vector&lt;Double&gt; v = new Vector&lt;&gt;();</span>
+<span class="fc" id="L211">            v.add(0, vCursor.getDouble(vCursor.getColumnIndex(X_COLUM)));</span>
+<span class="fc" id="L212">            v.add(1, vCursor.getDouble(vCursor.getColumnIndex(Y_COLUM)));</span>
+<span class="fc" id="L213">            v.add(2, vCursor.getDouble(vCursor.getColumnIndex(POINT1X_COLUM)));</span>
+<span class="fc" id="L214">            v.add(3, vCursor.getDouble(vCursor.getColumnIndex(POINT1Y_COLUM)));</span>
+<span class="fc" id="L215">            v.add(4, vCursor.getDouble(vCursor.getColumnIndex(POINT2X_COLUM)));</span>
+<span class="fc" id="L216">            v.add(5, vCursor.getDouble(vCursor.getColumnIndex(POINT2Y_COLUM)));</span>
+<span class="fc" id="L217">            vectorList.add(v);</span>
+<span class="fc" id="L218">        }</span>
 
-<span class="fc" id="L204">        AgrarianField field = new AgrarianField(context, cps);</span>
-<span class="fc" id="L205">        field.setID(id);</span>
-<span class="fc" id="L206">        field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));</span>
-<span class="fc" id="L207">        field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));</span>
-<span class="fc" id="L208">        field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));</span>
-<span class="fc" id="L209">        field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));</span>
-<span class="fc" id="L210">        field.setLinesFormField(vectorList);</span>
-<span class="fc" id="L211">        return field;</span>
+<span class="fc" id="L220">        AgrarianField field = new AgrarianField(context, cps);</span>
+<span class="fc" id="L221">        field.setID(id);</span>
+<span class="fc" id="L222">        field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));</span>
+<span class="fc" id="L223">        field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));</span>
+<span class="fc" id="L224">        field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));</span>
+<span class="fc" id="L225">        field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));</span>
+<span class="fc" id="L226">        field.setLinesFormField(vectorList);</span>
+<span class="fc" id="L227">        return field;</span>
     }
 
     /**
@@ -217,16 +233,16 @@ public class DBConnection {
      * @return all DamageFields
      */
     public List&lt;DamageField&gt; getAllDamgageFields() {
-<span class="fc" id="L220">        List&lt;DamageField&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L236">        List&lt;DamageField&gt; fields = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L222">        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null, null, null, null, null, null);</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">        while (cursor.moveToNext()) {</span>
-<span class="fc" id="L224">            DamageField field = toDamageField(cursor);</span>
+<span class="fc" id="L238">        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null, null, null, null, null, null);</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        while (cursor.moveToNext()) {</span>
+<span class="fc" id="L240">            DamageField field = toDamageField(cursor);</span>
 
-<span class="fc" id="L226">            fields.add(field);</span>
-<span class="fc" id="L227">        }</span>
+<span class="fc" id="L242">            fields.add(field);</span>
+<span class="fc" id="L243">        }</span>
 
-<span class="fc" id="L229">        return fields;</span>
+<span class="fc" id="L245">        return fields;</span>
     }
 
     /**
@@ -236,41 +252,41 @@ public class DBConnection {
      * @return the Field identified by the id
      */
     public DamageField getDamageFieldById(long id) {
-<span class="nc" id="L239">        String[] selection_args = new String[1];</span>
-<span class="nc" id="L240">        selection_args[0] = Long.toString(id);</span>
-<span class="nc" id="L241">        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args, null, null, null);</span>
-<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (cursor.moveToNext()) {</span>
-<span class="nc" id="L243">            return toDamageField(cursor);</span>
+<span class="nc" id="L255">        String[] selection_args = new String[1];</span>
+<span class="nc" id="L256">        selection_args[0] = Long.toString(id);</span>
+<span class="nc" id="L257">        Cursor cursor = db.query(DBHelper.DamageFieldTable_NAME, null, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args, null, null, null);</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        if (cursor.moveToNext()) {</span>
+<span class="nc" id="L259">            return toDamageField(cursor);</span>
         }
-<span class="nc" id="L245">        return null;</span>
+<span class="nc" id="L261">        return null;</span>
     }
 
     private DamageField toDamageField(Cursor cursor) {
-<span class="fc" id="L249">        long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));</span>
-<span class="fc" id="L250">        List&lt;CornerPoint&gt; cps = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L251">        String table_name = GeoPointTable_Suffix + &quot;_Dmg_&quot; + id;</span>
-<span class="fc" id="L252">        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + &quot; ASC&quot;);</span>
-<span class="fc bfc" id="L253" title="All 2 branches covered.">        while (cpCursor.moveToNext()) {</span>
-<span class="fc" id="L254">            double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));</span>
-<span class="fc" id="L255">            double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));</span>
-<span class="fc" id="L256">            cps.add(new CornerPoint(lat, lon));</span>
-<span class="fc" id="L257">        }</span>
-<span class="fc" id="L258">        long parent_ID = cursor.getLong(cursor.getColumnIndex(DBHelper.PARENT_COLUM));</span>
-<span class="fc" id="L259">        AgrarianField parent = getAgrarianFieldByID(parent_ID);</span>
+<span class="fc" id="L265">        long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));</span>
+<span class="fc" id="L266">        List&lt;CornerPoint&gt; cps = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L267">        String table_name = GeoPointTable_Suffix + &quot;_Dmg_&quot; + id;</span>
+<span class="fc" id="L268">        Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + &quot; ASC&quot;);</span>
+<span class="fc bfc" id="L269" title="All 2 branches covered.">        while (cpCursor.moveToNext()) {</span>
+<span class="fc" id="L270">            double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));</span>
+<span class="fc" id="L271">            double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));</span>
+<span class="fc" id="L272">            cps.add(new CornerPoint(lat, lon));</span>
+<span class="fc" id="L273">        }</span>
+<span class="fc" id="L274">        long parent_ID = cursor.getLong(cursor.getColumnIndex(DBHelper.PARENT_COLUM));</span>
+<span class="fc" id="L275">        AgrarianField parent = getAgrarianFieldByID(parent_ID);</span>
 
-<span class="fc" id="L261">        DamageField field = new DamageField(context, cps, parent);</span>
-<span class="fc" id="L262">        field.setID(id);</span>
-<span class="fc" id="L263">        field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));</span>
-<span class="fc" id="L264">        field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));</span>
-<span class="fc" id="L265">        field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));</span>
-<span class="fc" id="L266">        field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));</span>
-<span class="fc" id="L267">        field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));</span>
-<span class="fc" id="L268">        field.setProgressStatus(ProgressStatus.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.PROGRESS_COLUM))));</span>
-<span class="fc" id="L269">        List&lt;PictureData&gt; pictureData = getPicturesOfField(id);</span>
-<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        for (PictureData pd : pictureData) {</span>
-<span class="nc" id="L271">            field.setPath(pd);</span>
-<span class="nc" id="L272">        }</span>
-<span class="fc" id="L273">        return field;</span>
+<span class="fc" id="L277">        DamageField field = new DamageField(context, cps, parent);</span>
+<span class="fc" id="L278">        field.setID(id);</span>
+<span class="fc" id="L279">        field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));</span>
+<span class="fc" id="L280">        field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));</span>
+<span class="fc" id="L281">        field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));</span>
+<span class="fc" id="L282">        field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));</span>
+<span class="fc" id="L283">        field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));</span>
+<span class="fc" id="L284">        field.setProgressStatus(ProgressStatus.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.PROGRESS_COLUM))));</span>
+<span class="fc" id="L285">        List&lt;PictureData&gt; pictureData = getPicturesOfField(id);</span>
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">        for (PictureData pd : pictureData) {</span>
+<span class="nc" id="L287">            field.setPath(pd);</span>
+<span class="nc" id="L288">        }</span>
+<span class="fc" id="L289">        return field;</span>
     }
 
     /**
@@ -280,12 +296,12 @@ public class DBConnection {
      * @param pd       the data of the added picture
      */
     public void addPictureToField(long field_id, PictureData pd) {
-<span class="nc" id="L283">        ContentValues values = new ContentValues();</span>
-<span class="nc" id="L284">        values.put(DBHelper.PARENT_COLUM, field_id);</span>
-<span class="nc" id="L285">        values.put(DBHelper.NAME_COLUM, pd.getImage_title());</span>
-<span class="nc" id="L286">        values.put(DBHelper.PATH_COLUM, pd.getImage_path());</span>
-<span class="nc" id="L287">        db.insert(DBHelper.ImageTable_NAME, null, values);</span>
-<span class="nc" id="L288">    }</span>
+<span class="nc" id="L299">        ContentValues values = new ContentValues();</span>
+<span class="nc" id="L300">        values.put(DBHelper.PARENT_COLUM, field_id);</span>
+<span class="nc" id="L301">        values.put(DBHelper.NAME_COLUM, pd.getImage_title());</span>
+<span class="nc" id="L302">        values.put(DBHelper.PATH_COLUM, pd.getImage_path());</span>
+<span class="nc" id="L303">        db.insert(DBHelper.ImageTable_NAME, null, values);</span>
+<span class="nc" id="L304">    }</span>
 
     /**
      * deletes a picture from the database
@@ -293,12 +309,12 @@ public class DBConnection {
      * @param pd the data of the picture to delete
      */
     public void deletePicture(PictureData pd) {
-<span class="nc" id="L296">        String[] selction_args = new String[2];</span>
-<span class="nc" id="L297">        selction_args[0] = pd.getImage_title();</span>
-<span class="nc" id="L298">        selction_args[1] = pd.getImage_path();</span>
+<span class="nc" id="L312">        String[] selction_args = new String[2];</span>
+<span class="nc" id="L313">        selction_args[0] = pd.getImage_title();</span>
+<span class="nc" id="L314">        selction_args[1] = pd.getImage_path();</span>
 
-<span class="nc" id="L300">        db.delete(DBHelper.ImageTable_NAME, DBHelper.NAME_COLUM + &quot;= ? AND &quot; + DBHelper.PATH_COLUM + &quot;= ?&quot;, selction_args);</span>
-<span class="nc" id="L301">    }</span>
+<span class="nc" id="L316">        db.delete(DBHelper.ImageTable_NAME, DBHelper.NAME_COLUM + &quot;= ? AND &quot; + DBHelper.PATH_COLUM + &quot;= ?&quot;, selction_args);</span>
+<span class="nc" id="L317">    }</span>
 
     /**
      * returns all pictures of a field
@@ -307,17 +323,17 @@ public class DBConnection {
      * @return all pictures of the field
      */
     public List&lt;PictureData&gt; getPicturesOfField(long field_id) {
-<span class="fc" id="L310">        String[] selection_args = new String[1];</span>
-<span class="fc" id="L311">        selection_args[0] = Long.toString(field_id);</span>
-<span class="fc" id="L312">        Cursor cursor = db.query(DBHelper.ImageTable_NAME, new String[]{DBHelper.NAME_COLUM, DBHelper.PATH_COLUM}, (DBHelper.PARENT_COLUM + &quot;= ?&quot;), selection_args, null, null, null);</span>
-<span class="fc" id="L313">        List&lt;PictureData&gt; pictureData = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L314" title="1 of 2 branches missed.">        while (cursor.moveToNext()) {</span>
-<span class="nc" id="L315">            String title = cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM));</span>
-<span class="nc" id="L316">            String path = cursor.getString(cursor.getColumnIndex(DBHelper.PATH_COLUM));</span>
-<span class="nc" id="L317">            PictureData pd = new PictureData(title, path);</span>
-<span class="nc" id="L318">            pictureData.add(pd);</span>
-<span class="nc" id="L319">        }</span>
-<span class="fc" id="L320">        return pictureData;</span>
+<span class="fc" id="L326">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L327">        selection_args[0] = Long.toString(field_id);</span>
+<span class="fc" id="L328">        Cursor cursor = db.query(DBHelper.ImageTable_NAME, new String[]{DBHelper.NAME_COLUM, DBHelper.PATH_COLUM}, (DBHelper.PARENT_COLUM + &quot;= ?&quot;), selection_args, null, null, null);</span>
+<span class="fc" id="L329">        List&lt;PictureData&gt; pictureData = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">        while (cursor.moveToNext()) {</span>
+<span class="nc" id="L331">            String title = cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM));</span>
+<span class="nc" id="L332">            String path = cursor.getString(cursor.getColumnIndex(DBHelper.PATH_COLUM));</span>
+<span class="nc" id="L333">            PictureData pd = new PictureData(title, path);</span>
+<span class="nc" id="L334">            pictureData.add(pd);</span>
+<span class="nc" id="L335">        }</span>
+<span class="fc" id="L336">        return pictureData;</span>
     }
 
     /**
@@ -326,20 +342,20 @@ public class DBConnection {
      * @param field the updated field
      */
     public void updateAgrarianField(AgrarianField field) {
-<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc" id="L330">            ContentValues values = new ContentValues();</span>
-<span class="fc" id="L331">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
-<span class="fc" id="L332">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
-<span class="fc" id="L333">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
-<span class="fc" id="L334">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
-<span class="fc" id="L335">            values.put(DBHelper.OWNER_COLUM, field.getOwner());</span>
+<span class="pc bpc" id="L345" title="1 of 2 branches missed.">        if (field != null) {</span>
+<span class="fc" id="L346">            ContentValues values = new ContentValues();</span>
+<span class="fc" id="L347">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
+<span class="fc" id="L348">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
+<span class="fc" id="L349">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
+<span class="fc" id="L350">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
+<span class="fc" id="L351">            values.put(DBHelper.OWNER_COLUM, field.getOwner());</span>
 
-<span class="fc" id="L337">            String[] selection_args = new String[1];</span>
-<span class="fc" id="L338">            selection_args[0] = Long.toString(field.getID());</span>
+<span class="fc" id="L353">            String[] selection_args = new String[1];</span>
+<span class="fc" id="L354">            selection_args[0] = Long.toString(field.getID());</span>
 
-<span class="fc" id="L340">            db.update(DBHelper.AgrarianFieldTable_NAME, values, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
+<span class="fc" id="L356">            db.update(DBHelper.AgrarianFieldTable_NAME, values, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
         }
-<span class="fc" id="L342">    }</span>
+<span class="fc" id="L358">    }</span>
 
 
     /**
@@ -348,23 +364,23 @@ public class DBConnection {
      * @param field the updated field
      */
     public void updateDamageField(DamageField field) {
-<span class="pc bpc" id="L351" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc" id="L352">            ContentValues values = new ContentValues();</span>
-<span class="fc" id="L353">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
-<span class="fc" id="L354">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
-<span class="fc" id="L355">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
-<span class="fc" id="L356">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
-<span class="fc" id="L357">            values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());</span>
-<span class="fc" id="L358">            values.put(DBHelper.DATE_COLUM, field.getParsedDate());</span>
-<span class="fc" id="L359">            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());</span>
-<span class="fc" id="L360">            values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">        if (field != null) {</span>
+<span class="fc" id="L368">            ContentValues values = new ContentValues();</span>
+<span class="fc" id="L369">            values.put(DBHelper.SIZE_COLUM, field.getSize());</span>
+<span class="fc" id="L370">            values.put(DBHelper.NAME_COLUM, field.getName());</span>
+<span class="fc" id="L371">            values.put(DBHelper.TYPE_COLUM, field.getType().toString());</span>
+<span class="fc" id="L372">            values.put(DBHelper.COUNTY_COLUM, field.getCounty());</span>
+<span class="fc" id="L373">            values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());</span>
+<span class="fc" id="L374">            values.put(DBHelper.DATE_COLUM, field.getParsedDate());</span>
+<span class="fc" id="L375">            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());</span>
+<span class="fc" id="L376">            values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());</span>
 
-<span class="fc" id="L362">            String[] selection_args = new String[1];</span>
-<span class="fc" id="L363">            selection_args[0] = Long.toString(field.getID());</span>
+<span class="fc" id="L378">            String[] selection_args = new String[1];</span>
+<span class="fc" id="L379">            selection_args[0] = Long.toString(field.getID());</span>
 
-<span class="fc" id="L365">            db.update(DBHelper.DamageFieldTable_NAME, values, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
+<span class="fc" id="L381">            db.update(DBHelper.DamageFieldTable_NAME, values, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
         }
-<span class="fc" id="L367">    }</span>
+<span class="fc" id="L383">    }</span>
 
     /**
      * deletes an AgrarianField in the database
@@ -372,21 +388,21 @@ public class DBConnection {
      * @param field the field to delete
      */
     public void deleteAgrarianField(AgrarianField field) {
-<span class="pc bpc" id="L375" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc" id="L376">            long id = field.getID();</span>
-<span class="fc" id="L377">            String[] selection_args = new String[1];</span>
-<span class="fc" id="L378">            selection_args[0] = Long.toString(id);</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">        if (field != null) {</span>
+<span class="fc" id="L392">            long id = field.getID();</span>
+<span class="fc" id="L393">            String[] selection_args = new String[1];</span>
+<span class="fc" id="L394">            selection_args[0] = Long.toString(id);</span>
 
 
-<span class="fc" id="L381">            int rows = db.delete(DBHelper.AgrarianFieldTable_NAME, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
-<span class="pc bpc" id="L382" title="1 of 2 branches missed.">            if (rows &gt; 0) {</span>
-<span class="fc" id="L383">                String table_name = GeoPointTable_Suffix + &quot;_Agr_&quot; + id;</span>
-<span class="fc" id="L384">                String vectorTable = VectorTable_Suffix + id;</span>
-<span class="fc" id="L385">                db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + table_name);</span>
-<span class="fc" id="L386">                db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + vectorTable);</span>
+<span class="fc" id="L397">            int rows = db.delete(DBHelper.AgrarianFieldTable_NAME, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">            if (rows &gt; 0) {</span>
+<span class="fc" id="L399">                String table_name = GeoPointTable_Suffix + &quot;_Agr_&quot; + id;</span>
+<span class="fc" id="L400">                String vectorTable = VectorTable_Suffix + id;</span>
+<span class="fc" id="L401">                db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + table_name);</span>
+<span class="fc" id="L402">                db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + vectorTable);</span>
             }
         }
-<span class="fc" id="L389">    }</span>
+<span class="fc" id="L405">    }</span>
 
     /**
      * deletes a DamageField in the database
@@ -394,20 +410,20 @@ public class DBConnection {
      * @param field the field to delete
      */
     public void deleteDamageField(DamageField field) {
-<span class="pc bpc" id="L397" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc" id="L398">            long id = field.getID();</span>
-<span class="fc" id="L399">            String[] selection_args = new String[1];</span>
-<span class="fc" id="L400">            selection_args[0] = Long.toString(id);</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">        if (field != null) {</span>
+<span class="nc" id="L414">            long id = field.getID();</span>
+<span class="nc" id="L415">            String[] selection_args = new String[1];</span>
+<span class="nc" id="L416">            selection_args[0] = Long.toString(id);</span>
 
 
-<span class="fc" id="L403">            int rows = db.delete(DBHelper.DamageFieldTable_NAME, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
-<span class="pc bpc" id="L404" title="1 of 2 branches missed.">            if (rows &gt; 0) {</span>
-<span class="fc" id="L405">                String table_name = GeoPointTable_Suffix + &quot;_Dmg_&quot; + id;</span>
-<span class="fc" id="L406">                db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + table_name);</span>
-<span class="fc" id="L407">                db.delete(DBHelper.ImageTable_NAME, (DBHelper.PARENT_COLUM + &quot;= ?&quot;), selection_args);</span>
+<span class="nc" id="L419">            int rows = db.delete(DBHelper.DamageFieldTable_NAME, (DBHelper.ID_COLUM + &quot;= ?&quot;), selection_args);</span>
+<span class="nc bnc" id="L420" title="All 2 branches missed.">            if (rows &gt; 0) {</span>
+<span class="nc" id="L421">                String table_name = GeoPointTable_Suffix + &quot;_Dmg_&quot; + id;</span>
+<span class="nc" id="L422">                db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + table_name);</span>
+<span class="nc" id="L423">                db.delete(DBHelper.ImageTable_NAME, (DBHelper.PARENT_COLUM + &quot;= ?&quot;), selection_args);</span>
             }
         }
-<span class="fc" id="L410">    }</span>
+<span class="nc" id="L426">    }</span>
 
     /**
      * searches all searchable colums in the database for the given string
@@ -416,44 +432,44 @@ public class DBConnection {
      * @return all fields that contain the search string
      */
     public List&lt;Field&gt; searchAll(String text) {
-<span class="fc" id="L419">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L420">        String[] selection_args = new String[3];</span>
-<span class="fc" id="L421">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
-<span class="fc" id="L422">        selection_args[1] = &quot;%&quot; + text + &quot;%&quot;;</span>
-<span class="fc" id="L423">        selection_args[2] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L435">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L436">        String[] selection_args = new String[3];</span>
+<span class="fc" id="L437">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L438">        selection_args[1] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L439">        selection_args[2] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
         try {
-<span class="fc" id="L426">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null,</span>
+<span class="fc" id="L442">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null,</span>
                     DBHelper.OWNER_COLUM + &quot; LIKE  ? OR &quot; + DBHelper.NAME_COLUM + &quot; LIKE ? OR &quot; + DBHelper.TYPE_COLUM + &quot; LIKE ?&quot;,
                     selection_args, null, null, null);
-<span class="fc bfc" id="L429" title="All 2 branches covered.">            while (agrCursor.moveToNext()) {</span>
-<span class="fc" id="L430">                fields.add(toAgrarianField(agrCursor));</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">            while (agrCursor.moveToNext()) {</span>
+<span class="fc" id="L446">                fields.add(toAgrarianField(agrCursor));</span>
             }
-<span class="fc" id="L432">            agrCursor.close();</span>
+<span class="fc" id="L448">            agrCursor.close();</span>
 
-<span class="fc" id="L434">            selection_args = new String[5];</span>
-<span class="fc" id="L435">            selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
-<span class="fc" id="L436">            selection_args[1] = &quot;%&quot; + text + &quot;%&quot;;</span>
-<span class="fc" id="L437">            selection_args[2] = &quot;%&quot; + text + &quot;%&quot;;</span>
-<span class="fc" id="L438">            selection_args[3] = &quot;%&quot; + text + &quot;%&quot;;</span>
-<span class="fc" id="L439">            selection_args[4] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L450">            selection_args = new String[5];</span>
+<span class="fc" id="L451">            selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L452">            selection_args[1] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L453">            selection_args[2] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L454">            selection_args[3] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L455">            selection_args[4] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
-<span class="fc" id="L441">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null,</span>
+<span class="fc" id="L457">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null,</span>
                     DBHelper.EVALUATOR_COLUM + &quot; LIKE ? OR &quot; + DBHelper.NAME_COLUM + &quot; LIKE ? OR &quot; +
                             DBHelper.DATE_COLUM + &quot; LIKE ? OR &quot; + DBHelper.PROGRESS_COLUM + &quot; LIKE ?  OR &quot; +
                             DBHelper.TYPE_COLUM + &quot; LIKE ?&quot;
                     , selection_args, null, null, null);
 
-<span class="fc bfc" id="L447" title="All 2 branches covered.">            while (dmgCursor.moveToNext()) {</span>
-<span class="fc" id="L448">                fields.add(toDamageField(dmgCursor));</span>
+<span class="fc bfc" id="L463" title="All 2 branches covered.">            while (dmgCursor.moveToNext()) {</span>
+<span class="fc" id="L464">                fields.add(toDamageField(dmgCursor));</span>
             }
-<span class="fc" id="L450">            dmgCursor.close();</span>
+<span class="fc" id="L466">            dmgCursor.close();</span>
 
-<span class="nc" id="L452">        } catch (SQLException e) {</span>
-<span class="nc" id="L453">            e.printStackTrace();</span>
-<span class="fc" id="L454">        }</span>
+<span class="nc" id="L468">        } catch (SQLException e) {</span>
+<span class="nc" id="L469">            e.printStackTrace();</span>
+<span class="fc" id="L470">        }</span>
 
-<span class="fc" id="L456">        return fields;</span>
+<span class="fc" id="L472">        return fields;</span>
     }
 
     /**
@@ -463,22 +479,22 @@ public class DBConnection {
      * @return all fields that contain the search string as owner
      */
     public List&lt;Field&gt; searchOwner(String text) {
-<span class="fc" id="L466">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L467">        String[] selection_args = new String[1];</span>
-<span class="fc" id="L468">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L482">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L483">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L484">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
 
         try {
-<span class="fc" id="L472">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.OWNER_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="pc bpc" id="L473" title="1 of 2 branches missed.">            while (agrCursor.moveToNext()) {</span>
-<span class="nc" id="L474">                fields.add(toAgrarianField(agrCursor));</span>
+<span class="fc" id="L488">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.OWNER_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L489" title="1 of 2 branches missed.">            while (agrCursor.moveToNext()) {</span>
+<span class="nc" id="L490">                fields.add(toAgrarianField(agrCursor));</span>
             }
-<span class="fc" id="L476">            agrCursor.close();</span>
-<span class="nc" id="L477">        } catch (SQLException e) {</span>
-<span class="nc" id="L478">            e.printStackTrace();</span>
-<span class="nc" id="L479">            fields = null;</span>
-<span class="fc" id="L480">        }</span>
-<span class="fc" id="L481">        return fields;</span>
+<span class="fc" id="L492">            agrCursor.close();</span>
+<span class="nc" id="L493">        } catch (SQLException e) {</span>
+<span class="nc" id="L494">            e.printStackTrace();</span>
+<span class="nc" id="L495">            fields = null;</span>
+<span class="fc" id="L496">        }</span>
+<span class="fc" id="L497">        return fields;</span>
     }
 
     /**
@@ -488,21 +504,21 @@ public class DBConnection {
      * @return all fields that contain the search string as evaluator
      */
     public List&lt;Field&gt; searchEvaluator(String text) {
-<span class="nc" id="L491">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L492">        String[] selection_args = new String[1];</span>
-<span class="nc" id="L493">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L507">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L508">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L509">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
         try {
-<span class="nc" id="L496">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="nc bnc" id="L497" title="All 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
-<span class="nc" id="L498">                fields.add(toDamageField(dmgCursor));</span>
+<span class="fc" id="L512">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.EVALUATOR_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
+<span class="nc" id="L514">                fields.add(toDamageField(dmgCursor));</span>
             }
-<span class="nc" id="L500">            dmgCursor.close();</span>
-<span class="nc" id="L501">        } catch (SQLException e) {</span>
-<span class="nc" id="L502">            e.printStackTrace();</span>
-<span class="nc" id="L503">            fields = null;</span>
-<span class="nc" id="L504">        }</span>
-<span class="nc" id="L505">        return fields;</span>
+<span class="fc" id="L516">            dmgCursor.close();</span>
+<span class="nc" id="L517">        } catch (SQLException e) {</span>
+<span class="nc" id="L518">            e.printStackTrace();</span>
+<span class="nc" id="L519">            fields = null;</span>
+<span class="fc" id="L520">        }</span>
+<span class="fc" id="L521">        return fields;</span>
     }
 
     /**
@@ -512,21 +528,21 @@ public class DBConnection {
      * @return all fields that contain the search string as date
      */
     public List&lt;Field&gt; searchDate(String text) {
-<span class="nc" id="L515">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L516">        String[] selection_args = new String[1];</span>
-<span class="nc" id="L517">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L531">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L532">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L533">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
         try {
-<span class="nc" id="L520">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="nc bnc" id="L521" title="All 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
-<span class="nc" id="L522">                fields.add(toDamageField(dmgCursor));</span>
+<span class="fc" id="L536">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.DATE_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L537" title="1 of 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
+<span class="nc" id="L538">                fields.add(toDamageField(dmgCursor));</span>
             }
-<span class="nc" id="L524">            dmgCursor.close();</span>
-<span class="nc" id="L525">        } catch (SQLException e) {</span>
-<span class="nc" id="L526">            e.printStackTrace();</span>
-<span class="nc" id="L527">            fields = null;</span>
-<span class="nc" id="L528">        }</span>
-<span class="nc" id="L529">        return fields;</span>
+<span class="fc" id="L540">            dmgCursor.close();</span>
+<span class="nc" id="L541">        } catch (SQLException e) {</span>
+<span class="nc" id="L542">            e.printStackTrace();</span>
+<span class="nc" id="L543">            fields = null;</span>
+<span class="fc" id="L544">        }</span>
+<span class="fc" id="L545">        return fields;</span>
     }
 
     /**
@@ -536,28 +552,28 @@ public class DBConnection {
      * @return all fields that contain the search string as name
      */
     public List&lt;Field&gt; searchName(String text) {
-<span class="nc" id="L539">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L540">        String[] selection_args = new String[1];</span>
-<span class="nc" id="L541">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L555">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L556">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L557">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
         try {
-<span class="nc" id="L544">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.NAME_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="nc bnc" id="L545" title="All 2 branches missed.">            while (agrCursor.moveToNext()) {</span>
-<span class="nc" id="L546">                fields.add(toAgrarianField(agrCursor));</span>
+<span class="fc" id="L560">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.NAME_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L561" title="1 of 2 branches missed.">            while (agrCursor.moveToNext()) {</span>
+<span class="nc" id="L562">                fields.add(toAgrarianField(agrCursor));</span>
             }
-<span class="nc" id="L548">            agrCursor.close();</span>
+<span class="fc" id="L564">            agrCursor.close();</span>
 
-<span class="nc" id="L550">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="nc bnc" id="L551" title="All 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
-<span class="nc" id="L552">                fields.add(toDamageField(dmgCursor));</span>
+<span class="fc" id="L566">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.NAME_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L567" title="1 of 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
+<span class="nc" id="L568">                fields.add(toDamageField(dmgCursor));</span>
             }
-<span class="nc" id="L554">            dmgCursor.close();</span>
-<span class="nc" id="L555">        } catch (SQLException e) {</span>
-<span class="nc" id="L556">            e.printStackTrace();</span>
-<span class="nc" id="L557">            fields = null;</span>
-<span class="nc" id="L558">        }</span>
+<span class="fc" id="L570">            dmgCursor.close();</span>
+<span class="nc" id="L571">        } catch (SQLException e) {</span>
+<span class="nc" id="L572">            e.printStackTrace();</span>
+<span class="nc" id="L573">            fields = null;</span>
+<span class="fc" id="L574">        }</span>
 
-<span class="nc" id="L560">        return fields;</span>
+<span class="fc" id="L576">        return fields;</span>
     }
 
     /**
@@ -567,28 +583,28 @@ public class DBConnection {
      * @return all fields that contain the search string as state
      */
     public List&lt;Field&gt; searchState(String text) {
-<span class="nc" id="L570">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L571">        String[] selection_args = new String[1];</span>
-<span class="nc" id="L572">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
+<span class="fc" id="L586">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L587">        String[] selection_args = new String[1];</span>
+<span class="fc" id="L588">        selection_args[0] = &quot;%&quot; + text + &quot;%&quot;;</span>
 
         try {
-<span class="nc" id="L575">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.TYPE_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="nc bnc" id="L576" title="All 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
-<span class="nc" id="L577">                fields.add(toDamageField(dmgCursor));</span>
+<span class="fc" id="L591">            Cursor dmgCursor = db.query(DBHelper.DamageFieldTable_NAME, null, DBHelper.TYPE_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L592" title="1 of 2 branches missed.">            while (dmgCursor.moveToNext()) {</span>
+<span class="nc" id="L593">                fields.add(toDamageField(dmgCursor));</span>
             }
-<span class="nc" id="L579">            dmgCursor.close();</span>
+<span class="fc" id="L595">            dmgCursor.close();</span>
 
-<span class="nc" id="L581">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.TYPE_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
-<span class="nc bnc" id="L582" title="All 2 branches missed.">            while (agrCursor.moveToNext()) {</span>
-<span class="nc" id="L583">                fields.add(toAgrarianField(agrCursor));</span>
+<span class="fc" id="L597">            Cursor agrCursor = db.query(DBHelper.AgrarianFieldTable_NAME, null, DBHelper.TYPE_COLUM + &quot; LIKE ?&quot;, selection_args, null, null, null);</span>
+<span class="pc bpc" id="L598" title="1 of 2 branches missed.">            while (agrCursor.moveToNext()) {</span>
+<span class="nc" id="L599">                fields.add(toAgrarianField(agrCursor));</span>
             }
-<span class="nc" id="L585">            agrCursor.close();</span>
-<span class="nc" id="L586">        } catch (SQLException e) {</span>
-<span class="nc" id="L587">            e.printStackTrace();</span>
-<span class="nc" id="L588">            fields = null;</span>
-<span class="nc" id="L589">        }</span>
+<span class="fc" id="L601">            agrCursor.close();</span>
+<span class="nc" id="L602">        } catch (SQLException e) {</span>
+<span class="nc" id="L603">            e.printStackTrace();</span>
+<span class="nc" id="L604">            fields = null;</span>
+<span class="fc" id="L605">        }</span>
 
-<span class="nc" id="L591">        return fields;</span>
+<span class="fc" id="L607">        return fields;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

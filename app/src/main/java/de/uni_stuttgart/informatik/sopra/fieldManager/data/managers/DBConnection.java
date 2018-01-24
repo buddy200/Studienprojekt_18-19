@@ -34,6 +34,10 @@ public class DBConnection {
     private static final String VectorTable_Suffix = "Vectors_";
     private static final String X_COLUM = "x";
     private static final String Y_COLUM = "y";
+    private static final String POINT1X_COLUM = "x1";
+    private static final String POINT1Y_COLUM = "y1";
+    private static final String POINT2X_COLUM = "x2";
+    private static final String POINT2Y_COLUM = "y2";
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
@@ -78,12 +82,20 @@ public class DBConnection {
         String table_name = VectorTable_Suffix + field.getID();
         db.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
                 X_COLUM + " REAL NOT NULL," +
-                Y_COLUM + " REAL NOT NULL)");
+                Y_COLUM + " REAL NOT NULL," +
+                POINT1X_COLUM + " REAL NOT NULL," +
+                POINT1Y_COLUM + " REAL NOT NULL," +
+                POINT2X_COLUM + " REAL NOT NULL," +
+                POINT2Y_COLUM + " REAL NOT NULL)");
 
         for (java.util.Vector<Double> v : field.getLinesFormField()) {
             ContentValues values = new ContentValues();
             values.put(X_COLUM, v.get(0));
             values.put(Y_COLUM, v.get(1));
+            values.put(POINT1X_COLUM, v.get(2));
+            values.put(POINT1Y_COLUM, v.get(3));
+            values.put(POINT2X_COLUM, v.get(4));
+            values.put(POINT2Y_COLUM, v.get(5));
 
             db.insert(table_name, null, values);
         }
@@ -180,7 +192,7 @@ public class DBConnection {
         return null;
     }
 
-    private AgrarianField toAgrarianField(Cursor cursor) {
+    private AgrarianField toAgrarianField(Cursor cursor) throws IllegalStateException{
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
         List<CornerPoint> cps = new ArrayList<>();
         ArrayList<java.util.Vector<Double>> vectorList = new ArrayList<>();
@@ -198,6 +210,10 @@ public class DBConnection {
             java.util.Vector<Double> v = new Vector<>();
             v.add(0, vCursor.getDouble(vCursor.getColumnIndex(X_COLUM)));
             v.add(1, vCursor.getDouble(vCursor.getColumnIndex(Y_COLUM)));
+            v.add(2, vCursor.getDouble(vCursor.getColumnIndex(POINT1X_COLUM)));
+            v.add(3, vCursor.getDouble(vCursor.getColumnIndex(POINT1Y_COLUM)));
+            v.add(4, vCursor.getDouble(vCursor.getColumnIndex(POINT2X_COLUM)));
+            v.add(5, vCursor.getDouble(vCursor.getColumnIndex(POINT2Y_COLUM)));
             vectorList.add(v);
         }
 

@@ -29,7 +29,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private Context context;
     private BottomSheetDialogFragment bottomSheet;
     private final BitmapFactory.Options options;
-    private static final int IMAGE_SCALE = 10;
+    private static final int IMAGE_SCALE = 7;
 
     public GalleryAdapter(Context context, ArrayList<PictureData> galleryList, BottomSheetDialogFragment bottomSheet) {
         this.bottomSheet = bottomSheet;

@@ -1,6 +1,7 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.Serializable;

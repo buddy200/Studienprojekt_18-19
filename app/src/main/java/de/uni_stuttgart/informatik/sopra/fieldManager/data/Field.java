@@ -10,14 +10,12 @@ import org.osmdroid.util.GeoPoint;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Queue;
+import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.FieldType;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.Triangle;
 
 /**
  * Created by larsb on 22.11.2017.
@@ -50,7 +48,6 @@ public abstract class Field implements Serializable {
      */
     private boolean rotation = false;
 
-    private boolean finished = false;
 
     /**
      * constructor only used in custom Field classes via super()
@@ -66,7 +63,7 @@ public abstract class Field implements Serializable {
         if (cPoints.size() < 2) {
         } else {
             setCornerPoints(cPoints);
-            finish();
+            calculateSize();
         }
     }
 
@@ -79,86 +76,48 @@ public abstract class Field implements Serializable {
         if (cornerPoints.size() == 1) {
             setAutomaticCounty();
         }
-        if (!finished) {
-            cornerPoints.add(cp);
-            if (cornerPoints.size() > 2) {
-                cornerPoints.get(cornerPoints.size() - 2).calculateAngle(cornerPoints.get(cornerPoints.size() - 3), cp);
-            }
-        }
+        cornerPoints.add(cp);
     }
 
     /**
-     * only used if there will be no corner points added anymore
+     * calculates out of the latitude and longitude, cartesian coordinates
+     *
+     * @param latitude
+     * @param longitude
+     * @return
      */
-    public void finish() {
-        if (cornerPoints.size() > 2) {
-            cornerPoints.get(cornerPoints.size() - 1).calculateAngle(cornerPoints.get(cornerPoints.size() - 2), cornerPoints.get(0));
-            cornerPoints.get(0).calculateAngle(cornerPoints.get(cornerPoints.size() - 1), cornerPoints.get(1));
-            calculateSize();
-            convertSize();
-            finished = true;
-        }
+    private Vector<Double> calculateCartesianCoordinates(double latitude, double longitude) {
+        Vector<Double> coordinate = new java.util.Vector<>();
+        coordinate.add(6371000 * ((longitude * Math.PI) / 180) * Math.cos((Math.PI * getCentroid().getLatitude()) / 180));
+        coordinate.add(6371000 * (latitude * Math.PI) / 180);
+        return coordinate;
     }
 
     /**
      * calculate the size of the polygon
      */
-    private void calculateSize() {
+    void calculateSize() {
         size = 0;
-        List<CornerPoint> rmCopy = new ArrayList<>(cornerPoints);
-
-        Queue<CornerPoint> outwardPoints = new LinkedList<>();
-        List<Triangle> triangleList = new ArrayList<>();
-
-        if (angleSum()) {
-            for (CornerPoint cp : cornerPoints) {
-                if (angleCheck(cp.getAngle())) {
-                    outwardPoints.add(cp);
-                }
-            }
-            for (int i = 0; i < cornerPoints.size() - 2; i++) {
-                if (outwardPoints.isEmpty()) {
-                    triangleList.add(new Triangle(rmCopy.get(0), rmCopy.get(1), rmCopy.get(2)));
-                    rmCopy.remove(1);
-                } else {
-                    CornerPoint cp = outwardPoints.poll();
-                    int index = rmCopy.indexOf(cp);
-                    int indexBefore = ((index != 0) ? index - 1 : rmCopy.size() - 1);
-
-                    //two outward Points following
-                    if (angleCheck(rmCopy.get(indexBefore).getAngle())) {
-                        i--;
-                        outwardPoints.add(cp);
-                    } else {
-                        int indexTwoBefore = ((indexBefore != 0) ? indexBefore - 1 : rmCopy.size() - 1);
-                        //make triangle
-                        triangleList.add(new Triangle(rmCopy.get(indexTwoBefore), rmCopy.get(indexBefore), rmCopy.get(index)));
-                        rmCopy.remove(indexBefore);
-
-                        //recalculate angles
-                        index = rmCopy.indexOf(cp);
-                        indexBefore = ((index != 0) ? index - 1 : rmCopy.size() - 1);
-                        int indexAfter = ((index == rmCopy.size() - 1) ? 0 : ++index);
-                        indexTwoBefore = ((indexBefore != 0) ? indexBefore - 1 : rmCopy.size() - 1);
-                        CornerPoint cpBefore = rmCopy.get(indexBefore);
-                        cp.calculateAngle(cpBefore, rmCopy.get(indexAfter));
-                        cpBefore.calculateAngle(rmCopy.get(indexTwoBefore), cp);
-                        if (angleCheck(cp.getAngle())) {
-                            outwardPoints.add(cp);
-                        }
-                        if (angleCheck(cpBefore.getAngle())) {
-                            outwardPoints.add(cpBefore);
-                        }
-                    }
-                }
-            }
-            for (Triangle t : triangleList) {
-                size += t.getSize();
-            }
+        double firstSum = 0.0;
+        double secondSum = 0.0;
+        ArrayList<Vector<Double>> cordinates = new ArrayList<>();
+        for (int i = 0; i < cornerPoints.size(); i++) {
+            cordinates.add(calculateCartesianCoordinates(cornerPoints.get(i).getWGS().getLatitude(), cornerPoints.get(i).getWGS().getLongitude()));
         }
+
+        //area calculation with cross prduct
+        for (int i = 1; i < cordinates.size(); i++) {
+            firstSum = firstSum + (cordinates.get(i - 1).get(0) * cordinates.get(i).get(1));
+            secondSum = secondSum + (cordinates.get(i - 1).get(1) * cordinates.get(i).get(0));
+        }
+        firstSum = firstSum + cordinates.get(cordinates.size() - 1).get(0) * cordinates.get(0).get(1);
+        secondSum = secondSum + cordinates.get(cordinates.size() - 1).get(1) * cordinates.get(0).get(0);
+        size = Math.abs((firstSum - secondSum) / 2);
+        convertSize();
     }
 
-    /*
+
+    /**
      * Convert the size of the field in a readable format
      */
     private void convertSize() {
@@ -170,37 +129,6 @@ public abstract class Field implements Serializable {
             this.conSize = (String.valueOf(size / 100)) + "a";
         } else {
             this.conSize = (String.valueOf(size)) + "m" + "\u00B2";
-        }
-    }
-
-    /**
-     * check if angles are okay
-     *
-     * @param angle
-     * @return
-     */
-    private boolean angleCheck(double angle) {
-        return rotation ? angle <= Math.PI : angle >= Math.PI;
-    }
-
-    /**
-     * calculate angle sum, might be wrong
-     *
-     * @return
-     */
-    private boolean angleSum() {
-        double sum = 0;
-        for (int i = 0; i < cornerPoints.size(); i++) {
-            sum += cornerPoints.get(i).getAngle();
-        }
-        if (Math.abs(sum - (Math.PI * (cornerPoints.size() + 2))) < 0.001) {
-            rotation = true;
-            return true;
-        } else if (Math.abs(sum - (Math.PI * (cornerPoints.size() - 2))) < 0.001) {
-            return true;
-        } else {
-            //either wrong calculation or crossing lines in input polygon
-            return false;
         }
     }
 
@@ -237,7 +165,7 @@ public abstract class Field implements Serializable {
      * @return the size of the field or 0 if the field isn't finished
      */
     public double getSize() {
-        return finished ? size : 0;
+        return  size;
     }
 
     public void setCornerPoints(List<CornerPoint> cornerPoints) {

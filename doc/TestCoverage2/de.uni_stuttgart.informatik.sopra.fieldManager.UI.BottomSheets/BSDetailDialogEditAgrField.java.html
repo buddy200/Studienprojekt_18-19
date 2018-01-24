@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BSDetailDialogEditAgrField.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets</a> &gt; <span class="el_source">BSDetailDialogEditAgrField.java</span></div><h1>BSDetailDialogEditAgrField.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.Arrays;
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.AddFieldActivity;
+import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.AgrarianFieldType;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 07.12.17.
+ * Mail: felix.burk@gmail.com
+ * &lt;p&gt;
+ * A custom BSDetailDialogDmgField to edit Fields
+ */
+
+<span class="fc" id="L37">public class</span>
+BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditContract.BottomSheet, View.OnClickListener {
+
+    private static final String TAG = &quot;BSDetailDialogEditFragmentAgrarianField&quot;;
+
+    private BSEditContract.Presenter mPresenter;
+
+    private TextView headingText;
+    private EditText fieldName;
+    private EditText fieldRegion;
+    private Spinner fieldSpinner;
+    private TextView fieldSize;
+    private EditText fieldPolicyHolder;
+    private ImageButton finishButton;
+    private ImageButton deleteButton;
+    private FragmentInteractionListener mListener;
+
+    /**
+     * this factory method is used to generate an instance
+     * using the provided parameters
+     *
+     * @return A new instance of fragment BottomSheetDialogFragment.
+     */
+    public static BSDetailDialogEditAgrField newInstance() {
+<span class="fc" id="L61">        final BSDetailDialogEditAgrField fragment = new BSDetailDialogEditAgrField();</span>
+
+<span class="fc" id="L63">        return fragment;</span>
+    }
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L68">        super.onAttach(context);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L70">            mListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L72">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement FragmentInteractionListener&quot;);
+        }
+<span class="fc" id="L75">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L79">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc" id="L81">        this.setCancelable(false);</span>
+<span class="fc" id="L82">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L87">        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_agrarianfieldedit, container, false);</span>
+<span class="fc" id="L88">        configureBottomSheetBehaviour(view);</span>
+
+<span class="fc" id="L90">        headingText = view.findViewById(R.id.heading);</span>
+<span class="fc" id="L91">        fieldName = view.findViewById(R.id.field_detail_name_edit);</span>
+<span class="fc" id="L92">        fieldRegion = view.findViewById(R.id.field_detail_region_edit);</span>
+<span class="fc" id="L93">        fieldSpinner = view.findViewById(R.id.field_detail_state_spinner);</span>
+<span class="fc" id="L94">        fieldSize = view.findViewById(R.id.field_detail_size);</span>
+<span class="fc" id="L95">        fieldPolicyHolder = view.findViewById(R.id.field_detail_policyholder_edit);</span>
+
+<span class="fc" id="L97">        finishButton = view.findViewById(R.id.finish_edit_button_agr);</span>
+<span class="fc" id="L98">        deleteButton = view.findViewById(R.id.delete_button);</span>
+<span class="fc" id="L99">        finishButton.setOnClickListener(this);</span>
+<span class="fc" id="L100">        deleteButton.setOnClickListener(this);</span>
+
+<span class="fc" id="L102">        return view;</span>
+    }
+
+    private void configureBottomSheetBehaviour(View view) {
+        //Not implemented yet - TODO
+<span class="fc" id="L107">    }</span>
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L111">        super.onStart();</span>
+<span class="fc" id="L112">        mPresenter.start();</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * handle clicks on buttons
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (this.mPresenter != null) {</span>
+<span class="pc bpc" id="L123" title="1 of 3 branches missed.">            switch (v.getId()) {</span>
+                case R.id.finish_edit_button_agr:
+<span class="fc" id="L125">                    mListener.onFragmentMessage(TAG, &quot;done&quot;, null);</span>
+<span class="fc" id="L126">                    mPresenter.changeField(changedField());</span>
+<span class="fc" id="L127">                    this.dismiss();</span>
+<span class="fc" id="L128">                    break;</span>
+                case R.id.delete_button:
+<span class="fc" id="L130">                    generateDeleteDialog().show();</span>
+<span class="fc" id="L131">                    this.dismiss();</span>
+                    break;
+            }
+        }
+<span class="fc" id="L135">    }</span>
+
+    @Override
+    public void setPresenter(BasePresenter p) {
+<span class="fc" id="L139">        mPresenter = (BSEditContract.Presenter) p;</span>
+<span class="fc" id="L140">    }</span>
+
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+        //Not implemented yet TODO
+<span class="nc" id="L146">    }</span>
+
+    @Override
+    public void fillData(Field f) {
+<span class="fc" id="L150">        AgrarianField field = (AgrarianField) f;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (this.getActivity() instanceof AddFieldActivity) {</span>
+<span class="fc" id="L152">            deleteButton.setVisibility(View.INVISIBLE);</span>
+        }
+<span class="fc" id="L154">        headingText.setText(&quot;AgrarFeld&quot;);</span>
+<span class="fc" id="L155">        fieldRegion.setText(field.getCounty());</span>
+        List&lt;AgrarianFieldType&gt; statusCheck;
+<span class="fc" id="L157">        statusCheck = Arrays.asList(AgrarianFieldType.values());</span>
+<span class="fc" id="L158">        fieldSpinner.setAdapter(new ArrayAdapter&lt;AgrarianFieldType&gt;(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));</span>
+<span class="fc" id="L159">        fieldSpinner.setSelection(statusCheck.indexOf(field.getType()));</span>
+<span class="fc" id="L160">        fieldPolicyHolder.setText(field.getOwner());</span>
+<span class="fc" id="L161">        fieldName.setText(field.getName());</span>
+<span class="fc" id="L162">        fieldSize.setText(field.getConvertedSize());</span>
+<span class="fc" id="L163">    }</span>
+
+    /**
+     * add the changed data to a new Field
+     *
+     * @return
+     */
+    public Field changedField() {
+<span class="fc" id="L171">        AgrarianField mFieldToChange = (AgrarianField) mPresenter.getVisibleField();</span>
+<span class="fc" id="L172">        mFieldToChange.setOwner(fieldPolicyHolder.getText().toString());</span>
+<span class="fc" id="L173">        mFieldToChange.setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());</span>
+<span class="fc" id="L174">        mFieldToChange.setName(fieldName.getText().toString());</span>
+<span class="fc" id="L175">        mFieldToChange.setType((AgrarianFieldType) fieldSpinner.getSelectedItem());</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {</span>
+<span class="fc" id="L177">            mFieldToChange.setCounty(fieldRegion.getText().toString());</span>
+        }
+<span class="fc" id="L179">        return mFieldToChange;</span>
+    }
+
+    /**
+     * generate a delete Dialog
+     *
+     * @return
+     */
+    private AlertDialog.Builder generateDeleteDialog() {
+<span class="fc" id="L188">        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {</span>
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+<span class="pc bpc" id="L191" title="2 of 3 branches missed.">                switch (which) {</span>
+                    case DialogInterface.BUTTON_POSITIVE:
+<span class="fc" id="L193">                        mPresenter.deleteCurrentField();</span>
+<span class="fc" id="L194">                        dialog.dismiss();</span>
+<span class="fc" id="L195">                        break;</span>
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+<span class="nc" id="L198">                        dialog.dismiss();</span>
+                        break;
+                }
+<span class="fc" id="L201">            }</span>
+        };
+<span class="fc" id="L203">        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());</span>
+<span class="fc" id="L204">        builder.setMessage(getContext().getResources().getString(R.string.dialogmessage_want_delete_Field)).setPositiveButton(getContext().getResources().getString(R.string.word_yes), dialogClickListener)</span>
+<span class="fc" id="L205">                .setNegativeButton(getContext().getResources().getString(R.string.word_no), dialogClickListener);</span>
+
+<span class="fc" id="L207">        return builder;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GlobalConstants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager</a> &gt; <span class="el_source">GlobalConstants.java</span></div><h1>GlobalConstants.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager;
+
+import android.content.Context;
+
+import org.osmdroid.util.GeoPoint;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 14.11.17.
+ * Mail: felix.burk@gmail.com
+ *
+ * Class for testing and constants
+ * most of it is not used anymore
+ */
+
+<span class="nc" id="L25">public class GlobalConstants {</span>
+
+
+    public static GeoPoint getLastLocationOnMap() {
+<span class="fc" id="L29">        return lastLocationOnMap;</span>
+    }
+
+    public static void setLastLocationOnMap(GeoPoint lastLocationOnMap) {
+<span class="fc" id="L33">        GlobalConstants.lastLocationOnMap = lastLocationOnMap;</span>
+<span class="fc" id="L34">    }</span>
+
+    // Init Uni Stuttgart - compsci building else last location on map
+<span class="fc" id="L37">    private static GeoPoint lastLocationOnMap = new GeoPoint( 48.745424, 9.106488 );</span>
+
+
+    //default zoom value for the mapFragment
+    public static final int DEFAULT_ZOOM = 20;
+
+<span class="fc" id="L43">    public static boolean isAdmin = false;</span>
+
+
+
+    public static DamageField getCurrentPhotoField() {
+<span class="nc" id="L48">        return currentPhotoField;</span>
+    }
+
+    public static void setCurrentPhotoField(DamageField currentPhotoField) {
+<span class="nc" id="L52">        GlobalConstants.currentPhotoField = currentPhotoField;</span>
+<span class="nc" id="L53">    }</span>
+
+<span class="fc" id="L55">    private static DamageField currentPhotoField = null;</span>
+
+
+    /**
+     * Polygon Test: this is probably inefficient and unreadable as fuck buuut it works, meh
+     * creates a rectangle containing n polygons with m points, close to lastLocationOnMap  - FB
+     * @param numberPolygons n
+     * @param numberPoints m
+     * @return ArrayList of polygons
+     */
+
+    public static void polygonTest(int numberPolygons, int numberPoints, Context context, AppDataManager appDataManager){
+
+        //just small numbers to keep the tester from searching the rectangle
+<span class="nc" id="L69">        double Max = +0.001;</span>
+<span class="nc" id="L70">        double Min = -0.001;</span>
+
+<span class="nc" id="L72">        List&lt;AgrarianField&gt; polis = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L73">        double initialLat = GlobalConstants.lastLocationOnMap.getLatitude();</span>
+<span class="nc" id="L74">        double initialLon = GlobalConstants.lastLocationOnMap.getLongitude();</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        for(int j=0; j&lt;numberPolygons; j++) {</span>
+
+     //       p.setFillColor(Color.argb(50,0,0,0));
+<span class="nc" id="L79">            List&lt;CornerPoint&gt; points = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            for (int i = 0; i &lt; numberPoints; i++) {</span>
+<span class="nc" id="L81">                points.add(new CornerPoint(initialLat +  Min + (Math.random() * ((Max - Min) )),</span>
+<span class="nc" id="L82">                        initialLon + Min + (Math.random() * ((Max - Min) ))));</span>
+            }
+<span class="nc" id="L84">            AgrarianField p = new AgrarianField(context, points);</span>
+<span class="nc" id="L85">            p.setLinesFormField(new ArrayList&lt;Vector&lt;Double&gt;&gt;());</span>
+<span class="nc" id="L86">            appDataManager.addAgrarianField(p);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            if(j % (int) Math.sqrt(numberPolygons) == 0){</span>
+<span class="nc" id="L88">                initialLon += 0.003;</span>
+<span class="nc" id="L89">                initialLat = GlobalConstants.lastLocationOnMap.getLatitude();</span>
+            }
+<span class="nc" id="L91">            initialLat += 0.003;</span>
+
+
+<span class="nc" id="L94">            polis.add(p);</span>
+        }
+<span class="nc" id="L96">    }</span>
+
+  /*  public static DamageField damageFieldTest(Context context){
+
+        List&lt;CornerPoint&gt; points3 = new ArrayList&lt;&gt;();
+        points3.add(new CornerPoint(48.840644, 8.841278));
+        points3.add(new CornerPoint(48.840377, 8.841401));
+        points3.add(new CornerPoint(48.840384, 8.841656));
+        points3.add(new CornerPoint(48.840658, 8.841659));
+        DamageField df = new DamageField(context, points3);
+        df.setName(&quot;Test&quot;);
+        return  df;
+    }*/
+
+    /**
+     * Same as polygonTest, only for fields, state is selected by random
+     * @param numberFields
+     * @param numberCornerPoints
+     * @return
+     */
+/*    public static ArrayList&lt;Field&gt; fieldTest(int numberFields, int numberCornerPoints, Context context){
+        //just small numbers to keep the tester from searching the rectangle
+        double Max = +0.001;
+        double Min = -0.001;
+        double MaxDmg = +0.0005;
+        double MinDmg = -0.0006;
+
+        ArrayList&lt;Field&gt; polis = new ArrayList&lt;&gt;();
+        double initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
+        double initialLon = GlobalConstants.lastLocationOnMap.getLongitude();
+
+        String[] superheroes = {
+                &quot;BATMAN&quot;, &quot;Superman&quot;, &quot;Superwoman&quot;, &quot;Spiderman&quot;, &quot;THE INCREDIBLE HULK&quot;
+        };
+
+        //Test for field with damage
+        List&lt;CornerPoint&gt; points2 = new ArrayList&lt;&gt;();
+        points2.add(new CornerPoint(48.839349, 8.840506));
+        points2.add(new CornerPoint(48.839101, 8.843861));
+        points2.add(new CornerPoint(48.840586, 8.844068));
+        points2.add(new CornerPoint(48.840992, 8.840656));
+        AgrarianField ff = new AgrarianField(context, points2);
+        DamageField df = new DamageField(context, points2);
+        ff.setAutomaticCounty();
+        polis.add(df);
+        polis.add(ff);
+
+        for(int j=0; j&lt;numberFields; j++) {
+
+            int numberCornerPointsRandom = 3 + (int) (Math.random()*(numberCornerPoints-3));
+
+            List&lt;CornerPoint&gt; points = new ArrayList&lt;&gt;();
+            for (int i = 0; i &lt; numberCornerPointsRandom; i++) {
+                points.add(new CornerPoint(initialLat +  Min + (Math.random() * ((Max - Min) )),
+                        initialLon + Min + (Math.random() * ((Max - Min) ))));
+            }
+            if(j % (int) Math.sqrt(numberFields) == 0){
+                initialLon += 0.003;
+                initialLat = GlobalConstants.lastLocationOnMap.getLatitude();
+            }
+            initialLat += 0.003;
+
+            //add a agrarian field
+            AgrarianField f = new AgrarianField(context, points);
+            f.setName(&quot;AgrarianField Nr: &quot; + String.valueOf(j));
+            f.setType(AgrarianFieldType.values()[(int)(Math.random()* AgrarianFieldType.values().length)]);
+
+            f.setCounty(&quot;Somewhere&quot;);
+            f.setOwner((superheroes[(int)(Math.random()*superheroes.length)]));
+            f.getSize();
+            polis.add(f);
+            //or a damage field
+            if(j % 2 == 0){
+                List&lt;CornerPoint&gt; pointsDmg = new ArrayList&lt;&gt;();
+                for (int i = 0; i &lt; 4; i++) {
+                    pointsDmg.add(new CornerPoint(initialLat +  MinDmg + (Math.random() * ((MaxDmg - MinDmg) )),
+                            initialLon + MinDmg + (Math.random() * ((MaxDmg - MinDmg) ))));
+                }
+                DamageField dmg = new DamageField(context, pointsDmg);
+                dmg.setName(&quot;DamageField Nr: &quot; + String.valueOf(j));
+                dmg.setType(DamageFieldType.values()[(int)(Math.random()* DamageFieldType.values().length)]);
+                dmg.setDate(new Date(0));
+                dmg.setCounty(&quot;somewhere&quot;);
+
+                dmg.setEvaluator(superheroes[(int)(Math.random()*superheroes.length)]);
+                f.addContainedDamageField(dmg);
+            }
+
+
+
+        }
+
+        return polis;
+    }
+
+*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

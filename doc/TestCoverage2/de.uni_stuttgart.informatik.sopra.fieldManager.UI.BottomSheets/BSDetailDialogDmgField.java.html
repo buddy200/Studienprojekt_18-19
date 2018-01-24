@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BSDetailDialogDmgField.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets</a> &gt; <span class="el_source">BSDetailDialogDmgField.java</span></div><h1>BSDetailDialogDmgField.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+
+
+/**
+ * sopra_priv
+ * Created by Felix B on 20.11.17.
+ * Mail: felix.burk@gmail.com
+ * &lt;p&gt;
+ * A custom BottomSheetDialogFragment to display information of Fields
+ */
+
+<span class="fc" id="L33">public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {</span>
+
+    private static final String TAG = &quot;BottomSheetDetail&quot;;
+
+    private FragmentInteractionListener mListener;
+    private BSEditContract.Presenter mPresenter;
+
+    private DamageField mField;
+
+    private TextView name;
+    private TextView state;
+    private TextView size;
+    private TextView ownerOrEvaluator;
+    private TextView date;
+    private ImageButton edit;
+    private ImageButton navButton;
+    private RecyclerView recyclerView;
+    private TextView estimatedCosts;
+    private TextView progressState;
+
+    /**
+     * this factory method is used to generate an instance
+     * using the provided parameters
+     *
+     * @return A new instance of fragment BottomSheetDialogFragment.
+     */
+    public static BSDetailDialogDmgField newInstance() {
+<span class="fc" id="L60">        final BSDetailDialogDmgField fragment = new BSDetailDialogDmgField();</span>
+<span class="fc" id="L61">        return fragment;</span>
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L66">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc" id="L68">    }</span>
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L72">        super.onAttach(context);</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L74">            mListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L76">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement FragmentInteractionListener&quot;);
+        }
+<span class="fc" id="L79">    }</span>
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L83">        super.onStart();</span>
+<span class="fc" id="L84">        mPresenter.start();</span>
+<span class="fc" id="L85">    }</span>
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L91">        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_damagefield, container, false);</span>
+<span class="fc" id="L92">        configureBottomSheetBehaviour(view);</span>
+<span class="fc" id="L93">        return view;</span>
+    }
+
+    /**
+     * method to configure the behaviour of the bottom sheet
+     *
+     * @param view
+     */
+    void configureBottomSheetBehaviour(View view) {
+<span class="fc" id="L102">    }</span>
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L106">        recyclerView = view.findViewById(R.id.imagegallery);</span>
+<span class="fc" id="L107">        recyclerView.setHasFixedSize(true);</span>
+
+<span class="fc" id="L109">        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);</span>
+<span class="fc" id="L110">        recyclerView.setLayoutManager(layoutManager);</span>
+<span class="fc" id="L111">        name = view.findViewById(R.id.field_detail_name);</span>
+<span class="fc" id="L112">        edit = view.findViewById(R.id.finish_edit_button_agr);</span>
+<span class="fc" id="L113">        edit.setOnClickListener(this);</span>
+<span class="fc" id="L114">        navButton = view.findViewById(R.id.button_navigate_google_maps);</span>
+<span class="fc" id="L115">        navButton.setOnClickListener(this);</span>
+
+<span class="fc" id="L117">        progressState = view.findViewById(R.id.progress_state);</span>
+<span class="fc" id="L118">        size = view.findViewById(R.id.field_detail_size);</span>
+<span class="fc" id="L119">        state = view.findViewById(R.id.field_detail_state);</span>
+<span class="fc" id="L120">        size = view.findViewById(R.id.field_detail_size);</span>
+<span class="fc" id="L121">        ownerOrEvaluator = view.findViewById(R.id.field_detail_policyholder);</span>
+<span class="fc" id="L122">        date = view.findViewById(R.id.field_detail_date);</span>
+<span class="fc" id="L123">        estimatedCosts = view.findViewById(R.id.field_cost);</span>
+
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (!GlobalConstants.isAdmin) {</span>
+<span class="nc" id="L126">            edit.setVisibility(View.GONE);</span>
+        }
+<span class="fc" id="L128">    }</span>
+
+    @Override
+    public void fillData(Field mField) {
+<span class="fc" id="L132">        this.mField = (DamageField) mField;</span>
+<span class="fc" id="L133">        name.setText(getResources().getString(R.string.dialogItem_Name) + &quot; &quot; + this.mField.getName());</span>
+<span class="fc" id="L134">        edit.setImageResource(R.drawable.ic_mode_edit_black_24px);</span>
+<span class="fc" id="L135">        state.setText(getResources().getString(R.string.dialogItem_Type) + &quot; &quot; + this.mField.getType().toString());</span>
+<span class="fc" id="L136">        state.setTextColor(this.mField.getColor());</span>
+<span class="fc" id="L137">        size.setText(getResources().getString(R.string.dialogItem_Size) + &quot; &quot; + this.mField.getConvertedSize());</span>
+<span class="fc" id="L138">        date.setText(getResources().getString(R.string.dialogItem_Date) + &quot; &quot; + (this.mField.getParsedDate()));</span>
+<span class="fc" id="L139">        progressState.setText(getResources().getString(R.string.dialogitem_progress_state) + &quot; &quot; + this.mField.getProgressStatus().toString());</span>
+<span class="fc" id="L140">        ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + &quot; &quot; + (this.mField.getEvaluator()));</span>
+<span class="fc" id="L141">        estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + &quot; &quot; + String.valueOf(this.mField.getInsuranceMoney()));</span>
+
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if ((this.mField).getPaths() != null) {</span>
+<span class="fc" id="L144">            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);</span>
+<span class="fc" id="L145">            recyclerView.setAdapter(galleryAdapter);</span>
+        }
+<span class="fc" id="L147">    }</span>
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+<span class="nc" id="L151">    }</span>
+
+    /**
+     * handle button clicks
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (mListener != null) {</span>
+<span class="pc bpc" id="L161" title="2 of 3 branches missed.">            switch (v.getId()) {</span>
+                case R.id.finish_edit_button_agr:
+<span class="fc" id="L163">                    mListener.onFragmentMessage(TAG, &quot;startEdit&quot;, mPresenter.getVisibleField());</span>
+<span class="fc" id="L164">                    this.dismiss();</span>
+<span class="fc" id="L165">                    break;</span>
+                case R.id.button_navigate_google_maps:
+<span class="nc" id="L167">                    callGoogleMapsIntent();</span>
+                    break;
+            }
+        }
+<span class="fc" id="L171">    }</span>
+
+    @Override
+    public void setPresenter(BasePresenter presenter) {
+<span class="fc" id="L175">        mPresenter = (BSEditContract.Presenter) presenter;</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * call a googlemaps intent with the position of the centroid point from the field object
+     */
+    private void callGoogleMapsIntent() {
+<span class="nc" id="L182">        String geoString = &quot;geo:&quot; + String.valueOf(mField.getCentroid().getLatitude()) + &quot;,&quot; + String.valueOf(mField.getCentroid().getLongitude()) + &quot;?q=&quot; + String.valueOf(mField.getCentroid().getLatitude()) + &quot;,&quot; + String.valueOf(mField.getCentroid().getLongitude());</span>
+<span class="nc" id="L183">        Uri gmmIntentUri = Uri.parse(geoString);</span>
+<span class="nc" id="L184">        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);</span>
+<span class="nc" id="L185">        mapIntent.setPackage(&quot;com.google.android.apps.maps&quot;);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {</span>
+<span class="nc" id="L187">            startActivity(mapIntent);</span>
+        }
+<span class="nc" id="L189">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

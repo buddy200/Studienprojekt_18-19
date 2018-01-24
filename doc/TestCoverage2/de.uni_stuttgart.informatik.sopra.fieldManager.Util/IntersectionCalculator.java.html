@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IntersectionCalculator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.Util</a> &gt; <span class="el_source">IntersectionCalculator.java</span></div><h1>IntersectionCalculator.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.Util;
+
+import android.content.Context;
+import android.widget.Toast;
+
+import org.osmdroid.util.GeoPoint;
+
+import java.util.ArrayList;
+import java.util.Vector;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+
+/**
+ * This class helps to check whether a damage field is complete in the correct agrarian field.
+ */
+
+public class IntersectionCalculator {
+
+    private GeoPoint lastPoint;
+    private GeoPoint currentPoint;
+    private ArrayList&lt;Vector&lt;Double&gt;&gt; linesFromAgrarianField;
+    private Context context;
+    private ArrayList&lt;GeoPoint&gt; points;
+    private Vector&lt;Double&gt; line;
+
+<span class="fc" id="L28">    public IntersectionCalculator(Context context, ArrayList&lt;GeoPoint&gt; points, ArrayList&lt;Vector&lt;Double&gt;&gt; linesFromAgrarianField) {</span>
+<span class="fc" id="L29">        this.linesFromAgrarianField = linesFromAgrarianField;</span>
+<span class="fc" id="L30">        this.context = context;</span>
+<span class="fc" id="L31">        this.points = points;</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * This method calculate lines from the second last und last point and save this line in the linesFromAgrarianField Array list
+     *
+     * @param isAgrarianField give true if new field a agrarian field
+     */
+    public void calculateLine(boolean isAgrarianField) {
+        //set the two points for the line and checks if enough points available
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (points.size() &gt; 0) {</span>
+<span class="fc" id="L42">            currentPoint = points.get(points.size() - 1);</span>
+        } else {
+<span class="nc" id="L44">            currentPoint = null;</span>
+        }
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (points.size() &gt; 1) {</span>
+<span class="fc" id="L47">            lastPoint = points.get(points.size() - 2);</span>
+        } else {
+<span class="fc" id="L49">            lastPoint = null;</span>
+        }
+<span class="fc" id="L51">        line = new Vector&lt;&gt;();</span>
+
+        //calculates the line form second last to the last point
+<span class="pc bpc" id="L54" title="1 of 4 branches missed.">        if (lastPoint != null &amp;&amp; currentPoint != null) {</span>
+<span class="fc" id="L55">            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));</span>
+<span class="fc" id="L56">            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());</span>
+
+        }
+        //the line must only saved if the new field a agrarian field
+<span class="pc bpc" id="L60" title="1 of 6 branches missed.">        if (isAgrarianField &amp;&amp; line != null &amp;&amp; line.size() != 0) {</span>
+<span class="fc" id="L61">            linesFromAgrarianField.add(line);</span>
+        }
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * this method calculate the intersection between the new line from the damage field and all lines form the parent field
+     *
+     * @param parentField parent field from the damage field
+     * @return true if no intersection found with the new line, else falls
+     */
+    public boolean calcIntersection(Field parentField) {
+
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (parentField instanceof AgrarianField) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (line.size() != 0) {</span>
+                //this calculates the intersection
+<span class="fc bfc" id="L76" title="All 2 branches covered.">                for (Vector&lt;Double&gt; vec : ((AgrarianField) parentField).getLinesFormField()) {</span>
+<span class="fc" id="L77">                    Vector&lt;Double&gt; intersection = new Vector&lt;&gt;();</span>
+<span class="fc" id="L78">                    intersection.add((line.get(1) - vec.get(1)) / (vec.get(0) - line.get(0)));</span>
+<span class="fc" id="L79">                    intersection.add(line.get(0) * intersection.get(0) + line.get(1));</span>
+
+                    //check if the intersection point is inside the damage field
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                    if (boundaryCheck(intersection)) {</span>
+<span class="nc" id="L83">                        Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L84">                        return false;</span>
+                    }
+<span class="fc" id="L86">                }</span>
+            }
+        }
+<span class="fc" id="L89">        return true;</span>
+    }
+
+    /**
+     * checks if the intersection point in the damageField
+     *
+     * @param intersection
+     * @return
+     */
+    private boolean boundaryCheck(Vector&lt;Double&gt; intersection) {
+<span class="pc bpc" id="L99" title="1 of 4 branches missed.">        return ((lastPoint.getLatitude() &lt;= intersection.get(0).doubleValue() &amp;&amp; intersection.get(0).doubleValue() &lt;= currentPoint.getLatitude())</span>
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">                || (currentPoint.getLatitude() &lt;= intersection.get(0).doubleValue() &amp;&amp; intersection.get(0).doubleValue() &lt;= lastPoint.getLatitude()))</span>
+<span class="pc bnc" id="L101" title="All 4 branches missed.">                &amp;&amp; ((lastPoint.getLongitude()) &lt;= intersection.get(1).doubleValue() &amp;&amp; intersection.get(1).doubleValue() &lt;= currentPoint.getLongitude())</span>
+<span class="pc bpc" id="L102" title="1 of 4 branches missed.">                || (currentPoint.getLongitude() &lt;= intersection.get(1).doubleValue() &amp;&amp; intersection.get(1).doubleValue() &lt;= lastPoint.getLongitude());</span>
+    }
+
+    /**
+     * this method calculate the last line from the new agrarian field from the end point to the start point
+     *
+     * @param field
+     */
+    public void calcLastLine(Field field) {
+<span class="fc" id="L111">        Vector&lt;Double&gt; line = new Vector&lt;&gt;();</span>
+        GeoPoint startPoint;
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (points.get(0) != null) {</span>
+<span class="fc" id="L114">            lastPoint = points.get(points.size() - 1);</span>
+<span class="fc" id="L115">            startPoint = points.get(0);</span>
+<span class="fc" id="L116">            currentPoint = startPoint;</span>
+<span class="fc" id="L117">            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));</span>
+<span class="fc" id="L118">            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());</span>
+<span class="fc" id="L119">            linesFromAgrarianField.add(line);</span>
+<span class="fc" id="L120">            ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);</span>
+        }
+<span class="fc" id="L122">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

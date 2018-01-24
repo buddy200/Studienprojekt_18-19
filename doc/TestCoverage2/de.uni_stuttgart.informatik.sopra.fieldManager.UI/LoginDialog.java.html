@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>LoginDialog.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI</a> &gt; <span class="el_source">LoginDialog.java</span></div><h1>LoginDialog.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 10.01.18.
+ * Mail: felix.burk@gmail.com
+ */
+
+public class LoginDialog extends Dialog implements android.view.View.OnClickListener {
+    private static final String TAG = &quot;LoginDialog&quot;;
+    private EditText username;
+    private EditText password;
+    private Button loginBtn;
+    private RadioGroup userPrivileges;
+    private FragmentInteractionListener mListener;
+    private Context context;
+
+    private static final int RB_ADMIN_ID = 1000;//first radio button id
+    private static final int RB_FARMER_ID = 1001;//second radio button id
+
+    public LoginDialog(@NonNull Context context) {
+<span class="fc" id="L42">        super(context, R.style.Login_Dialog);</span>
+
+<span class="fc" id="L44">        this.context = context;</span>
+        //prevent user from cancelling
+<span class="fc" id="L46">        this.setCanceledOnTouchOutside(false);</span>
+<span class="fc" id="L47">        this.setCancelable(false);</span>
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+<span class="fc" id="L52">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L53">        setContentView(R.layout.dialog_login);</span>
+<span class="fc" id="L54">        username = findViewById(R.id.login_dialog_editText_username);</span>
+<span class="fc" id="L55">        password = findViewById(R.id.login_dialog_editText_password);</span>
+<span class="fc" id="L56">        loginBtn = findViewById(R.id.login_dialog_btn_login);</span>
+<span class="fc" id="L57">        userPrivileges = findViewById(R.id.login_dialog_usr_privileges);</span>
+
+<span class="fc" id="L59">        RadioButton admRadio = findViewById(R.id.setAdmin);</span>
+<span class="fc" id="L60">        RadioButton farmerRadio = findViewById(R.id.setFarmer);</span>
+<span class="fc" id="L61">        admRadio.setId(RB_ADMIN_ID);</span>
+<span class="fc" id="L62">        farmerRadio.setId(RB_FARMER_ID);</span>
+
+<span class="fc" id="L64">        loginBtn.setOnClickListener(this);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L66">            mListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L68">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement FragmentInteractionListener&quot;);
+        }
+<span class="fc" id="L71">    }</span>
+
+    @Override
+    public void onClick(View v) {
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        switch (v.getId()) {</span>
+            case R.id.login_dialog_btn_login:
+<span class="pc bpc" id="L77" title="2 of 4 branches missed.">                if(!username.getText().toString().equals(&quot;&quot;) &amp;&amp; userPrivileges.getCheckedRadioButtonId() != -1){</span>
+<span class="fc" id="L78">                    saveLogin(username.getText().toString(), password.getText().toString(), userPrivileges.getCheckedRadioButtonId());</span>
+<span class="fc" id="L79">                    Toast.makeText(getContext(), &quot;Logged in as &quot; + username.getText().toString(), Toast.LENGTH_SHORT);</span>
+<span class="fc" id="L80">                    this.dismiss();</span>
+
+                }else{
+<span class="nc" id="L83">                    Animation shake = AnimationUtils.loadAnimation(getContext(), R.anim.shake);</span>
+
+                    //start shake animation on the missing view
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                    if(username.getText().toString().equals(&quot;&quot;)) username.startAnimation(shake);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                    if(userPrivileges.getCheckedRadioButtonId() == -1) userPrivileges.startAnimation(shake);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    if(password.getText().toString().equals(&quot;&quot;)) password.startAnimation(shake);</span>
+                }
+                break;
+        }
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * save login to shared preferences
+     */
+    public void saveLogin(String username, String password, int radioButtonId){
+<span class="fc" id="L98">        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());</span>
+<span class="fc" id="L99">        SharedPreferences.Editor edit = prefs.edit();</span>
+<span class="fc" id="L100">        edit.putBoolean(getContext().getString(R.string.pref_previously_started), Boolean.TRUE);</span>
+<span class="fc" id="L101">        edit.putString(getContext().getString(R.string.pref_username), username);</span>
+
+<span class="fc" id="L103">        Log.e(TAG, &quot;checked radio button: &quot; + radioButtonId);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if(radioButtonId == RB_ADMIN_ID){</span>
+<span class="fc" id="L105">            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);</span>
+<span class="fc" id="L106">            GlobalConstants.isAdmin = true;</span>
+        }else {
+<span class="fc" id="L108">            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);</span>
+<span class="fc" id="L109">            GlobalConstants.isAdmin = false;</span>
+        }
+
+        //password not saved yet.. would be unsave
+<span class="fc" id="L113">        edit.apply();</span>
+<span class="fc" id="L114">        mListener.onFragmentMessage(TAG, &quot;complete&quot;, null );</span>
+<span class="fc" id="L115">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

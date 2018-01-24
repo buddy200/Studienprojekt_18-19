@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AppDataManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.data.managers</a> &gt; <span class="el_source">AppDataManager.java</span></div><h1>AppDataManager.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.data.managers;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
+
+/**
+ * this class communicate with the App and the Database.
+ */
+
+public class AppDataManager {
+    private static final String TAG = &quot;AppDataManager&quot;;
+
+    SharedPreferences prefs;
+    private HashMap&lt;Long, AgrarianField&gt; agrarianFieldMap;
+    private HashMap&lt;Long, DamageField&gt; damageFieldMap;
+    private Context context;
+    private DBConnection dbConnection;
+    private DataChangeListener listener;
+
+<span class="fc" id="L31">    public AppDataManager(Context context) {</span>
+<span class="fc" id="L32">        this.context = context;</span>
+        try {
+<span class="fc" id="L34">            listener = (DataChangeListener) context;</span>
+<span class="nc" id="L35">        } catch (ClassCastException e) {</span>
+<span class="nc" id="L36">            Log.e(&quot;AppDataManager&quot;, &quot;parent must implement DataChangeListener&quot;);</span>
+<span class="fc" id="L37">        }</span>
+<span class="fc" id="L38">        dbConnection = new DBConnection(context);</span>
+<span class="fc" id="L39">        agrarianFieldMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L40">        damageFieldMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L41">        prefs = PreferenceManager.getDefaultSharedPreferences(context);</span>
+<span class="fc" id="L42">        dataChange();</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Reads all field data from the database and write these in two Hash maps. One for DamageFields one for AgrarianFields
+     */
+    public void readData() {
+<span class="fc" id="L49">        clearAllMaps();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (AgrarianField field : dbConnection.getAllAgrarianFields()) {</span>
+<span class="fc" id="L51">            agrarianFieldMap.put(field.getID(), field);</span>
+<span class="fc" id="L52">        }</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (DamageField field : dbConnection.getAllDamgageFields()) {</span>
+<span class="fc" id="L54">            damageFieldMap.put(field.getID(), field);</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (DamageField field : damageFieldMap.values()) {</span>
+<span class="fc" id="L57">            agrarianFieldMap.get(field.getParentField().getID()).addContainedDamageField(field);</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * add a AgrarianField to the DB
+     *
+     * @param f
+     */
+    public void addAgrarianField(AgrarianField f) {
+<span class="fc" id="L67">        dbConnection.addField(f);</span>
+<span class="fc" id="L68">        readData();</span>
+<span class="fc" id="L69">        dataChange();</span>
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * add a DamageField to the DB
+     *
+     * @param dmg
+     */
+    public void addDamageField(DamageField dmg) {
+<span class="fc" id="L78">        dbConnection.addField(dmg);</span>
+<span class="fc" id="L79">        readData();</span>
+<span class="fc" id="L80">        dataChange();</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * remove a given field. regardless of the field type
+     *
+     * @param f
+     */
+    public void removeField(Field f) {
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (f instanceof DamageField) {</span>
+<span class="fc" id="L90">            DamageField damageField = (DamageField) f;</span>
+<span class="fc" id="L91">            removeField(damageField);</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        } else if (f instanceof AgrarianField) {</span>
+<span class="fc" id="L93">            AgrarianField agrarianField = (AgrarianField) f;</span>
+<span class="fc" id="L94">            removeField(agrarianField);</span>
+        }
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * remove the given damageField from the DB and the hashMaps
+     *
+     * @param agrarianField field to delete
+     */
+    public void removeField(AgrarianField agrarianField) {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        for (DamageField dmf : agrarianField.getContainedDamageFields()) {</span>
+<span class="nc" id="L105">            dbConnection.deleteDamageField(dmf);</span>
+<span class="nc" id="L106">            damageFieldMap.remove(dmf.getID());</span>
+<span class="nc" id="L107">        }</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        for (DamageField field : agrarianField.getContainedDamageFields()) {</span>
+<span class="nc" id="L109">            removeField(field);</span>
+<span class="nc" id="L110">        }</span>
+<span class="fc" id="L111">        agrarianFieldMap.remove(agrarianField.getID());</span>
+<span class="fc" id="L112">        dbConnection.deleteAgrarianField(agrarianField);</span>
+<span class="fc" id="L113">        dataChange();</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * remove the given damageField from the DB and the hashMaps
+     *
+     * @param damageField field to delete
+     */
+    public void removeField(DamageField damageField) {
+<span class="fc" id="L122">        damageField.getParentField().getContainedDamageFields().remove(damageField);</span>
+<span class="fc" id="L123">        dbConnection.updateAgrarianField(damageField.getParentField());</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        for (PictureData pictureData : damageField.getPaths()) {</span>
+<span class="nc" id="L125">            dbConnection.deletePicture(pictureData);</span>
+<span class="nc" id="L126">        }</span>
+<span class="fc" id="L127">        damageField.deleteAllPhotos();</span>
+<span class="fc" id="L128">        dbConnection.deleteDamageField(damageField);</span>
+<span class="fc" id="L129">        damageFieldMap.remove(damageField.getID());</span>
+<span class="fc" id="L130">        agrarianFieldMap.put(damageField.getParentField().getID(), damageField.getParentField());</span>
+<span class="fc" id="L131">        dataChange();</span>
+<span class="fc" id="L132">    }</span>
+
+    public void dataChange() {
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (listener != null) {</span>
+<span class="fc" id="L136">            listener.onDataChange();</span>
+        }
+<span class="fc" id="L138">    }</span>
+
+    /**
+     * this method get a agrarianField that was changed and update the DB and the hashMap
+     *
+     * @param field field to change
+     */
+    public void changeAgrarianField(AgrarianField field) {
+<span class="fc" id="L146">        dbConnection.updateAgrarianField(field);</span>
+<span class="fc" id="L147">        agrarianFieldMap.put(field.getID(), field);</span>
+<span class="fc" id="L148">        dataChange();</span>
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * this method get a damageField that was changed and update the DB and the hashMap
+     *
+     * @param field field to change
+     */
+    public void changeDamageField(DamageField field) {
+<span class="fc" id="L157">        dbConnection.updateDamageField(field);</span>
+<span class="fc" id="L158">        damageFieldMap.put(field.getID(), field);</span>
+<span class="fc" id="L159">        dataChange();</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * build a ArrayList with damageFields and AgrarianFields
+     *
+     * @return a ArrayList of fields
+     */
+    public ArrayList&lt;Field&gt; getAllFields() {
+<span class="fc" id="L168">        ArrayList&lt;Field&gt; dataFromFields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L169">        dataFromFields.addAll(agrarianFieldMap.values());</span>
+<span class="fc" id="L170">        dataFromFields.addAll(damageFieldMap.values());</span>
+<span class="fc" id="L171">        return dataFromFields;</span>
+    }
+
+    public ArrayList&lt;AgrarianField&gt; getAllAgrarianFields() {
+<span class="nc" id="L175">        return new ArrayList&lt;&gt;(agrarianFieldMap.values());</span>
+    }
+
+    public ArrayList&lt;DamageField&gt; getAllDamageFields() {
+<span class="nc" id="L179">        return new ArrayList&lt;&gt;(damageFieldMap.values());</span>
+    }
+
+    public interface DataChangeListener {
+        void onDataChange();
+    }
+
+    public void clearAllMaps() {
+<span class="fc" id="L187">        agrarianFieldMap.clear();</span>
+<span class="fc" id="L188">        damageFieldMap.clear();</span>
+<span class="fc" id="L189">    }</span>
+
+    public void dbClose() {
+<span class="fc" id="L192">        dbConnection.close();</span>
+<span class="fc" id="L193">    }</span>
+
+    public void addPicture(DamageField field, PictureData pd) {
+<span class="nc" id="L196">        dbConnection.addPictureToField(field.getID(), pd);</span>
+<span class="nc" id="L197">    }</span>
+
+    /**
+     * loads only the fields with the given name
+     *
+     * @param name
+     */
+    public void loadUserFields(String name) {
+<span class="fc" id="L205">        clearAllMaps();</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        for (Field field : this.searchOwner(name.toLowerCase())) {</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">            if (field instanceof AgrarianField) {</span>
+<span class="nc" id="L208">                agrarianFieldMap.put(field.getID(), (AgrarianField) field);</span>
+            }
+<span class="nc" id="L210">        }</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        for (DamageField damageField : dbConnection.getAllDamgageFields()) {</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (agrarianFieldMap.containsKey(damageField.getParentField().getID())) {</span>
+<span class="nc" id="L213">                damageFieldMap.put(damageField.getID(), damageField);</span>
+            }
+<span class="nc" id="L215">        }</span>
+
+<span class="fc" id="L217">    }</span>
+
+    public void deletePicture(DamageField field, PictureData pd) {
+<span class="nc" id="L220">        dbConnection.deletePicture(pd);</span>
+<span class="nc" id="L221">    }</span>
+
+    public HashMap&lt;Long, AgrarianField&gt; getAgrarianFieldMap() {
+<span class="fc" id="L224">        return agrarianFieldMap;</span>
+    }
+
+    public HashMap&lt;Long, DamageField&gt; getDamageFieldMap() {
+<span class="nc" id="L228">        return damageFieldMap;</span>
+    }
+
+    public List&lt;Field&gt; searchAll(String text) {
+<span class="fc" id="L232">        return dbConnection.searchAll(text);</span>
+    }
+
+    public List&lt;Field&gt; searchOwner(String text) {
+<span class="fc" id="L236">        return dbConnection.searchOwner(text);</span>
+    }
+
+    public List&lt;Field&gt; searchDate(String text) {
+<span class="nc" id="L240">        return dbConnection.searchDate(text);</span>
+    }
+
+    public List&lt;Field&gt; searchName(String text) {
+<span class="nc" id="L244">        return dbConnection.searchName(text);</span>
+    }
+
+    public List&lt;Field&gt; searchState(String text) {
+<span class="nc" id="L248">        return dbConnection.searchState(text);</span>
+    }
+
+    public List&lt;Field&gt; searchEvaluator(String text) {
+<span class="nc" id="L252">        return dbConnection.searchEvaluator(text);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

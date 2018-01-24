@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MainActivity.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager</a> &gt; <span class="el_source">MainActivity.java</span></div><h1>MainActivity.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.location.Location;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.support.v7.widget.SearchView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.osmdroid.util.GeoPoint;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogDmgField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditAgrField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditDmgField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSEditHandler;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BottomSheetAddPhoto;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogAgrField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.ItemListDialogFragment;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.LoginDialog;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialUtils;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 03.11.17.
+ * Mail: felix.burk@gmail.com
+ * &lt;p&gt;
+ * the main activity for our app, everything starts here
+ * the class is listening for every Interaction of its fragments
+ */
+
+/*
+Copyright (c) 2018 Lars Buttgereit, Felix Burk, Christian Bräuner
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+<span class="fc" id="L74">public class MainActivity extends AppCompatActivity implements FragmentInteractionListener&lt;Object&gt;, AppDataManager.DataChangeListener {</span>
+
+    private static final String TAG = &quot;MainActivity&quot;;
+
+    //i know this is bad, but there is no other way to get the context inside our AgrarianFieldType enum.. -D
+    private static Context mContext;
+
+    private MapFragment mapFragment;
+    private MapViewHandler mapHandler;
+
+    private AppDataManager dataManager;
+
+    private SharedPreferences prefs;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L90">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L91">        mContext = this;</span>
+
+<span class="fc" id="L93">        setContentView(R.layout.activity_main);</span>
+<span class="fc" id="L94">        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);</span>
+
+<span class="fc" id="L96">        Toolbar toolbar = findViewById(R.id.toolbar_main);</span>
+<span class="fc" id="L97">        setSupportActionBar(toolbar);</span>
+
+<span class="fc" id="L99">        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);</span>
+
+<span class="fc" id="L101">        dataManager = new AppDataManager(this);</span>
+
+<span class="fc" id="L103">        prefs = PreferenceManager.getDefaultSharedPreferences(this);</span>
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (prefs.getFloat(&quot;Longitude&quot;, 0) != 0) {</span>
+<span class="fc" id="L106">            GeoPoint geoPoint = new GeoPoint((double) prefs.getFloat(&quot;Latitude&quot;, 0), (double) prefs.getFloat(&quot;Longitude&quot;, 0));</span>
+<span class="fc" id="L107">            GlobalConstants.setLastLocationOnMap(geoPoint);</span>
+        }
+<span class="fc" id="L109">        mapHandler = new MapViewHandler(this, dataManager, mapFragment);</span>
+<span class="fc" id="L110">        mapFragment.setPresenter(mapHandler);</span>
+<span class="fc" id="L111">    }</span>
+
+    @Override
+    public void onResume() {
+<span class="fc" id="L115">        super.onResume();</span>
+<span class="fc" id="L116">        mapHandler.reload();</span>
+<span class="fc" id="L117">    }</span>
+
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L122">        super.onStart();</span>
+
+<span class="fc" id="L124">        loadFieldData();</span>
+
+        //check if user already used the app - if not show login dialog
+<span class="fc" id="L127">        boolean previouslyStarted = prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (!previouslyStarted) {</span>
+<span class="fc" id="L129">            LoginDialog loginDialog = new LoginDialog(this);</span>
+<span class="fc" id="L130">            loginDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {</span>
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+<span class="fc" id="L133">                    invalidateOptionsMenu();</span>
+<span class="fc" id="L134">                }</span>
+            });
+<span class="fc" id="L136">            loginDialog.show();</span>
+
+<span class="fc" id="L138">        } else {</span>
+<span class="fc" id="L139">            boolean adm = prefs.getBoolean(this.getString(R.string.pref_admin_bool), false);</span>
+<span class="fc" id="L140">            GlobalConstants.isAdmin = adm;</span>
+<span class="fc" id="L141">            this.invalidateOptionsMenu();</span>
+        }
+    //    GlobalConstants.polygonTest(1000, 4, this, dataManager);
+<span class="fc" id="L144">        mapHandler.reload();</span>
+<span class="fc" id="L145">    }</span>
+
+    @Override
+    public void onStop() {
+<span class="fc" id="L149">        super.onStop();</span>
+<span class="fc" id="L150">        mapHandler.saveMapCenter();</span>
+<span class="fc" id="L151">        mapHandler.destroy();</span>
+<span class="fc" id="L152">    }</span>
+
+    @Override
+    public void onDestroy() {
+<span class="fc" id="L156">        super.onDestroy();</span>
+<span class="fc" id="L157">        dataManager.dbClose();</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * receive messages from fragments
+     *
+     * @param Tag    of the fragment
+     * @param action the fragment performs
+     * @param data   data the fragment sends
+     */
+    @Override
+    public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
+<span class="fc" id="L169">        Log.d(TAG, &quot;MSG TAG: &quot; + Tag + &quot; ACTION: &quot; + action);</span>
+<span class="pc bpc" id="L170" title="10 of 22 branches missed.">        switch (Tag) {</span>
+            case &quot;MapViewHandler&quot;:
+<span class="nc bnc" id="L172" title="All 6 branches missed.">                switch (action) {</span>
+                    case &quot;singleTabOnPoly&quot;:
+<span class="nc" id="L174">                        animateMapToFieldWithBS((Field) data);</span>
+                }
+            case &quot;ItemListDialogFragment&quot;:
+<span class="pc bpc" id="L177" title="3 of 6 branches missed.">                switch (action) {</span>
+                    case &quot;itemClick&quot;:
+<span class="fc" id="L179">                        animateMapToFieldWithBS((Field) data);</span>
+                        break;
+                }
+<span class="fc" id="L182">                break;</span>
+            case &quot;BottomSheetDetail&quot;:
+<span class="pc bpc" id="L184" title="4 of 10 branches missed.">                switch (action) {</span>
+                    case &quot;startEdit&quot;:
+                        //TODO
+<span class="fc bfc" id="L187" title="All 2 branches covered.">                        if (data instanceof AgrarianField) {</span>
+<span class="fc" id="L188">                            BSDetailDialogEditAgrField bsDetail = BSDetailDialogEditAgrField.newInstance();</span>
+<span class="fc" id="L189">                            new BSEditHandler((Field) data, dataManager, bsDetail);</span>
+<span class="fc" id="L190">                            bsDetail.show(getSupportFragmentManager(), &quot;test&quot;);</span>
+<span class="fc" id="L191">                        } else {</span>
+<span class="fc" id="L192">                            BSDetailDialogEditDmgField bsDetail = BSDetailDialogEditDmgField.newInstance();</span>
+<span class="fc" id="L193">                            new BSEditHandler((Field) data, dataManager, bsDetail);</span>
+<span class="fc" id="L194">                            bsDetail.show(getSupportFragmentManager(), &quot;test&quot;);</span>
+                        }
+<span class="fc" id="L196">                        break;</span>
+                    case &quot;addDmgField&quot;:
+<span class="fc" id="L198">                        Intent i = new Intent(this, AddFieldActivity.class);</span>
+<span class="fc" id="L199">                        i.putExtra(&quot;parentField&quot;, ((Field) data).getID());</span>
+<span class="fc" id="L200">                        startActivityForResult(i, 2403);</span>
+                        break;
+
+                }
+<span class="fc" id="L204">                break;</span>
+            case &quot;BSDetailDialogEditFragmentDamageField&quot;:
+<span class="pc bpc" id="L206" title="3 of 6 branches missed.">                switch (action) {</span>
+                    case &quot;addPhoto&quot;:
+<span class="fc" id="L208">                        BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();</span>
+<span class="fc" id="L209">                        new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);</span>
+<span class="fc" id="L210">                        bottomSheetAddPhoto.show(getSupportFragmentManager(), &quot;test&quot;);</span>
+                        break;
+                }
+<span class="fc" id="L213">                break;</span>
+            case &quot;LoginDialog&quot;:
+<span class="pc bpc" id="L215" title="3 of 6 branches missed.">                switch (action) {</span>
+                    case &quot;complete&quot;:
+<span class="fc" id="L217">                        onStart();</span>
+                        break;
+                }
+                break;
+
+        }
+
+<span class="fc" id="L224">    }</span>
+
+    /**
+     * animates the center of the map to the centroid of a field
+     * we need some offset because of the visible bottom sheet
+     *
+     * @param field
+     */
+    private void animateMapToFieldWithBS(Field field) {
+        //offset get center on top of BottomSheet
+<span class="fc" id="L234">        double offset = 0.0007;</span>
+<span class="fc" id="L235">        mapHandler.animateAndZoomTo((field).getCentroid().getLatitude() - offset,</span>
+<span class="fc" id="L236">                (field).getCentroid().getLongitude());</span>
+
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (field instanceof DamageField) {</span>
+<span class="fc" id="L239">            BSDetailDialogDmgField bs = BSDetailDialogDmgField.newInstance();</span>
+<span class="fc" id="L240">            new BSEditHandler(field, dataManager, bs);</span>
+<span class="fc" id="L241">            bs.show(this.getSupportFragmentManager(), &quot;DetailField&quot;);</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        } else if (field instanceof AgrarianField) {</span>
+<span class="fc" id="L243">            BSDetailDialogAgrField bs = BSDetailDialogAgrField.newInstance();</span>
+<span class="fc" id="L244">            new BSEditHandler(field, dataManager, bs);</span>
+<span class="fc" id="L245">            bs.show(this.getSupportFragmentManager(), &quot;DetailField&quot;);</span>
+        }
+
+<span class="fc" id="L248">    }</span>
+
+    /**
+     * get the context, this is necessary for FieldState enums
+     * without context it's not possible to get Enum names from strings.xml
+     *
+     * @return
+     */
+    public static Context getmContext() {
+<span class="fc" id="L257">        return mContext;</span>
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+<span class="fc" id="L262">        setUpSearchMenuItem(menu);</span>
+
+<span class="fc" id="L264">        MenuItem addFieldMenuItem = menu.findItem(R.id.action_toolbar_add);</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (!GlobalConstants.isAdmin) {</span>
+<span class="fc" id="L266">            addFieldMenuItem.setVisible(false);</span>
+        } else {
+<span class="fc" id="L268">            addFieldMenuItem.setVisible(true);</span>
+        }
+<span class="fc" id="L270">        MenuItem username = menu.findItem(R.id.action_toolbar_username);</span>
+<span class="fc" id="L271">        username.setTitle(&quot;Logged in as: &quot; + prefs.getString(&quot;usr&quot;, &quot;not logged in&quot;));</span>
+
+<span class="fc" id="L273">        return true;</span>
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+<span class="fc" id="L279">        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);</span>
+
+<span class="fc" id="L281">        return true;</span>
+    }
+
+    /**
+     * sets all listeners for the SearchView implementation in the action bar
+     *
+     * @param menu
+     */
+    private View expandSearch;
+
+    private void setUpSearchMenuItem(Menu menu) {
+<span class="fc" id="L292">        final String searchFor[] = {</span>
+<span class="fc" id="L293">                MainActivity.getmContext().getResources().getString(R.string.search_all),</span>
+<span class="fc" id="L294">                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),</span>
+<span class="fc" id="L295">                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),</span>
+<span class="fc" id="L296">                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),</span>
+<span class="fc" id="L297">                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date)</span>
+        };
+
+<span class="fc" id="L300">        final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);</span>
+<span class="fc" id="L301">        expandSearch = findViewById(R.id.search_bar);</span>
+<span class="fc" id="L302">        final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);</span>
+<span class="fc" id="L303">        final ArrayAdapter&lt;String&gt; adapter = new ArrayAdapter&lt;String&gt;(getBaseContext(),</span>
+                android.R.layout.simple_spinner_item, searchFor);
+<span class="fc" id="L305">        searchTypeSpinner.setAdapter(adapter);</span>
+<span class="fc" id="L306">        searchTypeSpinner.setSelection(0);</span>
+
+<span class="fc" id="L308">        adapter.notifyDataSetChanged();</span>
+<span class="fc" id="L309">        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {</span>
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+<span class="fc" id="L313">                expandSearch.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L314">                expandSearch.bringToFront();</span>
+<span class="fc" id="L315">                return true;</span>
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+<span class="fc" id="L320">                expandSearch.setVisibility(View.INVISIBLE);</span>
+<span class="fc" id="L321">                return true;</span>
+            }
+        });
+
+<span class="fc" id="L325">        SearchView searchView = (SearchView) searchItem.getActionView();</span>
+<span class="fc" id="L326">        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {</span>
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">                if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {</span>
+<span class="fc" id="L330">                    ItemListDialogFragment.newInstance(dataManager.searchAll(query)).show(getSupportFragmentManager(), &quot;FieldList&quot;);</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {</span>
+<span class="nc" id="L332">                    ItemListDialogFragment.newInstance(dataManager.searchName(query)).show(getSupportFragmentManager(), &quot;FieldList&quot;);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {</span>
+<span class="nc" id="L334">                    ItemListDialogFragment.newInstance(dataManager.searchOwner(query)).show(getSupportFragmentManager(), &quot;FieldList&quot;);</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {</span>
+<span class="nc" id="L336">                    ItemListDialogFragment.newInstance(dataManager.searchState(query)).show(getSupportFragmentManager(), &quot;FieldList&quot;);</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {</span>
+<span class="nc" id="L338">                    ItemListDialogFragment.newInstance(dataManager.searchDate(query)).show(getSupportFragmentManager(), &quot;FieldList&quot;);</span>
+                }
+<span class="fc" id="L340">                searchItem.collapseActionView();</span>
+<span class="fc" id="L341">                return true;</span>
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //do nothing
+<span class="fc" id="L347">                return false;</span>
+            }
+        });
+<span class="fc" id="L350">    }</span>
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+<span class="fc" id="L357">        int id = item.getItemId();</span>
+
+<span class="pc bpc" id="L359" title="2 of 6 branches missed.">        switch (id) {</span>
+            case R.id.action_toolbar_add:
+<span class="fc" id="L361">                GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));</span>
+<span class="fc" id="L362">                Intent i = new Intent(this, AddFieldActivity.class);</span>
+<span class="fc" id="L363">                startActivityForResult(i, 2404);</span>
+<span class="fc" id="L364">                break;</span>
+            case R.id.action_toolbar_list:
+<span class="nc" id="L366">                ItemListDialogFragment.newInstance(dataManager.getAllFields()).show(getSupportFragmentManager(), &quot;FieldList&quot;);</span>
+<span class="nc" id="L367">                break;</span>
+            case R.id.action_toolbar_location:
+<span class="nc" id="L369">                MYLocationListener myLocationListener = new MYLocationListener();</span>
+<span class="nc" id="L370">                myLocationListener.initializeLocationManager(this, mapHandler);</span>
+<span class="nc" id="L371">                Location location = myLocationListener.getLocation();</span>
+<span class="nc bnc" id="L372" title="All 2 branches missed.">                if (location != null) {</span>
+<span class="nc" id="L373">                    mapHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());</span>
+<span class="nc" id="L374">                    mapHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());</span>
+<span class="nc" id="L375">                    GlobalConstants.setLastLocationOnMap(new GeoPoint(location));</span>
+                } else {
+<span class="nc" id="L377">                    Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();</span>
+                }
+<span class="nc" id="L379">                break;</span>
+            case R.id.action_toolbar_logout:
+                //DATABASE IS NOT CHANGED AFTER LOGOUT
+<span class="fc" id="L382">                generateLogoutDialog().show();</span>
+<span class="fc" id="L383">                break;</span>
+            case R.id.action_toolbar_tutorial:
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">                if(GlobalConstants.isAdmin){</span>
+<span class="fc" id="L386">                    new TutorialUtils().mainTutorial(this);</span>
+                }else {
+<span class="nc" id="L388">                    new TutorialUtils().mainTutorialNoAdmin(this);</span>
+                }
+                break;
+        }
+
+
+<span class="fc" id="L394">        return super.onOptionsItemSelected(item);</span>
+    }
+
+    private AlertDialog.Builder generateLogoutDialog() {
+<span class="fc" id="L398">        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {</span>
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+<span class="pc bpc" id="L401" title="2 of 3 branches missed.">                switch (which) {</span>
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //delete all shared preferences - DATABASE IS NOT CHANGED
+<span class="fc" id="L404">                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());</span>
+<span class="fc" id="L405">                        SharedPreferences.Editor edit = prefs.edit();</span>
+<span class="fc" id="L406">                        edit.clear();</span>
+<span class="fc" id="L407">                        edit.apply();</span>
+<span class="fc" id="L408">                        dataManager.clearAllMaps();</span>
+<span class="fc" id="L409">                        mapHandler.reload();</span>
+<span class="fc" id="L410">                        onStart();</span>
+<span class="fc" id="L411">                        break;</span>
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+<span class="nc" id="L414">                        dialog.dismiss();</span>
+                        break;
+                }
+<span class="fc" id="L417">            }</span>
+        };
+<span class="fc" id="L419">        final AlertDialog.Builder builder = new AlertDialog.Builder(this);</span>
+<span class="fc" id="L420">        builder.setMessage(getResources().getString(R.string.logout_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)</span>
+<span class="fc" id="L421">                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);</span>
+
+<span class="fc" id="L423">        return builder;</span>
+    }
+
+    @Override
+    public void onDataChange() {
+<span class="fc bfc" id="L428" title="All 2 branches covered.">        if (mapHandler != null) {</span>
+<span class="fc" id="L429">            mapHandler.reload();</span>
+        }
+<span class="fc" id="L431">    }</span>
+
+    private void loadFieldData() {
+<span class="fc" id="L434">        String name = prefs.getString(&quot;usr&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        if (!(prefs.getBoolean(&quot;adm&quot;, false))) {</span>
+<span class="fc bfc" id="L436" title="All 2 branches covered.">            if ((!name.equals(&quot;&quot;))) {</span>
+<span class="fc" id="L437">                dataManager.loadUserFields(name);</span>
+            } else {
+<span class="fc" id="L439">                dataManager.clearAllMaps();</span>
+            }
+        } else {
+<span class="fc" id="L442">            dataManager.readData();</span>
+        }
+<span class="fc" id="L444">        mapHandler.reload();</span>
+<span class="fc" id="L445">    }</span>
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+<span class="fc" id="L449">        super.onActivityResult(requestCode, resultCode, data);</span>
+<span class="fc" id="L450">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

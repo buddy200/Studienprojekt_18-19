@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SearchUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.Util</a> &gt; <span class="el_source">SearchUtil.java</span></div><h1>SearchUtil.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.Util;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 04.12.17.
+ * Mail: felix.burk@gmail.com
+ *
+ * Helper for the search function
+ * this implements simple string matching
+ */
+
+<span class="nc" id="L12">public class SearchUtil {</span>
+
+<span class="nc" id="L14">    private static final String searchFor[] =  {</span>
+            &quot;All&quot;, &quot;Name&quot;, &quot;Owner&quot;, &quot;State&quot;, &quot;Date&quot;
+    };
+
+    /**
+     * does a field match a search input?
+     * @param f Field
+     * @param input search input
+     * @return boolean
+     */
+    /*
+    public static boolean matchesFieldSearch(Field f, String input){
+        Bundle b = f.getBundle();
+
+        //search for name
+        if(!f.getName().contains(input)){
+
+            //search for type
+            if(! b.getSerializable(&quot;type&quot;).toString().contains(input)) {
+
+                // search for county
+                if(!f.getCounty().contains(input)) {
+
+                    //fieldToAdd is type agrarian
+                    if (b.containsKey(&quot;owner&quot;)) {
+                        //search for states and owners
+                        if (!b.getString(&quot;owner&quot;).contains(input)) {
+                            return false;
+                        }
+                    }
+
+
+                    //fieldToAdd is type damage field
+                    if (b.containsKey(&quot;evaluator&quot;)) {
+                        //search for evaluators
+                        if (!b.getString(&quot;evaluator&quot;).contains(input)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static String[] getSearchFor() {
+        return searchFor;
+    }
+
+
+
+    public static void searchForType(AppDataManager manager, String query, String type) {
+        List&lt;Field&gt; results = new ArrayList&lt;&gt;();
+        if (type.equals(searchFor[0])) {
+            results = manager.searchAll(query);
+        } else if (type.equals(searchFor[1])) {
+            results = manager.searchName(query);
+        } else if (type.equals(searchFor[2])) {
+            results = manager.searchOwner(query);
+        } else if (type.equals(searchFor[3])) {
+            results = manager.searchState(query);
+        } else if (type.equals(searchFor[4])) {
+            results = manager.searchDate(query);
+        }
+
+
+
+    }*/
+
+    /**
+     * search implementation
+     * @param
+     */
+    /*
+    public void onSearchButtonClicked(String input) {
+        Log.e(TAG, &quot;Search for: &quot; + input);
+
+        // copy dataFromFields in search data listGeoPoints
+        // we need a deep copy - because fields contain other fields
+        ArrayList&lt;Field&gt; searchData = new ArrayList&lt;&gt;(dataManager.getAllFields());
+        ArrayList&lt;Field&gt; resultData = new ArrayList&lt;&gt;();
+
+        /**
+         * not optimal and dirty way of searching
+         * but it's fast to implement and probably enough for our use case
+         * - ah and this is case sensitive right now... TODO
+         */
+    /*
+        Iterator&lt;Field&gt; iter = searchData.iterator();
+        while(iter.hasNext()){
+            Field f = iter.next();
+
+            if(SearchUtil.matchesFieldSearch(f, input)){
+                resultData.add(f);
+            }
+
+            if(f instanceof AgrarianField){
+                for(DamageField dmg : ((AgrarianField)f).getContainedDamageFields()){
+                    if(SearchUtil.matchesFieldSearch(dmg,input)){
+                        resultData.add(dmg);
+                    }
+                }
+            }
+
+        }
+
+        if(resultData.size() != 0){
+            ItemListDialogFragment.newInstance(resultData).show(getSupportFragmentManager(), &quot;SearchList&quot; );
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.toastmsg_nothing_found), Toast.LENGTH_SHORT).show();
+        }
+
+    }*/
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

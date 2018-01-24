@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AddFieldActivity.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager</a> &gt; <span class="el_source">AddFieldActivity.java</span></div><h1>AddFieldActivity.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
+import android.location.Location;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Polyline;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditAgrField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditDmgField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSEditHandler;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BottomSheetAddPhoto;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.fieldManager.Util.IntersectionCalculator;
+import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialUtils;
+
+
+/**
+ * sopra_priv
+ * Created by Felix B on 10.11.17.
+ * Mail: felix.burk@gmail.com
+ * &lt;p&gt;
+ * this activity lets users add fields depending
+ * on their position
+ */
+<span class="fc" id="L59">public class AddFieldActivity extends AppCompatActivity implements FragmentInteractionListener&lt;Object&gt;, AppDataManager.DataChangeListener {</span>
+    private static final String TAG = &quot;AddFieldActivity&quot;;
+
+    MapFragment mapFragment;
+    MYLocationListener myLocationListener;
+    List&lt;CornerPoint&gt; cornerPoints;
+
+    Field fieldToAddFinal;
+
+    BSDetailDialogEditAgrField bottomSheetDialogAF;
+    BSDetailDialogEditDmgField bottomSheetDialogDMF;
+
+<span class="fc" id="L71">    ArrayList&lt;GeoPoint&gt; listGeoPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L72">    ArrayList&lt;CornerPoint&gt; listCornerPoints = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L74">    boolean isDmgField = false;</span>
+    AgrarianField parentField;
+
+    private MapViewHandler mMapViewHandler;
+    private AppDataManager dataManager;
+
+    private TextView fabLabel;
+    private MenuItem menuItemDone;
+    private Toolbar toolbar;
+
+<span class="fc" id="L84">    private boolean enoughPoints = false;</span>
+
+    private Polyline polyline;
+
+    private ArrayList&lt;Vector&lt;Double&gt;&gt; linesFromAgrarianField;
+    private IntersectionCalculator intersectionCalculator;
+
+    private SharedPreferences prefs;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L96">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc" id="L98">        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);</span>
+
+<span class="fc" id="L100">        setContentView(R.layout.activity_add_field);</span>
+<span class="fc" id="L101">        toolbar = (Toolbar) findViewById(R.id.toolbar);</span>
+<span class="fc" id="L102">        setSupportActionBar(toolbar);</span>
+<span class="fc" id="L103">        toolbar.setTitle(R.string.title_activity_add_field);</span>
+
+<span class="fc" id="L105">        cornerPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L106">        linesFromAgrarianField = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L107">        intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);</span>
+<span class="fc" id="L108">        polyline = new Polyline();</span>
+<span class="fc" id="L109">        polyline.setColor(R.color.colorAccent);</span>
+<span class="fc" id="L110">        polyline.setWidth(2.0f);</span>
+
+        //back button on toolbar implementation
+<span class="fc" id="L113">        getSupportActionBar().setDisplayHomeAsUpEnabled(true);</span>
+<span class="fc" id="L114">        getSupportActionBar().setDisplayShowHomeEnabled(true);</span>
+
+        //floating action button listener stuff
+<span class="fc" id="L117">        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);</span>
+<span class="fc" id="L118">        fab.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L121">                onFabClick(view);</span>
+<span class="nc" id="L122">            }</span>
+        });
+<span class="fc" id="L124">        fabLabel = (TextView) findViewById(R.id.fab_label);</span>
+
+        //override onClick for toolbar arrow button,
+        //to trigger going back to parent activty
+<span class="fc" id="L128">        toolbar.setNavigationOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L131">                generateSaveDialog().show();</span>
+<span class="nc" id="L132">            }</span>
+        });
+
+<span class="fc" id="L135">        menuItemDone = toolbar.getMenu().add(Menu.NONE, 1000, Menu.NONE, R.string.done);</span>
+<span class="fc" id="L136">        menuItemDone.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);</span>
+<span class="fc" id="L137">        invalidateOptionsMenu();</span>
+
+<span class="fc" id="L139">        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_add);</span>
+
+<span class="fc" id="L141">        dataManager = new AppDataManager(this);</span>
+<span class="fc" id="L142">        mMapViewHandler = new MapViewHandler(this, dataManager, mapFragment);</span>
+
+<span class="fc" id="L144">        prefs = PreferenceManager.getDefaultSharedPreferences(this);</span>
+
+<span class="fc" id="L146">        mapFragment.setPresenter(mMapViewHandler);</span>
+
+<span class="fc" id="L148">    }</span>
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L152">        super.onStart();</span>
+
+<span class="fc" id="L154">        loadFieldData();</span>
+<span class="fc" id="L155">        long i = getIntent().getLongExtra(&quot;parentField&quot;, -1);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (i != -1) {</span>
+<span class="fc" id="L157">            parentField = dataManager.getAgrarianFieldMap().get(i);</span>
+        } else {
+<span class="fc" id="L159">            parentField = null;</span>
+        }
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (parentField != null) {</span>
+            //we add a dmg field!
+<span class="fc" id="L163">            isDmgField = true;</span>
+            //  mMapViewHandler.addField(parentField);
+<span class="fc" id="L165">            getSupportActionBar().setTitle(R.string.title_activity_add_fieldDmg);</span>
+        }
+
+<span class="fc" id="L168">        myLocationListener = new MYLocationListener();</span>
+<span class="fc" id="L169">        myLocationListener.initializeLocationManager(this, mMapViewHandler);</span>
+<span class="fc" id="L170">        myLocationListener.setFollow(true);</span>
+<span class="fc" id="L171">        Location location = myLocationListener.getLocation();</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (location != null) {</span>
+<span class="nc" id="L173">            mMapViewHandler.animateAndZoomTo(myLocationListener.getLocation().getLatitude(),</span>
+<span class="nc" id="L174">                    myLocationListener.getLocation().getLongitude());</span>
+<span class="nc" id="L175">            mMapViewHandler.setCurrLocMarker(myLocationListener.getLocation().getLatitude(),</span>
+<span class="nc" id="L176">                    myLocationListener.getLocation().getLongitude());</span>
+        } else {
+<span class="fc" id="L178">            Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();</span>
+        }
+<span class="fc" id="L180">        dataManager.readData();</span>
+
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        if(!prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false)){</span>
+<span class="nc" id="L183">            new TutorialUtils().addFieldTutorial(this);</span>
+        }
+<span class="fc" id="L185">    }</span>
+
+    @Override
+    public void onResume(){
+<span class="fc" id="L189">        super.onResume();</span>
+<span class="fc" id="L190">        OnMapClick();</span>
+<span class="fc" id="L191">    }</span>
+
+    @Override
+    public void onStop() {
+<span class="fc" id="L195">        super.onStop();</span>
+<span class="fc" id="L196">        mMapViewHandler.saveMapCenter();</span>
+<span class="fc" id="L197">        mMapViewHandler.destroy();</span>
+<span class="fc" id="L198">    }</span>
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+<span class="fc" id="L203">        getMenuInflater().inflate(R.menu.menu_activity_add_field, menu);</span>
+<span class="fc" id="L204">        return true;</span>
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+<span class="pc bpc" id="L209" title="2 of 5 branches missed.">        switch (item.getItemId()) {</span>
+            case R.id.action_menu_done:
+<span class="fc" id="L211">                onDoneButtonClick();</span>
+<span class="fc" id="L212">                break;</span>
+            case R.id.action_menu_toggleLoc:
+<span class="nc" id="L214">                onToggleLocButtonClick();</span>
+<span class="nc" id="L215">                break;</span>
+            case R.id.action_menu_redo:
+<span class="fc" id="L217">                onRedoButtonClick();</span>
+<span class="fc" id="L218">                break;</span>
+            case R.id.action_menu_tutorial:
+<span class="fc" id="L220">                new TutorialUtils().addFieldTutorial(this);</span>
+                break;
+        }
+<span class="fc" id="L223">        return true;</span>
+    }
+
+    /**
+     * removes the last added Point from the new field, and redraw the Polyline
+     */
+    private void onRedoButtonClick() {
+<span class="pc bpc" id="L230" title="2 of 4 branches missed.">        if (listGeoPoints.size() &gt; 0 &amp;&amp; listCornerPoints.size() &gt; 0) {</span>
+<span class="fc" id="L231">            listGeoPoints.remove(listGeoPoints.size() - 1);</span>
+<span class="fc" id="L232">            listCornerPoints.remove(listCornerPoints.size() - 1);</span>
+<span class="fc" id="L233">            polyline.setPoints(listGeoPoints);</span>
+<span class="fc" id="L234">            mMapViewHandler.deleteLastFieldMarker();</span>
+<span class="fc" id="L235">            mMapViewHandler.addPolyline(polyline);</span>
+<span class="fc" id="L236">            mMapViewHandler.invalidateMap();</span>
+<span class="fc" id="L237">            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + &quot; &quot; + getResources().getString(R.string.add_activity_needMore));</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">            if (listCornerPoints.size() &lt; 3) {</span>
+<span class="fc" id="L239">                fabLabel.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L240">                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + &quot; &quot; + getResources().getString(R.string.add_activity_needMore));</span>
+            }
+        } else {
+<span class="nc" id="L243">            Toast.makeText(this, getResources().getString(R.string.add_activity_NoMorePoints), Toast.LENGTH_SHORT).show();</span>
+        }
+<span class="pc bpc" id="L245" title="2 of 4 branches missed.">        if (!isDmgField &amp;&amp; linesFromAgrarianField.size() &gt; 0) {</span>
+<span class="fc" id="L246">            linesFromAgrarianField.remove(linesFromAgrarianField.size() - 1);</span>
+        }
+<span class="fc" id="L248">    }</span>
+
+    private void onToggleLocButtonClick() {
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (myLocationListener.getFollow()) {</span>
+<span class="nc" id="L252">            Toast.makeText(getApplicationContext(), getResources().getString(R.string.toastmsg_toggle_Loc_Off), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L253">            toolbar.getMenu().getItem(2).setTitle(R.string.toastmsg_toggle_Loc_Off);</span>
+<span class="nc" id="L254">            myLocationListener.setFollow(false);</span>
+        } else {
+<span class="nc" id="L256">            Toast.makeText(getApplicationContext(), getResources().getString(R.string.toastmsg_toggle_Loc_On), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L257">            toolbar.getMenu().getItem(2).setTitle(R.string.toastmsg_toggle_Loc_On);</span>
+<span class="nc" id="L258">            myLocationListener.setFollow(true);</span>
+        }
+<span class="nc" id="L260">    }</span>
+
+    /**
+     * adds a point to the field with a click on the map
+     */
+    public void OnMapClick() {
+<span class="fc" id="L266">        MapEventsReceiver mReceive = new MapEventsReceiver() {</span>
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint point) {
+<span class="fc" id="L269">                Log.e(TAG, &quot;single Tab confirmed!&quot;);</span>
+<span class="fc" id="L270">                Location location = new Location(&quot;Loc&quot;);</span>
+<span class="fc" id="L271">                location.setLatitude(point.getLatitude());</span>
+<span class="fc" id="L272">                location.setLongitude(point.getLongitude());</span>
+<span class="fc" id="L273">                addPoint(location);</span>
+<span class="fc" id="L274">                return false;</span>
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+<span class="nc" id="L279">                return false;</span>
+            }
+        };
+
+<span class="fc" id="L283">        MapEventsOverlay overlayEvents = new MapEventsOverlay(mReceive);</span>
+<span class="fc" id="L284">        mMapViewHandler.getMap().getOverlayManager().add(overlayEvents);</span>
+<span class="fc" id="L285">    }</span>
+
+
+    /**
+     * adds a new Point to the Field
+     *
+     * @param location
+     */
+
+    public void addPoint(Location location) {
+<span class="fc" id="L295">        GeoPoint g = new GeoPoint(location);</span>
+<span class="fc" id="L296">        listGeoPoints.add(g);</span>
+<span class="fc" id="L297">        listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));</span>
+<span class="fc" id="L298">        polyline.setPoints(listGeoPoints);</span>
+<span class="fc" id="L299">        mMapViewHandler.addPolyline(polyline);</span>
+<span class="fc" id="L300">        mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());</span>
+<span class="fc" id="L301">        mMapViewHandler.invalidateMap();</span>
+
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (listCornerPoints.size() &gt; 2) {</span>
+<span class="fc" id="L304">            enoughPoints = true;</span>
+<span class="fc" id="L305">            fabLabel.setVisibility(View.INVISIBLE);</span>
+<span class="fc" id="L306">            menuItemDone.setVisible(true);</span>
+<span class="fc" id="L307">            menuItemDone.setTitle(getResources().getString(R.string.done_Button));</span>
+
+        }
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        intersectionCalculator.calculateLine(!isDmgField);</span>
+<span class="pc bpc" id="L311" title="1 of 4 branches missed.">        if (isDmgField &amp;&amp; !intersectionCalculator.calcIntersection(parentField)) {</span>
+<span class="nc" id="L312">            onRedoButtonClick();</span>
+        } else {
+<span class="fc" id="L314">            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed)  + String.valueOf(3 - listCornerPoints.size()) + &quot; &quot; + getResources().getString(R.string.add_activity_needMore));</span>
+<span class="fc" id="L315">            Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +</span>
+<span class="fc" id="L316">                    location.getLatitude() + &quot; &quot; + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)</span>
+<span class="fc" id="L317">                    .setAction(&quot;Action&quot;, null).show();</span>
+        }
+<span class="fc" id="L319">    }</span>
+
+    private AlertDialog.Builder generateSaveDialog() {
+<span class="nc" id="L322">        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {</span>
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+<span class="nc bnc" id="L325" title="All 3 branches missed.">                switch (which) {</span>
+                    case DialogInterface.BUTTON_POSITIVE:
+<span class="nc" id="L327">                        onBackPressed();</span>
+<span class="nc" id="L328">                        break;</span>
+                    case DialogInterface.BUTTON_NEGATIVE:
+<span class="nc" id="L330">                        dialog.dismiss();</span>
+                        break;
+                }
+<span class="nc" id="L333">            }</span>
+        };
+<span class="nc" id="L335">        final AlertDialog.Builder builder = new AlertDialog.Builder(this);</span>
+<span class="nc" id="L336">        builder.setMessage(getResources().getString(R.string.go_back_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)</span>
+<span class="nc" id="L337">                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);</span>
+
+<span class="nc" id="L339">        return builder;</span>
+    }
+
+    /**
+     * Handle clicks for the done button on top
+     * depending on the current state of our field to add
+     */
+    private void onDoneButtonClick() {
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (enoughPoints) {</span>
+            Field fieldToAdd;
+<span class="fc bfc" id="L349" title="All 2 branches covered.">            if (isDmgField) {</span>
+<span class="fc" id="L350">                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, parentField);</span>
+<span class="fc" id="L351">                parentField.addContainedDamageField((DamageField) fieldToAdd);</span>
+<span class="fc" id="L352">                dataManager.changeAgrarianField(parentField);</span>
+
+
+            } else {
+<span class="fc" id="L356">                fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);</span>
+<span class="fc" id="L357">                Log.e(&quot;LIST SIZE&quot;, String.valueOf(listCornerPoints.size()));</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                if (fieldToAdd instanceof AgrarianField) {</span>
+<span class="fc" id="L359">                    intersectionCalculator.calcLastLine(fieldToAdd);</span>
+                }
+            }
+<span class="fc" id="L362">            GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());</span>
+
+<span class="fc bfc" id="L364" title="All 2 branches covered.">            if (isDmgField) {</span>
+<span class="fc" id="L365">                bottomSheetDialogDMF = BSDetailDialogEditDmgField.newInstance();</span>
+<span class="fc" id="L366">                dataManager.addDamageField((DamageField) fieldToAdd);</span>
+<span class="fc" id="L367">                BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogDMF);</span>
+<span class="fc" id="L368">                bottomSheetDialogDMF.setPresenter(handler);</span>
+<span class="fc" id="L369">                bottomSheetDialogDMF.show(getSupportFragmentManager(), &quot;EditView&quot;);</span>
+<span class="fc" id="L370">            } else {</span>
+<span class="fc" id="L371">                bottomSheetDialogAF = BSDetailDialogEditAgrField.newInstance();</span>
+<span class="fc" id="L372">                dataManager.addAgrarianField((AgrarianField) fieldToAdd);</span>
+
+<span class="fc" id="L374">                BSEditHandler handler = new BSEditHandler(fieldToAdd, dataManager, bottomSheetDialogAF);</span>
+<span class="fc" id="L375">                bottomSheetDialogAF.setPresenter(handler);</span>
+<span class="fc" id="L376">                bottomSheetDialogAF.show(getSupportFragmentManager(), &quot;EditView&quot;);</span>
+            }
+
+
+<span class="fc" id="L380">            enoughPoints = false;</span>
+<span class="fc" id="L381">            listGeoPoints.clear();</span>
+<span class="fc" id="L382">            listCornerPoints.clear();</span>
+
+<span class="fc" id="L384">            fabLabel.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L385">            fabLabel.setText(&quot;Add a Corner Point at your current position&quot;);</span>
+
+<span class="fc" id="L387">        } else {</span>
+<span class="nc" id="L388">            Toast.makeText(getApplicationContext(), R.string.toastmsg_not_enough_points, Toast.LENGTH_LONG).show();</span>
+        }
+<span class="fc" id="L390">    }</span>
+
+    /**
+     * handle Floating Action Button clicks
+     * depending on the current state of our field to add
+     *
+     * @param view
+     */
+    private void onFabClick(View view) {
+<span class="nc bnc" id="L399" title="All 2 branches missed.">        if (fieldToAddFinal == null) {</span>
+<span class="nc" id="L400">            Location location = myLocationListener.getLocation();</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">            if (location != null) {</span>
+<span class="nc" id="L402">                addPoint(location);</span>
+            } else {
+<span class="nc" id="L404">                Snackbar.make(view, R.string.toastmsg_nolocation, Snackbar.LENGTH_LONG).setAction(&quot;Action&quot;, null).show();</span>
+            }
+<span class="nc" id="L406">        } else {</span>
+<span class="nc" id="L407">            Snackbar.make(view, R.string.toastmsg_points_already_added, Snackbar.LENGTH_LONG).setAction(&quot;Action&quot;, null).show();</span>
+        }
+<span class="nc" id="L409">    }</span>
+
+    /**
+     * receive messages from fragments
+     *
+     * @param Tag    of the fragment
+     * @param action the fragment performs
+     * @param data   data the fragment sends
+     */
+    @Override
+    public void onFragmentMessage(String Tag, @NonNull String action, @Nullable Object data) {
+<span class="fc" id="L420">        Log.d(TAG, &quot;MSG TAG: &quot; + Tag + &quot; ACTION: &quot; + action);</span>
+<span class="pc bpc" id="L421" title="6 of 14 branches missed.">        switch (Tag) {</span>
+            case &quot;MapFragment&quot;:
+<span class="nc bnc" id="L423" title="All 6 branches missed.">                switch (action) {</span>
+                    case &quot;complete&quot;:
+<span class="nc" id="L425">                        onMapFragmentComplete();</span>
+                        break;
+                }
+<span class="nc" id="L428">                break;</span>
+            case &quot;BSDetailDialogEditFragmentAgrarianField&quot;:
+<span class="fc" id="L430">                Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherAgrarainField), Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L431">                break;</span>
+            case &quot;BSDetailDialogEditFragmentDamageField&quot;:
+<span class="fc" id="L433">                Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherDamageField), Toast.LENGTH_SHORT).show();</span>
+<span class="pc bpc" id="L434" title="4 of 6 branches missed.">                switch (action) {</span>
+                    case &quot;addPhoto&quot;:
+<span class="nc" id="L436">                        BottomSheetAddPhoto bottomSheetAddPhoto = BottomSheetAddPhoto.newInstance();</span>
+<span class="nc" id="L437">                        new BSEditHandler((Field) data, dataManager, bottomSheetAddPhoto);</span>
+<span class="nc" id="L438">                        bottomSheetAddPhoto.show(getSupportFragmentManager(), &quot;test&quot;);</span>
+                        break;
+                }
+                break;
+        }
+<span class="fc" id="L443">    }</span>
+
+    /**
+     * as soon as the map fragment is completely initialized and displayed
+     * try to get the current user location
+     */
+    public void onMapFragmentComplete() {
+
+<span class="nc" id="L451">    }</span>
+
+    @Override
+    public void onDataChange() {
+<span class="fc bfc" id="L455" title="All 2 branches covered.">        if (mMapViewHandler != null) {</span>
+<span class="fc" id="L456">            mMapViewHandler.reload();</span>
+        }
+<span class="fc" id="L458">    }</span>
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+<span class="nc" id="L462">        super.onActivityResult(requestCode, resultCode, data);</span>
+<span class="nc" id="L463">    }</span>
+
+    @Override
+    public void onDestroy() {
+<span class="fc" id="L467">        super.onDestroy();</span>
+<span class="fc" id="L468">        dataManager.dbClose();</span>
+<span class="fc" id="L469">    }</span>
+    private void loadFieldData() {
+<span class="fc" id="L471">        String name = prefs.getString(&quot;usr&quot;, &quot;&quot;);</span>
+<span class="pc bpc" id="L472" title="1 of 2 branches missed.">        if (!(prefs.getBoolean(&quot;adm&quot;, false))) {</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">            if ((!name.equals(&quot;&quot;))) {</span>
+<span class="nc" id="L474">                dataManager.loadUserFields(name);</span>
+            } else {
+<span class="nc" id="L476">                dataManager.clearAllMaps();</span>
+            }
+        } else {
+<span class="fc" id="L479">            dataManager.readData();</span>
+        }
+<span class="fc" id="L481">        mMapViewHandler.reload();</span>
+<span class="fc" id="L482">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

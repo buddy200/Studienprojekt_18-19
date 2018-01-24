@@ -20,7 +20,7 @@ Folgende Additional Features wurden implmentiert:
 - License
 
 ## Tests/Testprotokolle/Nachweis der Testabdeckung
-![Testabdeckung der App](images/Test.png)
+![Testabdeckung der App](images/Test2.png)
 Testabdeckung der App
 
-Genauere Details befinden sich in der Datei TestCoverage/TestCoverage.html .
+Genauere Details befinden sich in der Datei TestCoverage2/TestCoverage.html (Leider keine Links zu html Files).

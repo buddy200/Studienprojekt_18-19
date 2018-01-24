@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MapViewHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map</a> &gt; <span class="el_source">MapViewHandler.java</span></div><h1>MapViewHandler.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.MotionEvent;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.Polyline;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.GlobalConstants;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 14.11.17.
+ * Mail: felix.burk@gmail.com
+ * &lt;p&gt;
+ * a handler class for the map view inside the MapViewFragment
+ */
+
+public class MapViewHandler implements MapContract.MapHandler {
+
+    private static final String TAG = &quot;MapViewHandler&quot;;
+
+    private MapView map;
+    private IMapController mapController;
+    private Context context;
+    private Marker currentLocMarker;
+    private ArrayList&lt;Marker&gt; fieldMarker;
+
+    //map fields to Polygon Overlays
+    private Map&lt;Field, FieldPolygon&gt; fieldPolyMap;
+
+    private FragmentInteractionListener mapInteractionListener;
+
+    private AppDataManager mDataManager;
+
+    @Nullable
+    private MapFragment mMapFragment;
+    private GeoPoint backupLocation;
+
+    /**
+     * constructor
+     *
+     * @param context
+     */
+<span class="fc" id="L69">    public MapViewHandler(Context context, @Nullable AppDataManager dataManager, MapFragment mapFragment) {</span>
+<span class="fc" id="L70">        this.context = context;</span>
+<span class="fc" id="L71">        mDataManager = dataManager;</span>
+<span class="fc" id="L72">        mMapFragment = mapFragment;</span>
+<span class="fc" id="L73">        fieldMarker = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L74">    }</span>
+
+    @Override
+    public void start() {
+<span class="fc" id="L78">        init();</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * initialize the map
+     */
+<span class="fc" id="L84">    int counter = 0;</span>
+
+    public void init() {
+<span class="fc" id="L87">        Log.e(TAG, &quot;init map &quot; + counter);</span>
+<span class="fc" id="L88">        counter++;</span>
+<span class="fc" id="L89">        map = new MapView(context);</span>
+<span class="fc" id="L90">        map.setTileSource(TileSourceFactory.MAPNIK);</span>
+<span class="fc" id="L91">        map.setMultiTouchControls(true);</span>
+<span class="fc" id="L92">        map.setUseDataConnection(true);</span>
+
+<span class="fc" id="L94">        fieldPolyMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L96">        mapController = map.getController();</span>
+<span class="fc" id="L97">        mapController.setZoom(GlobalConstants.DEFAULT_ZOOM);</span>
+
+<span class="fc" id="L99">        mapController.setCenter(GlobalConstants.getLastLocationOnMap());</span>
+
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (currentLocMarker != null) {</span>
+<span class="nc" id="L102">            mapController.setCenter(currentLocMarker.getPosition());</span>
+        } else {
+<span class="fc" id="L104">            mapController.setCenter(GlobalConstants.getLastLocationOnMap());</span>
+        }
+
+        //setup listener for tabs on polygons
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L109">            mapInteractionListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L111">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement MapInteractionListener&quot;);
+        }
+
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (mDataManager != null) {</span>
+<span class="fc" id="L116">            reloadWithData(mDataManager.getAllFields());</span>
+        }
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * convert Objects of Type Field to Polygons on the map
+     * and put both in a hashMap
+     *
+     * @param mField
+     * @return
+     */
+    public Polygon fieldToPolygon(Field mField) {
+<span class="fc" id="L128">        final Field field = mField;</span>
+<span class="fc" id="L129">        FieldPolygon polygon = new FieldPolygon(context, field) {</span>
+<span class="fc" id="L130">            double offset = 0.00075;</span>
+
+            @Override
+            public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView) {
+<span class="fc" id="L134">                boolean tapped = contains(event);</span>
+
+                //only show detail if map is zoomed in enough
+<span class="pc bpc" id="L137" title="2 of 4 branches missed.">                if (tapped &amp;&amp; mapView.getZoomLevel() &gt; 13) {</span>
+<span class="fc" id="L138">                    mapInteractionListener.onFragmentMessage(TAG, &quot;singleTabOnPoly&quot;, field);</span>
+                }
+<span class="fc" id="L140">                return tapped;</span>
+            }
+        };
+<span class="fc" id="L143">        List&lt;GeoPoint&gt; polyPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for (CornerPoint point : field.getCornerPoints()) {</span>
+<span class="fc" id="L145">            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));</span>
+<span class="fc" id="L146">        }</span>
+<span class="fc" id="L147">        polygon.setPoints(polyPoints);</span>
+<span class="fc" id="L148">        polygon.setFillColor(field.getColor());</span>
+<span class="fc" id="L149">        polygon.setTitle(field.getName());</span>
+
+<span class="fc" id="L151">        fieldPolyMap.put(field, polygon);</span>
+<span class="fc" id="L152">        return polygon;</span>
+    }
+
+    /**
+     * add a list of fields
+     * first add AgrarianFields to map then DamageFields
+     * because overlays are added first to last =&gt; first is &quot;behind&quot;, last is &quot;in front&quot;
+     *
+     * @param fields
+     */
+    public void addFields(List&lt;Field&gt; fields) {
+<span class="fc" id="L163">        int agrarFieldCount = 0;</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for (Field field : fields) {</span>
+            //add contained damage fields if field is type agrarian
+<span class="fc bfc" id="L166" title="All 2 branches covered.">            if (field instanceof AgrarianField) {</span>
+<span class="fc" id="L167">                map.getOverlayManager().add(0, fieldToPolygon(field));</span>
+<span class="fc" id="L168">                agrarFieldCount++;</span>
+            }
+<span class="fc" id="L170">        }</span>
+
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (Field field : fields) {</span>
+            //add contained damage fields if field is type agrarian
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (field instanceof DamageField) {</span>
+<span class="fc" id="L175">                map.getOverlayManager().add(agrarFieldCount, fieldToPolygon(field));</span>
+            }
+<span class="fc" id="L177">        }</span>
+<span class="fc" id="L178">        map.invalidate();</span>
+<span class="fc" id="L179">    }</span>
+
+    /**
+     * add a single field
+     *
+     * @param field
+     */
+    public void addField(Field field) {
+<span class="nc" id="L187">        map.getOverlayManager().add(fieldToPolygon(field));</span>
+<span class="nc" id="L188">    }</span>
+
+    /**
+     * delete field polygon from the map
+     *
+     * @param field
+     */
+    public void deleteFieldFromOverlay(Field field) {
+<span class="nc" id="L196">        map.getOverlayManager().remove(fieldPolyMap.get(field));</span>
+<span class="nc" id="L197">    }</span>
+
+    /**
+     * set a Marker with the current Location on the map
+     *
+     * @param lat
+     * @param lon
+     */
+    public void setCurrLocMarker(double lat, double lon) {
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (map == null) {</span>
+<span class="nc" id="L207">            return;</span>
+        }
+<span class="nc" id="L209">        map.getOverlayManager().remove(currentLocMarker);</span>
+<span class="nc" id="L210">        currentLocMarker = new Marker(map);</span>
+<span class="nc" id="L211">        currentLocMarker.setPosition(new GeoPoint(lat, lon));</span>
+
+<span class="nc" id="L213">        currentLocMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {</span>
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                //do nothing
+<span class="nc" id="L217">                return false;</span>
+            }
+        });
+<span class="nc" id="L220">        Drawable dr = context.getResources().getDrawable(R.drawable.ic_person_pin);</span>
+
+<span class="nc" id="L222">        currentLocMarker.setIcon(dr);</span>
+<span class="nc" id="L223">        map.getOverlayManager().add(currentLocMarker);</span>
+<span class="nc" id="L224">    }</span>
+
+    public void dropMarker(double lat, double lon) {
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (map == null) return;</span>
+
+<span class="fc" id="L229">        Marker m = new Marker(map);</span>
+<span class="fc" id="L230">        m.setPosition(new GeoPoint(lat, lon));</span>
+<span class="fc" id="L231">        m.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {</span>
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                //do nothing
+<span class="nc" id="L235">                return false;</span>
+            }
+        });
+
+<span class="fc" id="L239">        Drawable dr = context.getResources().getDrawable(R.drawable.ic_pin_map);</span>
+<span class="fc" id="L240">        m.setIcon(dr);</span>
+<span class="fc" id="L241">        m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);</span>
+<span class="fc" id="L242">        map.getOverlayManager().add(m);</span>
+<span class="fc" id="L243">        fieldMarker.add(m);</span>
+<span class="fc" id="L244">    }</span>
+
+    public void deleteLastFieldMarker() {
+<span class="fc" id="L247">        map.getOverlayManager().remove(fieldMarker.get(fieldMarker.size() - 1));</span>
+<span class="fc" id="L248">        fieldMarker.remove(fieldMarker.size() - 1);</span>
+<span class="fc" id="L249">    }</span>
+
+    /**
+     * redraw the map
+     */
+    public void invalidateMap() {
+<span class="fc" id="L255">        map.invalidate();</span>
+<span class="fc" id="L256">    }</span>
+
+    /**
+     * @param lat
+     * @param lon
+     */
+    public void animateAndZoomTo(double lat, double lon) {
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        if (map != null) {</span>
+<span class="fc" id="L264">            mapController.setZoom(20);</span>
+<span class="fc" id="L265">            mapController.animateTo(new GeoPoint(lat, lon));</span>
+        } else {
+<span class="nc" id="L267">            backupLocation = new GeoPoint(lat, lon);</span>
+        }
+<span class="fc" id="L269">    }</span>
+
+    @Override
+    public void addPolyline(Polyline p) {
+<span class="fc" id="L273">        map.getOverlayManager().add(p);</span>
+<span class="fc" id="L274">    }</span>
+
+    public void reload() {
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        if (map != null) {</span>
+<span class="fc" id="L278">            reloadWithData(mDataManager.getAllFields());</span>
+        }
+<span class="fc" id="L280">    }</span>
+
+    public void reloadWithData(ArrayList&lt;Field&gt; fields) {
+<span class="fc" id="L283">        MapEventsOverlay backup = null;</span>
+
+<span class="fc" id="L285">        fieldPolyMap.clear();</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        for (Overlay p : map.getOverlayManager().overlays()) {</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">            if (p instanceof Polyline) {</span>
+<span class="fc" id="L288">                map.getOverlayManager().overlays().remove(p);</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">            } else if (p instanceof FieldPolygon) {</span>
+<span class="fc" id="L290">                map.getOverlayManager().overlays().remove(p);</span>
+            }
+<span class="fc" id="L292">        }</span>
+<span class="fc" id="L293">        addFields(fields);</span>
+<span class="fc" id="L294">    }</span>
+
+    public MapView getMap() {
+<span class="fc" id="L297">        return map;</span>
+    }
+
+    public void requestPermissions(String[] strings, int i) {
+<span class="nc" id="L301">        mMapFragment.requestPermissions(strings, i);</span>
+<span class="nc" id="L302">    }</span>
+
+    /**
+     * Save the Map Center point to shared preference
+     */
+    public void saveMapCenter() {
+<span class="fc" id="L308">        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);</span>
+<span class="fc" id="L309">        SharedPreferences.Editor edit = prefs.edit();</span>
+<span class="fc" id="L310">        edit.putFloat(&quot;Longitude&quot;, (float) this.getMap().getMapCenter().getLongitude());</span>
+<span class="fc" id="L311">        edit.putFloat(&quot;Latitude&quot;, (float) this.getMap().getMapCenter().getLatitude());</span>
+<span class="fc" id="L312">        edit.apply();</span>
+<span class="fc" id="L313">    }</span>
+
+    public void destroy() {
+<span class="fc" id="L316">        fieldMarker.clear();</span>
+<span class="fc" id="L317">        map.onDetach();</span>
+<span class="fc" id="L318">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

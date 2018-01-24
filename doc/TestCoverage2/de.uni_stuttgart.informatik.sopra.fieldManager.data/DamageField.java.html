@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DamageField.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.data</a> &gt; <span class="el_source">DamageField.java</span></div><h1>DamageField.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.data;
+
+import android.content.Context;
+
+import java.io.File;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.DamageFieldType;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.ProgressStatus;
+
+/**
+ * Created by larsb on 22.11.2017.
+ * &lt;p&gt;
+ * a custom field class, containing fields that represent damage
+ */
+
+public class DamageField extends Field implements Serializable {
+    private static final String TAG = &quot;DamageField&quot;;
+
+    private static final long serialVersionUID = 8L;
+
+<span class="fc" id="L27">    private String parsedDate = &quot;&quot;;</span>
+<span class="fc" id="L28">    private String evaluator = &quot;&quot;;</span>
+    private ProgressStatus progressStatus;
+    private double insuranceMoney;
+    private ArrayList&lt;PictureData&gt; paths;
+<span class="fc" id="L32">    private DamageFieldType defaultType = DamageFieldType.Aliens;</span>
+    private AgrarianField parentField;
+
+    /**
+     * constructor
+     *
+     * @param context
+     * @param cPoints
+     */
+    public DamageField(Context context, List&lt;CornerPoint&gt; cPoints, AgrarianField parentField) {
+<span class="fc" id="L42">        super(context, cPoints);</span>
+<span class="fc" id="L43">        super.setType(defaultType);</span>
+<span class="fc" id="L44">        this.setColor(damageFieldToColor());</span>
+<span class="fc" id="L45">        this.setDate(new Date(0));</span>
+<span class="fc" id="L46">        this.paths = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L47">        this.parentField = parentField;</span>
+<span class="fc" id="L48">        calcInsuranceAmount();</span>
+<span class="fc" id="L49">        progressStatus = ProgressStatus.sent;</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * map type of damage to color
+     *
+     * @return
+     */
+    private int damageFieldToColor() {
+<span class="fc" id="L58">        return R.color.fieldDefaultColor;</span>
+    }
+
+    public String getParsedDate() {
+<span class="fc" id="L62">        return parsedDate;</span>
+    }
+
+    /**
+     * return the date in a readable format
+     *
+     * @param date
+     */
+    public void setDate(Date date) {
+        //store date as a string - is probably easier
+<span class="fc" id="L72">        SimpleDateFormat format1 = new SimpleDateFormat(&quot;dd-MM-yyyy&quot;);</span>
+<span class="fc" id="L73">        String parsedDate =</span>
+<span class="fc" id="L74">                context.getResources().getString(R.string.date_label)</span>
+<span class="fc" id="L75">                        + &quot; &quot; + format1.format(date);</span>
+<span class="fc" id="L76">        this.parsedDate = parsedDate;</span>
+<span class="fc" id="L77">    }</span>
+
+    public void setDate(String date) {
+<span class="fc" id="L80">        this.parsedDate = date;</span>
+<span class="fc" id="L81">    }</span>
+
+    public String getEvaluator() {
+<span class="fc" id="L84">        return evaluator;</span>
+    }
+
+    public void setEvaluator(String evaluator) {
+<span class="fc" id="L88">        this.evaluator = evaluator;</span>
+<span class="fc" id="L89">    }</span>
+
+    public ArrayList&lt;PictureData&gt; getPaths() {
+<span class="fc" id="L92">        return paths;</span>
+    }
+
+    public void setPath(String path) {
+<span class="nc" id="L96">        PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);</span>
+<span class="nc" id="L97">        paths.add(pictureData);</span>
+<span class="nc" id="L98">    }</span>
+
+    public void setPath(PictureData pictureData) {
+<span class="nc" id="L101">        paths.add(pictureData);</span>
+<span class="nc" id="L102">    }</span>
+
+    public void setPhotoName(String name, PictureData pictureData) {
+<span class="nc" id="L105">        pictureData.setImage_title(name);</span>
+<span class="nc" id="L106">    }</span>
+
+    public void calcInsuranceAmount() {
+<span class="fc" id="L109">        insuranceMoney = this.getSize() * this.getType().getInsuranceMoneyPerSquareMeter() * parentField.getType().getInsuranceMoneyPerSquareMeter();</span>
+<span class="fc" id="L110">    }</span>
+
+    public double getInsuranceMoney() {
+<span class="fc" id="L113">        return insuranceMoney;</span>
+    }
+
+    public AgrarianField getParentField() {
+<span class="fc" id="L117">        return parentField;</span>
+    }
+
+    public void setType(DamageFieldType type) {
+<span class="fc" id="L121">        super.setType(type);</span>
+<span class="fc" id="L122">        this.calcInsuranceAmount();</span>
+<span class="fc" id="L123">    }</span>
+
+    public ProgressStatus getProgressStatus() {
+<span class="fc" id="L126">        return progressStatus;</span>
+    }
+
+    /**
+     * delete the given photo from the damage field and from the internal storage
+     *
+     * @param pos give the position of the photo in the paths ArrayList
+     */
+    public void deletePhoto(int pos) {
+<span class="nc" id="L135">        File photo = new File(getPaths().get(pos).getImage_path());</span>
+<span class="nc" id="L136">        photo.delete();</span>
+<span class="nc" id="L137">        paths.remove(pos);</span>
+<span class="nc" id="L138">    }</span>
+
+    /**
+     * this method delete all photos from the damageField and from the internal storage
+     */
+    public void deleteAllPhotos() {
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        for (PictureData pictureData : paths) {</span>
+<span class="nc" id="L145">            File photo = new File(pictureData.getImage_path());</span>
+<span class="nc" id="L146">            photo.delete();</span>
+<span class="nc" id="L147">        }</span>
+<span class="fc" id="L148">        paths.clear();</span>
+<span class="fc" id="L149">    }</span>
+
+    public void setProgressStatus(ProgressStatus progressStatus) {
+<span class="fc" id="L152">        this.progressStatus = progressStatus;</span>
+<span class="fc" id="L153">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

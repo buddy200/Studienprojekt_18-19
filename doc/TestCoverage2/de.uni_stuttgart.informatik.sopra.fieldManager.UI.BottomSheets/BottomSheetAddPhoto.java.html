@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BottomSheetAddPhoto.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets</a> &gt; <span class="el_source">BottomSheetAddPhoto.java</span></div><h1>BottomSheetAddPhoto.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
+
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
+import de.uni_stuttgart.informatik.sopra.fieldManager.Util.PhotoManager;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
+
+import static android.app.Activity.RESULT_OK;
+
+/**
+ * Created by larsb on 14.01.2018.
+ */
+
+<span class="fc" id="L33">public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {</span>
+
+    private static final String TAG = &quot;BottomSheetAddPhoto&quot;;
+    private static final int RESULT_LOAD_IMAGE = 13;
+
+    protected FragmentInteractionListener mListener;
+    private BSEditContract.Presenter mPresenter;
+
+    private DamageField mField;
+
+    private RecyclerView recyclerView;
+    private EditText photoName;
+    private ImageButton addPhotoFromGallery;
+    private ImageButton addPhotoFromCamera;
+    private ImageButton finish;
+    private GalleryAdapter galleryAdapter;
+
+    /**
+     * this factory method is used to generate an instance
+     * using the provided parameters
+     *
+     * @return A new instance of fragment BottomSheetDialogFragment.
+     */
+    public static BottomSheetAddPhoto newInstance() {
+<span class="fc" id="L57">        final BottomSheetAddPhoto fragment = new BottomSheetAddPhoto();</span>
+<span class="fc" id="L58">        return fragment;</span>
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L63">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L64">    }</span>
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L68">        super.onAttach(context);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L70">            mListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L72">            throw new RuntimeException(context.toString()</span>
+                    + &quot; must implement FragmentInteractionListener&quot;);
+        }
+<span class="fc" id="L75">    }</span>
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L79">        super.onStart();</span>
+<span class="fc" id="L80">        mPresenter.start();</span>
+<span class="fc" id="L81">    }</span>
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L87">        View view = inflater.inflate(R.layout.fragment_add_fotos, container, false);</span>
+<span class="fc" id="L88">        return view;</span>
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L93">        recyclerView = (RecyclerView) view.findViewById(R.id.imagegallery);</span>
+<span class="fc" id="L94">        recyclerView.setHasFixedSize(true);</span>
+
+<span class="fc" id="L96">        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);</span>
+<span class="fc" id="L97">        recyclerView.setLayoutManager(layoutManager);</span>
+<span class="fc" id="L98">        photoName = (EditText) view.findViewById(R.id.edit_photo_name);</span>
+<span class="fc" id="L99">        addPhotoFromCamera = (ImageButton) view.findViewById(R.id.button_add_photo);</span>
+<span class="fc" id="L100">        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);</span>
+<span class="fc" id="L101">        finish = (ImageButton) view.findViewById(R.id.finish_edit_button_agr);</span>
+<span class="fc" id="L102">        addPhotoFromGallery.setOnClickListener(this);</span>
+<span class="fc" id="L103">        addPhotoFromCamera.setOnClickListener(this);</span>
+<span class="fc" id="L104">        finish.setOnClickListener(this);</span>
+<span class="fc" id="L105">    }</span>
+
+    @Override
+    public void fillData(Field mField) {
+<span class="fc" id="L109">        this.mField = (DamageField) mField;</span>
+
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if ((this.mField).getPaths() != null) {</span>
+<span class="fc" id="L112">            galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);</span>
+<span class="fc" id="L113">            recyclerView.setAdapter(galleryAdapter);</span>
+        }
+<span class="fc" id="L115">    }</span>
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+<span class="nc" id="L120">    }</span>
+
+    /**
+     * handle button clicks
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (mListener != null) {</span>
+<span class="pc bpc" id="L130" title="3 of 4 branches missed.">            switch (v.getId()) {</span>
+                case R.id.finish_edit_button_agr:
+<span class="fc" id="L132">                    mPresenter.changeField(mPresenter.getVisibleField());</span>
+<span class="fc" id="L133">                    dismiss();</span>
+<span class="fc" id="L134">                    break;</span>
+                case R.id.button_add_photo:
+<span class="nc" id="L136">                    takePhoto();</span>
+<span class="nc" id="L137">                    mPresenter.changeField(mPresenter.getVisibleField());</span>
+<span class="nc" id="L138">                    break;</span>
+                case R.id.button_navigate_google_maps:
+<span class="nc" id="L140">                    Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);</span>
+<span class="nc" id="L141">                    startActivityForResult(i, RESULT_LOAD_IMAGE);</span>
+                    break;
+            }
+        }
+<span class="fc" id="L145">    }</span>
+
+    @Override
+    public void setPresenter(BasePresenter presenter) {
+<span class="fc" id="L149">        mPresenter = (BSEditContract.Presenter) presenter;</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * create a PhotoManager object and save the fielpath from the picture in the damageField
+     */
+    public void takePhoto() {
+<span class="nc" id="L156">        PhotoManager photoManager = new PhotoManager(getActivity(), this);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (mPresenter.getVisibleField() instanceof DamageField) {</span>
+<span class="nc" id="L158">            String s = photoManager.dispatchTakePictureIntent();</span>
+<span class="nc" id="L159">            PictureData pictureData = new PictureData(photoName.getText().toString(), s);</span>
+<span class="nc" id="L160">            mPresenter.addPhotoToDatabase(pictureData);</span>
+<span class="nc" id="L161">            galleryAdapter.notifyDataSetChanged();</span>
+        }
+<span class="nc" id="L163">    }</span>
+
+    /**
+     * remove picture from the clicked position and refresh the gallery
+     *
+     * @param position
+     */
+    public void removePicture(int position) {
+<span class="nc" id="L171">        DamageField damageField = (DamageField) mPresenter.getVisibleField();</span>
+        //remove the image data from the damage field and refresh the recycler view
+<span class="nc" id="L173">        PictureData pd = damageField.getPaths().get(position);</span>
+<span class="nc" id="L174">        mPresenter.deletePhotoFromDatabase(pd);</span>
+        //remove the image data from the damage field and refresh the recycler view
+<span class="nc" id="L176">        ((DamageField) mPresenter.getVisibleField()).deletePhoto(position);</span>
+<span class="nc" id="L177">        mPresenter.changeField(mPresenter.getVisibleField());</span>
+<span class="nc" id="L178">        galleryAdapter.notifyItemRemoved(position);</span>
+<span class="nc" id="L179">    }</span>
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (resultCode != RESULT_OK &amp;&amp; requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {</span>
+<span class="nc" id="L185">            photoRejected();</span>
+        }
+
+<span class="nc bnc" id="L188" title="All 8 branches missed.">        if (requestCode == RESULT_LOAD_IMAGE &amp;&amp; resultCode == RESULT_OK &amp;&amp; data != null &amp;&amp; data.getData() != null) {</span>
+<span class="nc" id="L189">            photoFromGallery(data);</span>
+        }
+<span class="nc" id="L191">    }</span>
+
+    /**
+     * Handles if the photo intent is aborted or the user has rejected the photo in the photo intent
+     */
+    private void photoRejected() {
+<span class="nc" id="L197">        DamageField fieldPhotoToDelete = (DamageField) mPresenter.getVisibleField();</span>
+<span class="nc" id="L198">        mPresenter.deletePhotoFromDatabase(fieldPhotoToDelete.getPaths().get(fieldPhotoToDelete.getPaths().size() - 1));</span>
+<span class="nc" id="L199">        fieldPhotoToDelete.deletePhoto(fieldPhotoToDelete.getPaths().size() - 1);</span>
+<span class="nc" id="L200">        mPresenter.changeField(fieldPhotoToDelete);</span>
+<span class="nc" id="L201">    }</span>
+
+    /**
+     * handle the intent data from the gallery intent
+     *
+     * @param data
+     */
+    private void photoFromGallery(Intent data) {
+<span class="nc" id="L209">        Uri uri = data.getData();</span>
+<span class="nc" id="L210">        String[] projection = {MediaStore.Images.Media.DATA};</span>
+
+<span class="nc" id="L212">        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);</span>
+<span class="nc" id="L213">        cursor.moveToFirst();</span>
+
+<span class="nc" id="L215">        int columnIndex = cursor.getColumnIndex(projection[0]);</span>
+<span class="nc" id="L216">        String picturePath = cursor.getString(columnIndex);</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        if (picturePath == null) {</span>
+<span class="nc" id="L218">            return;</span>
+        }
+<span class="nc" id="L220">        cursor.close();</span>
+<span class="nc" id="L221">        PictureData pictureData = new PictureData(photoName.getText().toString(), picturePath);</span>
+<span class="nc" id="L222">        mPresenter.addPhotoToDatabase(pictureData);</span>
+<span class="nc" id="L223">        galleryAdapter.notifyDataSetChanged();</span>
+<span class="nc" id="L224">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MYLocationListener.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.Util</a> &gt; <span class="el_source">MYLocationListener.java</span></div><h1>MYLocationListener.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.Util;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapViewHandler;
+
+/**
+ * Created by larsb on 21.11.2017.
+ * This class fetch the GPS-Sensor data form the device and save the actual location.
+ */
+
+public class MYLocationListener implements LocationListener {
+
+    private LocationManager locationManager;
+    private Location location;
+    private Context context;
+    private MapViewHandler mMapViewHandler;
+<span class="fc" id="L25">    public boolean follow = false;</span>
+
+<span class="fc" id="L27">    public MYLocationListener() {</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * initilize the Location Manager with teh actual context und mapHandler and start the location finding
+     *
+     * @param context
+     * @param mapHandler
+     */
+    public void initializeLocationManager(Context context, MapViewHandler mapHandler) {
+<span class="fc" id="L37">        this.mMapViewHandler = mapHandler;</span>
+<span class="fc" id="L38">        this.context = context;</span>
+        //get the location manager
+<span class="fc" id="L40">        this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);</span>
+        try {
+<span class="fc" id="L42">            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);</span>
+<span class="pc bpc" id="L43" title="2 of 4 branches missed.">            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {</span>
+                //Check Permission for fine location
+<span class="nc bnc" id="L45" title="All 2 branches missed.">                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)</span>
+                        != PackageManager.PERMISSION_GRANTED) {
+<span class="nc" id="L47">                    mapHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);</span>
+                }
+<span class="nc" id="L49">                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);</span>
+<span class="nc" id="L50">                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);</span>
+            }
+<span class="nc" id="L52">        } catch (Exception e) {</span>
+<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="fc" id="L54">        }</span>
+<span class="fc" id="L55">    }</span>
+
+    @Override
+    public void onLocationChanged(Location location) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (location != null) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            if (follow) {</span>
+<span class="nc" id="L61">                mMapViewHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());</span>
+            }
+<span class="nc" id="L63">            mMapViewHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());</span>
+        }
+<span class="nc" id="L65">    }</span>
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+<span class="nc" id="L70">    }</span>
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+<span class="nc" id="L75">    }</span>
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+<span class="nc" id="L80">    }</span>
+
+    /**
+     * get the actual location from the GPS or Network Sensor (depending on wich is better)
+     *
+     * @return
+     */
+    public Location getLocation() {
+        try {
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (locationManager != null) {</span>
+            }
+            //Check Permission for fine location
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)</span>
+                    != PackageManager.PERMISSION_GRANTED) {
+<span class="nc" id="L95">                mMapViewHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);</span>
+            }
+<span class="pc bpc" id="L97" title="2 of 4 branches missed.">            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {</span>
+<span class="nc" id="L98">                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);</span>
+                // if no GPS signal available, get location from Network Location
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if (location == null) {</span>
+<span class="nc" id="L101">                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);</span>
+                }
+            }
+<span class="nc" id="L104">        } catch (Exception e) {</span>
+<span class="nc" id="L105">            e.printStackTrace();</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">        return location;</span>
+    }
+
+    /**
+     * set follow on enabled or disabled
+     *
+     * @param b
+     */
+    public void setFollow(boolean b) {
+<span class="fc" id="L116">        follow = b;</span>
+<span class="fc" id="L117">    }</span>
+
+    public boolean getFollow() {
+<span class="nc" id="L120">        return follow;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

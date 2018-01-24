@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ItemListDialogFragment.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets</a> &gt; <span class="el_source">ItemListDialogFragment.java</span></div><h1>ItemListDialogFragment.java</h1><pre class="source lang-java linenums">package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.List;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
+
+/**
+ * sopra_priv
+ * Created by Felix B on 03.11.17.
+ * Mail: felix.burk@gmail.com
+ * &lt;p&gt;
+ * A generic List Dialog Fragment containing all Fields on the Map
+ */
+<span class="fc" id="L30">public class ItemListDialogFragment extends BottomSheetDialogFragment {</span>
+
+    private static final String TAG = &quot;ItemListDialogFragment&quot;;
+
+    private FragmentInteractionListener mListener;
+    private static List&lt;Field&gt; fieldData;
+
+
+    /**
+     * this factory method is used to generate an instance
+     * using the provided parameters
+     *
+     * @return A new instance of fragment ItemListDialogFragment.
+     */
+    public static ItemListDialogFragment newInstance(List&lt;Field&gt; fields) {
+<span class="fc" id="L45">        final ItemListDialogFragment fragment = new ItemListDialogFragment();</span>
+<span class="fc" id="L46">        fieldData = fields;</span>
+<span class="fc" id="L47">        return fragment;</span>
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L54">        View view = inflater.inflate(R.layout.fragment_item_list_dialog, container, false);</span>
+<span class="fc" id="L55">        configureBottomSheetBehavior(view);</span>
+<span class="fc" id="L56">        return view;</span>
+    }
+
+    /**
+     * method to configure the behaviour of the bottom sheet
+     *
+     * @param view
+     */
+    private void configureBottomSheetBehavior(View view) {
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L69">        final RecyclerView recyclerView = (RecyclerView) view;</span>
+<span class="fc" id="L70">        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));</span>
+<span class="fc" id="L71">        recyclerView.setAdapter(new ItemAdapter());</span>
+<span class="fc" id="L72">    }</span>
+
+    @Override
+    public void onAttach(Context context) {
+<span class="fc" id="L76">        super.onAttach(context);</span>
+
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (context instanceof FragmentInteractionListener) {</span>
+<span class="fc" id="L79">            mListener = (FragmentInteractionListener) context;</span>
+        } else {
+<span class="nc" id="L81">            throw new ClassCastException(context.toString() + &quot; must implement FragmentInteractionListener&quot;);</span>
+        }
+<span class="fc" id="L83">    }</span>
+
+    @Override
+    public void onDetach() {
+<span class="fc" id="L87">        mListener = null;</span>
+<span class="fc" id="L88">        super.onDetach();</span>
+<span class="fc" id="L89">    }</span>
+
+    /**
+     * the ViewHolder holding the Field Objects
+     */
+    private class ViewHolder extends RecyclerView.ViewHolder {
+
+        final TextView text;
+        final TextView state;
+        final TextView county;
+        final LinearLayout layout;
+
+<span class="fc" id="L101">        ViewHolder(LayoutInflater inflater, ViewGroup parent) {</span>
+            //add the item layout xml
+<span class="fc" id="L103">            super(inflater.inflate(R.layout.fragment_item_list_dialog_item, parent, false));</span>
+
+            //the item is shown as a text view
+<span class="fc" id="L106">            text = itemView.findViewById(R.id.item_field_name);</span>
+<span class="fc" id="L107">            state = itemView.findViewById(R.id.item_field_state);</span>
+<span class="fc" id="L108">            county = itemView.findViewById(R.id.item_field_county);</span>
+<span class="fc" id="L109">            layout = itemView.findViewById(R.id.ll_item);</span>
+
+            // the on click listener for the item that is being clicked
+<span class="fc" id="L112">            layout.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View v) {
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">                    if (mListener != null) {</span>
+<span class="fc" id="L116">                        mListener.onFragmentMessage(TAG, &quot;itemClick&quot;, fieldData.get(getAdapterPosition()));</span>
+<span class="fc" id="L117">                        dismiss();</span>
+                    }
+<span class="fc" id="L119">                }</span>
+            });
+<span class="fc" id="L121">        }</span>
+    }
+
+    /**
+     * Item Adapter for the different Fields
+     */
+<span class="fc" id="L127">    private class ItemAdapter extends RecyclerView.Adapter&lt;ViewHolder&gt; {</span>
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+<span class="fc" id="L131">            return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);</span>
+        }
+
+        /**
+         * sets the text of our items
+         *
+         * @param holder
+         * @param position
+         */
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+<span class="fc" id="L142">            holder.text.setText(fieldData.get(position).getName());</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">            if (fieldData.get(position).getType() != null) {</span>
+<span class="fc" id="L144">                holder.state.setText(fieldData.get(position).getType().toString());</span>
+<span class="fc" id="L145">                holder.state.setTextColor(fieldData.get(position).getColor());</span>
+            } else {
+<span class="nc" id="L147">                holder.state.setText(&quot; &quot;);</span>
+<span class="nc" id="L148">                holder.state.setTextColor(fieldData.get(position).getColor());</span>
+            }
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            if (fieldData.get(position) instanceof AgrarianField) {</span>
+<span class="fc" id="L151">                holder.county.setText(fieldData.get(position).getCounty());</span>
+            } else {
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">                if (fieldData.get(position) instanceof DamageField)</span>
+<span class="fc" id="L154">                    holder.county.setText(((DamageField) fieldData.get(position)).getParentField().getName());</span>
+            }
+<span class="fc" id="L156">        }</span>
+
+        @Override
+        public int getItemCount() {
+<span class="fc" id="L160">            return fieldData.size();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

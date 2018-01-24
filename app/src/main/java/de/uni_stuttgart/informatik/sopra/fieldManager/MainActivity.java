@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),
                 MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date),
-                MainActivity.getmContext().getResources().getString(R.string.detailItem_evaluator)
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_evaluator)
         };
 
         final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);

@@ -234,7 +234,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/detailItem_evaluator" />
+                android:text="@string/dialogItem_evaluator" />
 
             <EditText
                 android:id="@+id/field_detail_policyholder_edit"

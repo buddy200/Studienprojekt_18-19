@@ -51,6 +51,6 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="never"
         android:orderInCategory="2000"
-        android:title="Help" />
+        android:title="@string/help_label" />
 
 </menu>

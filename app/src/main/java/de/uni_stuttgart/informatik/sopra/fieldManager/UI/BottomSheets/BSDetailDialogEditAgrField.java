@@ -84,7 +84,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_agrarianfieldedit, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_detail_dialog_agrarianfield_edit, container, false);
         configureBottomSheetBehaviour(view);
 
         headingText = view.findViewById(R.id.heading);

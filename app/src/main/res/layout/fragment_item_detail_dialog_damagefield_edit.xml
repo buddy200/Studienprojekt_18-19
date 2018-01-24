@@ -30,18 +30,26 @@
             android:id="@+id/heading"
             android:text="-name-"/>
 
-        <RelativeLayout
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/namePanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/name_textView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Name" />
+
             <EditText
                 android:id="@+id/field_detail_name_edit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/name_textView"
                 android:imeOptions="actionNext"
                 android:paddingBottom="@dimen/list_item_spacing_half"
                 android:paddingLeft="@dimen/list_item_spacing"
@@ -50,31 +58,28 @@
                 android:paddingTop="@dimen/list_item_spacing_half"
                 />
 
-            <TextView
-                android:id="@+id/name_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/dialogItem_Name" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
 
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_date"
-                android:layout_width="wrap_content"
+                android:id="@+id/Datetext"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/button_pick_date"
-                android:layout_alignBottom="@+id/button_pick_date"
-                android:layout_toEndOf="@+id/Datetext"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Date" />
+
+            <TextView
+                android:id="@+id/text_date"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/list_item_spacing_half"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
@@ -83,38 +88,19 @@
 
             <Button
                 android:id="@+id/button_pick_date"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
                 android:paddingBottom="@dimen/list_item_spacing_half"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="pick date" />
+                android:text="@string/pick_date_label" />
 
-            <TextView
-                android:id="@+id/Datetext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/text_date"
-                android:layout_alignBottom="@+id/text_date"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/dialogItem_Date" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/spinnerPanel"
             android:layout_width="match_parent"
@@ -123,69 +109,29 @@
 
             <TextView
                 android:id="@+id/text_type"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="@dimen/list_item_spacing"
                 android:text="@string/dialogItem_Type" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
-                android:measureAllChildren="false"
                 android:layout_toEndOf="@+id/text_type">
-
-
 
                 <Spinner
                     android:id="@+id/field_detail_state_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:paddingBottom="@dimen/list_item_spacing_half"
-                    android:paddingLeft="@dimen/list_item_spacing"
-                    android:paddingRight="@dimen/list_item_spacing"
-                    android:paddingTop="@dimen/list_item_spacing_half"
                     android:text="-state-"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/sizePanel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/field_detail_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-
-                android:layout_toEndOf="@+id/textView"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="-size-" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/field_detail_size"
-                android:layout_alignBottom="@+id/field_detail_size"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/dialogItem_Size" />
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/spinnerPanelprogressState"
             android:layout_width="match_parent"
@@ -194,34 +140,56 @@
 
             <TextView
                 android:id="@+id/text_progressState"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="@dimen/list_item_spacing"
                 android:text="@string/dialogitem_progress_state" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:measureAllChildren="false"
-                android:layout_toEndOf="@+id/text_progressState">
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent">
 
                 <Spinner
                     android:id="@+id/progress_state_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:paddingBottom="@dimen/list_item_spacing_half"
-                    android:paddingLeft="@dimen/list_item_spacing"
-                    android:paddingRight="@dimen/list_item_spacing"
-                    android:paddingTop="@dimen/list_item_spacing_half"
-                    android:text="-state-"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                    android:layout_height="match_parent"
+                    android:text="-state-" />
 
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/sizePanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Size" />
+
+
+            <TextView
+                android:id="@+id/field_detail_size"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:text="-size-" />
+
+        </LinearLayout>
+
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/costPanel"
             android:layout_width="match_parent"
@@ -229,21 +197,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/field_cost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-
-                android:layout_toEndOf="@+id/costtext"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="-cost-" />
-
-            <TextView
                 android:id="@+id/costtext"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/field_cost"
                 android:layout_alignBottom="@+id/field_cost"
@@ -251,39 +207,49 @@
                 android:layout_marginStart="@dimen/list_item_spacing"
                 android:text="@string/detailItem_estimatedpayment" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/field_cost"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:text="-cost-" />
 
-        <RelativeLayout
+
+        </LinearLayout>
+
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/policyholderPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/policyholder_textView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/detailItem_evaluator" />
 
             <EditText
                 android:id="@+id/field_detail_policyholder_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:hint="@string/evaluator_default_name"
-                android:layout_toEndOf="@+id/policyholder_textView"
                 android:paddingBottom="@dimen/list_item_spacing_half"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
                 android:singleLine="false" />
 
-            <TextView
-                android:id="@+id/policyholder_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/detailItem_evaluator" />
+        </LinearLayout>
 
-        </RelativeLayout>
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/topPanel"

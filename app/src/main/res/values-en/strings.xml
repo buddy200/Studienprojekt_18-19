@@ -49,7 +49,7 @@
     <string name="logout_message">Are you sure you want to logout and close the app?</string>
     <string name="toastmsg_anotherDamageField">Add another damage case on this field or go back.</string>
     <string name="toastmsg_anotherAgrarainField">Add another field or go back.</string>
-    <string name="detailItem_estimatedpayment">"Estimated payment "</string>
+    <string name="detailItem_estimatedpayment">"Payment "</string>
     <string name="dialogItem_Location">Location</string>
     <string name="dialogItem_Type">Type</string>
     <string name="dialogItem_Size">Size</string>
@@ -79,4 +79,5 @@
     <string name="help_desc_fab">the corner point is your current position on the map, but if you wish to add points manually just press on the map to add a new one</string>
     <string name="help_title_create_field">create your field</string>
     <string name="help_desc_create_field">if you have enough points selected on the map press here to finish up your field and fill in the necessary data</string>
+    <string name="pick_date_label">pick date</string>
 </resources>

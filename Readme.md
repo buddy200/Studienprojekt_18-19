@@ -1,6 +1,6 @@
 # Field Manager
 
-![Screenshot vom Startbildschrim der App](doc\images\Startscreen.png)
+![Screenshot vom Startbildschrim der App](doc/images/Startscreen.png)
 Screenshot vom Startbildschrim der App
 
 Die App dient dazu Felder von Bauern zu erfassen und darin Schäden zu markieren. Dies geschieht mit einer Android App die ab Version 5.1 lauffähig ist. Sie soll Versicherungen und Bauern helfen Ihre Felder und vor allem die Schäden die in den Felder entstehen besser verwalten zu können als sie es im Moment tun.
@@ -33,6 +33,7 @@ Alle Daten sind eingetragen. Nun kann man das Feld mit Hilfe des Diskettenicons 
 ![Fertiges Feld auf der Karte](doc/images/FieldAdded.png)
 Ansicht des Feldes in der Add Activity
 
+
 ![Weiters Feld hinzufügen](doc/images/zweiFelder.png)
 Nun kann wie gerade beschrieben ein weiteres Feld hinzugefügt werden. Wenn alle gewünschten Felder hinzugefügt worden sind kann mit dem Pfeil in der linken Ecke zurückgegangen werden
 
@@ -55,6 +56,7 @@ So sieht das Feld nun nach der Änderung aus
 
 ### Feature 3 Erstellen und Verwalten von Schadensfällen
 
+
 Es können zu einem Feld Schadensfälle hinzugefügt oder entfernt werden. Das Hinzufügen und editieren läuft nahezu identisch ab wie bei Feature 1 beschrieben. Allerdings können hier noch Daten wie zum Beispiel das Entstehungsdatum des Schadens eigetragen werden oder Bilder vom Schaden angehängt werden. Hier werden nun hauptsächlich die Sachen erläutert die nicht identisch zum Felder hinzufügen/ändern sind.
 
 ![Dateneingabe zum Schadensfall](doc/images/damageDate.png)
@@ -63,11 +65,13 @@ Das Eintragen eines Schadensfall läuft nach dem Klicken auf das Feuericon eines
 ![Datum hinzufügen](doc/images/Datepicker.png)
 Datum auswählen wann der Schaden entstanden ist.
 
+
 ![Nachdem ausfüllen des Formulars](doc/images/schdensfallDaten.png)
 So könnte das ausgefüllte Formular aussehen.
 
 ![Nachdem einfügen des Schadens](doc/images/damageEnd.png)
 Nachdem einfügen des Schadens.
+
 
 ![Mehrere Schadensfälle in einem Feld](doc/images/beideSchadensfalle.png)
 Auch hier können mehrere Schadensfälle direkt hintereinander eingefügt werden. Diese Schadensfälle sind unabhängig voneinander und müssen nur im gleichen Feld liegen. Hier die Ansicht von zwei Schadensfällen in einem Feld.
@@ -83,6 +87,7 @@ Hier gibt es nun die Möglichkeit dem Bild einen Titel zu geben (der Titel kann 
 ![Mit Kamera](doc/images/mitKamera.png)
 Hier wird ein Bild mit der Kamera gemacht.
 
+
 ![Galerie](doc/images/galerie.png)
 Hier kann ein Bild aus der Galerie ausgewählt werden.
 
@@ -95,6 +100,7 @@ Hier kann man die Bilder nun sehen wie sie eingefügt aussehen. Durch einfaches 
 
 Es wird ein Liste alle Schadensfälle und Felder sobald man auf den Button "list" drückt angezeigt. In dieser werden ein paar Informationen zu den Feldern und Schadensfällen angezeigt. Durch klicken auf einen Eintrag, werden alle Informationen die Verfügbar sind angezeigt und es wird zum jeweiligen Feld oder Schadensfall gezoomt. Es ist dann auch möglich den Eintrag zu bearbeiten und einen Schadensfall hinzuzufügen (Siehe Feature 1 und 2). Weiter sind in der Liste zuerst die Felder und dann die Schadensfälle aufgelistet
 
+
 ! [Liste aktivieren](doc/images/NachAnmelden.png)
 Hier kann die Liste ausgewählt werden.
 
@@ -103,7 +109,6 @@ Anzeige der Liste mit den wichtigsten Informationen.
 
 ![Detailansicht eines Feldes/Schadensfall](doc/images/Detailansicht2.png)
 Detailansicht eines Feldes/Schadensfall nach dem klicken auf einen Eintrag in der Liste.
-
 
 
 ### Feature 6 Durchsuchen nach bestimmten Attributen
@@ -162,6 +167,11 @@ Hier ist die Ansicht wenn sich der Bauer Müller eigeloggt hat.
 
 ![Liste Müller](ListeMuller.png)
 Liste der Felder mit Bauer Müller als Benutzer.
+
+### Feature 12 In App Tutorial
+Mit Hilfe des Hilfe Buttons kann ein Tutorial aufgerufen werden das die grundlegenden Features der App zeigt
+![Tutorial](doc/images/tutorial.png)
+Hier eine exemplarische Darstellung eines Tutorialfensters.
 
 
 ## Installation

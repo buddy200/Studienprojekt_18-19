@@ -52,16 +52,6 @@ public class Vector {
         }
     }
 
-    /**
-     * checks if a given vector has the same direction as this vector
-     * 
-     * @param v the vector to compare direction
-     * @return true if the vectors have the same direction, else false
-     */
-    public boolean equalDirection(Vector v) {
-        return v.normalize().equals(this.normalize());
-    }
-
     public boolean equals(Vector v) {
         return Math.abs(v.x - this.x ) < 0.001 && Math.abs(v.y - this.y) < 0.001;
     }
@@ -72,18 +62,6 @@ public class Vector {
             return this.equals((Vector)o);
         else
             return false;
-    }
-
-    /**
-     * rotate this vector counterclockwise
-     * 
-     * @param angle the angle this vector gets rotated
-     * @return the rotated vector
-     */
-    public Vector rotate (double angle) {
-        double x1 = x * Math.cos(angle) - y * Math.sin(angle);
-        double y1 = x * Math.sin(angle) + y * Math.cos(angle);
-        return new Vector(x1,y1);
     }
 
     @Override

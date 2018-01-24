@@ -80,4 +80,7 @@
     <string name="help_desc_search">Sie können nach Feldnamen oder anderen Kategorien suchen</string>
     <string name="help_title_fab">Drücken sie hier um ein neuen Eckpunkt hinzuzufügen</string>
     <string name="pick_date_label">ändern</string>
+    <string name="storm">Storm</string>
+    <string name="heat">Hitze</string>
+    <string name="insects">Insekten</string>
 </resources>

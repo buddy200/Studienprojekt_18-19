@@ -7,11 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +34,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private ArrayList<PictureData> galleryList;
     private Context context;
     private BottomSheetDialogFragment bottomSheet;
-    private final BitmapFactory.Options options;
-    private static final int IMAGE_SCALE = 7;
 
     public GalleryAdapter(Context context, ArrayList<PictureData> galleryList, BottomSheetDialogFragment bottomSheet) {
         this.bottomSheet = bottomSheet;
         this.galleryList = galleryList;
         this.context = context;
-        options = new BitmapFactory.Options();
-
     }
 
     @Override
@@ -141,6 +135,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
 class LoadImage extends AsyncTask<Object, Void, Bitmap> {
     private static final String TAG = "GalleryAdapterAsync";
+    private static final int IMAGE_SCALE = 7;
+    private  BitmapFactory.Options options;
+
 
 
     private ImageView imv;
@@ -154,10 +151,12 @@ class LoadImage extends AsyncTask<Object, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Object... params) {
         Bitmap bitmap = null;
+        options = new BitmapFactory.Options();
         File file = new File(path);
 
         if(file.exists()){
-            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            options.inSampleSize = IMAGE_SCALE;
+            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
         }
 
         return bitmap;

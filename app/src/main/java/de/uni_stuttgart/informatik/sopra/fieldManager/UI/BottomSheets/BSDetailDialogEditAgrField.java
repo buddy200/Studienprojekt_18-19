@@ -151,7 +151,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
         if (this.getActivity() instanceof AddFieldActivity) {
             deleteButton.setVisibility(View.INVISIBLE);
         }
-        headingText.setText("AgrarFeld");
+        headingText.setText(getResources().getString(R.string.agrarian_field));
         fieldRegion.setText(field.getCounty());
         List<AgrarianFieldType> statusCheck;
         statusCheck = Arrays.asList(AgrarianFieldType.values());

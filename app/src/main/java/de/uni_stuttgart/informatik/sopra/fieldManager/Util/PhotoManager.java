@@ -66,13 +66,9 @@ public class PhotoManager {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
-        // Save a file: path for use with ACTION_VIEW intents
+
         mCurrentPhotoPath = image.getAbsolutePath();
         Log.e("Path", mCurrentPhotoPath);
         return image;

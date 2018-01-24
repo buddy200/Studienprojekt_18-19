@@ -83,4 +83,6 @@
     <string name="storm">Storm</string>
     <string name="heat">Hitze</string>
     <string name="insects">Insekten</string>
+    <string name="agrarian_field">Agrarfeld</string>
+    <string name="damage_field">Schadensfall</string>
 </resources>

@@ -105,7 +105,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
         edit.setOnClickListener(this);
         addDmg = view.findViewById(R.id.add_damageField_button);
         addDmg.setOnClickListener(this);
-        navButton = view.findViewById(R.id.button_navigate_google_maps);
+        navButton = view.findViewById(R.id.pick_form_gallery);
         navButton.setOnClickListener(this);
 
         size = view.findViewById(R.id.field_detail_size);
@@ -155,7 +155,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
                     mListener.onFragmentMessage(TAG, "addDmgField", mPresenter.getVisibleField());
                     dismiss();
                     break;
-                case R.id.button_navigate_google_maps:
+                case R.id.pick_form_gallery:
                     callGoogleMapsIntent();
                     break;
             }

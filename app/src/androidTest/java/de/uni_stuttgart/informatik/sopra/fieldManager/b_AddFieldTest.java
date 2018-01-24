@@ -1,11 +1,18 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.SystemClock;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.CoordinatesProvider;
 import android.support.test.espresso.action.GeneralClickAction;
 import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Tap;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +20,8 @@ import android.widget.EditText;
 
 import org.junit.Rule;
 import org.junit.Test;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.GalleryAdapter;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -23,9 +32,15 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static net.bytebuddy.matcher.ElementMatchers.hasType;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  * sopra_priv
@@ -54,17 +69,6 @@ public class b_AddFieldTest {
         testData("dmg name");
         addPhotoBottomSheet();
 
-        testData("dmg name");
-        onView(withId(R.id.finish_edit_button_agr)).perform(click());
-        onView(withId(R.id.delete_button)).perform(click());
-        onView(withText(R.string.word_yes)).perform(click());
-
-
-        testData("field name");
-        onView(withId(R.id.finish_edit_button_agr)).perform(click());
-        onView(withId(R.id.delete_button)).perform(click());
-        onView(withText(R.string.word_yes)).perform(click());
-
         a_LoginTest.logout();
     }
 
@@ -80,7 +84,7 @@ public class b_AddFieldTest {
         writeData(s);
     }
 
-    private void testData(String s) {
+    static void testData(String s) {
         SystemClock.sleep(500);
 
         onView(withId(R.id.action_toolbar_search)).perform(click());
@@ -133,6 +137,9 @@ public class b_AddFieldTest {
         SystemClock.sleep(500);
 
         onView(withId(R.id.map_fragment_add)).perform(clickXY(0.25f,0.6f));
+        SystemClock.sleep(500);
+
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.1f,0.9f));
         SystemClock.sleep(500);
 
         onView(withId(R.id.map_fragment_add)).perform(clickXY(0.15f,0.7f));

@@ -227,7 +227,7 @@
                 android:layout_alignParentRight="true" />
 
             <ImageButton
-                android:id="@+id/button_navigate_google_maps"
+                android:id="@+id/pick_form_gallery"
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"

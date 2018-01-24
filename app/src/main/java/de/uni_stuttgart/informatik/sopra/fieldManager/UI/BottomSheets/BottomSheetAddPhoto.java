@@ -97,7 +97,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
         recyclerView.setLayoutManager(layoutManager);
         photoName = (EditText) view.findViewById(R.id.edit_photo_name);
         addPhotoFromCamera = (ImageButton) view.findViewById(R.id.button_add_photo);
-        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.button_navigate_google_maps);
+        addPhotoFromGallery = (ImageButton) view.findViewById(R.id.pick_form_gallery);
         finish = (ImageButton) view.findViewById(R.id.finish_edit_button_agr);
         addPhotoFromGallery.setOnClickListener(this);
         addPhotoFromCamera.setOnClickListener(this);
@@ -136,7 +136,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
                     takePhoto();
                     mPresenter.changeField(mPresenter.getVisibleField());
                     break;
-                case R.id.button_navigate_google_maps:
+                case R.id.pick_form_gallery:
                     Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
                     break;

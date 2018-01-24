@@ -111,7 +111,7 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         name = view.findViewById(R.id.field_detail_name);
         edit = view.findViewById(R.id.finish_edit_button_agr);
         edit.setOnClickListener(this);
-        navButton = view.findViewById(R.id.button_navigate_google_maps);
+        navButton = view.findViewById(R.id.pick_form_gallery);
         navButton.setOnClickListener(this);
 
         progressState = view.findViewById(R.id.progress_state);
@@ -163,7 +163,7 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
                     mListener.onFragmentMessage(TAG, "startEdit", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
-                case R.id.button_navigate_google_maps:
+                case R.id.pick_form_gallery:
                     callGoogleMapsIntent();
                     break;
             }

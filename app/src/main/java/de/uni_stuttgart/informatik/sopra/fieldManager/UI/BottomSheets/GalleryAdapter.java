@@ -39,7 +39,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private final BitmapFactory.Options options;
     private static final int IMAGE_SCALE = 7;
 
-    public GalleryAdapter(Context context, ArrayList<PictureData> galleryList, BottomSheetDialogFragment bottomSheet) {
+    GalleryAdapter(Context context, ArrayList<PictureData> galleryList, BottomSheetDialogFragment bottomSheet) {
         this.bottomSheet = bottomSheet;
         this.galleryList = galleryList;
         this.context = context;
@@ -142,11 +142,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 class LoadImage extends AsyncTask<Object, Void, Bitmap> {
     private static final String TAG = "GalleryAdapterAsync";
 
-
     private ImageView imv;
     private String path;
 
-    public LoadImage(ImageView imv, String path) {
+    LoadImage(ImageView imv, String path) {
         this.imv = imv;
         this.path = path;
     }

@@ -327,7 +327,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 onRedoButtonClick();
             }
             else{
-                
+
             }
         }
     }

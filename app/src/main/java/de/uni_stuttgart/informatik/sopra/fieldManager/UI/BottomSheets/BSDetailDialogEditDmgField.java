@@ -196,7 +196,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
         if (this.getActivity() instanceof AddFieldActivity) {
             deleteButton.setVisibility(View.INVISIBLE);
         }
-        headingText.setText("DamageFeld");
+        headingText.setText(getResources().getString(R.string.damage_field));
         fieldestimatedCosts.setText(String.valueOf(((DamageField) field).getInsuranceMoney()));
         dateText.setText(field.getParsedDate());
         List<DamageFieldType> statusCheck;

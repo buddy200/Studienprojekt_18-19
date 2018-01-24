@@ -39,6 +39,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapViewHandler;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.IntersectionCalculator;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
+import de.uni_stuttgart.informatik.sopra.fieldManager.Util.PointOutOfField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
@@ -86,6 +87,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     private ArrayList<Vector<Double>> linesFromAgrarianField;
     private IntersectionCalculator intersectionCalculator;
+    private PointOutOfField pointOutOfField;
 
     private SharedPreferences prefs;
 
@@ -104,6 +106,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         cornerPoints = new ArrayList<>();
         linesFromAgrarianField = new ArrayList<>();
         intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);
+        pointOutOfField = new PointOutOfField(this);
         polyline = new Polyline();
         polyline.setColor(R.color.colorAccent);
         polyline.setWidth(2.0f);
@@ -307,16 +310,27 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         }
         intersectionCalculator.calculateLine(!isDmgField);
-        if (isDmgField && !intersectionCalculator.calcIntersection(parentField)) {
-            onRedoButtonClick();
-        } else {
-            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed)  + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
-            Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
-                    location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+        if (isDmgField && pointOutOfField.calcIntersection(parentField.getLinesFormField(), parentField.getCentroid(), g)) {
+
+
+            if ((isDmgField && !intersectionCalculator.calcIntersection(parentField))) {
+                onRedoButtonClick();
+            } else {
+                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+                Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
+                        location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        }
+        else {
+            if (isDmgField) {
+                onRedoButtonClick();
+            }
+            else{
+                
+            }
         }
     }
-
     private AlertDialog.Builder generateSaveDialog() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override

@@ -78,13 +78,13 @@ public class IntersectionCalculator {
         if (parentField instanceof AgrarianField) {
             if (line.size() != 0) {
                 //this calculates the intersection
-                for (Vector<Double> vec : ((AgrarianField) parentField).getLinesFormField()) {
+                for (Vector<Double> lineFromParent : ((AgrarianField) parentField).getLinesFormField()) {
                     Vector<Double> intersection = new Vector<>();
-                    intersection.add((line.get(1) - vec.get(1)) / (vec.get(0) - line.get(0)));
+                    intersection.add((line.get(1) - lineFromParent.get(1)) / (lineFromParent.get(0) - line.get(0)));
                     intersection.add(line.get(0) * intersection.get(0) + line.get(1));
 
                     //check if the intersection point is inside the damage field
-                    if (boundaryCheck(intersection, lastPoint, currentPoint) && boundaryCheck(intersection, new GeoPoint(vec.get(2).doubleValue(), vec.get(3).doubleValue()), new GeoPoint(vec.get(4).doubleValue(), vec.get(5).doubleValue()))) {
+                    if (boundaryCheck(intersection, lastPoint, currentPoint) && boundaryCheck(intersection, new GeoPoint(lineFromParent.get(2).doubleValue(), lineFromParent.get(3).doubleValue()), new GeoPoint(lineFromParent.get(4).doubleValue(), lineFromParent.get(5).doubleValue()))) {
                         Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                         return false;
                     }

@@ -49,8 +49,7 @@ public class PhotoManager {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(activity, " de.uni_stuttgart.informatik.sopra.fieldManager.Util.fileprovider"
-                        ,
-                        photoFile);
+                        , photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 fragment.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 return photoFile.getAbsolutePath();

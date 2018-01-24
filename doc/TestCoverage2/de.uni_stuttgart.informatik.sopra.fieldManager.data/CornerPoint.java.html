@@ -2,11 +2,8 @@
 
 import java.io.Serializable;
 
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.MathUtility;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.UTMCoordinate;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.Vector;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.WGS84Coordinate;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.WGS84UTMConverter;
 
 /**
  * Created by Christian on 13.11.2017.
@@ -31,98 +28,34 @@ public class CornerPoint implements Serializable {
      * @param latitude
      * @param logitude
      */
-<span class="fc" id="L34">    public CornerPoint(double latitude, double logitude) {</span>
-<span class="pc bpc" id="L35" title="2 of 4 branches missed.">        if (latitude != Double.NaN &amp;&amp; logitude != Double.NaN) {</span>
-<span class="fc" id="L36">            wgs = new WGS84Coordinate(latitude, logitude);</span>
-<span class="fc" id="L37">            utm = WGS84UTMConverter.convert(wgs);</span>
+<span class="fc" id="L31">    public CornerPoint(double latitude, double logitude) {</span>
+<span class="pc bpc" id="L32" title="2 of 4 branches missed.">        if (latitude != Double.NaN &amp;&amp; logitude != Double.NaN) {</span>
+<span class="fc" id="L33">            wgs = new WGS84Coordinate(latitude, logitude);</span>
         }
-<span class="fc" id="L39">    }</span>
-
-    /**
-     * calculate the angle of two corner points
-     * @param before the Cornerpoint infront of this Cornerpoint
-     * @param after the Cornerpoint behind of this Cornerpoint
-     */
-    public void calculateAngle(CornerPoint before, CornerPoint after) {
-
-<span class="fc" id="L48">        UTMCoordinate utmBefore = before.getUtm();</span>
-<span class="fc" id="L49">        UTMCoordinate utmAfter = after.getUtm();</span>
-        Vector v_before;
-        Vector v_after;
-<span class="fc" id="L52">        double centralMerdian = 3.0 + 6.0 * (this.utm.getZone() - 1.0) - 180.0;</span>
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if(utm.getZone() == utmBefore.getZone()) {</span>
-<span class="fc" id="L54">            v_before = new Vector((utmBefore.getEasting()- utm.getEasting()), (utmBefore.getNorthing()-utm.getNorthing()));</span>
-        } else {
-            double merdian;
-<span class="nc bnc" id="L57" title="All 2 branches missed.">            if(utm.getZone() &lt; utmBefore.getZone()) {</span>
-<span class="nc" id="L58">                merdian = centralMerdian + 3;</span>
-            } else {
-<span class="nc" id="L60">                merdian = centralMerdian - 3;</span>
-            }
-<span class="nc" id="L62">            double deltaLat = before.getWGS().getLatitude() - wgs.getLatitude();</span>
-<span class="nc" id="L63">            double deltaLong = before.getWGS().getLongitude() - wgs.getLongitude();</span>
-
-<span class="nc" id="L65">            double lat = deltaLat/deltaLong * (merdian - wgs.getLongitude()) + wgs.getLatitude();</span>
-
-<span class="nc" id="L67">            UTMCoordinate utm = WGS84UTMConverter.getUtmCoordinateByMeridian(MathUtility.degToRad(lat),MathUtility.degToRad(merdian), centralMerdian);</span>
-<span class="nc" id="L68">            v_before = new Vector((utm.getEasting()- this.utm.getEasting()), (utm.getNorthing()- this.utm.getNorthing()));</span>
-        }
-
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if(utm.getZone() == utmAfter.getZone()) {</span>
-<span class="fc" id="L72">            v_after = new Vector((utmAfter.getEasting()- utm.getEasting()), (utmAfter.getNorthing()-utm.getNorthing()));</span>
-        } else {
-            double merdian;
-<span class="nc bnc" id="L75" title="All 2 branches missed.">            if(utm.getZone() &lt; utmAfter.getZone()) {</span>
-<span class="nc" id="L76">                merdian = centralMerdian + 3;</span>
-            } else {
-<span class="nc" id="L78">                merdian = centralMerdian - 3;</span>
-            }
-<span class="nc" id="L80">            double deltaLat = after.getWGS().getLatitude() - wgs.getLatitude();</span>
-<span class="nc" id="L81">            double deltaLong = after.getWGS().getLongitude() - wgs.getLongitude();</span>
-
-<span class="nc" id="L83">            double lat = deltaLat/deltaLong * (merdian - wgs.getLongitude()) + wgs.getLatitude();</span>
-
-<span class="nc" id="L85">            UTMCoordinate utm = WGS84UTMConverter.getUtmCoordinateByMeridian(MathUtility.degToRad(lat),MathUtility.degToRad(merdian), centralMerdian);</span>
-<span class="nc" id="L86">            v_after = new Vector((utm.getEasting()- this.utm.getEasting()), (utm.getNorthing()- this.utm.getNorthing()));</span>
-        }
-
-
-<span class="fc bfc" id="L90" title="All 4 branches covered.">        if(v_before.getLength() == 0 || v_after.getLength() == 0) {</span>
-<span class="fc" id="L91">            angle = 0;</span>
-<span class="fc" id="L92">            return;</span>
-        }
-        //cos a = (v_a x v_b )/ (|v_a| * |v_b)|
-<span class="fc" id="L95">        angle = Math.acos(MathUtility.scalarProduct(v_before,v_after)/(v_before.getLength() * v_after.getLength()));</span>
-
-<span class="fc" id="L97">        Vector rotated = v_after.rotate(angle);</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if(rotated.equalDirection(v_before)) {</span>
-<span class="fc" id="L99">            angle = 2*Math.PI - angle;</span>
-        }
-
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L35">    }</span>
 
     public WGS84Coordinate getWGS() {
-<span class="fc" id="L105">        return wgs;</span>
+<span class="fc" id="L38">        return wgs;</span>
     }
 
     public UTMCoordinate getUtm() {
-<span class="fc" id="L109">        return utm;</span>
+<span class="nc" id="L42">        return utm;</span>
     }
 
     public double getAngle() {
-<span class="fc" id="L113">        return angle;</span>
+<span class="nc" id="L46">        return angle;</span>
     }
 
     public void setUtm(UTMCoordinate utm) {
-<span class="fc" id="L117">        this.utm = utm;</span>
-<span class="fc" id="L118">    }</span>
+<span class="nc" id="L50">        this.utm = utm;</span>
+<span class="nc" id="L51">    }</span>
 
     @Override
     public boolean equals(Object o ) {
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (o instanceof CornerPoint) {</span>
-<span class="fc" id="L123">            return utm.equals( ((CornerPoint) o).getUtm());</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (o instanceof CornerPoint) {</span>
+<span class="nc" id="L56">            return utm.equals( ((CornerPoint) o).getUtm());</span>
         } else {
-<span class="fc" id="L125">            return false;</span>
+<span class="nc" id="L58">            return false;</span>
         }
     }
 

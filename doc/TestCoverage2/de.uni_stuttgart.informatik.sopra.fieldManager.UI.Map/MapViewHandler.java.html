@@ -203,25 +203,25 @@ public class MapViewHandler implements MapContract.MapHandler {
      * @param lon
      */
     public void setCurrLocMarker(double lat, double lon) {
-<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (map == null) {</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if (map == null) {</span>
 <span class="nc" id="L207">            return;</span>
         }
-<span class="nc" id="L209">        map.getOverlayManager().remove(currentLocMarker);</span>
-<span class="nc" id="L210">        currentLocMarker = new Marker(map);</span>
-<span class="nc" id="L211">        currentLocMarker.setPosition(new GeoPoint(lat, lon));</span>
+<span class="fc" id="L209">        map.getOverlayManager().remove(currentLocMarker);</span>
+<span class="fc" id="L210">        currentLocMarker = new Marker(map);</span>
+<span class="fc" id="L211">        currentLocMarker.setPosition(new GeoPoint(lat, lon));</span>
 
-<span class="nc" id="L213">        currentLocMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {</span>
+<span class="fc" id="L213">        currentLocMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {</span>
             @Override
             public boolean onMarkerClick(Marker marker, MapView mapView) {
                 //do nothing
 <span class="nc" id="L217">                return false;</span>
             }
         });
-<span class="nc" id="L220">        Drawable dr = context.getResources().getDrawable(R.drawable.ic_person_pin);</span>
+<span class="fc" id="L220">        Drawable dr = context.getResources().getDrawable(R.drawable.ic_person_pin);</span>
 
-<span class="nc" id="L222">        currentLocMarker.setIcon(dr);</span>
-<span class="nc" id="L223">        map.getOverlayManager().add(currentLocMarker);</span>
-<span class="nc" id="L224">    }</span>
+<span class="fc" id="L222">        currentLocMarker.setIcon(dr);</span>
+<span class="fc" id="L223">        map.getOverlayManager().add(currentLocMarker);</span>
+<span class="fc" id="L224">    }</span>
 
     public void dropMarker(double lat, double lon) {
 <span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (map == null) return;</span>
@@ -274,7 +274,7 @@ public class MapViewHandler implements MapContract.MapHandler {
 <span class="fc" id="L274">    }</span>
 
     public void reload() {
-<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        if (map != null) {</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (map != null) {</span>
 <span class="fc" id="L278">            reloadWithData(mDataManager.getAllFields());</span>
         }
 <span class="fc" id="L280">    }</span>
@@ -298,8 +298,8 @@ public class MapViewHandler implements MapContract.MapHandler {
     }
 
     public void requestPermissions(String[] strings, int i) {
-<span class="nc" id="L301">        mMapFragment.requestPermissions(strings, i);</span>
-<span class="nc" id="L302">    }</span>
+<span class="fc" id="L301">        mMapFragment.requestPermissions(strings, i);</span>
+<span class="fc" id="L302">    }</span>
 
     /**
      * Save the Map Center point to shared preference

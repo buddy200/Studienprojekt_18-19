@@ -8,6 +8,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import de.uni_stuttgart.informatik.sopra.fieldManager.AddFieldActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
@@ -25,11 +26,11 @@ public class IntersectionCalculator {
     private ArrayList&lt;GeoPoint&gt; points;
     private Vector&lt;Double&gt; line;
 
-<span class="fc" id="L28">    public IntersectionCalculator(Context context, ArrayList&lt;GeoPoint&gt; points, ArrayList&lt;Vector&lt;Double&gt;&gt; linesFromAgrarianField) {</span>
-<span class="fc" id="L29">        this.linesFromAgrarianField = linesFromAgrarianField;</span>
-<span class="fc" id="L30">        this.context = context;</span>
-<span class="fc" id="L31">        this.points = points;</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc" id="L29">    public IntersectionCalculator(Context context, ArrayList&lt;GeoPoint&gt; points, ArrayList&lt;Vector&lt;Double&gt;&gt; linesFromAgrarianField) {</span>
+<span class="fc" id="L30">        this.linesFromAgrarianField = linesFromAgrarianField;</span>
+<span class="fc" id="L31">        this.context = context;</span>
+<span class="fc" id="L32">        this.points = points;</span>
+<span class="fc" id="L33">    }</span>
 
     /**
      * This method calculate lines from the second last und last point and save this line in the linesFromAgrarianField Array list
@@ -38,29 +39,33 @@ public class IntersectionCalculator {
      */
     public void calculateLine(boolean isAgrarianField) {
         //set the two points for the line and checks if enough points available
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (points.size() &gt; 0) {</span>
-<span class="fc" id="L42">            currentPoint = points.get(points.size() - 1);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (points.size() &gt; 0) {</span>
+<span class="fc" id="L43">            currentPoint = points.get(points.size() - 1);</span>
         } else {
-<span class="nc" id="L44">            currentPoint = null;</span>
+<span class="nc" id="L45">            currentPoint = null;</span>
         }
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (points.size() &gt; 1) {</span>
-<span class="fc" id="L47">            lastPoint = points.get(points.size() - 2);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (points.size() &gt; 1) {</span>
+<span class="fc" id="L48">            lastPoint = points.get(points.size() - 2);</span>
         } else {
-<span class="fc" id="L49">            lastPoint = null;</span>
+<span class="fc" id="L50">            lastPoint = null;</span>
         }
-<span class="fc" id="L51">        line = new Vector&lt;&gt;();</span>
+<span class="fc" id="L52">        line = new Vector&lt;&gt;();</span>
 
         //calculates the line form second last to the last point
-<span class="pc bpc" id="L54" title="1 of 4 branches missed.">        if (lastPoint != null &amp;&amp; currentPoint != null) {</span>
-<span class="fc" id="L55">            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));</span>
-<span class="fc" id="L56">            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">        if (lastPoint != null &amp;&amp; currentPoint != null) {</span>
+<span class="fc" id="L56">            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));</span>
+<span class="fc" id="L57">            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());</span>
 
         }
         //the line must only saved if the new field a agrarian field
-<span class="pc bpc" id="L60" title="1 of 6 branches missed.">        if (isAgrarianField &amp;&amp; line != null &amp;&amp; line.size() != 0) {</span>
-<span class="fc" id="L61">            linesFromAgrarianField.add(line);</span>
+<span class="pc bpc" id="L61" title="1 of 6 branches missed.">        if (isAgrarianField &amp;&amp; line != null &amp;&amp; line.size() != 0) {</span>
+<span class="fc" id="L62">            line.add(2, lastPoint.getLatitude());</span>
+<span class="fc" id="L63">            line.add(3, lastPoint.getLongitude());</span>
+<span class="fc" id="L64">            line.add(4, currentPoint.getLatitude());</span>
+<span class="fc" id="L65">            line.add(5, currentPoint.getLongitude());</span>
+<span class="fc" id="L66">            linesFromAgrarianField.add(line);</span>
         }
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * this method calculate the intersection between the new line from the damage field and all lines form the parent field
@@ -70,23 +75,23 @@ public class IntersectionCalculator {
      */
     public boolean calcIntersection(Field parentField) {
 
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (parentField instanceof AgrarianField) {</span>
-<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (line.size() != 0) {</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (parentField instanceof AgrarianField) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (line.size() != 0) {</span>
                 //this calculates the intersection
-<span class="fc bfc" id="L76" title="All 2 branches covered.">                for (Vector&lt;Double&gt; vec : ((AgrarianField) parentField).getLinesFormField()) {</span>
-<span class="fc" id="L77">                    Vector&lt;Double&gt; intersection = new Vector&lt;&gt;();</span>
-<span class="fc" id="L78">                    intersection.add((line.get(1) - vec.get(1)) / (vec.get(0) - line.get(0)));</span>
-<span class="fc" id="L79">                    intersection.add(line.get(0) * intersection.get(0) + line.get(1));</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                for (Vector&lt;Double&gt; vec : ((AgrarianField) parentField).getLinesFormField()) {</span>
+<span class="fc" id="L82">                    Vector&lt;Double&gt; intersection = new Vector&lt;&gt;();</span>
+<span class="fc" id="L83">                    intersection.add((line.get(1) - vec.get(1)) / (vec.get(0) - line.get(0)));</span>
+<span class="fc" id="L84">                    intersection.add(line.get(0) * intersection.get(0) + line.get(1));</span>
 
                     //check if the intersection point is inside the damage field
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                    if (boundaryCheck(intersection)) {</span>
-<span class="nc" id="L83">                        Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();</span>
-<span class="nc" id="L84">                        return false;</span>
+<span class="pc bpc" id="L87" title="3 of 4 branches missed.">                    if (boundaryCheck(intersection, lastPoint, currentPoint) &amp;&amp; boundaryCheck(intersection, new GeoPoint(vec.get(2).doubleValue(), vec.get(3).doubleValue()), new GeoPoint(vec.get(4).doubleValue(), vec.get(5).doubleValue()))) {</span>
+<span class="nc" id="L88">                        Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L89">                        return false;</span>
                     }
-<span class="fc" id="L86">                }</span>
+<span class="fc" id="L91">                }</span>
             }
         }
-<span class="fc" id="L89">        return true;</span>
+<span class="fc" id="L94">        return true;</span>
     }
 
     /**
@@ -95,30 +100,97 @@ public class IntersectionCalculator {
      * @param intersection
      * @return
      */
-    private boolean boundaryCheck(Vector&lt;Double&gt; intersection) {
-<span class="pc bpc" id="L99" title="1 of 4 branches missed.">        return ((lastPoint.getLatitude() &lt;= intersection.get(0).doubleValue() &amp;&amp; intersection.get(0).doubleValue() &lt;= currentPoint.getLatitude())</span>
-<span class="pc bpc" id="L100" title="1 of 4 branches missed.">                || (currentPoint.getLatitude() &lt;= intersection.get(0).doubleValue() &amp;&amp; intersection.get(0).doubleValue() &lt;= lastPoint.getLatitude()))</span>
-<span class="pc bnc" id="L101" title="All 4 branches missed.">                &amp;&amp; ((lastPoint.getLongitude()) &lt;= intersection.get(1).doubleValue() &amp;&amp; intersection.get(1).doubleValue() &lt;= currentPoint.getLongitude())</span>
-<span class="pc bpc" id="L102" title="1 of 4 branches missed.">                || (currentPoint.getLongitude() &lt;= intersection.get(1).doubleValue() &amp;&amp; intersection.get(1).doubleValue() &lt;= lastPoint.getLongitude());</span>
-    }
+    private boolean boundaryCheck(Vector&lt;Double&gt; intersection, GeoPoint lastPoint, GeoPoint currentPoint) {
 
+
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">        if (lastPoint.getLatitude() &lt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &lt;= currentPoint.getLongitude()) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (((intersection.get(0).doubleValue() &gt;= lastPoint.getLatitude()</span>
+<span class="pc bpc" id="L108" title="3 of 4 branches missed.">                    &amp;&amp; intersection.get(0).doubleValue() &lt;= currentPoint.getLatitude()) &amp;&amp; (intersection.get(1).doubleValue() &gt;= lastPoint.getLongitude()</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                    &amp;&amp; intersection.get(1).doubleValue() &lt;= currentPoint.getLongitude()))) {</span>
+<span class="nc" id="L110">                return true;</span>
+            }
+        }
+
+<span class="fc bfc" id="L114" title="All 4 branches covered.">        if (lastPoint.getLatitude() &gt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &gt;= currentPoint.getLongitude()) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if (((intersection.get(0).doubleValue() &gt;= currentPoint.getLatitude()</span>
+<span class="pc bpc" id="L116" title="3 of 4 branches missed.">                    &amp;&amp; intersection.get(0).doubleValue() &lt;= lastPoint.getLatitude()) &amp;&amp; (intersection.get(1).doubleValue() &gt;= currentPoint.getLongitude()</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                    &amp;&amp; intersection.get(1).doubleValue() &lt;= lastPoint.getLongitude()))) {</span>
+<span class="nc" id="L118">                return true;</span>
+            }
+        }
+<span class="fc bfc" id="L121" title="All 4 branches covered.">        if (lastPoint.getLatitude() &gt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &lt;= currentPoint.getLongitude()) {</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if (((intersection.get(0).doubleValue() &gt;= currentPoint.getLatitude()</span>
+<span class="nc bnc" id="L123" title="All 4 branches missed.">                    &amp;&amp; intersection.get(0).doubleValue() &lt;= lastPoint.getLatitude()) &amp;&amp; (intersection.get(1).doubleValue() &gt;= lastPoint.getLongitude()</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                    &amp;&amp; intersection.get(1).doubleValue() &lt;= currentPoint.getLongitude()))) {</span>
+<span class="nc" id="L125">                return true;</span>
+            }
+        }
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">        if (lastPoint.getLatitude() &lt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &gt;= currentPoint.getLongitude()) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (((intersection.get(0).doubleValue() &gt;= lastPoint.getLatitude()</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    &amp;&amp; intersection.get(0).doubleValue() &lt;= currentPoint.getLatitude()) &amp;&amp;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                    (intersection.get(1).doubleValue() &gt;= currentPoint.getLongitude()</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                            &amp;&amp; intersection.get(1).doubleValue() &lt;= lastPoint.getLongitude()))) {</span>
+<span class="nc" id="L133">                return true;</span>
+            }
+        }
+<span class="fc" id="L136">        return false;</span>
+    }
+/*
+    private boolean boudnryCheck2(Vector&lt;Double&gt; intersection) {
+        if (lastPoint.getLatitude() &lt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &lt;= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() &gt;= lastPoint.getLatitude()
+                    &amp;&amp; intersection.get(0).doubleValue() &lt;= currentPoint.getLatitude()) &amp;&amp; (intersection.get(1).doubleValue() &gt;= lastPoint.getLongitude()
+                    &amp;&amp; intersection.get(1).doubleValue() &lt;= currentPoint.getLongitude()))) {
+                return true;
+            }
+        }
+
+        if (lastPoint.getLatitude() &gt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &gt;= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() &gt;= currentPoint.getLatitude()
+                    &amp;&amp; intersection.get(0).doubleValue() &lt;= lastPoint.getLatitude()) &amp;&amp; (intersection.get(1).doubleValue() &gt;= currentPoint.getLongitude()
+                    &amp;&amp; intersection.get(1).doubleValue() &lt;= lastPoint.getLongitude()))) {
+                return true;
+            }
+        }
+        if (lastPoint.getLatitude() &gt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &lt;= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() &gt;= currentPoint.getLatitude()
+                    &amp;&amp; intersection.get(0).doubleValue() &lt;= lastPoint.getLatitude()) &amp;&amp; (intersection.get(1).doubleValue() &gt;= lastPoint.getLongitude()
+                    &amp;&amp; intersection.get(1).doubleValue() &lt;= currentPoint.getLongitude()))) {
+                return true;
+            }
+        }
+        if (lastPoint.getLatitude() &lt;= currentPoint.getLatitude() &amp;&amp; lastPoint.getLongitude() &gt;= currentPoint.getLongitude()) {
+            if (((intersection.get(0).doubleValue() &gt;= lastPoint.getLatitude()
+                    &amp;&amp; intersection.get(0).doubleValue() &lt;= currentPoint.getLatitude()) &amp;&amp;
+                    (intersection.get(1).doubleValue() &gt;= currentPoint.getLongitude()
+                            &amp;&amp; intersection.get(1).doubleValue() &lt;= lastPoint.getLongitude()))) {
+                return true;
+            }
+        }
+        return false;
+    }
+*/
     /**
      * this method calculate the last line from the new agrarian field from the end point to the start point
      *
      * @param field
      */
     public void calcLastLine(Field field) {
-<span class="fc" id="L111">        Vector&lt;Double&gt; line = new Vector&lt;&gt;();</span>
+<span class="fc" id="L179">        Vector&lt;Double&gt; line = new Vector&lt;&gt;();</span>
         GeoPoint startPoint;
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (points.get(0) != null) {</span>
-<span class="fc" id="L114">            lastPoint = points.get(points.size() - 1);</span>
-<span class="fc" id="L115">            startPoint = points.get(0);</span>
-<span class="fc" id="L116">            currentPoint = startPoint;</span>
-<span class="fc" id="L117">            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));</span>
-<span class="fc" id="L118">            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());</span>
-<span class="fc" id="L119">            linesFromAgrarianField.add(line);</span>
-<span class="fc" id="L120">            ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (points.get(0) != null) {</span>
+<span class="fc" id="L182">            lastPoint = points.get(points.size() - 1);</span>
+<span class="fc" id="L183">            startPoint = points.get(0);</span>
+<span class="fc" id="L184">            currentPoint = startPoint;</span>
+<span class="fc" id="L185">            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));</span>
+<span class="fc" id="L186">            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());</span>
+<span class="fc" id="L187">            line.add(2, lastPoint.getLatitude());</span>
+<span class="fc" id="L188">            line.add(3, lastPoint.getLongitude());</span>
+<span class="fc" id="L189">            line.add(4, currentPoint.getLatitude());</span>
+<span class="fc" id="L190">            line.add(5, currentPoint.getLongitude());</span>
+<span class="fc" id="L191">            linesFromAgrarianField.add(line);</span>
+<span class="fc" id="L192">            ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);</span>
         }
-<span class="fc" id="L122">    }</span>
+<span class="fc" id="L194">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span>Generated by the Android Gradle plugin 3.0.1</div></body></html>

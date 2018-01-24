@@ -40,29 +40,29 @@ public class MYLocationListener implements LocationListener {
 <span class="fc" id="L40">        this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);</span>
         try {
 <span class="fc" id="L42">            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);</span>
-<span class="pc bpc" id="L43" title="2 of 4 branches missed.">            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {</span>
+<span class="pc bpc" id="L43" title="3 of 4 branches missed.">            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {</span>
                 //Check Permission for fine location
-<span class="nc bnc" id="L45" title="All 2 branches missed.">                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)</span>
                         != PackageManager.PERMISSION_GRANTED) {
-<span class="nc" id="L47">                    mapHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);</span>
+<span class="fc" id="L47">                    mapHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);</span>
                 }
-<span class="nc" id="L49">                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);</span>
-<span class="nc" id="L50">                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);</span>
+<span class="fc" id="L49">                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);</span>
+<span class="fc" id="L50">                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);</span>
             }
-<span class="nc" id="L52">        } catch (Exception e) {</span>
-<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="fc" id="L52">        } catch (Exception e) {</span>
+<span class="fc" id="L53">            e.printStackTrace();</span>
 <span class="fc" id="L54">        }</span>
 <span class="fc" id="L55">    }</span>
 
     @Override
     public void onLocationChanged(Location location) {
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (location != null) {</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">            if (follow) {</span>
-<span class="nc" id="L61">                mMapViewHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (location != null) {</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">            if (follow) {</span>
+<span class="fc" id="L61">                mMapViewHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());</span>
             }
-<span class="nc" id="L63">            mMapViewHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());</span>
+<span class="fc" id="L63">            mMapViewHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());</span>
         }
-<span class="nc" id="L65">    }</span>
+<span class="fc" id="L65">    }</span>
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -90,19 +90,19 @@ public class MYLocationListener implements LocationListener {
 <span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (locationManager != null) {</span>
             }
             //Check Permission for fine location
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)</span>
                     != PackageManager.PERMISSION_GRANTED) {
-<span class="nc" id="L95">                mMapViewHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);</span>
+<span class="fc" id="L95">                mMapViewHandler.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);</span>
             }
-<span class="pc bpc" id="L97" title="2 of 4 branches missed.">            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {</span>
-<span class="nc" id="L98">                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);</span>
+<span class="pc bpc" id="L97" title="3 of 4 branches missed.">            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {</span>
+<span class="fc" id="L98">                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);</span>
                 // if no GPS signal available, get location from Network Location
-<span class="nc bnc" id="L100" title="All 2 branches missed.">                if (location == null) {</span>
-<span class="nc" id="L101">                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">                if (location == null) {</span>
+<span class="fc" id="L101">                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);</span>
                 }
             }
-<span class="nc" id="L104">        } catch (Exception e) {</span>
-<span class="nc" id="L105">            e.printStackTrace();</span>
+<span class="fc" id="L104">        } catch (Exception e) {</span>
+<span class="fc" id="L105">            e.printStackTrace();</span>
 <span class="fc" id="L106">        }</span>
 <span class="fc" id="L107">        return location;</span>
     }

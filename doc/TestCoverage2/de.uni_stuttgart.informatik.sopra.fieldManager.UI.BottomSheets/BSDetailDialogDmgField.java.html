@@ -111,7 +111,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 <span class="fc" id="L111">        name = view.findViewById(R.id.field_detail_name);</span>
 <span class="fc" id="L112">        edit = view.findViewById(R.id.finish_edit_button_agr);</span>
 <span class="fc" id="L113">        edit.setOnClickListener(this);</span>
-<span class="fc" id="L114">        navButton = view.findViewById(R.id.button_navigate_google_maps);</span>
+<span class="fc" id="L114">        navButton = view.findViewById(R.id.pick_form_gallery);</span>
 <span class="fc" id="L115">        navButton.setOnClickListener(this);</span>
 
 <span class="fc" id="L117">        progressState = view.findViewById(R.id.progress_state);</span>
@@ -130,15 +130,15 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
     @Override
     public void fillData(Field mField) {
 <span class="fc" id="L132">        this.mField = (DamageField) mField;</span>
-<span class="fc" id="L133">        name.setText(getResources().getString(R.string.dialogItem_Name) + &quot; &quot; + this.mField.getName());</span>
+<span class="fc" id="L133">        name.setText(this.mField.getName());</span>
 <span class="fc" id="L134">        edit.setImageResource(R.drawable.ic_mode_edit_black_24px);</span>
-<span class="fc" id="L135">        state.setText(getResources().getString(R.string.dialogItem_Type) + &quot; &quot; + this.mField.getType().toString());</span>
+<span class="fc" id="L135">        state.setText(this.mField.getType().toString());</span>
 <span class="fc" id="L136">        state.setTextColor(this.mField.getColor());</span>
-<span class="fc" id="L137">        size.setText(getResources().getString(R.string.dialogItem_Size) + &quot; &quot; + this.mField.getConvertedSize());</span>
-<span class="fc" id="L138">        date.setText(getResources().getString(R.string.dialogItem_Date) + &quot; &quot; + (this.mField.getParsedDate()));</span>
-<span class="fc" id="L139">        progressState.setText(getResources().getString(R.string.dialogitem_progress_state) + &quot; &quot; + this.mField.getProgressStatus().toString());</span>
-<span class="fc" id="L140">        ownerOrEvaluator.setText(getResources().getString(R.string.dialogItem_Owner) + &quot; &quot; + (this.mField.getEvaluator()));</span>
-<span class="fc" id="L141">        estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + &quot; &quot; + String.valueOf(this.mField.getInsuranceMoney()));</span>
+<span class="fc" id="L137">        size.setText(this.mField.getConvertedSize());</span>
+<span class="fc" id="L138">        date.setText(this.mField.getParsedDate());</span>
+<span class="fc" id="L139">        progressState.setText( this.mField.getProgressStatus().toString());</span>
+<span class="fc" id="L140">        ownerOrEvaluator.setText(this.mField.getEvaluator());</span>
+<span class="fc" id="L141">        estimatedCosts.setText( String.valueOf(this.mField.getInsuranceMoney()));</span>
 
 <span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if ((this.mField).getPaths() != null) {</span>
 <span class="fc" id="L144">            GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);</span>
@@ -163,7 +163,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 <span class="fc" id="L163">                    mListener.onFragmentMessage(TAG, &quot;startEdit&quot;, mPresenter.getVisibleField());</span>
 <span class="fc" id="L164">                    this.dismiss();</span>
 <span class="fc" id="L165">                    break;</span>
-                case R.id.button_navigate_google_maps:
+                case R.id.pick_form_gallery:
 <span class="nc" id="L167">                    callGoogleMapsIntent();</span>
                     break;
             }

@@ -105,7 +105,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 <span class="fc" id="L105">        edit.setOnClickListener(this);</span>
 <span class="fc" id="L106">        addDmg = view.findViewById(R.id.add_damageField_button);</span>
 <span class="fc" id="L107">        addDmg.setOnClickListener(this);</span>
-<span class="fc" id="L108">        navButton = view.findViewById(R.id.button_navigate_google_maps);</span>
+<span class="fc" id="L108">        navButton = view.findViewById(R.id.pick_form_gallery);</span>
 <span class="fc" id="L109">        navButton.setOnClickListener(this);</span>
 
 <span class="fc" id="L111">        size = view.findViewById(R.id.field_detail_size);</span>
@@ -123,13 +123,13 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
     @Override
     public void fillData(Field mField) {
 <span class="fc" id="L125">        this.mField = (AgrarianField) mField;</span>
-<span class="fc" id="L126">        name.setText(getResources().getString(R.string.dialogItem_Name) + &quot; &quot; + this.mField.getName() + &quot;&quot;);</span>
-<span class="fc" id="L127">        county.setText(getResources().getString(R.string.dialogItem_Location) + &quot; &quot; + this.mField.getCounty());</span>
+<span class="fc" id="L126">        name.setText(this.mField.getName());</span>
+<span class="fc" id="L127">        county.setText(this.mField.getCounty());</span>
 <span class="fc" id="L128">        edit.setImageResource(R.drawable.ic_mode_edit_black_24px);</span>
-<span class="fc" id="L129">        state.setText(getResources().getString(R.string.dialogItem_Type) + &quot; &quot; + this.mField.getType().toString());</span>
+<span class="fc" id="L129">        state.setText(this.mField.getType().toString());</span>
 <span class="fc" id="L130">        state.setTextColor(mField.getColor());</span>
-<span class="fc" id="L131">        size.setText(getResources().getString(R.string.dialogItem_Size) + &quot; &quot; + this.mField.getConvertedSize());</span>
-<span class="fc" id="L132">        owner.setText(getResources().getString(R.string.detailItem_evaluator) + &quot; &quot; + this.mField.getOwner());</span>
+<span class="fc" id="L131">        size.setText(this.mField.getConvertedSize());</span>
+<span class="fc" id="L132">        owner.setText(this.mField.getOwner());</span>
 <span class="fc" id="L133">    }</span>
 
     @Override
@@ -155,7 +155,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 <span class="fc" id="L155">                    mListener.onFragmentMessage(TAG, &quot;addDmgField&quot;, mPresenter.getVisibleField());</span>
 <span class="fc" id="L156">                    dismiss();</span>
 <span class="fc" id="L157">                    break;</span>
-                case R.id.button_navigate_google_maps:
+                case R.id.pick_form_gallery:
 <span class="nc" id="L159">                    callGoogleMapsIntent();</span>
                     break;
             }

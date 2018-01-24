@@ -101,12 +101,12 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
 <span class="fc" id="L101">        edit.putString(getContext().getString(R.string.pref_username), username);</span>
 
 <span class="fc" id="L103">        Log.e(TAG, &quot;checked radio button: &quot; + radioButtonId);</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        if(radioButtonId == RB_ADMIN_ID){</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if(radioButtonId == RB_ADMIN_ID){</span>
 <span class="fc" id="L105">            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);</span>
 <span class="fc" id="L106">            GlobalConstants.isAdmin = true;</span>
         }else {
-<span class="fc" id="L108">            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);</span>
-<span class="fc" id="L109">            GlobalConstants.isAdmin = false;</span>
+<span class="nc" id="L108">            edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.FALSE);</span>
+<span class="nc" id="L109">            GlobalConstants.isAdmin = false;</span>
         }
 
         //password not saved yet.. would be unsave

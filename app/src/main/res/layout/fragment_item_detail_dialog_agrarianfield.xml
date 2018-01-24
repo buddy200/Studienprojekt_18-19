@@ -35,52 +35,118 @@
             android:id="@+id/field_detail_name"
             android:text="-name-"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/spinnerPanel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_region"
-            android:text="-region-"/>
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/text_type"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Location" />
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/field_detail_region"
+                android:text="-region-"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_state"
-            android:text="-state-"/>
+            android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_type2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_spacing"
+                    android:text="@string/dialogItem_Type" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/list_item_spacing_half"
+                    android:paddingLeft="@dimen/list_item_spacing"
+                    android:paddingRight="@dimen/list_item_spacing"
+                    android:paddingTop="@dimen/list_item_spacing_half"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:id="@+id/field_detail_state"
+                    android:text="-state-"/>
+
+        </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_size"
-            android:text="-size-"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/text_type3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/field_detail_size"
+                android:text="-size-"/>
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_policyholder"
-            android:text="-name policyholer-"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_type4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Owner" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/field_detail_policyholder"
+                android:text="-name policyholer-"/>
+        </LinearLayout>
 
 
         <RelativeLayout

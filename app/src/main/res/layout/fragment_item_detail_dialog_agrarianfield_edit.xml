@@ -31,47 +31,60 @@
             android:id="@+id/heading"
             android:text="-name-"/>
 
-        <RelativeLayout
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/namePanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/field_detail_name_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/name_textView"
-                android:imeOptions="actionNext"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:hint="@string/field_default_name"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                 />
-
             <TextView
                 android:id="@+id/name_textView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/list_item_spacing"
                 android:text="@string/dialogItem_Name" />
 
-        </RelativeLayout>
 
-        <RelativeLayout
+            <EditText
+                android:id="@+id/field_detail_name_edit"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:hint="@string/field_default_name"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/regionPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/region_textView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Location" />
+
             <EditText
                 android:id="@+id/field_detail_region_edit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/region_textView"
                 android:hint="@string/county_default_name"
@@ -80,26 +93,10 @@
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half" />
 
-        <TextView
-            android:id="@+id/region_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/list_item_spacing"
-            android:text="@string/dialogItem_Location" />
 
-    </RelativeLayout>
+        </LinearLayout>
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/spinnerPanel"
             android:layout_width="match_parent"
@@ -108,37 +105,35 @@
 
             <TextView
                 android:id="@+id/text_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
                 android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_spacing"
                 android:text="@string/dialogItem_Type" />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:measureAllChildren="false"
-            android:layout_toEndOf="@+id/text_type">
-
-
-
-            <Spinner
-                android:id="@+id/field_detail_state_spinner"
-                android:layout_width="wrap_content"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
+                android:measureAllChildren="false"
+                android:layout_toEndOf="@+id/text_type">
 
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="-state-"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                <Spinner
+                    android:id="@+id/field_detail_state_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/list_item_spacing_half"
+                    android:paddingLeft="@dimen/list_item_spacing"
+                    android:paddingRight="@dimen/list_item_spacing"
+                    android:paddingTop="@dimen/list_item_spacing_half"
+                    android:text="-state-"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
+            </LinearLayout>
         </LinearLayout>
-        </RelativeLayout>
 
 
-        <RelativeLayout
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/sizePanel"
             android:layout_width="match_parent"
@@ -146,21 +141,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/field_detail_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-
-                android:layout_toEndOf="@+id/textView"
-                android:paddingBottom="@dimen/list_item_spacing_half"
-                android:paddingLeft="@dimen/list_item_spacing"
-                android:paddingRight="@dimen/list_item_spacing"
-                android:paddingTop="@dimen/list_item_spacing_half"
-                android:text="-size-" />
-
-            <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/field_detail_size"
                 android:layout_alignBottom="@+id/field_detail_size"
@@ -168,19 +151,42 @@
                 android:layout_marginStart="@dimen/list_item_spacing"
                 android:text="@string/dialogItem_Size" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/field_detail_size"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/textView"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:text="-size-" />
 
-        <RelativeLayout
+        </LinearLayout>
+
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/policyholderPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/policyholder_textView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Owner" />
 
             <EditText
                 android:id="@+id/field_detail_policyholder_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:hint="@string/owner_default_name"
@@ -191,16 +197,7 @@
                 android:paddingTop="@dimen/list_item_spacing_half"
                 android:singleLine="false" />
 
-            <TextView
-                android:id="@+id/policyholder_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/dialogItem_Owner" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

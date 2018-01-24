@@ -49,15 +49,15 @@
     <string name="logout_message">Wirklich abmelden und die App schließen?</string>
     <string name="toastmsg_anotherDamageField">Fügen Sie ein weiteren Schadensfall hinzu oder gehen Sie zurück</string>
     <string name="toastmsg_anotherAgrarainField">Fügen Sie ein weiteres Feld hinzu oder gehen Sie zurück</string>
-    <string name="detailItem_estimatedpayment">Geschätzte Zahlung</string>
+    <string name="dialogItem_estimatedpayment">Zahlung</string>
     <string name="dialogItem_Location">Ort</string>
     <string name="dialogItem_Type">Typ</string>
     <string name="dialogItem_Size">Größe</string>
     <string name="dialogItem_Owner">Besitzer</string>
     <string name="dialogItem_Date">Datum</string>
-    <string name="detailItem_evaluator">Gutachter</string>
+    <string name="dialogItem_evaluator">Gutachter</string>
     <string name="dialogItem_Name">Name</string>
-    <string name="dialogitem_progress_state">Bearbeitungsstatus</string>
+    <string name="dialogitem_progress_state">Status</string>
     <string name="progress_status_sent">Verschickt</string>
     <string name="progress_status_inprogress">In Bearbeitung</string>
     <string name="progress_status_finish">Abgeschlossen</string>
@@ -79,4 +79,5 @@
     <string name="help_title_search">Drücken sie hier um zu suchen</string>
     <string name="help_desc_search">Sie können nach Feldnamen oder anderen Kategorien suchen</string>
     <string name="help_title_fab">Drücken sie hier um ein neuen Eckpunkt hinzuzufügen</string>
+    <string name="pick_date_label">ändern</string>
 </resources>

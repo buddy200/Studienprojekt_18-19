@@ -21,6 +21,9 @@
     <!-- Damage Types-->
     <color name="hailTypeDmg">#aa81bed4</color>
     <color name="snowTypeDmg">#aaa6a6a6</color>
-    <color name="alienTypeDmg">#aad304da</color>
+    <color name="insectsTypeDmg">#aad304da</color>
+    <color name="stormTypeDmg">#aa041dda</color>
+    <color name="heatTypeDmg">#aada0404</color>
+
 
 </resources>

@@ -55,6 +55,8 @@ public class FieldPolygon extends Polygon {
      */
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+        if(shadow) return;
+
         //only draw names if zoomed in to certain level
         //TODO: show name depending to polygon size and zoom level
         if (field instanceof AgrarianField) {
@@ -73,7 +75,7 @@ public class FieldPolygon extends Polygon {
                 return;
             }
             textPaint.setTextSize(40);
-            textPaint.setColor(Color.RED);
+            textPaint.setColor(Color.BLACK);
             this.setStrokeColor(Color.argb(255, 0, 0, 0));
             this.setStrokeWidth(1.0f);
         }

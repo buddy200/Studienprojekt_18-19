@@ -130,15 +130,15 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
     @Override
     public void fillData(Field mField) {
         this.mField = (DamageField) mField;
-        name.setText(getResources().getString(R.string.dialogItem_Name) + " " + this.mField.getName());
+        name.setText(this.mField.getName());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
-        state.setText(getResources().getString(R.string.dialogItem_Type) + " " + this.mField.getType().toString());
+        state.setText(this.mField.getType().toString());
         state.setTextColor(this.mField.getColor());
-        size.setText(getResources().getString(R.string.dialogItem_Size) + " " + this.mField.getConvertedSize());
-        date.setText(getResources().getString(R.string.dialogItem_Date) + " " + (this.mField.getParsedDate()));
-        progressState.setText(getResources().getString(R.string.dialogitem_progress_state) + " " + this.mField.getProgressStatus().toString());
-        ownerOrEvaluator.setText(getResources().getString(R.string.detailItem_evaluator) + " " + (this.mField.getEvaluator()));
-        estimatedCosts.setText(getResources().getString(R.string.detailItem_estimatedpayment) + " " + String.valueOf(this.mField.getInsuranceMoney()));
+        size.setText(this.mField.getConvertedSize());
+        date.setText(this.mField.getParsedDate());
+        progressState.setText( this.mField.getProgressStatus().toString());
+        ownerOrEvaluator.setText(this.mField.getEvaluator());
+        estimatedCosts.setText( String.valueOf(this.mField.getInsuranceMoney()));
 
         if ((this.mField).getPaths() != null) {
             GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);

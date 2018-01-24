@@ -49,16 +49,16 @@
     <string name="logout_message">Are you sure you want to logout and close the app?</string>
     <string name="toastmsg_anotherDamageField">Add another damage case on this field or go back.</string>
     <string name="toastmsg_anotherAgrarainField">Add another field or go back.</string>
-    <string name="detailItem_estimatedpayment">"Estimated payment "</string>
+    <string name="dialogItem_estimatedpayment">"Payment "</string>
     <string name="dialogItem_Location">Location</string>
     <string name="dialogItem_Type">Type</string>
     <string name="dialogItem_Size">Size</string>
     <string name="dialogItem_Owner">Owner</string>
     <string name="dialogItem_Date">Date</string>
-    <string name="detailItem_evaluator">Evaluator</string>
+    <string name="dialogItem_evaluator">Evaluator</string>
     <string name="dialogItem_Name">Name</string>
     <string name="no_date">no date</string>
-    <string name="dialogitem_progress_state">Progress state</string>
+    <string name="dialogitem_progress_state">Progress </string>
     <string name="progress_status_sent">Sent</string>
     <string name="progress_status_inprogress">In progress</string>
     <string name="progress_status_finish">Completed</string>
@@ -79,4 +79,8 @@
     <string name="help_desc_fab">the corner point is your current position on the map, but if you wish to add points manually just press on the map to add a new one</string>
     <string name="help_title_create_field">create your field</string>
     <string name="help_desc_create_field">if you have enough points selected on the map press here to finish up your field and fill in the necessary data</string>
+    <string name="pick_date_label">pick date</string>
+    <string name="storm">storm</string>
+    <string name="heat">heat</string>
+    <string name="insects">insects</string>
 </resources>

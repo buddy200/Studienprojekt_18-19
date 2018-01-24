@@ -2,8 +2,10 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
 
@@ -76,13 +79,26 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(new File(galleryList.get(getAdapterPosition()).getImage_path())), "image/*");
+                MainActivity.getmContext().startActivity(intent);
+            }
+        };
+
+        private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
                 generateDeleteDialog().show();
+                return true;
             }
         };
 
         public ViewHolder(View view) {
             super(view);
             if (bottomSheet instanceof BSDetailDialogEditDmgField || bottomSheet instanceof BottomSheetAddPhoto) {
+                view.setOnLongClickListener(mOnLongClickListener);
+            }else {
                 view.setOnClickListener(mOnClickListener);
             }
 

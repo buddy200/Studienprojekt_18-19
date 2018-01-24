@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,8 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
 
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
+    private static final String TAG = "GalleryAdapter";
+
     private ArrayList<PictureData> galleryList;
     private Context context;
     private BottomSheetDialogFragment bottomSheet;
@@ -55,13 +60,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public void onBindViewHolder(GalleryAdapter.ViewHolder viewHolder, int i) {
         viewHolder.title.setText(galleryList.get(i).getImage_title());
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        File imgFile = new File(galleryList.get(i).getImage_path());
-        if (imgFile.exists()) {
-            options.inSampleSize = IMAGE_SCALE;
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
-            viewHolder.img.setImageBitmap(myBitmap);
-        }
-        imgFile = null;
+        new LoadImage(viewHolder.img, galleryList.get(i).getImage_path()).execute();
     }
 
     @Override
@@ -137,4 +136,40 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             return builder;
         }
     }
+
+}
+
+class LoadImage extends AsyncTask<Object, Void, Bitmap> {
+    private static final String TAG = "GalleryAdapterAsync";
+
+
+    private ImageView imv;
+    private String path;
+
+    public LoadImage(ImageView imv, String path) {
+        this.imv = imv;
+        this.path = path;
+    }
+
+    @Override
+    protected Bitmap doInBackground(Object... params) {
+        Bitmap bitmap = null;
+        File file = new File(path);
+
+        if(file.exists()){
+            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        }
+
+        return bitmap;
+    }
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        if(result != null && imv != null){
+            imv.setVisibility(View.VISIBLE);
+            imv.setImageBitmap(result);
+        }else{
+            imv.setVisibility(View.GONE);
+        }
+    }
+
 }

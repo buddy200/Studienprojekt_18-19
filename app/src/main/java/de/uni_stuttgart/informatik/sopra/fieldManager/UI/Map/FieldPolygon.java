@@ -55,6 +55,8 @@ public class FieldPolygon extends Polygon {
      */
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+        if(shadow) return;
+
         //only draw names if zoomed in to certain level
         //TODO: show name depending to polygon size and zoom level
         if (field instanceof AgrarianField) {

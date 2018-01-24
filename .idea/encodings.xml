@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/de/uni_stuttgart/informatik/sopra/fieldManager/TriangleTest.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/de/uni_stuttgart/informatik/sopra/fieldManager/data/geoData/WGS84Coordinate.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/de/uni_stuttgart/informatik/sopra/fieldManager/data/geoData/WGS84UTMConverter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/test/java/de/uni_stuttgart/informatik/sopra/fieldManager/data/geoData/TriangleTest.java" charset="ISO-8859-1" />

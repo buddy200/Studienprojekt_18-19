@@ -35,7 +35,7 @@
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:paddingBottom="16dp"
+                android:paddingBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -47,7 +47,7 @@
                 android:paddingLeft="@dimen/list_item_spacing"
                 android:paddingRight="@dimen/list_item_spacing"
                 android:paddingTop="@dimen/list_item_spacing_half"
-                android:paddingBottom="16dp"
+                android:paddingBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -68,9 +68,14 @@
                 android:id="@+id/button_add_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:paddingBottom="7dp"
+                android:background="@null"
                 android:layout_above="@+id/imagegallery"
                 android:layout_toStartOf="@+id/button_navigate_google_maps"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+                android:src="@drawable/ic_photo_camera_black_24px" />
 
             <EditText
                 android:id="@+id/edit_photo_name"
@@ -78,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/imagegallery"
                 android:layout_alignParentStart="true"
-                android:ems="10"
+                android:ems="9"
                 android:hint="@string/photo_default_name"
                 android:inputType="textPersonName" />
 

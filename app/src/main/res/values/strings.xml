@@ -103,5 +103,15 @@
 
     <string name="search_all">All</string>
     <string name="progress_no_status">No status</string>
+    <string name="help_label">Help</string>
+
+    <!-- tutorial strings -->
+    <string name="help_title_add_agr_field">tab here to add a new agrarian field</string>
+    <string name="help_title_search">tab here to search</string>
+    <string name="help_desc_search">you may search for field names or other categories</string>
+    <string name="help_title_fab">tab here to add a corner point</string>
+    <string name="help_desc_fab">the corner point is your current position on the map, but if you wish to add points manually just press on the map to add a new one</string>
+    <string name="help_title_create_field">create your field</string>
+    <string name="help_desc_create_field">if you have enough points selected on the map press here to finish up your field and fill in the necessary data</string>
 
 </resources>

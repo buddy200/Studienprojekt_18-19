@@ -39,7 +39,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManag
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
-import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialUtils;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
 
 /**
  * sopra_priv
@@ -386,8 +386,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
                 generateLogoutDialog().show();
                 break;
             case R.id.action_toolbar_tutorial:
-                if (GlobalConstants.isAdmin) {
-                    new TutorialUtils().mainTutorial(this);
+                if(GlobalConstants.isAdmin){
+                    new TutorialOverlays().mainTutorial(this);
+                }else {
+                    new TutorialOverlays().mainTutorialNoAdmin(this);
                 }
                 break;
         }

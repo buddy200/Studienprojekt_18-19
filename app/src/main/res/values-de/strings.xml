@@ -71,4 +71,12 @@
     <string name="progress_no_status">Kein Status</string>
     <string name="dialogmessage_want_delete_Field">Wollen Sie dieses Feld wirklich löschen?</string>
     <string name="dialogmessage_want_delete_damage">Wollen Sie diesen Schadensfall wirklich löschen?</string>
+    <string name="help_label">Hilfe</string>
+    <string name="help_title_add_agr_field">Drücke Sie hier um ein neues Agrarfeld hinzuzufügen</string>
+    <string name="help_desc_fab">Der Eckpunkt ist ihre eigene Position auf der Karte, sollten die Eckpunkte auf andere weise hinzufügen wollen können sie ebenfalls auf die Karte drücken</string>
+    <string name="help_title_create_field">Erstellen Sie ihr Feld</string>
+    <string name="help_desc_create_field">Wenn Sie genug Punkte auf der Karte ausgewählt haben, drücken sie hier um ihr Feld zu erstellen und die nötigen Daten zu ergänzen</string>
+    <string name="help_title_search">Drücken sie hier um zu suchen</string>
+    <string name="help_desc_search">Sie können nach Feldnamen oder anderen Kategorien suchen</string>
+    <string name="help_title_fab">Drücken sie hier um ein neuen Eckpunkt hinzuzufügen</string>
 </resources>

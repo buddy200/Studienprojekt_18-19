@@ -1,8 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:layout_width="168dp"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/dialog_holo_light_frame"
+    android:padding="2dp">
 
 
     <TextView
@@ -15,12 +16,13 @@
 
     <ImageView
         android:id="@+id/img"
+        android:padding="5dp"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:layout_width="168dp"
+        android:layout_width="256dp"
         android:layout_height="168dp"
         android:layout_below="@+id/title"
-        android:scaleType="centerInside"/>
+        android:scaleType="centerCrop"/>
 
 
 </LinearLayout>

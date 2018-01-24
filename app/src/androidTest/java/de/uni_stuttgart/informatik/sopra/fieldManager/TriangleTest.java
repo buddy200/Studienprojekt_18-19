@@ -1,8 +1,9 @@
-package de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData;
+package de.uni_stuttgart.informatik.sopra.fieldManager;
 
 import org.junit.Test;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.Triangle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

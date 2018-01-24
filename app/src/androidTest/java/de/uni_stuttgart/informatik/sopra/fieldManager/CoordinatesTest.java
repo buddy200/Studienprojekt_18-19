@@ -1,6 +1,10 @@
-package de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData;
+package de.uni_stuttgart.informatik.sopra.fieldManager;
 
 import org.junit.Test;
+
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.UTMCoordinate;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.WGS84Coordinate;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.WGS84UTMConverter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

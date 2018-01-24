@@ -54,7 +54,17 @@ public class a_LoginTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void loginAsFarmer(){
+    static void start(){
+        loginAsFarmer();
+        checkLoginAndLogout("FARMER NAME");
+        String name = "ADMIN NAME";
+        loginAsAdmin(name);
+
+        checkLoginAndLogout(name);
+    }
+
+    @Test
+    static void loginAsFarmer(){
 
         onView(withId(R.id.login_dialog_usr_privileges))
                 .perform(click());
@@ -65,14 +75,8 @@ public class a_LoginTest {
         onView(withId(R.id.login_dialog_btn_login))
                 .perform(click());
 
-        checkLoginAndLogout("FARMER NAME");
-
-        String name = "ADMIN NAME";
-        loginAsAdmin(name);
-
-        checkLoginAndLogout(name);
-
-
+        SystemClock.sleep(1000);
+       // onView(withId(R.id.action_toolbar_add)).check(matches(isDisplayed()));
     }
 
     static void loginAsAdmin(String name) {

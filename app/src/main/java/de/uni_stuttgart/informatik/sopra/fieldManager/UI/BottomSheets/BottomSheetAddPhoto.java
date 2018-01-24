@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -208,7 +209,7 @@ public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements Vi
     private void photoFromGallery(Intent data) {
         Uri uri = data.getData();
         String[] projection = {MediaStore.Images.Media.DATA};
-
+        Log.e("dhioahiwa", String.valueOf(uri.toString()));
         Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
         cursor.moveToFirst();
 

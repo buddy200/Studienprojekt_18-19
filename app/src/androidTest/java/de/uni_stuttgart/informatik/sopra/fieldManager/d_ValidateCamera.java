@@ -5,6 +5,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
@@ -16,7 +17,10 @@ import android.widget.EditText;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.File;
+
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -62,7 +66,6 @@ public class d_ValidateCamera {
 
         // Build a result to return from the Camera app
         Intent resultData = new Intent();
-        resultData.putExtra("data", icon);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
 
         // Stub out the Camera. When an intent is sent to the Camera, this tells Espresso to respond
@@ -76,17 +79,22 @@ public class d_ValidateCamera {
 
         onView(withId(R.id.finish_edit_button_agr)).perform(click());
 
+        b_AddFieldTest.testData("dmg name");
+        SystemClock.sleep(2000);
+        pressBack();
 
         deleteAll();
+        SystemClock.sleep(2000);
+
+
+        a_LoginTest.logout();
+        SystemClock.sleep(2000);
+
 
         // ... additional test steps and validation ...
     }
 
     private void deleteAll() {
-        b_AddFieldTest.testData("dmg name");
-        onView(withId(R.id.finish_edit_button_agr)).perform(click());
-        onView(withId(R.id.delete_button)).perform(click());
-        onView(withText(R.string.word_yes)).perform(click());
 
 
         b_AddFieldTest.testData("field name");

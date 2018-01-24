@@ -84,7 +84,7 @@ public class IntersectionCalculator {
                     intersection.add(line.get(0) * intersection.get(0) + line.get(1));
 
                     //check if the intersection point is inside the damage field
-                    if (boudnryCheck2(intersection) && boundaryCheck(intersection, vec)) {
+                    if (boundaryCheck(intersection, lastPoint, currentPoint) && boundaryCheck(intersection, new GeoPoint(vec.get(2).doubleValue(), vec.get(3).doubleValue()), new GeoPoint(vec.get(4).doubleValue(), vec.get(5).doubleValue()))) {
                         Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                         return false;
                     }
@@ -100,9 +100,8 @@ public class IntersectionCalculator {
      * @param intersection
      * @return
      */
-    private boolean boundaryCheck(Vector<Double> intersection, Vector<Double> line) {
-        GeoPoint lastPoint = new GeoPoint(line.get(2).doubleValue(), line.get(3).doubleValue());
-        GeoPoint currentPoint = new GeoPoint(line.get(4).doubleValue(), line.get(5).doubleValue());
+    private boolean boundaryCheck(Vector<Double> intersection, GeoPoint lastPoint, GeoPoint currentPoint) {
+
 
         if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
@@ -136,7 +135,7 @@ public class IntersectionCalculator {
         }
         return false;
     }
-
+/*
     private boolean boudnryCheck2(Vector<Double> intersection) {
         if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
@@ -170,7 +169,7 @@ public class IntersectionCalculator {
         }
         return false;
     }
-
+*/
     /**
      * this method calculate the last line from the new agrarian field from the end point to the start point
      *

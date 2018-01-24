@@ -35,9 +35,24 @@
             android:id="@+id/field_detail_name"
             android:text="-name-"/>
 
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/spinnerPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <TextView
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/text_type_dmg"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Type" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/list_item_spacing_half"
                 android:paddingLeft="@dimen/list_item_spacing"
@@ -47,8 +62,25 @@
                 android:id="@+id/field_detail_state"
                 android:text="-state-"/>
 
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_type_dmg1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Location" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/list_item_spacing_half"
                 android:paddingLeft="@dimen/list_item_spacing"
@@ -57,51 +89,121 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:id="@+id/field_detail_date"
                 android:text="-date-"/>
+        </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_size"
-            android:text="-size-"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_cost"
-            android:text="-cost-"/>
+            <TextView
+                android:id="@+id/text_type_dmg2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/progress_state"
-            android:text="-progress state-"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/field_detail_size"
+                android:text="-size-"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            android:paddingLeft="@dimen/list_item_spacing"
-            android:paddingRight="@dimen/list_item_spacing"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/field_detail_policyholder"
-            android:text="-name policyholer-"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_type_dmg3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_estimatedpayment" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/field_cost"
+                android:text="-cost-"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_type_dmg4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogitem_progress_state" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/progress_state"
+                android:text="-progress state-"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_type_dmg5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_spacing"
+                android:text="@string/dialogItem_Location" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                android:paddingLeft="@dimen/list_item_spacing"
+                android:paddingRight="@dimen/list_item_spacing"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/field_detail_policyholder"
+                android:text="-name policyholer-"/>
+
+        </LinearLayout>
 
 
         <RelativeLayout

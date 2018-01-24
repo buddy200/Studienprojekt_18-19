@@ -205,7 +205,7 @@
                 android:layout_alignBottom="@+id/field_cost"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/detailItem_estimatedpayment" />
+                android:text="@string/dialogItem_estimatedpayment" />
 
             <TextView
                 android:id="@+id/field_cost"

@@ -84,7 +84,7 @@
     <string name="dialogItem_Size">Size</string>
     <string name="dialogItem_Owner">Owner</string>
     <string name="dialogItem_Date">Date</string>
-    <string name="detailItem_estimatedpayment">"Estimated payment "</string>
+    <string name="dialogItem_estimatedpayment">"Estimated payment "</string>
     <string name="detailItem_evaluator">Evaluator</string>
     <string name="no_date">no date</string>
     <string name="dialogitem_progress_state">Progress state:</string>

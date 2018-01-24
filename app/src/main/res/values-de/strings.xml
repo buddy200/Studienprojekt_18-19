@@ -49,7 +49,7 @@
     <string name="logout_message">Wirklich abmelden und die App schließen?</string>
     <string name="toastmsg_anotherDamageField">Fügen Sie ein weiteren Schadensfall hinzu oder gehen Sie zurück</string>
     <string name="toastmsg_anotherAgrarainField">Fügen Sie ein weiteres Feld hinzu oder gehen Sie zurück</string>
-    <string name="detailItem_estimatedpayment">Zahlung</string>
+    <string name="dialogItem_estimatedpayment">Zahlung</string>
     <string name="dialogItem_Location">Ort</string>
     <string name="dialogItem_Type">Typ</string>
     <string name="dialogItem_Size">Größe</string>

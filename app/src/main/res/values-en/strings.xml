@@ -49,7 +49,7 @@
     <string name="logout_message">Are you sure you want to logout and close the app?</string>
     <string name="toastmsg_anotherDamageField">Add another damage case on this field or go back.</string>
     <string name="toastmsg_anotherAgrarainField">Add another field or go back.</string>
-    <string name="detailItem_estimatedpayment">"Payment "</string>
+    <string name="dialogItem_estimatedpayment">"Payment "</string>
     <string name="dialogItem_Location">Location</string>
     <string name="dialogItem_Type">Type</string>
     <string name="dialogItem_Size">Size</string>

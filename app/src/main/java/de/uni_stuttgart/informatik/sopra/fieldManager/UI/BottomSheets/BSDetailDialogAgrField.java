@@ -123,13 +123,13 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
     @Override
     public void fillData(Field mField) {
         this.mField = (AgrarianField) mField;
-        name.setText(getResources().getString(R.string.dialogItem_Name) + " " + this.mField.getName() + "");
-        county.setText(getResources().getString(R.string.dialogItem_Location) + " " + this.mField.getCounty());
+        name.setText(this.mField.getName());
+        county.setText(this.mField.getCounty());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
-        state.setText(getResources().getString(R.string.dialogItem_Type) + " " + this.mField.getType().toString());
+        state.setText(this.mField.getType().toString());
         state.setTextColor(mField.getColor());
-        size.setText(getResources().getString(R.string.dialogItem_Size) + " " + this.mField.getConvertedSize());
-        owner.setText(getResources().getString(R.string.dialogItem_Owner) + " " + this.mField.getOwner());
+        size.setText(this.mField.getConvertedSize());
+        owner.setText(this.mField.getOwner());
     }
 
     @Override

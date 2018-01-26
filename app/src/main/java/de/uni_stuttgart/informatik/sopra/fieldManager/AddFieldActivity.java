@@ -140,7 +140,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_add);
 
-        dataManager = new AppDataManager(this);
+        dataManager = AppDataManager.getInstance(this);
         mMapViewHandler = new MapViewHandler(this, dataManager, mapFragment);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -478,7 +478,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dataManager.dbClose();
     }
     private void loadFieldData() {
         String name = prefs.getString("usr", "");

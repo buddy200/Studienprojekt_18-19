@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
-        dataManager = new AppDataManager(this);
+        dataManager = AppDataManager.getInstance(this);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 

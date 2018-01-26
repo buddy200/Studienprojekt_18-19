@@ -27,8 +27,9 @@ public class AppDataManager {
     private Context context;
     private DBConnection dbConnection;
     private DataChangeListener listener;
+    private static AppDataManager instance;
 
-    public AppDataManager(Context context) {
+    private AppDataManager(Context context) {
         this.context = context;
         try {
             listener = (DataChangeListener) context;
@@ -40,6 +41,13 @@ public class AppDataManager {
         damageFieldMap = new HashMap<>();
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         dataChange();
+    }
+
+    public static AppDataManager getInstance(Context context){
+        if(instance == null){
+            instance = new AppDataManager(context);
+        }
+        return instance;
     }
 
     /**

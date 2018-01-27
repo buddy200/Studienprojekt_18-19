@@ -1,11 +1,15 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
 
+import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 
 /**
  * sopra_priv
@@ -18,38 +22,73 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 
 public enum AgrarianFieldType implements FieldType, Serializable{
 
-    Hemp(MainActivity.getmContext().getResources().getString(R.string.hemp), ContextCompat.getColor(MainActivity.getmContext(), R.color.hempTypeAgrarian), 1.1),
-    Wheat(MainActivity.getmContext().getResources().getString(R.string.wheat), ContextCompat.getColor(MainActivity.getmContext(), R.color.wheatTypeAgrarian), 0.5),
-    Rye(MainActivity.getmContext().getResources().getString(R.string.rye), ContextCompat.getColor(MainActivity.getmContext(), R.color.ryeTypeAgrarian), 0.7),
-    Potatoes(MainActivity.getmContext().getResources().getString(R.string.potatoes), ContextCompat.getColor(MainActivity.getmContext(), R.color.potatoesTypeAgrarian), 1.2),
-    Corn(MainActivity.getmContext().getResources().getString(R.string.corn), ContextCompat.getColor(MainActivity.getmContext(), R.color.cornTypeAgrarian), 1.0);
+    Hemp(1, 1.1),
+    Wheat(2, 0.5),
+    Rye(3, 0.7),
+    Potatoes(4, 1.2),
+    Corn(5, 1.0);
 
-    private String friendlyName;
-    private int friendlyColor;
     private double insuranceValuePerSquaremeter;
+    private int id;
 
-    AgrarianFieldType(String friendlyName, int friendlyColor, double insuranceValuePerSquaremeter){
-        this.friendlyName = friendlyName;
-        this.friendlyColor = friendlyColor;
+    AgrarianFieldType(int id, double insuranceValuePerSquaremeter){
         this.insuranceValuePerSquaremeter = insuranceValuePerSquaremeter;
+        this.id = id;
     }
 
-    @Override public String toString(){
-        return friendlyName;
-    }
-
-
+    @Override
     public double getInsuranceMoneyPerSquareMeter(){
         return insuranceValuePerSquaremeter;
     }
 
-    public int toColor(){
-        return friendlyColor;
+
+    @Override
+    public String toString(Context context) {
+        switch (this.id) {
+            case 1:
+                return context.getResources().getString(R.string.hemp);
+            case 2:
+                return context.getResources().getString(R.string.wheat);
+            case 3:
+                return context.getResources().getString(R.string.rye);
+            case 4:
+                return context.getResources().getString(R.string.potatoes);
+            case 5:
+                return context.getResources().getString(R.string.corn);
+            default:
+                return "invalid";
+        }
     }
 
-    public static AgrarianFieldType fromString(String text) {
+    @Override
+    public int toColor(Context context) {
+        switch (this.id) {
+            case 1:
+                return context.getResources().getColor(R.color.hempTypeAgrarian);
+            case 2:
+                return context.getResources().getColor(R.color.wheatTypeAgrarian);
+            case 3:
+                return context.getResources().getColor(R.color.ryeTypeAgrarian);
+            case 4:
+                return context.getResources().getColor(R.color.potatoesTypeAgrarian);
+            case 5:
+                return context.getResources().getColor(R.color.cornTypeAgrarian);
+            default:
+                return 0;
+        }
+    }
+
+    public static List<String> getAllString(Context context){
+        ArrayList<String> allStrings = new ArrayList<>();
+        for(AgrarianFieldType aft : AgrarianFieldType.values()){
+            allStrings.add(aft.toString(context));
+        }
+        return allStrings;
+    }
+
+    public static AgrarianFieldType fromString(String text, Context context) {
         for (AgrarianFieldType type : AgrarianFieldType.values()) {
-            if (type.toString().equalsIgnoreCase(text)) {
+            if (type.toString(context).equalsIgnoreCase(text)) {
                 return type;
             }
         }

@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.AddFieldActivity;
@@ -173,7 +174,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
                                     + selectedYear);
                         }
                     };
-                    DatePickerDialog datePicker = new DatePickerDialog(getContext(), listener, 2018, 1, 20);
+                    DatePickerDialog datePicker = new DatePickerDialog(getContext(), listener, Calendar.getInstance().get(Calendar.YEAR) , Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                     datePicker.show();
                     break;
             }
@@ -201,9 +202,9 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
         dateText.setText(field.getParsedDate());
         List<DamageFieldType> statusCheck;
         statusCheck = Arrays.asList(DamageFieldType.values());
-        fieldSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.values()));
+        fieldSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, DamageFieldType.getAllString(getContext())));
         fieldSpinner.setSelection(statusCheck.indexOf(field.getType()));
-        progressSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ProgressStatus.values()));
+        progressSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ProgressStatus.getAllString(getContext())));
         progressSpinner.setSelection(statusCheck.indexOf(field.getProgressStatus()));
         if(field.getEvaluator().equals("")) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -231,8 +232,8 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
         mFieldToChange.setEvaluator(fieldPolicyHolder.getText().toString());
         mFieldToChange.setDate(dateText.getText().toString());
         mFieldToChange.setName(fieldName.getText().toString());
-        mFieldToChange.setType((DamageFieldType) fieldSpinner.getSelectedItem());
-        mFieldToChange.setProgressStatus((ProgressStatus) progressSpinner.getSelectedItem());
+        mFieldToChange.setType(DamageFieldType.fromString((String)  fieldSpinner.getSelectedItem(), getContext()));
+        mFieldToChange.setProgressStatus(ProgressStatus.fromString((String)progressSpinner.getSelectedItem(), getContext()));
         return mFieldToChange;
     }
 

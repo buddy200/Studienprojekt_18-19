@@ -132,11 +132,11 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         this.mField = (DamageField) mField;
         name.setText(this.mField.getName());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
-        state.setText(this.mField.getType().toString());
+        state.setText(this.mField.getType().toString(getContext()));
         state.setTextColor(this.mField.getColor());
         size.setText(this.mField.getConvertedSize());
         date.setText(this.mField.getParsedDate());
-        progressState.setText( this.mField.getProgressStatus().toString());
+        progressState.setText( this.mField.getProgressStatus().toString(getContext()));
         ownerOrEvaluator.setText(this.mField.getEvaluator());
         estimatedCosts.setText( String.valueOf(this.mField.getInsuranceMoney()));
 

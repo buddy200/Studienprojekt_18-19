@@ -1,55 +1,94 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
 
+import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 
 /**
  * sopra_priv
  * Created by Felix B on 18.11.17.
  * Mail: felix.burk@gmail.
- *
+ * <p>
  * a custom FieldType class containg the different types of DamageFields
  * Strings and Colors are mapped with strings.xml and colors.xml
  */
-public enum DamageFieldType implements FieldType, Serializable{
+public enum DamageFieldType implements FieldType, Serializable {
 
-    Hail(MainActivity.getmContext().getResources().getString(R.string.hail), ContextCompat.getColor(MainActivity.getmContext(), R.color.hailTypeDmg), 0.25),
-    Snow(MainActivity.getmContext().getResources().getString(R.string.snow), ContextCompat.getColor(MainActivity.getmContext(), R.color.snowTypeDmg), 0.2),
-    Storm(MainActivity.getmContext().getResources().getString(R.string.storm), ContextCompat.getColor(MainActivity.getmContext(), R.color.stormTypeDmg), 0.9),
-    Heat(MainActivity.getmContext().getResources().getString(R.string.heat), ContextCompat.getColor(MainActivity.getmContext(), R.color.heatTypeDmg), 0.1),
-    Insects(MainActivity.getmContext().getResources().getString(R.string.insects), ContextCompat.getColor(MainActivity.getmContext(), R.color.insectsTypeDmg), 0.8);
+    Hail(1, 0.25),
+    Snow(2, 0.2),
+    Storm(3, 0.9),
+    Heat(4, 0.1),
+    Insects(5, 0.8);
 
-
-    private String friendlyName;
-    private int friendlyColor;
     private double insuranceMoneyPerSquaremeter;
     private static final long serialVersionUID = 12L;
+    private int id;
 
-    DamageFieldType(String friendlyName, int friendlyColor, double insuranceMoneyPerSquaremeter){
-        this.friendlyName = friendlyName;
-        this.friendlyColor = friendlyColor;
+    DamageFieldType(int id, double insuranceMoneyPerSquaremeter) {
         this.insuranceMoneyPerSquaremeter = insuranceMoneyPerSquaremeter;
+        this.id = id;
     }
 
-    @Override public String toString(){
-        return friendlyName;
+
+    @Override
+    public String toString(Context context) {
+        switch (this.id) {
+            case 1:
+                return context.getResources().getString(R.string.hail);
+            case 2:
+                return context.getResources().getString(R.string.snow);
+            case 3:
+                return context.getResources().getString(R.string.storm);
+            case 4:
+                return context.getResources().getString(R.string.heat);
+            case 5:
+                return context.getResources().getString(R.string.insects);
+            default:
+                return "invalid";
+        }
     }
 
-    public double getInsuranceMoneyPerSquareMeter(){
+    @Override
+    public double getInsuranceMoneyPerSquareMeter() {
         return insuranceMoneyPerSquaremeter;
     }
 
-    public int toColor() {
-        return friendlyColor;
+    @Override
+    public int toColor(Context context) {
+        switch (this.id) {
+            case 1:
+                return context.getResources().getColor(R.color.hailTypeDmg);
+            case 2:
+                return context.getResources().getColor(R.color.snowTypeDmg);
+            case 3:
+                return context.getResources().getColor(R.color.stormTypeDmg);
+            case 4:
+                return context.getResources().getColor(R.color.heatTypeDmg);
+            case 5:
+                return context.getResources().getColor(R.color.insectsTypeDmg);
+            default:
+                return 0;
+        }
     }
 
-    public static DamageFieldType fromString(String text) {
+    public static List<String> getAllString(Context context) {
+        ArrayList<String> allStrings = new ArrayList<>();
+        for (DamageFieldType dmfT : DamageFieldType.values()) {
+            allStrings.add(dmfT.toString(context));
+        }
+        return allStrings;
+    }
+
+    public static DamageFieldType fromString(String text, Context context) {
         for (DamageFieldType type : DamageFieldType.values()) {
-            if (type.toString().equalsIgnoreCase(text)) {
+            if (type.toString(context).equalsIgnoreCase(text)) {
                 return type;
             }
         }

@@ -126,7 +126,7 @@ public class BSDetailDialogAgrField extends BottomSheetDialogFragment implements
         name.setText(this.mField.getName());
         county.setText(this.mField.getCounty());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
-        state.setText(this.mField.getType().toString());
+        state.setText(this.mField.getType().toString(getContext()));
         state.setTextColor(mField.getColor());
         size.setText(this.mField.getConvertedSize());
         owner.setText(this.mField.getOwner());

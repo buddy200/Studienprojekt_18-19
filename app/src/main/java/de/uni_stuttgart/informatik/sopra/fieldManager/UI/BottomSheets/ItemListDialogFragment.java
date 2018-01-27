@@ -141,7 +141,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.text.setText(fieldData.get(position).getName());
             if (fieldData.get(position).getType() != null) {
-                holder.state.setText(fieldData.get(position).getType().toString());
+                holder.state.setText(fieldData.get(position).getType().toString(getContext()));
                 holder.state.setTextColor(fieldData.get(position).getColor());
             } else {
                 holder.state.setText(" ");

@@ -66,7 +66,7 @@ public class DBConnection {
             ContentValues values = new ContentValues();
             values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString(context));
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.OWNER_COLUM, field.getOwner());
 
@@ -111,11 +111,11 @@ public class DBConnection {
             ContentValues values = new ContentValues();
             values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString(context));
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());
-            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());
+            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString(context));
             values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());
 
             long rowID = db.insert(DBHelper.DamageFieldTable_NAME, null, values);
@@ -219,7 +219,7 @@ public class DBConnection {
         AgrarianField field = new AgrarianField(context, geoPoints);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
-        field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
+        field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM)), context));
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setOwner(cursor.getString(cursor.getColumnIndex(DBHelper.OWNER_COLUM)));
         field.setLinesFormField(vectorList);
@@ -276,11 +276,11 @@ public class DBConnection {
         DamageField field = new DamageField(context, geoPoints, parent);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
-        field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
+        field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM)), context));
         field.setCounty(cursor.getString(cursor.getColumnIndex(DBHelper.COUNTY_COLUM)));
         field.setEvaluator(cursor.getString(cursor.getColumnIndex(DBHelper.EVALUATOR_COLUM)));
         field.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COLUM)));
-        field.setProgressStatus(ProgressStatus.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.PROGRESS_COLUM))));
+        field.setProgressStatus(ProgressStatus.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.PROGRESS_COLUM)), context));
         List<PictureData> pictureData = getPicturesOfField(id);
         for (PictureData pd : pictureData) {
             field.setPath(pd);
@@ -345,7 +345,7 @@ public class DBConnection {
             ContentValues values = new ContentValues();
             values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString(context));
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.OWNER_COLUM, field.getOwner());
 
@@ -367,11 +367,11 @@ public class DBConnection {
             ContentValues values = new ContentValues();
             values.put(DBHelper.SIZE_COLUM, field.getSize());
             values.put(DBHelper.NAME_COLUM, field.getName());
-            values.put(DBHelper.TYPE_COLUM, field.getType().toString());
+            values.put(DBHelper.TYPE_COLUM, field.getType().toString(context));
             values.put(DBHelper.COUNTY_COLUM, field.getCounty());
             values.put(DBHelper.EVALUATOR_COLUM, field.getEvaluator());
             values.put(DBHelper.DATE_COLUM, field.getParsedDate());
-            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString());
+            values.put(DBHelper.PROGRESS_COLUM, field.getProgressStatus().toString(context));
             values.put(DBHelper.PARENT_COLUM, field.getParentField().getID());
 
             String[] selection_args = new String[1];

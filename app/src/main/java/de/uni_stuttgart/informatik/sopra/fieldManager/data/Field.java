@@ -215,7 +215,7 @@ public abstract class Field implements Serializable {
      */
     public void setType(FieldType type) {
         this.type = type;
-        this.setColor(type.toColor());
+        this.setColor(type.toColor(context));
     }
 
     public boolean isFieldequal(Field otherField) {

@@ -155,7 +155,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
         fieldRegion.setText(field.getCounty());
         List<AgrarianFieldType> statusCheck;
         statusCheck = Arrays.asList(AgrarianFieldType.values());
-        fieldSpinner.setAdapter(new ArrayAdapter<AgrarianFieldType>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.values()));
+        fieldSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, AgrarianFieldType.getAllString(getContext())));
         fieldSpinner.setSelection(statusCheck.indexOf(field.getType()));
         fieldPolicyHolder.setText(field.getOwner());
         fieldName.setText(field.getName());
@@ -172,7 +172,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
         mFieldToChange.setOwner(fieldPolicyHolder.getText().toString());
         mFieldToChange.setLinesFormField(((AgrarianField) mPresenter.getVisibleField()).getLinesFormField());
         mFieldToChange.setName(fieldName.getText().toString());
-        mFieldToChange.setType((AgrarianFieldType) fieldSpinner.getSelectedItem());
+        mFieldToChange.setType(AgrarianFieldType.fromString((String) fieldSpinner.getSelectedItem(), getContext()));
         if (!fieldRegion.getText().toString().equals(getResources().getString(R.string.county_default_name))) {
             mFieldToChange.setCounty(fieldRegion.getText().toString());
         }

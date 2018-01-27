@@ -1,6 +1,10 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
 
 
+import android.content.Context;
+
+import java.util.List;
+
 /**
  * sopra_priv
  * Created by Felix B on 18.11.17.
@@ -10,7 +14,7 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
  */
 
 public interface FieldType{
-    String toString();
-    int toColor();
+    String toString(Context context);
+    int toColor(Context context);
     double getInsuranceMoneyPerSquareMeter();
 }

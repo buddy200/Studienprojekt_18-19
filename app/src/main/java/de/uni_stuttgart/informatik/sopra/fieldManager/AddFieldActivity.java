@@ -41,7 +41,6 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.Util.IntersectionCalculato
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.PointOutOfField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
@@ -61,7 +60,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
     MapFragment mapFragment;
     MYLocationListener myLocationListener;
-    List<CornerPoint> cornerPoints;
 
     Field fieldToAddFinal;
 
@@ -69,7 +67,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     BSDetailDialogEditDmgField bottomSheetDialogDMF;
 
     ArrayList<GeoPoint> listGeoPoints = new ArrayList<>();
-    ArrayList<CornerPoint> listCornerPoints = new ArrayList<>();
 
     boolean isDmgField = false;
     AgrarianField parentField;
@@ -103,7 +100,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_activity_add_field);
 
-        cornerPoints = new ArrayList<>();
         linesFromAgrarianField = new ArrayList<>();
         intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);
         pointOutOfField = new PointOutOfField(this);
@@ -229,17 +225,16 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
      * removes the last added Point from the new field, and redraw the Polyline
      */
     private void onRedoButtonClick() {
-        if (listGeoPoints.size() > 0 && listCornerPoints.size() > 0) {
+        if (listGeoPoints.size() > 0) {
             listGeoPoints.remove(listGeoPoints.size() - 1);
-            listCornerPoints.remove(listCornerPoints.size() - 1);
             polyline.setPoints(listGeoPoints);
             mMapViewHandler.deleteLastFieldMarker();
             mMapViewHandler.addPolyline(polyline);
             mMapViewHandler.invalidateMap();
-            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
-            if (listCornerPoints.size() < 3) {
+            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+            if (listGeoPoints.size() < 3) {
                 fabLabel.setVisibility(View.VISIBLE);
-                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
             }
         } else {
             Toast.makeText(this, getResources().getString(R.string.add_activity_NoMorePoints), Toast.LENGTH_SHORT).show();
@@ -296,13 +291,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     public void addPoint(Location location) {
         GeoPoint g = new GeoPoint(location);
         listGeoPoints.add(g);
-        listCornerPoints.add(new CornerPoint(g.getLatitude(), g.getLongitude()));
         polyline.setPoints(listGeoPoints);
         mMapViewHandler.addPolyline(polyline);
         mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());
         mMapViewHandler.invalidateMap();
 
-        if (listCornerPoints.size() > 2) {
+        if (listGeoPoints.size() > 2) {
             enoughPoints = true;
             fabLabel.setVisibility(View.INVISIBLE);
             menuItemDone.setVisible(true);
@@ -316,7 +310,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             if ((isDmgField && !intersectionCalculator.calcIntersection(parentField))) {
                 onRedoButtonClick();
             } else {
-                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listCornerPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
                 Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
                         location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
@@ -360,14 +354,13 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         if (enoughPoints) {
             Field fieldToAdd;
             if (isDmgField) {
-                fieldToAdd = new DamageField(getApplicationContext(), listCornerPoints, parentField);
+                fieldToAdd = new DamageField(getApplicationContext(), listGeoPoints, parentField);
                 parentField.addContainedDamageField((DamageField) fieldToAdd);
                 dataManager.changeAgrarianField(parentField);
 
 
             } else {
-                fieldToAdd = new AgrarianField(getApplicationContext(), listCornerPoints);
-                Log.e("LIST SIZE", String.valueOf(listCornerPoints.size()));
+                fieldToAdd = new AgrarianField(getApplicationContext(), listGeoPoints);
                 if (fieldToAdd instanceof AgrarianField) {
                     intersectionCalculator.calcLastLine(fieldToAdd);
                 }
@@ -392,7 +385,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
             enoughPoints = false;
             listGeoPoints.clear();
-            listCornerPoints.clear();
 
             fabLabel.setVisibility(View.VISIBLE);
             fabLabel.setText("Add a Corner Point at your current position");
@@ -440,9 +432,14 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 }
                 break;
             case "BSDetailDialogEditFragmentAgrarianField":
+                mMapViewHandler.addField((Field) data);
+                mMapViewHandler.invalidateMap();
+                mMapViewHandler.getMap().getOverlayManager().remove(polyline);
                 Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherAgrarainField), Toast.LENGTH_SHORT).show();
                 break;
             case "BSDetailDialogEditFragmentDamageField":
+                mMapViewHandler.addField((Field) data);
+                mMapViewHandler.invalidateMap();
                 Toast.makeText(this, getResources().getString(R.string.toastmsg_anotherDamageField), Toast.LENGTH_SHORT).show();
                 switch (action) {
                     case "addPhoto":

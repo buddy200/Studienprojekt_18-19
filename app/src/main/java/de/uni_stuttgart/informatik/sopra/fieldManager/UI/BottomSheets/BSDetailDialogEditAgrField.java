@@ -122,7 +122,7 @@ BSDetailDialogEditAgrField extends BottomSheetDialogFragment implements BSEditCo
         if (this.mPresenter != null) {
             switch (v.getId()) {
                 case R.id.finish_edit_button_agr:
-                    mListener.onFragmentMessage(TAG, "done", null);
+                    mListener.onFragmentMessage(TAG, "done", mPresenter.getVisibleField());
                     mPresenter.changeField(changedField());
                     this.dismiss();
                     break;

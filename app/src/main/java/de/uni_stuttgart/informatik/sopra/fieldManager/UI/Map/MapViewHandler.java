@@ -28,7 +28,6 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 
@@ -141,8 +140,8 @@ public class MapViewHandler implements MapContract.MapHandler {
             }
         };
         List<GeoPoint> polyPoints = new ArrayList<>();
-        for (CornerPoint point : field.getCornerPoints()) {
-            polyPoints.add(new GeoPoint(point.getWGS().getLatitude(), point.getWGS().getLongitude()));
+        for (GeoPoint point : field.getGeoPoints()) {
+            polyPoints.add(new GeoPoint(point.getLatitude(), point.getLongitude()));
         }
         polygon.setPoints(polyPoints);
         polygon.setFillColor(field.getColor());

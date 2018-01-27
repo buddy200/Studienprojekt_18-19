@@ -40,10 +40,11 @@ public class PointOutOfField {
             //check if the intersection point is inside the damage field
             if (boundaryCheck(intersection, centroidFromParent, newPoint) && boundaryCheck2(intersection, new GeoPoint(lineFromParent.get(2).doubleValue(), lineFromParent.get(3).doubleValue()), new GeoPoint(lineFromParent.get(4).doubleValue(), lineFromParent.get(5).doubleValue()))) {
                 countIntersection ++;
-                Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
+
             }
         }
         if(countIntersection % 2 == 0){
+            Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
             return false;
         }
         else{

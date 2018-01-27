@@ -6,19 +6,19 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.AgrarianFieldType;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.DamageFieldType;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.ProgressStatus;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.geoData.WGS84Coordinate;
 
 /**
  * Created by Christian on 11.01.2018.
@@ -149,11 +149,10 @@ public class DBConnection {
                 LAT_COLUM + " REAL NOT NULL," +
                 LONG_COLUM + " REAL NOT NULL)");
 
-        for (CornerPoint cp : field.getCornerPoints()) {
-            WGS84Coordinate wgs = cp.getWGS();
+        for (GeoPoint gp : field.getGeoPoints()) {
             ContentValues values = new ContentValues();
-            values.put(LAT_COLUM, wgs.getLatitude());
-            values.put(LONG_COLUM, wgs.getLongitude());
+            values.put(LAT_COLUM, gp.getLatitude());
+            values.put(LONG_COLUM, gp.getLongitude());
             db.insert(table_name, null, values);
         }
     }
@@ -194,14 +193,14 @@ public class DBConnection {
 
     private AgrarianField toAgrarianField(Cursor cursor) throws IllegalStateException{
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
-        List<CornerPoint> cps = new ArrayList<>();
+        List<GeoPoint> geoPoints = new ArrayList<>();
         ArrayList<java.util.Vector<Double>> vectorList = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Agr_" + id;
         Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + " ASC");
         while (cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
-            cps.add(new CornerPoint(lat, lon));
+            geoPoints.add(new GeoPoint(lat, lon));
         }
 
         String vectorTable = VectorTable_Suffix + id;
@@ -217,7 +216,7 @@ public class DBConnection {
             vectorList.add(v);
         }
 
-        AgrarianField field = new AgrarianField(context, cps);
+        AgrarianField field = new AgrarianField(context, geoPoints);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
         field.setType(AgrarianFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));
@@ -263,18 +262,18 @@ public class DBConnection {
 
     private DamageField toDamageField(Cursor cursor) {
         long id = cursor.getLong(cursor.getColumnIndex(DBHelper.ID_COLUM));
-        List<CornerPoint> cps = new ArrayList<>();
+        List<GeoPoint> geoPoints = new ArrayList<>();
         String table_name = GeoPointTable_Suffix + "_Dmg_" + id;
         Cursor cpCursor = db.query(table_name, new String[]{LAT_COLUM, LONG_COLUM}, null, null, null, null, DBHelper.ID_COLUM + " ASC");
         while (cpCursor.moveToNext()) {
             double lat = cpCursor.getDouble(cpCursor.getColumnIndex(LAT_COLUM));
             double lon = cpCursor.getDouble(cpCursor.getColumnIndex(LONG_COLUM));
-            cps.add(new CornerPoint(lat, lon));
+            geoPoints.add(new GeoPoint(lat, lon));
         }
         long parent_ID = cursor.getLong(cursor.getColumnIndex(DBHelper.PARENT_COLUM));
         AgrarianField parent = getAgrarianFieldByID(parent_ID);
 
-        DamageField field = new DamageField(context, cps, parent);
+        DamageField field = new DamageField(context, geoPoints, parent);
         field.setID(id);
         field.setName(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COLUM)));
         field.setType(DamageFieldType.fromString(cursor.getString(cursor.getColumnIndex(DBHelper.TYPE_COLUM))));

@@ -3,6 +3,8 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.data;
 import android.content.Context;
 import android.util.Log;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -37,10 +39,10 @@ public class DamageField extends Field implements Serializable {
      * constructor
      *
      * @param context
-     * @param cPoints
+     * @param gPoints
      */
-    public DamageField(Context context, List<CornerPoint> cPoints, AgrarianField parentField) {
-        super(context, cPoints);
+    public DamageField(Context context, List<GeoPoint> gPoints, AgrarianField parentField) {
+        super(context, gPoints);
         super.setType(defaultType);
         this.setColor(damageFieldToColor());
         this.setDate(new Date(0));

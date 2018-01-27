@@ -379,7 +379,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "-cornerPoints: List<ConrernPoints>",
+											"text": "-geoPoints: List<ConrernPoints>",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -8654,7 +8654,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "-cornerPoints: List<CornerPoints>",
+											"text": "-geoPoints: List<CornerPoints>",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -29476,7 +29476,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFgDSZOZrK3Aec="
 							},
-							"name": "cornerPoints",
+							"name": "geoPoints",
 							"visibility": "private",
 							"isStatic": false,
 							"isLeaf": false,
@@ -32379,7 +32379,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFgDYvprN4bKgI="
 							},
-							"name": "cornerPoints",
+							"name": "geoPoints",
 							"visibility": "private",
 							"isStatic": false,
 							"isLeaf": false,

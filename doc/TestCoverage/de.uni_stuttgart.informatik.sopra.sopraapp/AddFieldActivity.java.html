@@ -36,7 +36,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 
     MapFragment mapFragment;
     MYLocationListener myLocationListener;
-    List&lt;CornerPoint&gt; cornerPoints;
+    List&lt;CornerPoint&gt; geoPoints;
 
     Field fieldToAddFinal;
 
@@ -60,7 +60,7 @@ import de.uni_stuttgart.informatik.sopra.sopraapp.data.Field;
 <span class="fc" id="L60">        setSupportActionBar(toolbar);</span>
 <span class="fc" id="L61">        toolbar.setTitle(R.string.title_activity_add_field);</span>
 
-<span class="fc" id="L63">        cornerPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L63">        geoPoints = new ArrayList&lt;&gt;();</span>
 
         //back button on toolbar implementation
 <span class="fc" id="L66">        getSupportActionBar().setDisplayHomeAsUpEnabled(true);</span>

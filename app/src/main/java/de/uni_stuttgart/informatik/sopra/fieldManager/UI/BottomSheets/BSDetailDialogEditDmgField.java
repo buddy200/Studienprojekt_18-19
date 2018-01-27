@@ -152,7 +152,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
             switch (v.getId()) {
                 case R.id.finish_edit_button_agr:
                     mPresenter.changeField(changedField());
-                    mListener.onFragmentMessage(TAG, "done", null);
+                    mListener.onFragmentMessage(TAG, "done", mPresenter.getVisibleField());
                     this.dismiss();
                     break;
                 case R.id.delete_button:

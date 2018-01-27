@@ -1,17 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager;
 
-import android.content.Context;
-
 import org.osmdroid.util.GeoPoint;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.CornerPoint;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
 
 /**
  * sopra_priv
@@ -62,7 +53,7 @@ public class GlobalConstants {
      * @param numberPoints m
      * @return ArrayList of polygons
      */
-
+/*
     public static void polygonTest(int numberPolygons, int numberPoints, Context context, AppDataManager appDataManager){
 
         //just small numbers to keep the tester from searching the rectangle

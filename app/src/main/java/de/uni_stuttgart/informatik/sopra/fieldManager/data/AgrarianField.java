@@ -3,6 +3,8 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.data;
 
 import android.content.Context;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +33,8 @@ public class AgrarianField extends Field implements Serializable {
      * constructor method
      * fields need at least 3 corner points to exist
      */
-    public AgrarianField(Context context, List<CornerPoint> cPoints) {
-        super(context, cPoints);
+    public AgrarianField(Context context, List<GeoPoint> gPoints) {
+        super(context, gPoints);
         super.setType(AgrarianFieldType.Corn);
         this.setColor(defaultType.toColor());
         this.setContainedDamageFields(new ArrayList<DamageField>());

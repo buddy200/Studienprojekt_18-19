@@ -60,7 +60,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
 
     MapFragment mapFragment;
     MYLocationListener myLocationListener;
-    List&lt;CornerPoint&gt; cornerPoints;
+    List&lt;CornerPoint&gt; geoPoints;
 
     Field fieldToAddFinal;
 
@@ -101,7 +101,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
 <span class="fc" id="L101">        setSupportActionBar(toolbar);</span>
 <span class="fc" id="L102">        toolbar.setTitle(R.string.title_activity_add_field);</span>
 
-<span class="fc" id="L104">        cornerPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L104">        geoPoints = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L105">        linesFromAgrarianField = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L106">        intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);</span>
 <span class="fc" id="L107">        polyline = new Polyline();</span>

@@ -40,7 +40,7 @@ public abstract class Field implements Serializable {
 
     private String conSize = "";
 
-    private List<CornerPoint> cornerPoints = new ArrayList<>();
+    private List<GeoPoint> geoPoints = new ArrayList<>();
 
     /**
      * the rotation of the polygon
@@ -53,30 +53,18 @@ public abstract class Field implements Serializable {
      * constructor only used in custom Field classes via super()
      *
      * @param context
-     * @param cPoints
+     * @param gPoints
      */
-    public Field(Context context, List<CornerPoint> cPoints) {
+    public Field(Context context, List<GeoPoint> gPoints) {
         this.context = context;
         this.size = 0.0;
         this.color = R.color.fieldDefaultColor;
 
-        if (cPoints.size() < 2) {
+        if (gPoints.size() < 2) {
         } else {
-            setCornerPoints(cPoints);
+            setGeoPoints(gPoints);
             calculateSize();
         }
-    }
-
-    /**
-     * add a corner point to the field
-     *
-     * @param cp
-     */
-    public void addCornerPoint(CornerPoint cp) {
-        if (cornerPoints.size() == 1) {
-            setAutomaticCounty();
-        }
-        cornerPoints.add(cp);
     }
 
     /**
@@ -101,8 +89,8 @@ public abstract class Field implements Serializable {
         double firstSum = 0.0;
         double secondSum = 0.0;
         ArrayList<Vector<Double>> cordinates = new ArrayList<>();
-        for (int i = 0; i < cornerPoints.size(); i++) {
-            cordinates.add(calculateCartesianCoordinates(cornerPoints.get(i).getWGS().getLatitude(), cornerPoints.get(i).getWGS().getLongitude()));
+        for (int i = 0; i < geoPoints.size(); i++) {
+            cordinates.add(calculateCartesianCoordinates(geoPoints.get(i).getLatitude(), geoPoints.get(i).getLongitude()));
         }
 
         //area calculation with cross prduct
@@ -141,18 +129,18 @@ public abstract class Field implements Serializable {
         lowX0 = lowY0 = Double.MAX_VALUE;
         highX1 = highY1 = Double.MIN_VALUE;
 
-        for (CornerPoint point : getCornerPoints()) {
-            if (lowX0 > point.getWGS().getLatitude()) {
-                lowX0 = point.getWGS().getLatitude();
+        for (GeoPoint point : getGeoPoints()) {
+            if (lowX0 > point.getLatitude()) {
+                lowX0 = point.getLatitude();
             }
-            if (lowY0 > point.getWGS().getLongitude()) {
-                lowY0 = point.getWGS().getLongitude();
+            if (lowY0 > point.getLongitude()) {
+                lowY0 = point.getLongitude();
             }
-            if (highX1 < point.getWGS().getLatitude()) {
-                highX1 = point.getWGS().getLatitude();
+            if (highX1 < point.getLatitude()) {
+                highX1 = point.getLatitude();
             }
-            if (highY1 < point.getWGS().getLongitude()) {
-                highY1 = point.getWGS().getLongitude();
+            if (highY1 < point.getLongitude()) {
+                highY1 = point.getLongitude();
             }
         }
 
@@ -168,14 +156,16 @@ public abstract class Field implements Serializable {
         return  size;
     }
 
-    public void setCornerPoints(List<CornerPoint> cornerPoints) {
-        for (CornerPoint cp : cornerPoints) {
-            addCornerPoint(cp);
+    public void setGeoPoints(List<GeoPoint> geoPoints) {
+        for (GeoPoint gp : geoPoints) {
+            this.geoPoints.add(gp);
+            if(this.geoPoints.size() == 1)
+                setAutomaticCounty();
         }
     }
 
-    public List<CornerPoint> getCornerPoints() {
-        return cornerPoints;
+    public List<GeoPoint> getGeoPoints() {
+        return geoPoints;
     }
 
     public GeoPoint getCentroid() {
@@ -239,8 +229,8 @@ public abstract class Field implements Serializable {
      */
     public void setAutomaticCounty() {
         new AsyncReverseGeoCoding().execute(new double[]{
-                this.getCornerPoints().get(0).getWGS().getLatitude(),
-                this.getCornerPoints().get(0).getWGS().getLongitude()
+                this.getGeoPoints().get(0).getLatitude(),
+                this.getGeoPoints().get(0).getLongitude()
         });
     }
 

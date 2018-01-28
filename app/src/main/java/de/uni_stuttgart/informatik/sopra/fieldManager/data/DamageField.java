@@ -95,18 +95,10 @@ public class DamageField extends Field implements Serializable {
         return paths;
     }
 
-    public void setPath(String path) {
-        PictureData pictureData = new PictureData((new Integer(paths.size())).toString(), path);
-        paths.add(pictureData);
-    }
-
     public void setPath(PictureData pictureData) {
         paths.add(pictureData);
     }
 
-    public void setPhotoName(String name, PictureData pictureData) {
-        pictureData.setImage_title(name);
-    }
 
     public void calcInsuranceAmount() {
         insuranceMoney = this.getSize() * this.getType().getInsuranceMoneyPerSquareMeter() * parentField.getType().getInsuranceMoneyPerSquareMeter();

@@ -101,23 +101,25 @@ public abstract class Field implements Serializable {
         firstSum = firstSum + cordinates.get(cordinates.size() - 1).get(0) * cordinates.get(0).get(1);
         secondSum = secondSum + cordinates.get(cordinates.size() - 1).get(1) * cordinates.get(0).get(0);
         size = Math.abs((firstSum - secondSum) / 2);
-        convertSize();
+        this.conSize = convertSize(this.size);
     }
 
 
     /**
      * Convert the size of the field in a readable format
      */
-    private void convertSize() {
-        if (this.size > 1000000) {
-            this.conSize = (String.valueOf(size / 1000000)) + "km" + "\u00B2";
-        } else if (this.size > 10000 && this.size <= 1000000) {
-            this.conSize = (String.valueOf(size / 10000)) + "ha";
-        } else if (this.size > 100 && this.size <= 10000) {
-            this.conSize = (String.valueOf(size / 100)) + "a";
+    public String convertSize(double size) {
+        String conSize = "";
+        if (size > 1000000) {
+            conSize = (String.valueOf(size / 1000000)) + "km" + "\u00B2";
+        } else if (size > 10000 && size <= 1000000) {
+            conSize = (String.valueOf(size / 10000)) + "ha";
+        } else if (size > 100 && size <= 10000) {
+            conSize = (String.valueOf(size / 100)) + "a";
         } else {
-            this.conSize = (String.valueOf(size)) + "m" + "\u00B2";
+            conSize = (String.valueOf(size)) + "m" + "\u00B2";
         }
+        return conSize;
     }
 
     /**
@@ -218,9 +220,6 @@ public abstract class Field implements Serializable {
         this.setColor(type.toColor(context));
     }
 
-    public boolean isFieldequal(Field otherField) {
-        return otherField.getID() == this.getID();
-    }
 
     /**
      * starts an async task that tries to get the SubAdminArea

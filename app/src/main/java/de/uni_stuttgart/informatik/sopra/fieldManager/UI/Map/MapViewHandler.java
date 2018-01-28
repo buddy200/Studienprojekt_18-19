@@ -2,9 +2,15 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -146,9 +152,27 @@ public class MapViewHandler implements MapContract.MapHandler {
         polygon.setPoints(polyPoints);
         polygon.setFillColor(field.getColor());
         polygon.setTitle(field.getName());
+        //polygon.setStrokeColor(Color.BLACK);
+        //polygon.setStrokeWidth(3.0f);
+        //polygon.setPatternBMP(getBitmapFromVectorDrawable(context, R.drawable.pattern_falling_triangles));
 
         fieldPolyMap.put(field, polygon);
         return polygon;
+    }
+
+    public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     /**

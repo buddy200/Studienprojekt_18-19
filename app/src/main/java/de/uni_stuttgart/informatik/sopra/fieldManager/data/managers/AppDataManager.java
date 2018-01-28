@@ -240,6 +240,10 @@ public class AppDataManager {
         return resultList;
     }
 
+    public boolean checkLogin(String usr, String pw){
+        return dbConnection.checkUsr(usr,pw);
+    }
+
     public void deletePicture(DamageField field, PictureData pd) {
         dbConnection.deletePicture(pd);
     }

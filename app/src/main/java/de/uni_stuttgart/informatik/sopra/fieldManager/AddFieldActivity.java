@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -36,6 +35,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSEditHand
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BottomSheetAddPhoto;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.IntersectionCalculator;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.fieldManager.Util.PointOutOfField;
@@ -43,7 +43,6 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
-import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
 
 
 /**
@@ -303,6 +302,12 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         }
         intersectionCalculator.calculateLine(!isDmgField);
+        if(!isDmgField){
+            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+            Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
+                    location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }
         if (isDmgField && pointOutOfField.pointInField(parentField.getLinesFormField(), parentField.getCentroid(), g)) {
 
 

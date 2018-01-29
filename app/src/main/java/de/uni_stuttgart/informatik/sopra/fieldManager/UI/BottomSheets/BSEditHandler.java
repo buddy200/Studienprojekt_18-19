@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 
 /**
  * sopra_priv

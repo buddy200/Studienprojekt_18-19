@@ -1,11 +1,21 @@
-# Field Manager
+# Feldhelfer
 
-![Screenshot vom Startbildschrim der App](doc/images/Startscreen.png)
-Screenshot vom Startbildschrim der App
+![Screenshot vom Startbildschrim der App](doc/images/logo.jpg)
+![Screenshot vom Startbildschrim der App](doc/images/icon.png)
+
 
 Die App dient dazu Felder von Bauern zu erfassen und darin Schäden zu markieren. Dies geschieht mit einer Android App die ab Version 5.1 lauffähig ist. Sie soll Versicherungen und Bauern helfen Ihre Felder und vor allem die Schäden die in den Felder entstehen besser verwalten zu können als sie es im Moment tun.
 Diese App löst vor allem das Problem das man als Versicherung/Bauer häufig nur den Schadensfall auf dem Papier hat und dies unter Umständen deutlich länger dauert ihn zu versenden und zu bearbeiten, als wenn es elektronisch erfasst ist.
 Weiter ist es deutlich einfacher den Schaden wieder zu finden, weil man genau auf der Karte sieht wo der Schaden ist und welches Feld betroffen ist.
+
+Wichtig!
+Default Anmeldedaten:
+Verwalter:
+Name: adm
+Passwort: 123
+Bauer:
+Name: farm
+Passwort: 000
 
 
 ## Features
@@ -84,6 +94,7 @@ Wenn sich der Schadensfall im Bearbeitungsmodus befindet können auch Bilder zur
 ![Bilder UI](doc/images/bilderUI.png)
 Hier gibt es nun die Möglichkeit dem Bild einen Titel zu geben (der Titel kann auch leer gelassen werden). Man kann nun entweder ein Bild mit der Kamera machen oder eines aus der Galerie hinzuzufügen. Mit dem Rechtenesten Button wird das Fotomenü wieder geschlossen und es wird zur Kartenansicht zurückgegangen.
 
+
 ![Mit Kamera](doc/images/mitKamera.png)
 Hier wird ein Bild mit der Kamera gemacht.
 
@@ -94,6 +105,9 @@ Hier kann ein Bild aus der Galerie ausgewählt werden.
 ![Nach dem einfügen](doc/images/nacheinfugen.png)
 Hier kann man die Bilder nun sehen wie sie eingefügt aussehen. Durch einfaches Klicken können Bilder auch wieder gelöscht werden (mit Sicherheitsabfrage).
 
+![Löschen eines Bildes](doc/images/loescheBild.png)
+Mit einem langen Klick auf das Bild kann das Bild gelöscht werden.
+
 ![Anzeige im Schadensfall](doc/images/bilderDialog.png)
 
 ### Feature 5 Anzeigen aller Schadensfälle und Felder in einer Liste
@@ -101,13 +115,13 @@ Hier kann man die Bilder nun sehen wie sie eingefügt aussehen. Durch einfaches 
 Es wird ein Liste alle Schadensfälle und Felder sobald man auf den Button "list" drückt angezeigt. In dieser werden ein paar Informationen zu den Feldern und Schadensfällen angezeigt. Durch klicken auf einen Eintrag, werden alle Informationen die Verfügbar sind angezeigt und es wird zum jeweiligen Feld oder Schadensfall gezoomt. Es ist dann auch möglich den Eintrag zu bearbeiten und einen Schadensfall hinzuzufügen (Siehe Feature 1 und 2). Weiter sind in der Liste zuerst die Felder und dann die Schadensfälle aufgelistet
 
 
-! [Liste aktivieren](doc/images/NachAnmelden.png)
+! [Liste aktivieren](doc/images/NachAnmelden2.png)
 Hier kann die Liste ausgewählt werden.
 
 ![Anzeige der Liste mit den wichtigsten Informationen](doc/images/list.png)
 Anzeige der Liste mit den wichtigsten Informationen.
 
-![Detailansicht eines Feldes/Schadensfall](doc/images/Detailansicht2.png)
+![Detailansicht eines Feldes/Schadensfall](doc/images/Detailansicht3.png)
 Detailansicht eines Feldes/Schadensfall nach dem klicken auf einen Eintrag in der Liste.
 
 
@@ -133,10 +147,10 @@ Ohne Internetverbindung ist es eventuell nicht möglich die Karte anzuzeigen. We
 
 Die App kann sobald einmal die Standorterfassung aktiviert ist, den Standort erfassen und diesen dann alle zwei Sekunden aktualisieren. Um dieses Feature nutzen zu können muss die Standorterfassung des Gerätes eingeschalten sein. Außerdem kann es einige Sekunden dauern bis ein Standort gefunden worden ist. In Gebäuden oder in Gebieten mit schlechten GPS-Empfang kann die Ortung eventuell nicht erfolgen.
 
-![Standort aktivieren](doc/images/NachAnmelden.png)
+![Standort aktivieren](doc/images/NachAnmelden2.png)
 Hier in diesem Menu lässt sich der Standortdienst aktivieren.
 
-![Anzeige des aktuellen Standorts](doc/images/Startscreen.png)
+![Anzeige des aktuellen Standorts](doc/images/loc.png)
 Anzeige des aktuellen Standorts.
 
 ### Feature 9 Navigation mit Google Maps
@@ -151,7 +165,7 @@ Falls man nicht vor Ort die Felder eintragen will, kann man auch mit einfachen K
 Im Moment beschränkt sich die Nutzerverwaltung hauptsächlich darauf das Bauer und Verwalter unterschieden werden. Der Bauer hat keinerlei Schreibrechte. Kann also keine Felder oder Schadensfälle hinzufügen oder ändern. Er sieht nur Daten die auf seinen Namen laufen. Der Verwalter hingegen hat vollen Zugriff auf die App.
 
 ![Anmelde Dialog](doc/images/Anmelden1.png)
-Hier können sich die Nutzer anmelden. Im Moment reicht der Nutzernamen und die Auswahl was dieser für eine Rolle hat. Ein richtiger Login mit Passwort ist dann in Verbindung mit einem Backend sinnvoller zu integrieren.
+Hier können sich die Nutzer anmelden. Die Passwörte liegen verschlüsselt in der Datenbank. Eine Backend Lösung wäre hier sinvoller
 
 ![Anmelde Dialog 2 ](doc/images/Anmelden2.png)
 Eingetragene Login Daten.
@@ -159,14 +173,14 @@ Eingetragene Login Daten.
 ![Eingeloggter User sehen](doc/images/NachAnmelden.png)
 Hier lässt sich einsehen wer gerade eingeloggt ist.
 
-![Verwalteransicht](doc/images/Startscreen.png)
+![Verwalteransicht](doc/images/Verwalter.png)
 Ansicht eines beliebigen Verwalters.
 
 ![Ansicht Bauer Müller](doc/images/muller.png)
-Hier ist die Ansicht wenn sich der Bauer Müller eigeloggt hat.
+Hier ist die Ansicht wenn sich der Bauer farm eigeloggt hat.
 
-![Liste Müller](ListeMuller.png)
-Liste der Felder mit Bauer Müller als Benutzer.
+![Liste Müller](doc/images/ListeMuller.png)
+Liste der Felder mit Bauer farm als Benutzer.
 
 ### Feature 12 In App Tutorial
 Mit Hilfe des Hilfe Buttons kann ein Tutorial aufgerufen werden das die grundlegenden Features der App zeigt
@@ -190,7 +204,7 @@ Hier eine exemplarische Darstellung eines Tutorialfensters.
 ## Verwendung der App
 
 ### Wichtiger Anwendungsfall 1: Erstellung und Übersicht von Feldern
-Der Bauer oder Gutachter kann Felder erstellen in dem er sie abläuft/abfährt und die passenden Daten einträgt. Dadurch hat auch der Bauer nochmal eine Übersicht was er an Feldern hat, wie groß diese sind oder was darauf angebaut wird. Diese Informationen können aber auch für die Versicherung interessant sein.
+Der Gutachter kann Felder erstellen in dem er sie abläuft/abfährt und die passenden Daten einträgt. Dadurch hat auch der Bauer nochmal eine Übersicht was er an Feldern hat, wie groß diese sind oder was darauf angebaut wird. Diese Informationen können aber auch für die Versicherung interessant sein.
 
 ### Wichtiger Anwendungsfall 2: Erstellung von Schadensfälle durch einen Gutachter
 

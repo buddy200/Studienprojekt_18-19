@@ -5,7 +5,6 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 
 /**

@@ -2,9 +2,6 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
 
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-
-import java.util.List;
 
 /**
  * sopra_priv

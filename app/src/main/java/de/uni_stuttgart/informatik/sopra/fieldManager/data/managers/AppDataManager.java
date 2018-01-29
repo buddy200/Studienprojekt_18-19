@@ -230,7 +230,7 @@ public class AppDataManager {
         this.openDBWhenClosed();
         clearAllMaps();
         for (Field field : this.searchOwner(name)) {
-            if (field instanceof AgrarianField) {
+            if (field instanceof AgrarianField && ((AgrarianField) field).getOwner().equals(name)) {
                 agrarianFieldMap.put(field.getID(), (AgrarianField) field);
             }
         }

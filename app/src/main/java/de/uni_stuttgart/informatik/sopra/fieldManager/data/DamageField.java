@@ -1,7 +1,6 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
 

@@ -94,18 +94,18 @@ public class b_AddFieldTest {
     }
 
     private void drawFieldBig(){
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.1f, 0.1f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.2f, 0.2f));
         SystemClock.sleep(500);
 
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.1f,0.9f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.2f,0.8f));
         SystemClock.sleep(500);
 
         testRedoButton(0.1f, 0.9f);
 
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.9f,0.9f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.8f,0.8f));
         SystemClock.sleep(500);
 
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.15f,0.7f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.3f,0.7f));
         SystemClock.sleep(500);
 
         onView(withId(R.id.action_menu_done)).perform(click());
@@ -121,16 +121,16 @@ public class b_AddFieldTest {
     }
 
     private void drawFieldSmall(){
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.15f, 0.6f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.4f, 0.6f));
         SystemClock.sleep(500);
 
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.25f,0.6f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.40f,0.65f));
         SystemClock.sleep(500);
 
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.1f,0.9f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.45f,0.65f));
         SystemClock.sleep(500);
 
-        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.15f,0.7f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.45f,0.6f));
         SystemClock.sleep(500);
 
         // onView(withId(R.id.map_fragment_add)).perform(clickXY(0.1f,0.1f));

@@ -13,34 +13,34 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v7.widget.SearchView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogAgrField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogDmgField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditAgrField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditDmgField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSEditHandler;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BottomSheetAddPhoto;
-import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogAgrField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.ItemListDialogFragment;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.LoginDialog;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapFragment;
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map.MapViewHandler;
+import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
+import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
-import de.uni_stuttgart.informatik.sopra.fieldManager.Util.MYLocationListener;
-import de.uni_stuttgart.informatik.sopra.fieldManager.UI.TutorialOverlays;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
 
 /**
  * sopra_priv

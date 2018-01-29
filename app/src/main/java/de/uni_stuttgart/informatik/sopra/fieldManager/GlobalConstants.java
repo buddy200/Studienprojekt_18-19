@@ -2,8 +2,6 @@ package de.uni_stuttgart.informatik.sopra.fieldManager;
 
 import org.osmdroid.util.GeoPoint;
 
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
-
 /**
  * sopra_priv
  * Created by Felix B on 14.11.17.

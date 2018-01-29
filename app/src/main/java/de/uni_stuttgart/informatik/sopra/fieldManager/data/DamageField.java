@@ -44,7 +44,6 @@ public class DamageField extends Field implements Serializable {
     public DamageField(Context context, List<GeoPoint> gPoints, AgrarianField parentField) {
         super(context, gPoints);
         super.setType(defaultType);
-        this.setColor(damageFieldToColor());
         this.setDate(new Date(0));
         this.paths = new ArrayList<>();
         this.parentField = parentField;

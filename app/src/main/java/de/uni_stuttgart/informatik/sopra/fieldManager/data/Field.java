@@ -217,7 +217,6 @@ public abstract class Field implements Serializable {
      */
     public void setType(FieldType type) {
         this.type = type;
-        this.setColor(type.toColor(context));
     }
 
 

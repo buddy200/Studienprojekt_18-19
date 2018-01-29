@@ -75,6 +75,12 @@ public class DBConnection {
         dbHelper.close();
     }
 
+    public void openDBWhenClosed(){
+        if(!db.isOpen()){
+            db = dbHelper.getWritableDatabase();
+        }
+    }
+
     /**
      * add an field to the database
      *

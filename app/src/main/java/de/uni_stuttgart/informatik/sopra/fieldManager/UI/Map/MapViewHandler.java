@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import org.osmdroid.api.IMapController;
@@ -94,7 +93,6 @@ public class MapViewHandler implements MapContract.MapHandler {
     int counter = 0;
 
     public void init() {
-        Log.e(TAG, "init map " + counter);
         counter++;
         map = new MapView(context);
         map.setMinZoomLevel(3);
@@ -156,7 +154,7 @@ public class MapViewHandler implements MapContract.MapHandler {
             polyPoints.add(new GeoPoint(point.getLatitude(), point.getLongitude()));
         }
         polygon.setPoints(polyPoints);
-        polygon.setFillColor(field.getColor());
+        polygon.setFillColor(Color.BLACK);
         polygon.setTitle(field.getName());
         polygon.setStrokeColor(Color.BLACK);
         if(field  instanceof AgrarianField){

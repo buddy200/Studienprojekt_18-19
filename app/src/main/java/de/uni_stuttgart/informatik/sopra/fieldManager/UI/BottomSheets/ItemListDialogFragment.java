@@ -142,10 +142,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             holder.text.setText(fieldData.get(position).getName());
             if (fieldData.get(position).getType() != null) {
                 holder.state.setText(fieldData.get(position).getType().toString(getContext()));
-                holder.state.setTextColor(fieldData.get(position).getColor());
             } else {
                 holder.state.setText(" ");
-                holder.state.setTextColor(fieldData.get(position).getColor());
             }
             if (fieldData.get(position) instanceof AgrarianField) {
                 holder.county.setText(fieldData.get(position).getCounty());

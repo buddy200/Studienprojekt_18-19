@@ -133,7 +133,6 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         name.setText(this.mField.getName());
         edit.setImageResource(R.drawable.ic_mode_edit_black_24px);
         state.setText(this.mField.getType().toString(getContext()));
-        state.setTextColor(this.mField.getColor());
         size.setText(this.mField.getConvertedSize());
         date.setText(this.mField.getParsedDate());
         progressState.setText( this.mField.getProgressStatus().toString(getContext()));

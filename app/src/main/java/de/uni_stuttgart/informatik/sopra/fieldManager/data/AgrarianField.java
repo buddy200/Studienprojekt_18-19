@@ -36,7 +36,6 @@ public class AgrarianField extends Field implements Serializable {
     public AgrarianField(Context context, List<GeoPoint> gPoints) {
         super(context, gPoints);
         super.setType(AgrarianFieldType.Corn);
-        this.setColor(defaultType.toColor(context));
         this.setContainedDamageFields(new ArrayList<DamageField>());
         containedDamageFields = new ArrayList<>();
 

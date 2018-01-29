@@ -147,6 +147,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onStart() {
         super.onStart();
+        dataManager.openDBWhenClosed();
 
         loadFieldData();
         long i = getIntent().getLongExtra("parentField", -1);

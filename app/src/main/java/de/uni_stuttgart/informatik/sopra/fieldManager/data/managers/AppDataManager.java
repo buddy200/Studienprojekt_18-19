@@ -200,6 +200,10 @@ public class AppDataManager {
         dbConnection.close();
     }
 
+    public void openDBWhenClosed(){
+        dbConnection.openDBWhenClosed();
+    }
+
     public void addPicture(DamageField field, PictureData pd) {
         dbConnection.addPictureToField(field.getID(), pd);
     }

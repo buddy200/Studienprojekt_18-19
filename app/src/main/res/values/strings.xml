@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Field Manager</string>
+    <string name="app_name">FeldHelfer</string>
 
     <string name="done">Done</string>
 
@@ -119,5 +119,6 @@
     <string name="insects">insects</string>
     <string name="agrarian_field">Agrarian field</string>
     <string name="damage_field">Damage case</string>
+    <string name="no_privileges">This user has no admin privileges</string>
 
 </resources>

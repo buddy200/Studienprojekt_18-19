@@ -124,7 +124,7 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
 
         if(radioButtonId == RB_ADMIN_ID ){
             if(!password.equals("292C9515973C024858D535B4DB786ACB") && !username.equals("Adm")){
-                Toast.makeText(getContext(), "This user has no admin privileges", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.no_privileges, Toast.LENGTH_LONG).show();
             }else {
                 edit.putBoolean(getContext().getString(R.string.pref_admin_bool), Boolean.TRUE);
                 GlobalConstants.isAdmin = true;

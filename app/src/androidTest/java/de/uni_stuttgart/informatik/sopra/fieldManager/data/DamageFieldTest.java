@@ -2,9 +2,11 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.data;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import static org.junit.Assert.*;
 /**
  * Created by larsb on 28.01.2018.
  */
+@RunWith(AndroidJUnit4.class)
 public class DamageFieldTest {
     private AgrarianField agrarianField;
     private DamageField damageField1;

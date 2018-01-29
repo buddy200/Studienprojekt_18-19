@@ -1,31 +1,20 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.Util;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.Vector;
-
-import de.uni_stuttgart.informatik.sopra.fieldManager.R;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 
 /**
  * Created by larsb on 24.01.2018.
  */
 
 public class PointOutOfField {
-    private Context context;
 
-    public PointOutOfField(Context context) {
-        this.context = context;
+    public PointOutOfField() {
     }
 
-    public boolean calcIntersection(ArrayList<Vector<Double>> linesFromParent, GeoPoint centroidFromParent, GeoPoint newPoint) {
+    public static boolean pointInField(ArrayList<Vector<Double>> linesFromParent, GeoPoint centroidFromParent, GeoPoint newPoint) {
         Vector<Double> line = new Vector<>();
         int countIntersection = 0;
 
@@ -39,22 +28,17 @@ public class PointOutOfField {
 
             //check if the intersection point is inside the damage field
             if (boundaryCheck(intersection, centroidFromParent, newPoint) && boundaryCheck2(intersection, new GeoPoint(lineFromParent.get(2).doubleValue(), lineFromParent.get(3).doubleValue()), new GeoPoint(lineFromParent.get(4).doubleValue(), lineFromParent.get(5).doubleValue()))) {
-                countIntersection ++;
-
+                countIntersection++;
             }
         }
-        if(countIntersection % 2 == 0){
-            Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
+        if (countIntersection % 2 == 0) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
-    private boolean boundaryCheck(Vector<Double> intersection, GeoPoint centroidFromParent, GeoPoint newPoint) {
-
-
+    private static boolean boundaryCheck(Vector<Double> intersection, GeoPoint centroidFromParent, GeoPoint newPoint) {
         if (newPoint.getLatitude() <= centroidFromParent.getLatitude() && newPoint.getLongitude() <= centroidFromParent.getLongitude()) {
             if ((intersection.get(0).doubleValue() >= newPoint.getLatitude()
                     && (intersection.get(1).doubleValue() >= newPoint.getLongitude()))) {
@@ -70,7 +54,7 @@ public class PointOutOfField {
         }
         if (newPoint.getLatitude() >= centroidFromParent.getLatitude() && newPoint.getLongitude() <= centroidFromParent.getLongitude()) {
             if ((intersection.get(0).doubleValue() >= newPoint.getLatitude()) && (intersection.get(1).doubleValue() <= newPoint.getLongitude()
-                   )) {
+            )) {
                 return true;
             }
         }
@@ -82,7 +66,7 @@ public class PointOutOfField {
         return false;
     }
 
-    private boolean boundaryCheck2(Vector<Double> intersection, GeoPoint lastPoint, GeoPoint currentPoint) {
+    private static boolean boundaryCheck2(Vector<Double> intersection, GeoPoint lastPoint, GeoPoint currentPoint) {
 
 
         if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {

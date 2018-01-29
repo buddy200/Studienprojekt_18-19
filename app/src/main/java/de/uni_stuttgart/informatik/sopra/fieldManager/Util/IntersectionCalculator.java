@@ -1,15 +1,10 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.Util;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Vector;
 
-import de.uni_stuttgart.informatik.sopra.fieldManager.AddFieldActivity;
-import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
 
@@ -22,13 +17,11 @@ public class IntersectionCalculator {
     private GeoPoint lastPoint;
     private GeoPoint currentPoint;
     private ArrayList<Vector<Double>> linesFromAgrarianField;
-    private Context context;
     private ArrayList<GeoPoint> points;
     private Vector<Double> line;
 
-    public IntersectionCalculator(Context context, ArrayList<GeoPoint> points, ArrayList<Vector<Double>> linesFromAgrarianField) {
+    public IntersectionCalculator(ArrayList<GeoPoint> points, ArrayList<Vector<Double>> linesFromAgrarianField) {
         this.linesFromAgrarianField = linesFromAgrarianField;
-        this.context = context;
         this.points = points;
     }
 
@@ -53,9 +46,18 @@ public class IntersectionCalculator {
 
         //calculates the line form second last to the last point
         if (lastPoint != null && currentPoint != null) {
-            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));
-            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
-
+            if (currentPoint.getLatitude() - lastPoint.getLatitude() != 0 && currentPoint.getLongitude() - lastPoint.getLongitude() != 0) {
+                line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));
+                line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            }
+            //very uncommon cases. for this application is this approximation ok.
+            else if (currentPoint.getLatitude() - lastPoint.getLatitude() == 0) {
+                line.add(0.0000000000000000000000000001);
+                line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            } else if (currentPoint.getLongitude() - lastPoint.getLongitude() == 0) {
+                line.add(100000000000000000000000000000.0);
+                line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            }
         }
         //the line must only saved if the new field a agrarian field
         if (isAgrarianField && line != null && line.size() != 0) {
@@ -85,7 +87,6 @@ public class IntersectionCalculator {
 
                     //check if the intersection point is inside the damage field
                     if (boundaryCheck(intersection, lastPoint, currentPoint) && boundaryCheck(intersection, new GeoPoint(lineFromParent.get(2).doubleValue(), lineFromParent.get(3).doubleValue()), new GeoPoint(lineFromParent.get(4).doubleValue(), lineFromParent.get(5).doubleValue()))) {
-                        Toast.makeText(context, context.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
@@ -135,61 +136,32 @@ public class IntersectionCalculator {
         }
         return false;
     }
-/*
-    private boolean boudnryCheck2(Vector<Double> intersection) {
-        if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= currentPoint.getLongitude()))) {
-                return true;
-            }
-        }
 
-        if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= lastPoint.getLongitude()))) {
-                return true;
-            }
-        }
-        if (lastPoint.getLatitude() >= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= currentPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= lastPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()
-                    && intersection.get(1).doubleValue() <= currentPoint.getLongitude()))) {
-                return true;
-            }
-        }
-        if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() >= currentPoint.getLongitude()) {
-            if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
-                    && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) &&
-                    (intersection.get(1).doubleValue() >= currentPoint.getLongitude()
-                            && intersection.get(1).doubleValue() <= lastPoint.getLongitude()))) {
-                return true;
-            }
-        }
-        return false;
-    }
-*/
     /**
      * this method calculate the last line from the new agrarian field from the end point to the start point
-     *
-     * @param field
      */
-    public void calcLastLine(Field field) {
+    public void calcLastLine() {
         Vector<Double> line = new Vector<>();
         GeoPoint startPoint;
         if (points.get(0) != null) {
             lastPoint = points.get(points.size() - 1);
             startPoint = points.get(0);
             currentPoint = startPoint;
-            line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));
-            line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            if (currentPoint.getLatitude() - lastPoint.getLatitude() == 0) {
+                line.add(0.0000000000000000000000000001);
+                line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            } else if (currentPoint.getLongitude() - lastPoint.getLongitude() == 0) {
+                line.add(100000000000000000000000000000.0);
+                line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            } else {
+                line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));
+                line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
+            }
             line.add(2, lastPoint.getLatitude());
             line.add(3, lastPoint.getLongitude());
             line.add(4, currentPoint.getLatitude());
             line.add(5, currentPoint.getLongitude());
             linesFromAgrarianField.add(line);
-            ((AgrarianField) field).setLinesFormField(linesFromAgrarianField);
         }
     }
 }

@@ -28,7 +28,6 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BSDetailDialogEditAgrField;
@@ -101,8 +100,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         toolbar.setTitle(R.string.title_activity_add_field);
 
         linesFromAgrarianField = new ArrayList<>();
-        intersectionCalculator = new IntersectionCalculator(this, listGeoPoints, linesFromAgrarianField);
-        pointOutOfField = new PointOutOfField(this);
+        intersectionCalculator = new IntersectionCalculator(listGeoPoints, linesFromAgrarianField);
+        pointOutOfField = new PointOutOfField();
         polyline = new Polyline();
         polyline.setColor(R.color.colorAccent);
         polyline.setWidth(2.0f);
@@ -304,10 +303,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         }
         intersectionCalculator.calculateLine(!isDmgField);
-        if (isDmgField && pointOutOfField.calcIntersection(parentField.getLinesFormField(), parentField.getCentroid(), g)) {
+        if (isDmgField && pointOutOfField.pointInField(parentField.getLinesFormField(), parentField.getCentroid(), g)) {
 
 
             if ((isDmgField && !intersectionCalculator.calcIntersection(parentField))) {
+                Toast.makeText(this, this.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                 onRedoButtonClick();
             } else {
                 fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
@@ -362,7 +362,8 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
             } else {
                 fieldToAdd = new AgrarianField(getApplicationContext(), listGeoPoints);
                 if (fieldToAdd instanceof AgrarianField) {
-                    intersectionCalculator.calcLastLine(fieldToAdd);
+                    intersectionCalculator.calcLastLine();
+                    ((AgrarianField) fieldToAdd).setLinesFormField(linesFromAgrarianField);
                 }
             }
             GlobalConstants.setLastLocationOnMap(fieldToAdd.getCentroid());

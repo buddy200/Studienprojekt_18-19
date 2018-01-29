@@ -25,9 +25,9 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.BottomShee
 public class PhotoManager {
     public static final int REQUEST_TAKE_PHOTO = 1;
 
-    String mCurrentPhotoPath;
-    Activity activity;
-    BottomSheetAddPhoto fragment;
+    private String mCurrentPhotoPath;
+    private Activity activity;
+    private BottomSheetAddPhoto fragment;
 
     public PhotoManager(Activity a, BottomSheetAddPhoto fragment) {
         this.activity = a;

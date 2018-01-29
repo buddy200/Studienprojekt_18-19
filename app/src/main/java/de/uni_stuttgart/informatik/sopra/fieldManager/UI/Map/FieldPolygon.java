@@ -102,9 +102,6 @@ public class FieldPolygon extends Polygon {
         if(bitmapShader != null) recalculateMatrix(mapView);
         super.draw(canvas, mapView, shadow);
     }
-    float strokeWidth = 5.0f;
-    PathEffect dash = new DashPathEffect(
-            new float[] { strokeWidth * 3, strokeWidth }, 0);
 
     public void setPatternBMP(@NonNull final Bitmap patternBMP) {
         bitmapShader = new BitmapShader(patternBMP, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);

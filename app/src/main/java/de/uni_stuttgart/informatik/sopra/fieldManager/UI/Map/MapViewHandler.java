@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.PathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -94,6 +97,7 @@ public class MapViewHandler implements MapContract.MapHandler {
         Log.e(TAG, "init map " + counter);
         counter++;
         map = new MapView(context);
+        map.setMinZoomLevel(3);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
         map.setUseDataConnection(true);
@@ -271,7 +275,7 @@ public class MapViewHandler implements MapContract.MapHandler {
             }
         });
 
-        Drawable dr = context.getResources().getDrawable(R.drawable.ic_pin_map);
+        Drawable dr = context.getResources().getDrawable(R.drawable.ic_flag);
         m.setIcon(dr);
         m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlayManager().add(m);
@@ -305,8 +309,14 @@ public class MapViewHandler implements MapContract.MapHandler {
 
     @Override
     public void addPolyline(Polyline p) {
+        p.getPaint().setStyle(Paint.Style.STROKE);
+        p.getPaint().setPathEffect(dash);
         map.getOverlayManager().add(p);
     }
+
+    float strokeWidth = 5.0f;
+    PathEffect dash = new DashPathEffect(
+            new float[] { strokeWidth * 3, strokeWidth }, 0);
 
     public void reload() {
         if (map != null) {

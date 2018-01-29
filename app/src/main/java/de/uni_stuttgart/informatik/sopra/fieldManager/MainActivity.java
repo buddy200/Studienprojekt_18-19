@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onStart() {
         super.onStart();
-        dataManager.openDBWhenClosed();
         loadFieldData();
 
         //check if user already used the app - if not show login dialog

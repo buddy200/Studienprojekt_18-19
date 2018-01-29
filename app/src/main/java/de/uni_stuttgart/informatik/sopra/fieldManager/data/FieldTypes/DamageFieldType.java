@@ -1,15 +1,12 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_stuttgart.informatik.sopra.fieldManager.MainActivity;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
-import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 
 /**
  * sopra_priv
@@ -75,6 +72,24 @@ public enum DamageFieldType implements FieldType, Serializable {
                 return context.getResources().getColor(R.color.insectsTypeDmg);
             default:
                 return 0;
+        }
+    }
+
+    @Override
+    public int getPattern(Context context) {
+        switch (this.id) {
+            case 1:
+                return R.drawable.pattern_dmg_stripes;
+            case 2:
+                return R.drawable.pattern_dmg_diagonal_stripes;
+            case 3:
+                return R.drawable.pattern_dmg_flipped_diamonds;
+            case 4:
+                return R.drawable.pattern_dmg_houndstooth;
+            case 5:
+                return R.drawable.pattern_dmg_tiny_checkers;
+            default:
+                return R.drawable.pattern_dmg_wiggle;
         }
     }
 

@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         //check if user already used the app - if not show login dialog
         boolean previouslyStarted = prefs.getBoolean(this.getResources().getString(R.string.pref_previously_started), false);
         if (!previouslyStarted) {
-            LoginDialog loginDialog = new LoginDialog(this);
+            LoginDialog loginDialog = new LoginDialog(this, dataManager);
             loginDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {

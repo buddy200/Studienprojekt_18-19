@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -47,6 +48,24 @@ public class DBConnection {
         this.context = context;
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
+
+    }
+
+    public boolean checkUsr(String usr, String pw){
+        String[] selection_args = new String[2];
+        selection_args[0] = usr;
+        selection_args[1] = pw;
+
+        try {
+            Cursor cursor = db.query(DBHelper.UserTable_NAME, null, DBHelper.USR_COLUMN + " LIKE ? AND " + DBHelper.PW_COLUM +
+                    " LIKE ? ", selection_args, null, null, null);
+            if(cursor.getCount() == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**

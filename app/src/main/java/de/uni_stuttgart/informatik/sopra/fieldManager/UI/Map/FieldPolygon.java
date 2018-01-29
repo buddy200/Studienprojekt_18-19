@@ -1,12 +1,23 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathDashPathEffect;
+import android.graphics.PathEffect;
 import android.graphics.Point;
+import android.graphics.Shader;
+import android.support.annotation.NonNull;
 
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Polygon;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
@@ -27,6 +38,10 @@ public class FieldPolygon extends Polygon {
     private Paint textPaint;
     private Field field;
     private Point polyCentroidPoint;
+    private BitmapShader bitmapShader;
+    private IGeoPoint lastCenterGeoPoint;
+    private int xOffset = 0;
+    private int yOffset = 0;
 
     public FieldPolygon(Context context, Field field) {
         super(context);
@@ -61,28 +76,84 @@ public class FieldPolygon extends Polygon {
         //TODO: show name depending to polygon size and zoom level
         if (field instanceof AgrarianField) {
             if (mapView.getZoomLevel() < 18) {
+                if(bitmapShader != null) recalculateMatrix(mapView);
                 super.draw(canvas, mapView, shadow);
                 return;
             }
             textPaint.setTextSize(50);
             textPaint.setColor(Color.BLACK);
-            this.setStrokeColor(Color.argb(0, 0, 0, 0));
+            //this.setStrokeColor(Color.argb(0, 0, 0, 0));
 
             //handle damage fields
         } else if (field instanceof DamageField) {
             if (mapView.getZoomLevel() < 19) {
+                if(bitmapShader != null) recalculateMatrix(mapView);
                 super.draw(canvas, mapView, shadow);
                 return;
             }
             textPaint.setTextSize(40);
             textPaint.setColor(Color.BLACK);
-            this.setStrokeColor(Color.argb(255, 0, 0, 0));
-            this.setStrokeWidth(1.0f);
         }
 
         polyCentroidPoint = new Point();
         mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
+
+        if(bitmapShader != null) recalculateMatrix(mapView);
         super.draw(canvas, mapView, shadow);
+    }
+    float strokeWidth = 5.0f;
+    PathEffect dash = new DashPathEffect(
+            new float[] { strokeWidth * 3, strokeWidth }, 0);
+
+    public void setPatternBMP(@NonNull final Bitmap patternBMP) {
+        bitmapShader = new BitmapShader(patternBMP, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        mFillPaint.setShader(bitmapShader);
+    }
+
+    private PathEffect getTrianglePathEffect(int strokeWidth) {
+        return new PathDashPathEffect(
+                getTriangle(strokeWidth),
+                strokeWidth,
+                0.0f,
+                PathDashPathEffect.Style.ROTATE);
+    }
+
+    private Path getTriangle(float size) {
+        Path path = new Path();
+        float half = size / 2;
+        path.moveTo(-half, -half);
+        path.lineTo(half, -half);
+        path.lineTo(0, half);
+        path.close();
+        return path;
+    }
+
+    protected void recalculateMatrix(@NonNull final MapView mapView) {
+        //final int mapSize = TileSystem.MapSize(mapView.getZoomLevel());
+
+        final Projection projection = mapView.getProjection();
+        final IGeoPoint geoPoint = mapView.getMapCenter();
+        if (lastCenterGeoPoint == null) lastCenterGeoPoint = geoPoint;
+
+        final Point point = projection.toPixels(geoPoint, null);
+        final Point lastCenterPoint = projection.toPixels(lastCenterGeoPoint, null);
+
+        xOffset += lastCenterPoint.x - point.x;
+        yOffset += lastCenterPoint.y - point.y;
+
+        xOffset %= 35; // 100 is pixel size of shader image
+        yOffset %= 35;
+
+        final Matrix matrix = new Matrix();
+        matrix.reset();
+        matrix.setScale(1,1);
+        matrix.preTranslate(xOffset, yOffset);
+        //matrix.setTranslate(xOffset, yOffset);
+        bitmapShader.setLocalMatrix(matrix);
+
+        mFillPaint.setShader(bitmapShader);
+
+        lastCenterGeoPoint = geoPoint;
     }
 }

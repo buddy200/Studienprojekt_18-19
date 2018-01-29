@@ -54,6 +54,7 @@ public class AppDataManager {
      * Reads all field data from the database and write these in two Hash maps. One for DamageFields one for AgrarianFields
      */
     public void readData() {
+        this.openDBWhenClosed();
         clearAllMaps();
         for (AgrarianField field : dbConnection.getAllAgrarianFields()) {
             agrarianFieldMap.put(field.getID(), field);
@@ -72,6 +73,7 @@ public class AppDataManager {
      * @param f
      */
     public void addAgrarianField(AgrarianField f) {
+        this.openDBWhenClosed();
         dbConnection.addField(f);
         readData();
         dataChange();
@@ -83,6 +85,7 @@ public class AppDataManager {
      * @param dmg
      */
     public void addDamageField(DamageField dmg) {
+        this.openDBWhenClosed();
         dbConnection.addField(dmg);
         readData();
         dataChange();
@@ -94,6 +97,7 @@ public class AppDataManager {
      * @param f
      */
     public void removeField(Field f) {
+        this.openDBWhenClosed();
         if (f instanceof DamageField) {
             DamageField damageField = (DamageField) f;
             removeField(damageField);
@@ -109,6 +113,7 @@ public class AppDataManager {
      * @param agrarianField field to delete
      */
     public void removeField(AgrarianField agrarianField) {
+        this.openDBWhenClosed();
         for (DamageField dmf : agrarianField.getContainedDamageFields()) {
             dbConnection.deleteDamageField(dmf);
             damageFieldMap.remove(dmf.getID());
@@ -127,6 +132,7 @@ public class AppDataManager {
      * @param damageField field to delete
      */
     public void removeField(DamageField damageField) {
+        this.openDBWhenClosed();
         damageField.getParentField().getContainedDamageFields().remove(damageField);
         dbConnection.updateAgrarianField(damageField.getParentField());
         for (PictureData pictureData : damageField.getPaths()) {
@@ -151,6 +157,7 @@ public class AppDataManager {
      * @param field field to change
      */
     public void changeAgrarianField(AgrarianField field) {
+        this.openDBWhenClosed();
         dbConnection.updateAgrarianField(field);
         agrarianFieldMap.put(field.getID(), field);
         dataChange();
@@ -162,6 +169,7 @@ public class AppDataManager {
      * @param field field to change
      */
     public void changeDamageField(DamageField field) {
+        this.openDBWhenClosed();
         dbConnection.updateDamageField(field);
         damageFieldMap.put(field.getID(), field);
         dataChange();
@@ -173,6 +181,7 @@ public class AppDataManager {
      * @return a ArrayList of fields
      */
     public ArrayList<Field> getAllFields() {
+        this.openDBWhenClosed();
         ArrayList<Field> dataFromFields = new ArrayList<>();
         dataFromFields.addAll(agrarianFieldMap.values());
         dataFromFields.addAll(damageFieldMap.values());
@@ -180,10 +189,12 @@ public class AppDataManager {
     }
 
     public ArrayList<AgrarianField> getAllAgrarianFields() {
+        this.openDBWhenClosed();
         return new ArrayList<>(agrarianFieldMap.values());
     }
 
     public ArrayList<DamageField> getAllDamageFields() {
+        this.openDBWhenClosed();
         return new ArrayList<>(damageFieldMap.values());
     }
 
@@ -192,6 +203,7 @@ public class AppDataManager {
     }
 
     public void clearAllMaps() {
+        this.openDBWhenClosed();
         agrarianFieldMap.clear();
         damageFieldMap.clear();
     }
@@ -205,6 +217,7 @@ public class AppDataManager {
     }
 
     public void addPicture(DamageField field, PictureData pd) {
+        this.openDBWhenClosed();
         dbConnection.addPictureToField(field.getID(), pd);
     }
 
@@ -214,6 +227,7 @@ public class AppDataManager {
      * @param name
      */
     public void loadUserFields(String name) {
+        this.openDBWhenClosed();
         clearAllMaps();
         for (Field field : this.searchOwner(name)) {
             if (field instanceof AgrarianField) {
@@ -228,6 +242,7 @@ public class AppDataManager {
     }
 
     public ArrayList<Field> containsField(List<Field> fieldList){
+        this.openDBWhenClosed();
         ArrayList<Field> resultList = new ArrayList<>();
         for(Field field : fieldList){
             if(field instanceof AgrarianField){

@@ -27,8 +27,8 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
  * sopra_priv
  * Created by Felix B on 19.11.17.
  * Mail: felix.burk@gmail.com
- * <p>
- * A custom Polygon overlay for the MapView
+ *
+ * A custom Polygon overlay for our MapView
  */
 
 public class FieldPolygon extends Polygon {
@@ -42,7 +42,7 @@ public class FieldPolygon extends Polygon {
     private int xOffset = 0;
     private int yOffset = 0;
 
-    public FieldPolygon(Context context, Field field) {
+    FieldPolygon(Context context, Field field) {
         super(context);
 
         this.field = field;
@@ -81,7 +81,6 @@ public class FieldPolygon extends Polygon {
             }
             textPaint.setTextSize(50);
             textPaint.setColor(Color.BLACK);
-            //this.setStrokeColor(Color.argb(0, 0, 0, 0));
 
             //handle damage fields
         } else if (field instanceof DamageField) {
@@ -96,17 +95,29 @@ public class FieldPolygon extends Polygon {
 
         polyCentroidPoint = new Point();
         if(bitmapShader != null) recalculateMatrix(mapView);
+
         super.draw(canvas, mapView, shadow);
+
+        //after super call to draw names on top of everything else
         mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
 
     }
 
-    public void setPatternBMP(@NonNull final Bitmap patternBMP) {
+    /**
+     * set bitmap pattern to be displayed inside polygon
+     * @param patternBMP
+     */
+    void setPatternBMP(@NonNull final Bitmap patternBMP) {
         bitmapShader = new BitmapShader(patternBMP, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         mFillPaint.setShader(bitmapShader);
     }
 
+    /**
+     * unused border triangle effect
+     * @param strokeWidth
+     * @return
+     */
     private PathEffect getTrianglePathEffect(int strokeWidth) {
         return new PathDashPathEffect(
                 getTriangle(strokeWidth),
@@ -115,6 +126,11 @@ public class FieldPolygon extends Polygon {
                 PathDashPathEffect.Style.ROTATE);
     }
 
+    /**
+     * for custom border triangle effect
+     * @param size
+     * @return
+     */
     private Path getTriangle(float size) {
         Path path = new Path();
         float half = size / 2;
@@ -125,7 +141,12 @@ public class FieldPolygon extends Polygon {
         return path;
     }
 
-    protected void recalculateMatrix(@NonNull final MapView mapView) {
+    /**
+     * shift polygon content depending on camera position on map canvas
+     * used to prevent scrolling bitmap patterns
+     * @param mapView
+     */
+    private void recalculateMatrix(@NonNull final MapView mapView) {
         //final int mapSize = TileSystem.MapSize(mapView.getZoomLevel());
 
         final Projection projection = mapView.getProjection();

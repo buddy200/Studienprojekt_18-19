@@ -40,8 +40,8 @@ public class LoginDialog extends Dialog implements android.view.View.OnClickList
     private Context context;
     private AppDataManager dataManager;
 
-    private static final int RB_ADMIN_ID = 1000;//first radio button id
-    private static final int RB_FARMER_ID = 1001;//second radio button id
+    private static final int RB_ADMIN_ID = 1000;    //first radio button id
+    private static final int RB_FARMER_ID = 1001;   //second radio button id
 
     public LoginDialog(@NonNull Context context, AppDataManager dataManager) {
         super(context, R.style.Login_Dialog);

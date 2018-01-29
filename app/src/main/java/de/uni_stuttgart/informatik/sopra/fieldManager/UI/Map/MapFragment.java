@@ -22,6 +22,8 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BasePresenter;
  * sopra_priv
  * Created by Felix B on 03.11.17.
  * Mail: felix.burk@gmail.com
+ *
+ * Creates MapView inside fragment
  */
 
 public class MapFragment extends Fragment implements MapContract.MapFragment {
@@ -141,6 +143,10 @@ public class MapFragment extends Fragment implements MapContract.MapFragment {
         }
     }
 
+    /**
+     * sets presenter object, the presenter handles everything not directly related to android
+     * @param presenter
+     */
     public void setPresenter(MapViewHandler presenter) {
         mPresenter = presenter;
     }

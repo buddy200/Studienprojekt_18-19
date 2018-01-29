@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "69490563422",
+    "firebase_url": "https://soprapriv.firebaseio.com",
+    "project_id": "soprapriv",
+    "storage_bucket": "soprapriv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69490563422:android:c0a4f5c24d0fe336",
+        "android_client_info": {
+          "package_name": "de.uni_stuttgart.informatik.sopra.fieldManager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69490563422-gnj37mhiub38ce1gu4unvp9cm5at5doi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.uni_stuttgart.informatik.sopra.fieldManager",
+            "certificate_hash": "b5a77b7e6f3e5e1eb643ee26626cb3af54c9cab0"
+          }
+        },
+        {
+          "client_id": "69490563422-kjmn73tlvt5fjv48flf9o6l0dpvu5q4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGwwWKx8rOnK0v6-XJ2P-OxicB6r6-uMQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69490563422-kjmn73tlvt5fjv48flf9o6l0dpvu5q4b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

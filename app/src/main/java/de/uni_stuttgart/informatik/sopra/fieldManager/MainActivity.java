@@ -47,7 +47,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManag
  * Created by Felix B on 03.11.17.
  * Mail: felix.burk@gmail.com
  * <p>
- * the main activity for our app, everything starts here
+ * the main activity for odur app, everything starts here
  * the class is listening for every Interaction of its fragments
  */
 
@@ -166,6 +166,234 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         dataManager.dbClose();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        setUpSearchMenuItem(menu);
+
+        MenuItem addFieldMenuItem = menu.findItem(R.id.action_toolbar_add);
+        if (!GlobalConstants.isAdmin) {
+            addFieldMenuItem.setVisible(false);
+        } else {
+            addFieldMenuItem.setVisible(true);
+        }
+        MenuItem username = menu.findItem(R.id.action_toolbar_username);
+        username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
+
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_toolbar_add:
+                if(mapHandler.getMap() != null){
+                    GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));
+                }
+                Intent i = new Intent(this, AddFieldActivity.class);
+                startActivityForResult(i, 2404);
+                break;
+            case R.id.action_toolbar_list:
+                ItemListDialogFragment.newInstance(dataManager.getAllFields()).show(getSupportFragmentManager(), "FieldList");
+                break;
+            case R.id.action_toolbar_location:
+                MYLocationListener myLocationListener = new MYLocationListener();
+                myLocationListener.initializeLocationManager(this, mapHandler);
+                Location location = myLocationListener.getLocation();
+                if (location != null) {
+                    mapHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
+                    mapHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
+                    GlobalConstants.setLastLocationOnMap(new GeoPoint(location));
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.action_toolbar_logout:
+                //DATABASE IS NOT CHANGED AFTER LOGOUT
+                generateLogoutDialog().show();
+                break;
+            case R.id.action_toolbar_tutorial:
+                if(GlobalConstants.isAdmin){
+                    new TutorialOverlays().mainTutorial(this);
+                }else {
+                    new TutorialOverlays().mainTutorialNoAdmin(this);
+                }
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * animates the center of the map to the centroid of a field
+     * we need some offset because of the visible bottom sheet
+     *
+     * @param field
+     */
+    private void animateMapToFieldWithBS(Field field) {
+        //offset get center on top of BottomSheet
+        double offset = 0.0007;
+        mapHandler.animateAndZoomTo((field).getCentroid().getLatitude() - offset,
+                (field).getCentroid().getLongitude());
+
+        if (field instanceof DamageField) {
+            BSDetailDialogDmgField bs = BSDetailDialogDmgField.newInstance();
+            new BSEditHandler(field, dataManager, bs);
+            bs.show(this.getSupportFragmentManager(), "DetailField");
+        } else if (field instanceof AgrarianField) {
+            BSDetailDialogAgrField bs = BSDetailDialogAgrField.newInstance();
+            new BSEditHandler(field, dataManager, bs);
+            bs.show(this.getSupportFragmentManager(), "DetailField");
+        }
+
+    }
+
+    /**
+     * sets all listeners for the SearchView implementation in the action bar
+     *
+     * @param menu
+     */
+    private View expandSearch;
+
+    /**
+     * setup search Menu Item, has to be called before onCreateOptionsMenu(Menu menu) !
+     * searching happens here
+     * @param menu
+     */
+    private void setUpSearchMenuItem(Menu menu) {
+        final String searchFor[] = {
+                MainActivity.getmContext().getResources().getString(R.string.search_all),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date),
+                MainActivity.getmContext().getResources().getString(R.string.dialogItem_evaluator)
+        };
+
+        final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
+        expandSearch = findViewById(R.id.search_bar);
+        final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+                android.R.layout.simple_spinner_item, searchFor);
+        searchTypeSpinner.setAdapter(adapter);
+        searchTypeSpinner.setSelection(0);
+
+        adapter.notifyDataSetChanged();
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                expandSearch.setVisibility(View.VISIBLE);
+                expandSearch.bringToFront();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                expandSearch.setVisibility(View.INVISIBLE);
+                return true;
+            }
+        });
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchAll(query))).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchName(query))).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchOwner(query))).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchState(query))).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchDate(query))).show(getSupportFragmentManager(), "FieldList");
+                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[5])) {
+                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchEvaluator(query))).show(getSupportFragmentManager(), "FieldList");
+                }
+
+                searchItem.collapseActionView();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //do nothing
+                return false;
+            }
+        });
+    }
+
+    /**
+     * generator for the logout dialog
+     * @return
+     */
+    private AlertDialog.Builder generateLogoutDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //delete all shared preferences - DATABASE IS NOT CHANGED
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.clear();
+                        edit.apply();
+                        dataManager.clearAllMaps();
+                        mapHandler.reload();
+                        onStart();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.logout_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
+                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
+
+        return builder;
+    }
+
+    /**
+     * custom field data to load, depending on username
+     */
+    private void loadFieldData() {
+        String name = prefs.getString("usr", "");
+        if (!(prefs.getBoolean("adm", false))) {
+            if ((!name.equals(""))) {
+                dataManager.loadUserFields(name);
+            } else {
+                dataManager.clearAllMaps();
+            }
+        } else {
+            dataManager.readData();
+        }
+        mapHandler.reload();
+    }
+
     /**
      * receive messages from fragments
      *
@@ -233,27 +461,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     /**
-     * animates the center of the map to the centroid of a field
-     * we need some offset because of the visible bottom sheet
-     *
-     * @param field
+     * called every time a data changes happens from appDataManager instance
      */
-    private void animateMapToFieldWithBS(Field field) {
-        //offset get center on top of BottomSheet
-        double offset = 0.0007;
-        mapHandler.animateAndZoomTo((field).getCentroid().getLatitude() - offset,
-                (field).getCentroid().getLongitude());
-
-        if (field instanceof DamageField) {
-            BSDetailDialogDmgField bs = BSDetailDialogDmgField.newInstance();
-            new BSEditHandler(field, dataManager, bs);
-            bs.show(this.getSupportFragmentManager(), "DetailField");
-        } else if (field instanceof AgrarianField) {
-            BSDetailDialogAgrField bs = BSDetailDialogAgrField.newInstance();
-            new BSEditHandler(field, dataManager, bs);
-            bs.show(this.getSupportFragmentManager(), "DetailField");
+    @Override
+    public void onDataChange() {
+        if (mapHandler != null) {
+            mapHandler.reload();
         }
-
     }
 
     /**
@@ -264,203 +478,5 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
      */
     public static Context getmContext() {
         return mContext;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        setUpSearchMenuItem(menu);
-
-        MenuItem addFieldMenuItem = menu.findItem(R.id.action_toolbar_add);
-        if (!GlobalConstants.isAdmin) {
-            addFieldMenuItem.setVisible(false);
-        } else {
-            addFieldMenuItem.setVisible(true);
-        }
-        MenuItem username = menu.findItem(R.id.action_toolbar_username);
-        username.setTitle("Logged in as: " + prefs.getString("usr", "not logged in"));
-
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
-
-        return true;
-    }
-
-    /**
-     * sets all listeners for the SearchView implementation in the action bar
-     *
-     * @param menu
-     */
-    private View expandSearch;
-
-    private void setUpSearchMenuItem(Menu menu) {
-        final String searchFor[] = {
-                MainActivity.getmContext().getResources().getString(R.string.search_all),
-                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Name),
-                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Owner),
-                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Type),
-                MainActivity.getmContext().getResources().getString(R.string.dialogItem_Date),
-                MainActivity.getmContext().getResources().getString(R.string.dialogItem_evaluator)
-        };
-
-        final MenuItem searchItem = menu.findItem(R.id.action_toolbar_search);
-        expandSearch = findViewById(R.id.search_bar);
-        final Spinner searchTypeSpinner = findViewById(R.id.spinner_search);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
-                android.R.layout.simple_spinner_item, searchFor);
-        searchTypeSpinner.setAdapter(adapter);
-        searchTypeSpinner.setSelection(0);
-
-        adapter.notifyDataSetChanged();
-        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                expandSearch.setVisibility(View.VISIBLE);
-                expandSearch.bringToFront();
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                expandSearch.setVisibility(View.INVISIBLE);
-                return true;
-            }
-        });
-
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[0])) {
-                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchAll(query))).show(getSupportFragmentManager(), "FieldList");
-                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[1])) {
-                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchName(query))).show(getSupportFragmentManager(), "FieldList");
-                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[2])) {
-                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchOwner(query))).show(getSupportFragmentManager(), "FieldList");
-                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[3])) {
-                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchState(query))).show(getSupportFragmentManager(), "FieldList");
-                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[4])) {
-                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchDate(query))).show(getSupportFragmentManager(), "FieldList");
-                } else if (searchTypeSpinner.getSelectedItem().toString().equals(searchFor[5])) {
-                    ItemListDialogFragment.newInstance(dataManager.containsField(dataManager.searchEvaluator(query))).show(getSupportFragmentManager(), "FieldList");
-                }
-
-                searchItem.collapseActionView();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //do nothing
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_toolbar_add:
-                if(mapHandler.getMap() != null){
-                    GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));
-                }
-                Intent i = new Intent(this, AddFieldActivity.class);
-                startActivityForResult(i, 2404);
-                break;
-            case R.id.action_toolbar_list:
-                ItemListDialogFragment.newInstance(dataManager.getAllFields()).show(getSupportFragmentManager(), "FieldList");
-                break;
-            case R.id.action_toolbar_location:
-                MYLocationListener myLocationListener = new MYLocationListener();
-                myLocationListener.initializeLocationManager(this, mapHandler);
-                Location location = myLocationListener.getLocation();
-                if (location != null) {
-                    mapHandler.animateAndZoomTo(location.getLatitude(), location.getLongitude());
-                    mapHandler.setCurrLocMarker(location.getLatitude(), location.getLongitude());
-                    GlobalConstants.setLastLocationOnMap(new GeoPoint(location));
-                } else {
-                    Toast.makeText(this, getResources().getString(R.string.toastmsg_nolocation), Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.action_toolbar_logout:
-                //DATABASE IS NOT CHANGED AFTER LOGOUT
-                generateLogoutDialog().show();
-                break;
-            case R.id.action_toolbar_tutorial:
-                if(GlobalConstants.isAdmin){
-                    new TutorialOverlays().mainTutorial(this);
-                }else {
-                    new TutorialOverlays().mainTutorialNoAdmin(this);
-                }
-                break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private AlertDialog.Builder generateLogoutDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        //delete all shared preferences - DATABASE IS NOT CHANGED
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getmContext());
-                        SharedPreferences.Editor edit = prefs.edit();
-                        edit.clear();
-                        edit.apply();
-                        dataManager.clearAllMaps();
-                        mapHandler.reload();
-                        onStart();
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.logout_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
-                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
-
-        return builder;
-    }
-
-    @Override
-    public void onDataChange() {
-        if (mapHandler != null) {
-            mapHandler.reload();
-        }
-    }
-
-    private void loadFieldData() {
-        String name = prefs.getString("usr", "");
-        if (!(prefs.getBoolean("adm", false))) {
-            if ((!name.equals(""))) {
-                dataManager.loadUserFields(name);
-            } else {
-                dataManager.clearAllMaps();
-            }
-        } else {
-            dataManager.readData();
-        }
-        mapHandler.reload();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -90,8 +90,7 @@ public class MapViewHandler implements MapContract.MapHandler {
     /**
      * initialize the map
      */
-    int counter = 0;
-
+    private int counter = 0;
     public void init() {
         counter++;
         map = new MapView(context);
@@ -169,6 +168,14 @@ public class MapViewHandler implements MapContract.MapHandler {
         return polygon;
     }
 
+    /**
+     * create a bitmap canvas from a vector drawable
+     * the bitmap size is important here, it handles the pattern size inside the polygons
+     * @param context
+     * @param drawableId
+     * @param field
+     * @return
+     */
     public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId, Field field) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);
         if(field instanceof AgrarianField){
@@ -260,6 +267,11 @@ public class MapViewHandler implements MapContract.MapHandler {
         map.getOverlayManager().add(currentLocMarker);
     }
 
+    /**
+     * drop a flag pole marker on the map to indicate corner points
+     * @param lat
+     * @param lon
+     */
     public void dropMarker(double lat, double lon) {
         if (map == null) return;
 
@@ -280,6 +292,9 @@ public class MapViewHandler implements MapContract.MapHandler {
         fieldMarker.add(m);
     }
 
+    /**
+     * deletes the last field maker by removing it from the overlays list
+     */
     public void deleteLastFieldMarker() {
         map.getOverlayManager().remove(fieldMarker.get(fieldMarker.size() - 1));
         fieldMarker.remove(fieldMarker.size() - 1);
@@ -305,23 +320,34 @@ public class MapViewHandler implements MapContract.MapHandler {
         }
     }
 
+    /**
+     * create special stylized polyline to indicate the polygon boundaries
+     * @param p
+     */
     @Override
     public void addPolyline(Polyline p) {
+        float strokeWidth = 5.0f;
+        PathEffect dash = new DashPathEffect(
+                new float[] { strokeWidth * 3, strokeWidth }, 0);
+
         p.getPaint().setStyle(Paint.Style.STROKE);
         p.getPaint().setPathEffect(dash);
         map.getOverlayManager().add(p);
     }
 
-    float strokeWidth = 5.0f;
-    PathEffect dash = new DashPathEffect(
-            new float[] { strokeWidth * 3, strokeWidth }, 0);
-
+    /**
+     * reloads the overlay data on the map
+     */
     public void reload() {
         if (map != null) {
             reloadWithData(mDataManager.getAllFields());
         }
     }
 
+    /**
+     * reloads overlay data on the map with a new dataset
+     * @param fields
+     */
     public void reloadWithData(ArrayList<Field> fields) {
         MapEventsOverlay backup = null;
 
@@ -336,10 +362,19 @@ public class MapViewHandler implements MapContract.MapHandler {
         addFields(fields);
     }
 
+    /**
+     * returns the mapView instance
+     * @return
+     */
     public MapView getMap() {
         return map;
     }
 
+    /**
+     * permission requests
+     * @param strings
+     * @param i
+     */
     public void requestPermissions(String[] strings, int i) {
         mMapFragment.requestPermissions(strings, i);
     }
@@ -357,6 +392,9 @@ public class MapViewHandler implements MapContract.MapHandler {
         }
     }
 
+    /**
+     * destroys the whole view and closes the osmdroid sqlite database
+     */
     public void destroy() {
         fieldMarker.clear();
         if(map != null) map.onDetach();

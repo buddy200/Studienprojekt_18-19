@@ -183,7 +183,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     @Override
     public void onResume(){
         super.onResume();
-        OnMapClick();
+        onMapClick();
     }
 
     @Override
@@ -191,6 +191,11 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         super.onStop();
         mMapViewHandler.saveMapCenter();
         mMapViewHandler.destroy();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -217,6 +222,20 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 break;
         }
         return true;
+    }
+
+    private void loadFieldData() {
+        String name = prefs.getString("usr", "");
+        if (!(prefs.getBoolean("adm", false))) {
+            if ((!name.equals(""))) {
+                dataManager.loadUserFields(name);
+            } else {
+                dataManager.clearAllMaps();
+            }
+        } else {
+            dataManager.readData();
+        }
+        mMapViewHandler.reload();
     }
 
     /**
@@ -257,7 +276,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     /**
      * adds a point to the field with a click on the map
      */
-    public void OnMapClick() {
+    public void onMapClick() {
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint point) {
@@ -277,79 +296,6 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
 
         MapEventsOverlay overlayEvents = new MapEventsOverlay(mReceive);
         mMapViewHandler.getMap().getOverlayManager().add(overlayEvents);
-    }
-
-
-    /**
-     * adds a new Point to the Field
-     *
-     * @param location
-     */
-
-    public void addPoint(Location location) {
-        GeoPoint g = new GeoPoint(location);
-        listGeoPoints.add(g);
-        polyline.setPoints(listGeoPoints);
-        mMapViewHandler.addPolyline(polyline);
-        mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());
-        mMapViewHandler.invalidateMap();
-
-        if (listGeoPoints.size() > 2) {
-            enoughPoints = true;
-            fabLabel.setVisibility(View.INVISIBLE);
-            menuItemDone.setVisible(true);
-            menuItemDone.setTitle(getResources().getString(R.string.done_Button));
-
-        }
-        intersectionCalculator.calculateLine(!isDmgField);
-        if(!isDmgField){
-            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
-            Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
-                    location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
-        }
-        if (isDmgField && pointOutOfField.pointInField(parentField.getLinesFormField(), parentField.getCentroid(), g)) {
-
-
-            if ((isDmgField && !intersectionCalculator.calcIntersection(parentField))) {
-                Toast.makeText(this, this.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
-                onRedoButtonClick();
-            } else {
-                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
-                Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
-                        location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        }
-        else {
-            if (isDmgField) {
-                Toast.makeText(this, this.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
-                onRedoButtonClick();
-            }
-            else{
-
-            }
-        }
-    }
-    private AlertDialog.Builder generateSaveDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        onBackPressed();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.go_back_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
-                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
-
-        return builder;
     }
 
     /**
@@ -421,6 +367,100 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
     }
 
     /**
+     * map callback
+     */
+    public void onMapFragmentComplete() {
+
+    }
+
+
+    /**
+     * adds a new Point to the Field
+     *
+     * @param location
+     */
+    public void addPoint(Location location) {
+        GeoPoint g = new GeoPoint(location);
+        listGeoPoints.add(g);
+        polyline.setPoints(listGeoPoints);
+        mMapViewHandler.addPolyline(polyline);
+        mMapViewHandler.dropMarker(g.getLatitude(), g.getLongitude());
+        mMapViewHandler.invalidateMap();
+
+        if (listGeoPoints.size() > 2) {
+            enoughPoints = true;
+            fabLabel.setVisibility(View.INVISIBLE);
+            menuItemDone.setVisible(true);
+            menuItemDone.setTitle(getResources().getString(R.string.done_Button));
+
+        }
+        intersectionCalculator.calculateLine(!isDmgField);
+        if(!isDmgField){
+            fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+            Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
+                    location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }
+        if (isDmgField && pointOutOfField.pointInField(parentField.getLinesFormField(), parentField.getCentroid(), g)) {
+
+
+            if ((isDmgField && !intersectionCalculator.calcIntersection(parentField))) {
+                Toast.makeText(this, this.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
+                onRedoButtonClick();
+            } else {
+                fabLabel.setText(getResources().getString(R.string.add_Activity_YouNeed) + String.valueOf(3 - listGeoPoints.size()) + " " + getResources().getString(R.string.add_activity_needMore));
+                Snackbar.make(mapFragment.getView(), getResources().getString(R.string.add_activity_pointAt) +
+                        location.getLatitude() + " " + location.getLongitude() + getResources().getString(R.string.add_activity_added), Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        }
+        else {
+            if (isDmgField) {
+                Toast.makeText(this, this.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
+                onRedoButtonClick();
+            }
+            else{
+
+            }
+        }
+    }
+    private AlertDialog.Builder generateSaveDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        onBackPressed();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.go_back_message)).setPositiveButton(getResources().getString(R.string.word_yes), dialogClickListener)
+                .setNegativeButton(getResources().getString(R.string.word_no), dialogClickListener);
+
+        return builder;
+    }
+
+    /**
+     * called every time a data changes happens from appDataManager instance
+     */
+    @Override
+    public void onDataChange() {
+        if (mMapViewHandler != null) {
+            mMapViewHandler.reload();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
      * receive messages from fragments
      *
      * @param Tag    of the fragment
@@ -457,43 +497,5 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
                 }
                 break;
         }
-    }
-
-    /**
-     * as soon as the map fragment is completely initialized and displayed
-     * try to get the current user location
-     */
-    public void onMapFragmentComplete() {
-
-    }
-
-    @Override
-    public void onDataChange() {
-        if (mMapViewHandler != null) {
-            mMapViewHandler.reload();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-    private void loadFieldData() {
-        String name = prefs.getString("usr", "");
-        if (!(prefs.getBoolean("adm", false))) {
-            if ((!name.equals(""))) {
-                dataManager.loadUserFields(name);
-            } else {
-                dataManager.clearAllMaps();
-            }
-        } else {
-            dataManager.readData();
-        }
-        mMapViewHandler.reload();
     }
 }

@@ -70,7 +70,10 @@ public class a_LoginTest {
                 .perform(click());
 
         onView(withId(R.id.login_dialog_editText_username))
-                .perform(typeText("FARMER NAME"), closeSoftKeyboard());
+                .perform(typeText("farm"), closeSoftKeyboard());
+
+        onView(withId(R.id.login_dialog_editText_password))
+                .perform(typeText("000"), closeSoftKeyboard());
 
         onView(withId(R.id.login_dialog_btn_login))
                 .perform(click());
@@ -84,7 +87,10 @@ public class a_LoginTest {
                 .perform(click());
 
         onView(withId(R.id.login_dialog_editText_username))
-                .perform(typeText(name), closeSoftKeyboard());
+                .perform(typeText("Adm"), closeSoftKeyboard());
+
+        onView(withId(R.id.login_dialog_editText_password))
+                .perform(typeText("123"), closeSoftKeyboard());
 
         onView(withId(R.id.login_dialog_btn_login))
                 .perform(click());

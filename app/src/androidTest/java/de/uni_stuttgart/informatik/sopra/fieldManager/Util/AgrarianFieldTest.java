@@ -1,4 +1,4 @@
-package de.uni_stuttgart.informatik.sopra.fieldManager.data;
+package de.uni_stuttgart.informatik.sopra.fieldManager.Util;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.AgrarianFieldType;
 
 import static org.junit.Assert.*;

@@ -1,18 +1,11 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager;
 
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.SystemClock;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.CoordinatesProvider;
 import android.support.test.espresso.action.GeneralClickAction;
 import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Tap;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,8 +13,6 @@ import android.widget.EditText;
 
 import org.junit.Rule;
 import org.junit.Test;
-
-import de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets.GalleryAdapter;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -33,14 +24,10 @@ import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static net.bytebuddy.matcher.ElementMatchers.hasType;
 import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  * sopra_priv
@@ -58,7 +45,7 @@ public class b_AddFieldTest {
 
     @Test
     public void start(){
-        a_LoginTest.loginAsAdmin("ADD FIELD TEST");
+        ab_LoginTest.loginAsAdmin("ADD FIELD TEST");
 
         onView(withId(R.id.action_toolbar_add)).perform(click());
         drawFieldBig();
@@ -69,7 +56,7 @@ public class b_AddFieldTest {
         testData("dmg name");
         addPhotoBottomSheet();
 
-        a_LoginTest.logout();
+        ab_LoginTest.logout();
     }
 
     private void addPhotoBottomSheet() {
@@ -118,7 +105,8 @@ public class b_AddFieldTest {
         onView(withId(R.id.map_fragment_add)).perform(clickXY(0.9f,0.9f));
         SystemClock.sleep(500);
 
-        // onView(withId(R.id.map_fragment_add)).perform(clickXY(0.1f,0.1f));
+        onView(withId(R.id.map_fragment_add)).perform(clickXY(0.15f,0.7f));
+        SystemClock.sleep(500);
 
         onView(withId(R.id.action_menu_done)).perform(click());
 

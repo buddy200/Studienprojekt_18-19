@@ -5,19 +5,14 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.io.File;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -38,7 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  * Mail: felix.burk@gmail.com
  */
 
-public class d_ValidateCamera {
+public class e_ValidateCamera {
 
     @Rule
     public IntentsTestRule<MainActivity> intentsRule =
@@ -52,7 +47,7 @@ public class d_ValidateCamera {
                 R.mipmap.ic_launcher);
 
         // Now that we have the stub in place, click on the button in our app that launches into the Camera
-        a_LoginTest.loginAsAdmin("CAMERA TEST");
+        ab_LoginTest.loginAsAdmin("CAMERA TEST");
         SystemClock.sleep(500);
         onView(withId(R.id.action_toolbar_search)).perform(click());
         onView(isAssignableFrom(EditText.class)).perform(typeText("dmg name"), pressKey(KeyEvent.KEYCODE_ENTER));
@@ -87,7 +82,7 @@ public class d_ValidateCamera {
         SystemClock.sleep(2000);
 
 
-        a_LoginTest.logout();
+        ab_LoginTest.logout();
         SystemClock.sleep(2000);
 
 

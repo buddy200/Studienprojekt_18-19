@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.not;
  * Mail: felix.burk@gmail.com
  */
 
-public class a_LoginTest {
+public class ab_LoginTest {
 
     /**
      * BEFORE RUNNING THESE GRANT THE APP ALL PERMISSIONS,

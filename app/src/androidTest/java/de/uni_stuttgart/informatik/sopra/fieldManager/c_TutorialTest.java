@@ -28,7 +28,7 @@ public class c_TutorialTest {
 
     @Test
     public void start() {
-        a_LoginTest.loginAsAdmin("TUTORIAL TEST");
+        ab_LoginTest.loginAsAdmin("TUTORIAL TEST");
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.help_label)).perform(click());
@@ -44,7 +44,7 @@ public class c_TutorialTest {
         onView(withId(R.id.action_menu_done)).perform(click());
 
         pressBack();
-        a_LoginTest.logout();
+        ab_LoginTest.logout();
 
     }
 }

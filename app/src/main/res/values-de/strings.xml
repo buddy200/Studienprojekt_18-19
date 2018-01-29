@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Field Manager</string>
+    <string name="app_name">Feldhelfer</string>
     <string name="done">Fertig</string>
     <string name="toastmsg_nolocation">Keine Standortdaten verfügbar. Standorterfassung aktiviert?</string>
     <string name="toastmsg_not_enough_points">Nicht genügend Punkte, mindestends 3 Punkte werden benötigt</string>

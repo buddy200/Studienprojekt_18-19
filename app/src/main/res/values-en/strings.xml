@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Field Manager</string>
+    <string name="app_name">Feldhelfer</string>
     <string name="wheat">wheat</string>
     <string name="snow">snow</string>
     <string name="done">Done</string>

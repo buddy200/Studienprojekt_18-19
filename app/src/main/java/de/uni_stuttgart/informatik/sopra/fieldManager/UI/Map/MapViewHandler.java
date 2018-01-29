@@ -33,6 +33,8 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.FragmentInteractionListene
 import de.uni_stuttgart.informatik.sopra.fieldManager.GlobalConstants;
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.AgrarianField;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.AgrarianFieldType;
+import de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes.DamageFieldType;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.managers.AppDataManager;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.DamageField;
 import de.uni_stuttgart.informatik.sopra.fieldManager.data.Field;
@@ -152,22 +154,32 @@ public class MapViewHandler implements MapContract.MapHandler {
         polygon.setPoints(polyPoints);
         polygon.setFillColor(field.getColor());
         polygon.setTitle(field.getName());
-        //polygon.setStrokeColor(Color.BLACK);
-        //polygon.setStrokeWidth(3.0f);
-        //polygon.setPatternBMP(getBitmapFromVectorDrawable(context, R.drawable.pattern_falling_triangles));
+        polygon.setStrokeColor(Color.BLACK);
+        if(field  instanceof AgrarianField){
+            polygon.setPatternBMP(getBitmapFromVectorDrawable(context, ((AgrarianFieldType)field.getType()).getPattern(context), field));
+            polygon.setStrokeWidth(1.0f);
+        }else {
+            polygon.setPatternBMP(getBitmapFromVectorDrawable(context, ((DamageFieldType)field.getType()).getPattern(context), field));
+            polygon.setStrokeWidth(2.0f);
+        }
 
         fieldPolyMap.put(field, polygon);
         return polygon;
     }
 
-    public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+    public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId, Field field) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if(field instanceof AgrarianField){
+            drawable.setTint(context.getResources().getColor(R.color.colorAccentDark));
+        }else {
+            drawable.setTint(context.getResources().getColor(R.color.colorPrimary));
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             drawable = (DrawableCompat.wrap(drawable)).mutate();
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(35,
+                35, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);

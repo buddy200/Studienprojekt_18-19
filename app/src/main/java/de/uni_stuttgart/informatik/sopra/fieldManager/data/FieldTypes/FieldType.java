@@ -2,6 +2,7 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.data.FieldTypes;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface FieldType{
     String toString(Context context);
     int toColor(Context context);
     double getInsuranceMoneyPerSquareMeter();
+    int getPattern(Context context);
 }

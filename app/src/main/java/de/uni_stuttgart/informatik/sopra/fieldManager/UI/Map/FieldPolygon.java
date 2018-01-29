@@ -76,7 +76,7 @@ public class FieldPolygon extends Polygon {
         //TODO: show name depending to polygon size and zoom level
         if (field instanceof AgrarianField) {
             if (mapView.getZoomLevel() < 18) {
-                recalculateMatrix(mapView);
+                if(bitmapShader != null) recalculateMatrix(mapView);
                 super.draw(canvas, mapView, shadow);
                 return;
             }
@@ -87,21 +87,19 @@ public class FieldPolygon extends Polygon {
             //handle damage fields
         } else if (field instanceof DamageField) {
             if (mapView.getZoomLevel() < 19) {
-                recalculateMatrix(mapView);
+                if(bitmapShader != null) recalculateMatrix(mapView);
                 super.draw(canvas, mapView, shadow);
                 return;
             }
+            textPaint.setTextSize(40);
+            textPaint.setColor(Color.BLACK);
         }
 
-      //  this.setStrokeColor(Color.argb(255, 0, 0, 0));
-       // mFillPaint.setStyle(Paint.Style.STROKE);
-       // this.setStrokeWidth(5.0f);
-        mFillPaint.setPathEffect(dash);
         polyCentroidPoint = new Point();
         mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
 
-        //recalculateMatrix(mapView);
+        if(bitmapShader != null) recalculateMatrix(mapView);
         super.draw(canvas, mapView, shadow);
     }
     float strokeWidth = 5.0f;
@@ -144,8 +142,8 @@ public class FieldPolygon extends Polygon {
         xOffset += lastCenterPoint.x - point.x;
         yOffset += lastCenterPoint.y - point.y;
 
-        xOffset %= 100; // 100 is pixel size of shader image
-        yOffset %= 100;
+        xOffset %= 35; // 100 is pixel size of shader image
+        yOffset %= 35;
 
         final Matrix matrix = new Matrix();
         matrix.reset();

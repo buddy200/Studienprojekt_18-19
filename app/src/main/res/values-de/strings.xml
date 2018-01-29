@@ -85,4 +85,5 @@
     <string name="insects">Insekten</string>
     <string name="agrarian_field">Agrarfeld</string>
     <string name="damage_field">Schadensfall</string>
+    <string name="no_privileges">Sie haben leider keine Admin Privilegien</string>
 </resources>

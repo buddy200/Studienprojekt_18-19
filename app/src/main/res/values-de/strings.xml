@@ -86,4 +86,5 @@
     <string name="agrarian_field">Agrarfeld</string>
     <string name="damage_field">Schadensfall</string>
     <string name="no_privileges">Sie haben leider keine Admin Privilegien</string>
+    <string name="no_read_write">Keine Berechtigungen, App kann nicht gestartet werden</string>
 </resources>

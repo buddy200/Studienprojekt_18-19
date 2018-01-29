@@ -121,4 +121,6 @@
     <string name="damage_field">Damage case</string>
     <string name="no_privileges">This user has no admin privileges</string>
 
+    <string name="no_read_write">No Permissions for writing on this device, map cannot be displayed</string>
+
 </resources>

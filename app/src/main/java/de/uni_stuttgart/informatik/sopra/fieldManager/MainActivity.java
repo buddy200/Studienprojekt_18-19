@@ -147,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             this.invalidateOptionsMenu();
         }
         mapHandler.reload();
+        if(mapHandler.getMap() == null) {
+            GlobalConstants.isAdmin = false;
+            Toast.makeText(this, R.string.no_read_write, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -367,7 +371,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
         switch (id) {
             case R.id.action_toolbar_add:
-                GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));
+                if(mapHandler.getMap() != null){
+                    GlobalConstants.setLastLocationOnMap(new GeoPoint(mapHandler.getMap().getMapCenter().getLatitude(), mapHandler.getMap().getMapCenter().getLongitude()));
+                }
                 Intent i = new Intent(this, AddFieldActivity.class);
                 startActivityForResult(i, 2404);
                 break;

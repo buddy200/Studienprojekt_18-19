@@ -318,6 +318,7 @@ public class AddFieldActivity extends AppCompatActivity implements FragmentInter
         }
         else {
             if (isDmgField) {
+                Toast.makeText(this, this.getResources().getString(R.string.add_activity_outsideOffField), Toast.LENGTH_SHORT).show();
                 onRedoButtonClick();
             }
             else{

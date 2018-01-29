@@ -3,6 +3,7 @@ package de.uni_stuttgart.informatik.sopra.fieldManager.UI.Map;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -96,11 +97,11 @@ public class FieldPolygon extends Polygon {
         }
 
         polyCentroidPoint = new Point();
+        if(bitmapShader != null) recalculateMatrix(mapView);
+        super.draw(canvas, mapView, shadow);
         mapView.getProjection().toPixels(field.getCentroid(), polyCentroidPoint);
         canvas.drawText(this.getTitle(), polyCentroidPoint.x, polyCentroidPoint.y, textPaint);
 
-        if(bitmapShader != null) recalculateMatrix(mapView);
-        super.draw(canvas, mapView, shadow);
     }
 
     public void setPatternBMP(@NonNull final Bitmap patternBMP) {

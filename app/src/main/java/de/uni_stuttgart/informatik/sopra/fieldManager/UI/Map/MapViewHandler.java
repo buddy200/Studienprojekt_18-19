@@ -350,13 +350,15 @@ public class MapViewHandler implements MapContract.MapHandler {
     public void saveMapCenter() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
-        edit.putFloat("Longitude", (float) this.getMap().getMapCenter().getLongitude());
-        edit.putFloat("Latitude", (float) this.getMap().getMapCenter().getLatitude());
-        edit.apply();
+        if(map != null){
+            edit.putFloat("Longitude", (float) this.getMap().getMapCenter().getLongitude());
+            edit.putFloat("Latitude", (float) this.getMap().getMapCenter().getLatitude());
+            edit.apply();
+        }
     }
 
     public void destroy() {
         fieldMarker.clear();
-        map.onDetach();
+        if(map != null) map.onDetach();
     }
 }

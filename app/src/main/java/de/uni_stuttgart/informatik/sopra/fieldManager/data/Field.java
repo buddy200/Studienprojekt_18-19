@@ -84,7 +84,7 @@ public abstract class Field implements Serializable {
     /**
      * calculate the size of the polygon
      */
-    void calculateSize() {
+    public void calculateSize() {
         size = 0;
         double firstSum = 0.0;
         double secondSum = 0.0;

@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Vector;
 
 import de.uni_stuttgart.informatik.sopra.fieldManager.R;
@@ -118,10 +119,19 @@ public class AgrarianFieldTest {
 
     @Test
     public void convertSize() throws Exception {
-        assertEquals(("10.0m" + "\u00B2"), field1.convertSize(10));
-        assertEquals(("50.0a"), field1.convertSize(5000));
-        assertEquals("50.0ha", field1.convertSize(500000));
-        assertEquals("50.0km" + "\u00B2", field1.convertSize(50000000));
+        if (Locale.getDefault().getDisplayLanguage().equals("Deutsch")) {
+
+            assertEquals(("10,0000m" + "\u00B2"), field1.convertSize(10));
+            assertEquals(("50,0000a"), field1.convertSize(5000));
+            assertEquals("50,0000ha", field1.convertSize(500000));
+            assertEquals("50,0000km" + "\u00B2", field1.convertSize(50000000));
+        } else {
+
+            assertEquals(("10.0000m" + "\u00B2"), field1.convertSize(10));
+            assertEquals(("50.0000a"), field1.convertSize(5000));
+            assertEquals("50.0000ha", field1.convertSize(500000));
+            assertEquals("50.0000km" + "\u00B2", field1.convertSize(50000000));
+        }
     }
 
     @Test

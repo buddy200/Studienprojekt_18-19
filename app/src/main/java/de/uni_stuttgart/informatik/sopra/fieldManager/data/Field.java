@@ -277,7 +277,11 @@ public abstract class Field implements Serializable {
                     setCounty("Adress: "); //remove "loading..."
                     String county = "";
                     for (int i = 0; i <= addresses.get(0).getMaxAddressLineIndex(); i++) {
-                        county += " " + addresses.get(0).getAddressLine(i);
+                        if(county.equals("")){
+                            county += addresses.get(0).getAddressLine(i);
+                        }else{
+                            county += " " + addresses.get(0).getAddressLine(i);
+                        }
                     }
                     setCounty(county);
                 } else {

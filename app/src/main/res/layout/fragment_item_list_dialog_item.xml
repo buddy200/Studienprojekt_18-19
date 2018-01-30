@@ -16,7 +16,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/item_field_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:paddingLeft="@dimen/list_item_spacing"
             android:paddingRight="@dimen/list_item_spacing"
@@ -25,22 +25,34 @@
             android:layout_weight="1"
             tools:text="-Field Name-" />
 
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/item_field_state"
+            android:id="@+id/item_field_state_pattern"
             android:gravity="right"
             android:textAlignment="gravity"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:paddingLeft="@dimen/list_item_spacing"
             android:paddingRight="@dimen/list_item_spacing"
             android:paddingTop="@dimen/list_item_spacing_half"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:layout_weight="1"
-            tools:text="-State-" />
+            android:src="@drawable/pattern_plus"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     </LinearLayout>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/item_field_state"
+        android:gravity="left"
+        android:textAlignment="gravity"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/list_item_spacing"
+        android:paddingRight="@dimen/list_item_spacing"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:text="-State-"/>
 
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,6 +62,8 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:paddingLeft="@dimen/list_item_spacing"
+        android:paddingRight="@dimen/list_item_spacing"
+        android:paddingTop="@dimen/list_item_spacing_half"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:text="-county name-" />
 

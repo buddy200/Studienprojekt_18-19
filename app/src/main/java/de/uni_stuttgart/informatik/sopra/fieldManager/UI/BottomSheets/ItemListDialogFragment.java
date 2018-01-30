@@ -1,6 +1,8 @@
 package de.uni_stuttgart.informatik.sopra.fieldManager.UI.BottomSheets;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -9,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -94,7 +97,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     private class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView text;
-        final TextView state;
+        final ImageView statePattern;
+        final TextView stateText;
         final TextView county;
         final LinearLayout layout;
 
@@ -104,7 +108,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
             //the item is shown as a text view
             text = itemView.findViewById(R.id.item_field_name);
-            state = itemView.findViewById(R.id.item_field_state);
+            statePattern = itemView.findViewById(R.id.item_field_state_pattern);
+            stateText = itemView.findViewById(R.id.item_field_state);
             county = itemView.findViewById(R.id.item_field_county);
             layout = itemView.findViewById(R.id.ll_item);
 
@@ -141,9 +146,16 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.text.setText(fieldData.get(position).getName());
             if (fieldData.get(position).getType() != null) {
-                holder.state.setText(fieldData.get(position).getType().toString(getContext()));
+                Drawable d = getContext().getDrawable(fieldData.get(position).getType().getPattern(getContext()));
+                holder.stateText.setText(fieldData.get(position).getType().toString(getContext()));
+                if(fieldData.get(position) instanceof AgrarianField){
+                    d.setTint(getContext().getResources().getColor(R.color.colorAccentDark));
+                } else {
+                    d.setTint(getContext().getResources().getColor(R.color.colorPrimary));
+                }
+                holder.statePattern.setImageDrawable(d);
             } else {
-                holder.state.setText(" ");
+                holder.statePattern.setImageDrawable(null);
             }
             if (fieldData.get(position) instanceof AgrarianField) {
                 holder.county.setText(fieldData.get(position).getCounty());

@@ -137,7 +137,7 @@ public class BSDetailDialogDmgField extends BottomSheetDialogFragment implements
         date.setText(this.mField.getParsedDate());
         progressState.setText( this.mField.getProgressStatus().toString(getContext()));
         ownerOrEvaluator.setText(this.mField.getEvaluator());
-        estimatedCosts.setText( String.valueOf(this.mField.getInsuranceMoney()));
+        estimatedCosts.setText("~" + String.valueOf((long) this.mField.getInsuranceMoney()) + "€");
 
         if ((this.mField).getPaths() != null) {
             GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), this.mField.getPaths(), this);

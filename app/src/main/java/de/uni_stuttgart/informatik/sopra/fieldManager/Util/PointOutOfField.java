@@ -38,6 +38,13 @@ public class PointOutOfField {
         }
     }
 
+    /**
+     * return only true from the new point over the centroid to the infinty
+     * @param intersection
+     * @param centroidFromParent
+     * @param newPoint
+     * @return
+     */
     private static boolean boundaryCheck(Vector<Double> intersection, GeoPoint centroidFromParent, GeoPoint newPoint) {
         if (newPoint.getLatitude() <= centroidFromParent.getLatitude() && newPoint.getLongitude() <= centroidFromParent.getLongitude()) {
             if ((intersection.get(0).doubleValue() >= newPoint.getLatitude()
@@ -66,9 +73,14 @@ public class PointOutOfField {
         return false;
     }
 
+    /**
+     * chekcs if the intersection point on the agrarain field outline
+     * @param intersection
+     * @param lastPoint
+     * @param currentPoint
+     * @return
+     */
     private static boolean boundaryCheck2(Vector<Double> intersection, GeoPoint lastPoint, GeoPoint currentPoint) {
-
-
         if (lastPoint.getLatitude() <= currentPoint.getLatitude() && lastPoint.getLongitude() <= currentPoint.getLongitude()) {
             if (((intersection.get(0).doubleValue() >= lastPoint.getLatitude()
                     && intersection.get(0).doubleValue() <= currentPoint.getLatitude()) && (intersection.get(1).doubleValue() >= lastPoint.getLongitude()

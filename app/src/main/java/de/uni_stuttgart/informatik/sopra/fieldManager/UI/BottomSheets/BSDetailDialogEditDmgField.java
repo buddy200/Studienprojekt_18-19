@@ -198,7 +198,7 @@ BSDetailDialogEditDmgField extends BottomSheetDialogFragment implements BSEditCo
             deleteButton.setVisibility(View.INVISIBLE);
         }
         headingText.setText(getResources().getString(R.string.damage_field));
-        fieldestimatedCosts.setText(String.valueOf(((DamageField) field).getInsuranceMoney()));
+        fieldestimatedCosts.setText("~" + String.valueOf((long) field.getInsuranceMoney()) + "€");
         dateText.setText(field.getParsedDate());
         List<DamageFieldType> statusCheck;
         statusCheck = Arrays.asList(DamageFieldType.values());

@@ -111,13 +111,13 @@ public abstract class Field implements Serializable {
     public String convertSize(double size) {
         String conSize = "";
         if (size > 1000000) {
-            conSize = (String.valueOf(size / 1000000)) + "km" + "\u00B2";
+            conSize = (String.format("%.4f", size / 1000000)) + "km" + "\u00B2";
         } else if (size > 10000 && size <= 1000000) {
-            conSize = (String.valueOf(size / 10000)) + "ha";
+            conSize = (String.format("%.4f", size / 10000)) + "ha";
         } else if (size > 100 && size <= 10000) {
-            conSize = (String.valueOf(size / 100)) + "a";
+            conSize = (String.format("%.4f", size / 100)) + "a";
         } else {
-            conSize = (String.valueOf(size)) + "m" + "\u00B2";
+            conSize = (String.format("%.4f", size)) + "m" + "\u00B2";
         }
         return conSize;
     }

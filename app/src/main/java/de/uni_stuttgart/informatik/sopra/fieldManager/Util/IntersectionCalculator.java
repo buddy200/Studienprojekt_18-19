@@ -47,7 +47,9 @@ public class IntersectionCalculator {
         //calculates the line form second last to the last point
         if (lastPoint != null && currentPoint != null) {
             if (currentPoint.getLatitude() - lastPoint.getLatitude() != 0 && currentPoint.getLongitude() - lastPoint.getLongitude() != 0) {
+                //pitch calculation
                 line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));
+                //y-intersept calculation
                 line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
             }
             //very uncommon cases. for this application is this approximation ok.
@@ -61,9 +63,9 @@ public class IntersectionCalculator {
         }
         //the line must only saved if the new field a agrarian field
         if (isAgrarianField && line != null && line.size() != 0) {
-            line.add(2, lastPoint.getLatitude());
+            line.add(2, lastPoint.getLatitude()); //first point form line
             line.add(3, lastPoint.getLongitude());
-            line.add(4, currentPoint.getLatitude());
+            line.add(4, currentPoint.getLatitude());// second point from line
             line.add(5, currentPoint.getLongitude());
             linesFromAgrarianField.add(line);
         }
@@ -85,7 +87,8 @@ public class IntersectionCalculator {
                     intersection.add((line.get(1) - lineFromParent.get(1)) / (lineFromParent.get(0) - line.get(0)));
                     intersection.add(line.get(0) * intersection.get(0) + line.get(1));
 
-                    //check if the intersection point is inside the damage field
+                    //check if the intersection point between the second last and last point and if the intersection point
+                    // in the the the line from the agrarian field
                     if (boundaryCheck(intersection, lastPoint, currentPoint) && boundaryCheck(intersection, new GeoPoint(lineFromParent.get(2).doubleValue(), lineFromParent.get(3).doubleValue()), new GeoPoint(lineFromParent.get(4).doubleValue(), lineFromParent.get(5).doubleValue()))) {
                         return false;
                     }
@@ -96,7 +99,7 @@ public class IntersectionCalculator {
     }
 
     /**
-     * checks if the intersection point in the damageField
+     * checks if the intersection point on the outline of the agrrian field or on the outline form the damage field
      *
      * @param intersection
      * @return
@@ -147,13 +150,16 @@ public class IntersectionCalculator {
             lastPoint = points.get(points.size() - 1);
             startPoint = points.get(0);
             currentPoint = startPoint;
+            //edge case
             if (currentPoint.getLatitude() - lastPoint.getLatitude() == 0) {
                 line.add(0.0000000000000000000000000001);
                 line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
             } else if (currentPoint.getLongitude() - lastPoint.getLongitude() == 0) {
                 line.add(100000000000000000000000000000.0);
                 line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
-            } else {
+            }
+            //normal case
+            else {
                 line.add(((lastPoint.getLongitude() - currentPoint.getLongitude()) / (lastPoint.getLatitude() - currentPoint.getLatitude())));
                 line.add(currentPoint.getLongitude() - line.get(0) * currentPoint.getLatitude());
             }

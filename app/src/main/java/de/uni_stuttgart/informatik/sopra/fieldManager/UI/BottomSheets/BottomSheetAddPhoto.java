@@ -28,7 +28,7 @@ import de.uni_stuttgart.informatik.sopra.fieldManager.data.PictureData;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by larsb on 14.01.2018.
+ *  Bottom sheet
  */
 
 public class BottomSheetAddPhoto extends BottomSheetDialogFragment implements View.OnClickListener, BSEditContract.BottomSheet {

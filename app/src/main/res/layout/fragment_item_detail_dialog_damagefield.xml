@@ -76,7 +76,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_spacing"
-                android:text="@string/dialogItem_Location" />
+                android:text="@string/dialogItem_Date" />
 
             <TextView
                 android:layout_width="0dp"

@@ -1,7 +1,7 @@
 # Feldhelfer
 
-![Screenshot vom Startbildschrim der App](doc/images/logo.jpg | width=100)
-![Screenshot vom Startbildschrim der App](doc/images/icon.png | width= 20)
+![Screenshot vom Startbildschrim der App]{:height="50%" width="50%"}
+![Screenshot vom Startbildschrim der App]{:height="50%" width="50%"}
 
 
 Die App dient dazu Felder von Bauern zu erfassen und darin Schäden zu markieren. Dies geschieht mit einer Android App die ab Version 5.1 lauffähig ist. Sie soll Versicherungen und Bauern helfen Ihre Felder und vor allem die Schäden die in den Felder entstehen besser verwalten zu können als sie es im Moment tun.
